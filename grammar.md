@@ -49,6 +49,7 @@
 - command = WORD Assignation WORD __sans espace__
 - command = [command] Sub_process(command)
 - command = [command] [arg_op] redirection_list [arg_op]
+- command = redirection_list [command] [arg_op]
 - command = NAME_BINARY arg_op
 - command = NAME_BINARY{0,1}
 
