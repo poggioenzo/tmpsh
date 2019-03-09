@@ -3,6 +3,13 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+
+/*
+** Fork a process a pull it in background by changing his process group id (pgid).
+** Wait a while with the father, restore de children in the foreground process group (with tcsetgrp)
+** and send him SIGCONT.
+*/
+
 int		main(int argc, char **argv, char **environ)
 {
 	pid_t pid;
