@@ -10,7 +10,7 @@ int		display_error(char *err_msg, int status)
 }
 
 /*
-** Create a pipe, and fork the programme to have 2 process communicating together.
+** Create a pipe, and fork the program to have 2 process who communicate together.
 ** Equal to : top | grep zsh
 */
 
