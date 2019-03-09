@@ -9,6 +9,11 @@ int		display_error(char *err_msg, int status)
 	return (status);
 }
 
+/*
+** Create a pipe, and fork the programme to have 2 process communicating together.
+** Equal to : top | grep zsh
+*/
+
 int		main(int argc, char **argv, char **environ)
 {
 	int		fd_pipe[2];
