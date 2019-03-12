@@ -1,4 +1,9 @@
 #include "display.h"
+#include "t_line_utils.h"
+#include "t_caps_utils.h"
+#include "t_cursor_utils.h"
+#include "screen_size.h"
+#include "t_char_utils.h"
 
 /*
 ** clean_lines:

@@ -78,6 +78,7 @@ int				shell_preconfig(t_line **shell, t_cursor **cursor)
 		manage_shell_repr(FREE, NULL, NULL);
 		return (MALLOC_ERROR);
 	}
+	ft_printf(g_caps->hide_cursor);
 	return (MALLOC_SUCCESS);
 }
 
@@ -89,6 +90,10 @@ void		char_analysis(t_line *shell_repr, char *new_char, t_cursor *cursor)
 	error = TRUE;
 	if (ft_isprint(*new_char))
 		error *= insert_char(shell_repr, *new_char, cursor);
+	else if (*new_char == 127)
+		delete_char(shell_repr, cursor);
+	DEBUG_print_line(shell_repr, fd_debug);
+	ft_dprintf(fd_debug, "\n");
 }
 
 int				read_loop(void)
@@ -99,6 +104,7 @@ int				read_loop(void)
 	t_line		*shell_lines;
 
 	shell_preconfig(&shell_lines, &cursor);
+	DEBUG_print_line(shell_lines, fd_debug);
 	while (1)
 	{
 		display_shell(shell_lines, cursor);
@@ -113,7 +119,7 @@ int				read_loop(void)
 
 int		main(int argc, char **argv)
 {
-	fd_debug = open("shell_debug", O_CREAT | O_RDWR | O_APPEND);
+	fd_debug = open("shell_debug", O_CREAT | O_RDWR | O_TRUNC);
 	manage_termios(SETUP);
 	read_loop();
 	return (0);

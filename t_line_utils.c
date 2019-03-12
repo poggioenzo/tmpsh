@@ -1,5 +1,6 @@
 #include "t_line_utils.h"
-
+#include "libft.h"
+#include "t_char_utils.h"
 /*
 ** free_t_line:
 **
@@ -51,7 +52,6 @@ int		create_t_line(t_line **new_line, t_line *prev, int position)
 		return (MALLOC_ERROR);
 	(*new_line)->chars = NULL;
 	(*new_line)->next = NULL;
-	(*new_line)->prev = prev;
 	(*new_line)->position = position;
 	return (MALLOC_SUCCESS);
 }
@@ -105,4 +105,25 @@ t_line		*get_cursor_line(t_line *shell_lines, t_cursor *cursor)
 {
 	while (shell_lines->position != cursor->row)
 		shell_lines = shell_lines->next;
+	return (shell_lines);
 }
+
+void		DEBUG_print_line(t_line *shell_lines, int fd)
+{
+	t_char	*char_lst;
+
+	while (shell_lines)
+	{
+		char_lst = shell_lines->chars;
+		ft_dprintf(fd, "%d =>", shell_lines->position);
+		while (char_lst)
+		{
+			ft_dprintf(fd, "(%c, %d, %d)-->", char_lst->letter, char_lst->position,
+					char_lst->lock);
+			char_lst = char_lst->next;
+		}
+		ft_dprintf(fd, "NULL\n");
+		shell_lines = shell_lines->next;
+	}
+}
+

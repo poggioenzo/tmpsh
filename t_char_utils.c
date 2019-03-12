@@ -1,4 +1,6 @@
 #include "t_char_utils.h"
+#include "t_cursor_utils.h"
+#include "t_line_utils.h"
 
 /*
 ** create_char:
@@ -6,15 +8,14 @@
 ** Allocate a single t_char element.
 */
 
-static int	create_char(t_char	**char_node, char letter, int position, \
-		t_char *previous)
+int	create_char(t_char	**char_node, char letter, int position, int lock)
 {
 	if (!(*char_node = (t_char *)malloc(sizeof(t_char))))
 		return (MALLOC_ERROR);
 	(*char_node)->letter = letter;
 	(*char_node)->position = position;
 	(*char_node)->next = NULL;
-	(*char_node)->prev = previous;
+	(*char_node)->lock = lock;
 	return (MALLOC_SUCCESS);
 }
 
@@ -29,14 +30,13 @@ int			push_end_char(t_char **char_node, char letter, int lock)
 	t_char	*tmp_char;
 
 	if (!*char_node)
-		 return (create_char(char_node, letter, 0, NULL));
+		 return (create_char(char_node, letter, 0, lock));
 	tmp_char = *char_node;
 	while (tmp_char->next)
 		tmp_char = tmp_char->next;
-	if (create_char(&tmp_char->next, letter, tmp_char->position + 1, \
-				tmp_char) == MALLOC_ERROR)
+	if (create_char(&tmp_char->next, letter, tmp_char->position + 1, lock) \
+			== MALLOC_ERROR)
 		return (MALLOC_ERROR);
-	tmp_char->lock = lock;
 	return (MALLOC_SUCCESS);
 }
 
@@ -52,7 +52,7 @@ void		update_position(t_char *char_lst)
 {
 	int		index;
 
-	index = char_lst && char_lst->prev ? char_lst->prev->position + 1 : 0;
+	index = 0;
 	while (char_lst)
 	{
 		char_lst->position = index++;
@@ -65,7 +65,7 @@ void		update_position(t_char *char_lst)
 ** Deallocate a single t_char element, set his pointer to NULL.
 */
 
-void static		free_t_char(t_char **char_node)
+void	free_t_char(t_char **char_node)
 {
 	free(*char_node);
 	*char_node = NULL;
