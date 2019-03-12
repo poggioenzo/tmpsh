@@ -74,4 +74,35 @@ int		push_end_line(t_line **line_lst)
 	return (create_t_line(&tmp_line->next, tmp_line, tmp_line->position + 1));
 }
 
+/*
+** is_cursor_last_pos:
+**
+** Check if the cursor is in the last position of the shell.
+*/
 
+int		is_cursor_last_pos(t_line *line_lst, t_cursor *cursor)
+{
+	t_char	*char_lst;
+	int		row;
+
+	row = 0;
+	while (line_lst->next)
+	{
+		row++;
+		line_lst = line_lst->next;
+	}
+	return (cursor->column == char_lst_len(line_lst->chars) && 
+			cursor->row == row);
+}
+
+/*
+** get_cursor_line:
+**
+** Get the line where the cursor is present.
+*/
+
+t_line		*get_cursor_line(t_line *shell_lines, t_cursor *cursor)
+{
+	while (shell_lines->position != cursor->row)
+		shell_lines = shell_lines->next;
+}

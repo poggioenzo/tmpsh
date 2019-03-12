@@ -7,10 +7,11 @@
 # include "t_line_utils.h"
 # include "t_char_utils.h"
 # include "tmpsh.h"
+# include "t_caps_utils.h"
+# include "display.h"
+# include "termios_setter.h"
 # include <termios.h>
 
-# define SETUP	1
-# define RESET	0
 
 # define PROMPT_BUFF	4
 

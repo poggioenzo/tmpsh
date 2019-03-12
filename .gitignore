@@ -2,6 +2,7 @@
 
 .*.swp
 .*.swo
+shell_debug
 
 # Prerequisites
 *.d

@@ -15,3 +15,8 @@ int		dealloc_cursor(t_cursor **cursor, int status)
 	*cursor = NULL;
 	return (status);
 }
+
+void	show_cursor(char letter)
+{
+	ft_printf("%s%c%s", g_caps->video, letter, g_caps->reset_video);
+}
