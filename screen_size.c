@@ -6,6 +6,6 @@ int			screen_size(int *col, int *line)
 
 	ioctl(0, TIOCGWINSZ, &window);
 	*line = window.ws_row;
-	*col = window.ws_col - 1;
+	*col = window.ws_col;
 	return (1);
 }

@@ -86,26 +86,13 @@ int		is_cursor_last_pos(t_line *line_lst, t_cursor *cursor)
 	int		row;
 
 	row = 0;
-	while (line_lst->next)
+	while (line_lst->position != cursor->row)
 	{
 		row++;
 		line_lst = line_lst->next;
 	}
 	return (cursor->column == char_lst_len(line_lst->chars) && 
 			cursor->row == row);
-}
-
-/*
-** get_cursor_line:
-**
-** Get the line where the cursor is present.
-*/
-
-t_line		*get_cursor_line(t_line *shell_lines, t_cursor *cursor)
-{
-	while (shell_lines->position != cursor->row)
-		shell_lines = shell_lines->next;
-	return (shell_lines);
 }
 
 void		DEBUG_print_line(t_line *shell_lines, int fd)

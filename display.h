@@ -4,6 +4,6 @@
 # include "libft.h"
 # include "tmpsh.h"
 
-void			display_shell(t_line *prompt_lines, t_cursor *cursor);
+void	display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display);
 
 #endif

@@ -1,0 +1,1 @@
+gcc -g edition.c prompt.c prompt_field.c -I Libft Libft/libft.a t_cursor_utils.c t_char_utils.c t_line_utils.c t_caps_utils.c -ltermcap screen_size.c display.c termios_setter.c t_char_insert.c cursor_dependent_selection.c cursor_move.c shell_setup.c

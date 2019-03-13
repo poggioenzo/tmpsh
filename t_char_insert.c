@@ -10,17 +10,22 @@
 ** or in the middle of the list.
 */
 
-static int		appropriate_char_insert(t_char *char_lst, char letter, \
-		t_cursor *cursor)
+static int		appropriate_char_insert(t_cursor *cursor, t_char *cursor_char,\
+		t_char *prev_char, char letter)
 {
 	t_char	*new_char_node;
 
-	if (!char_lst->next && cursor->column == char_lst->position + 1)
-		return (push_end_char(&char_lst, letter, 0));
+	if (!cursor_char && cursor->column == prev_char->position + 1)
+		return (push_end_char(&prev_char, letter, 0));
 	if (create_char(&new_char_node, letter, cursor->column, FALSE) ==
 			MALLOC_ERROR)
 		return (MALLOC_ERROR);
-	new_char_node->next = char_lst;
+
+	ft_dprintf(fd_debug, "there\n");
+	ft_dprintf(fd_debug, "new : %p\n", new_char_node);
+	ft_dprintf(fd_debug, "prev : %d\n", prev_char);
+	new_char_node->next = cursor_char;
+	prev_char->next = new_char_node;
 	return (MALLOC_SUCCESS);
 }
 
@@ -33,7 +38,8 @@ static int		appropriate_char_insert(t_char *char_lst, char letter, \
 
 int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 {
-	t_char		*tmp_char;
+	t_char		*cursor_char;
+	t_char		*prev_char;
 	t_line		*cursor_line;
 
 	cursor_line = get_cursor_line(shell_repr, cursor);
@@ -44,10 +50,9 @@ int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 	}
 	else
 	{
-		tmp_char = cursor_line->chars;
-		while (tmp_char->next && tmp_char->position != cursor->column)
-			tmp_char = tmp_char->next;
-		if (appropriate_char_insert(tmp_char, letter, cursor) == MALLOC_ERROR)
+		cursor_char = cursor_line->chars;
+		get_cursor_char(cursor, &cursor_char, &prev_char);
+		if (appropriate_char_insert(cursor, cursor_char, prev_char, letter) == MALLOC_ERROR)
 			return (MALLOC_ERROR);
 	}
 	cursor->column++;
@@ -62,7 +67,6 @@ int			del_pos_char(t_char **char_lst, t_cursor *cursor)
 
 	if (cursor->column == 0)
 		return (SUCCESS);
-	ft_dprintf(fd_debug, "entry %d|%d\n", cursor->row, cursor->column);
 	curr_char = *char_lst;
 	prev_char = NULL;
 	while (curr_char && curr_char->position + 1 != cursor->column)
@@ -71,17 +75,14 @@ int			del_pos_char(t_char **char_lst, t_cursor *cursor)
 		curr_char = curr_char->next;
 	}
 	if (curr_char->lock == TRUE)
-	{
-		ft_dprintf(fd_debug, "here\n");
 		return (SUCCESS);
-	}
 	else if (!prev_char)
 		*char_lst = curr_char->next;
 	else
 		prev_char->next = curr_char->next;
+	update_position(*char_lst);
 	free_t_char(&curr_char);
 	cursor->column--;
-	ft_dprintf(fd_debug, "del %d|%d\n", cursor->row, cursor->column);
 	return (SUCCESS);
 }
 
