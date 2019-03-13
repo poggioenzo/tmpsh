@@ -20,10 +20,6 @@ static int		appropriate_char_insert(t_cursor *cursor, t_char *cursor_char,\
 	if (create_char(&new_char_node, letter, cursor->column, FALSE) ==
 			MALLOC_ERROR)
 		return (MALLOC_ERROR);
-
-	ft_dprintf(fd_debug, "there\n");
-	ft_dprintf(fd_debug, "new : %p\n", new_char_node);
-	ft_dprintf(fd_debug, "prev : %d\n", prev_char);
 	new_char_node->next = cursor_char;
 	prev_char->next = new_char_node;
 	return (MALLOC_SUCCESS);

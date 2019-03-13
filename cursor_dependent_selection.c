@@ -26,13 +26,9 @@ void	get_cursor_char(t_cursor *cursor, t_char **curr_char,\
 		t_char **prev_char)
 {
 	*prev_char = NULL;
-	ft_dprintf(fd_debug, "in get_cursor_char : curr %p | prev %p\n", *curr_char, *prev_char);
-	ft_dprintf(fd_debug, "pos char : %d | cursor : %d\n", (*curr_char)->position, cursor->column);
 	while (*curr_char && (*curr_char)->position != cursor->column)
 	{
-		ft_dprintf(fd_debug, "start : prev : %p | curr %p\n", *prev_char, *curr_char);
 		*prev_char = *curr_char;
 		*curr_char = (*curr_char)->next;
-		ft_dprintf(fd_debug, "prev : %p | curr : %p\n", *prev_char, *curr_char);
 	}
 }
