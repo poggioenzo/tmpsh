@@ -5,7 +5,6 @@ SOURCES+=src/cursor_move.c
 SOURCES+=src/debug.c
 SOURCES+=src/display.c
 SOURCES+=src/edition.c
-SOURCES+=src/lol.c
 SOURCES+=src/newline_keypress.c
 SOURCES+=src/prompt.c
 SOURCES+=src/prompt_field.c

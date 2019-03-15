@@ -110,7 +110,6 @@ int			insert_string(t_char **char_lst, char *string, int lock)
 	start_char = char_lst;
 	while (*string)
 	{
-		ft_dprintf(fd_debug, "there\n");
 		if (push_end_char(char_lst, *string, lock) == MALLOC_ERROR)
 			return (MALLOC_ERROR);
 		char_lst = &(*char_lst)->next;

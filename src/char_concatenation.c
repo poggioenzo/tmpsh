@@ -7,6 +7,7 @@ static int		get_repr_len(t_char *char_lst, t_cursor *cursor, int line)
 {
 	int		line_len;
 
+	line_len = 0;
 	line_len += char_lst_len(char_lst);
 	if (cursor->row == line)
 	{
@@ -36,7 +37,7 @@ char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 	int		cursor_displayed;
 
 	line_len = get_repr_len(char_lst, cursor, line);
-	if (!(line_repr = malloc(sizeof(char) * (line_len))))
+	if (!(line_repr = (char *)malloc(sizeof(char) * (line_len))))
 		return (NULL);
 	index = 0;
 	cursor_displayed = FALSE;

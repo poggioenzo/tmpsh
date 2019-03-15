@@ -77,7 +77,6 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 			line_len++;
 		*total_lines += line_len / window.ws_col;
 		*total_lines += line_len % window.ws_col > 0;
-		dprintf(fd_debug, "curr size : %d\n", line_len / window.ws_col + (line_len % window.ws_col > 1));
 		prompt_lines = prompt_lines->next;
 		newline_tmp = "\n";
 		if (prompt_lines)
@@ -96,7 +95,6 @@ int			display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
 		return (MALLOC_ERROR);
 	if (first_display == FALSE)
 		clean_lines(displayed_lines, TRUE);
-	dprintf(fd_debug, "displayed_lines : %d | curr_size : %d\n", displayed_lines, curr_size);
 	displayed_lines = curr_size;
 	write(STDOUT_FILENO, shell_repr, ft_strlen(shell_repr));
 	return (SUCCESS);
