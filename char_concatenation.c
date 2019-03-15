@@ -1,8 +1,7 @@
-#include "char_concatenation.c"
+#include "char_concatenation.h"
 #include "libft.h"
 #include "t_char_utils.h"
 #include "screen_size.h"
-
 
 static int		get_repr_len(t_char *char_lst, t_cursor *cursor, int line)
 {
