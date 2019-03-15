@@ -9,6 +9,7 @@ shell_debug
 
 # Prerequisites
 dependencies/*.d
+*.d
 
 # Object files
 *.o
