@@ -1,8 +1,8 @@
 #ifndef SCREEN_SIZE_H
 # define SCREEN_SIZE_H
 
-# include <sys/ioctl.h>
+typedef struct winsize	t_win;
 
-int			screen_size(int *col, int *line);
+void		screen_size(t_win *window);
 
 #endif

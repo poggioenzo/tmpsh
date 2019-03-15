@@ -1,4 +1,5 @@
 #include "t_caps_utils.h"
+#include "libft.h"
 
 /*
 ** alloc_capabilities_struct:
@@ -25,6 +26,7 @@ int			alloc_capabilities_struct(t_caps **capabilities)
 	(*capabilities)->move_up = tgetstr("up", NULL);
 	(*capabilities)->move_down = tgetstr("do", NULL);
 
+	ft_dprintf(fd_debug, "len cursor_vid : %d, len reset_video : %d\n", ft_strlen((*capabilities)->video), ft_strlen((*capabilities)->reset_video));
 	return (MALLOC_SUCCESS);
 }
 

@@ -1,11 +1,7 @@
 #include "screen_size.h"
+#include <sys/ioctl.h>
 
-int			screen_size(int *col, int *line)
+void		screen_size(t_win *window)
 {
-	struct winsize window;
-
-	ioctl(0, TIOCGWINSZ, &window);
-	*line = window.ws_row;
-	*col = window.ws_col;
-	return (1);
+	ioctl(0, TIOCGWINSZ, window);
 }
