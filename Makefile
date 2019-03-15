@@ -30,6 +30,7 @@ INCLUDES_LIST := $(call select_dir, $(INCLUDES_LIST))
 all: $(NAME)
 
 $(NAME): $(OBJS)
+	make -C Libft
 	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^  Libft/libft.a -o $@
 
 clean:
