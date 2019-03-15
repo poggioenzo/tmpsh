@@ -95,22 +95,30 @@ int		is_cursor_last_pos(t_line *line_lst, t_cursor *cursor)
 			cursor->row == row);
 }
 
-void		DEBUG_print_line(t_line *shell_lines, int fd)
-{
-	t_char	*char_lst;
+/*
+** line_lst_len:
+**
+** Return the total lenght of the t_line chained list.
+** Can be used from any starting point of the chained list.
+*/
 
-	while (shell_lines)
-	{
-		char_lst = shell_lines->chars;
-		ft_dprintf(fd, "%d =>", shell_lines->position);
-		while (char_lst)
-		{
-			ft_dprintf(fd, "(%c, %d, %d)-->", char_lst->letter, char_lst->position,
-					char_lst->lock);
-			char_lst = char_lst->next;
-		}
-		ft_dprintf(fd, "NULL\n");
-		shell_lines = shell_lines->next;
-	}
+int			line_lst_len(t_line *shell_repr)
+{
+	while (shell_repr)
+		shell_repr = shell_repr->next;
+	return (shell_repr->position + 1);
 }
 
+
+/*
+** get_last_line:
+**
+** Return the last line of a t_line chained list.
+*/
+
+t_line		*get_last_line(t_line *shell_repr)
+{
+	while (shell_repr->next)
+		shell_repr = shell_repr->next;
+	return (shell_repr);
+}

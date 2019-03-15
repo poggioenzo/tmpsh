@@ -14,6 +14,7 @@
 # include "cursor_dependent_selection.h"
 # include "cursor_move.h"
 # include "shell_setup.h"
+# include "newline_keypress.h"
 
 # define PROMPT_BUFF	4
 

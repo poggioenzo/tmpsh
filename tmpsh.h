@@ -2,6 +2,7 @@
 # define TMPSH_H
 
 
+
 /*
 ** Cursor structure
 */
@@ -74,5 +75,7 @@ enum	malloc_fail
 
 void		DEBUG_print_line(t_line *shell_lines, int fd);
 extern int		fd_debug;
+
+#include "debug.h"
 
 #endif

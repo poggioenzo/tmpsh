@@ -95,6 +95,13 @@ int			delete_char(t_line *shell_repr, t_cursor *cursor)
 ** Update char position at the end.
 */
 
+int			insert_string_bis(t_cursor *cursor, t_char **char_lst, 
+		char *string, int lock)
+{
+	return (0);
+}
+
+
 // Will only insert string at the last position
 int			insert_string(t_char **char_lst, char *string, int lock) 
 {
@@ -103,11 +110,13 @@ int			insert_string(t_char **char_lst, char *string, int lock)
 	start_char = char_lst;
 	while (*string)
 	{
+		ft_dprintf(fd_debug, "there\n");
 		if (push_end_char(char_lst, *string, lock) == MALLOC_ERROR)
 			return (MALLOC_ERROR);
 		char_lst = &(*char_lst)->next;
 		string++;
 	}
 	update_position(*start_char);
+	
 	return (MALLOC_SUCCESS);
 }
