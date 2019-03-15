@@ -1,11 +1,14 @@
 #Personnal
 
+
+
+
 .*.swp
 .*.swo
 shell_debug
 
 # Prerequisites
-*.d
+dependencies/*.d
 
 # Object files
 *.o
