@@ -16,3 +16,4 @@ SOURCES+=src/t_char_utils.c
 SOURCES+=src/t_cursor_utils.c
 SOURCES+=src/t_line_utils.c
 SOURCES+=src/termios_setter.c
+SOURCES+=src/line_deletion.c

@@ -1,13 +1,14 @@
 #include "t_line_utils.h"
 #include "libft.h"
 #include "t_char_utils.h"
+
 /*
 ** free_t_line:
 **
 ** Free a single t_line element.
 */
 
-static int		free_t_line(t_line **line_lst, int status)
+int		free_t_line(t_line **line_lst, int status)
 {
 	t_char		*char_lst;
 
@@ -108,7 +109,6 @@ int			line_lst_len(t_line *shell_repr)
 		shell_repr = shell_repr->next;
 	return (shell_repr->position + 1);
 }
-
 
 /*
 ** get_last_line:

@@ -85,27 +85,30 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 	return (shell_str);
 }
 
-int			display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
-{
-	static int	displayed_lines = 0;
-	int			curr_size;
-	char		*shell_repr;
-
-	if (!(shell_repr = concat_shell(prompt_lines, cursor, &curr_size)))
-		return (MALLOC_ERROR);
-	if (first_display == FALSE)
-		clean_lines(displayed_lines, TRUE);
-	displayed_lines = curr_size;
-	write(STDOUT_FILENO, shell_repr, ft_strlen(shell_repr));
-	return (SUCCESS);
-}
-
 /*
 ** display_shell:
 **
 ** Display the representation of the shell using the t_line and t_char
 ** structure.
 */
+
+int			display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
+{
+	static int	displayed_lines = 0;
+	int			curr_line_size;
+	int			shell_len;
+	char		*shell_repr;
+
+	if (!(shell_repr = concat_shell(prompt_lines, cursor, &curr_line_size)))
+		return (MALLOC_ERROR);
+	shell_len = ft_strlen(shell_repr);
+	if (first_display == FALSE)
+		clean_lines(displayed_lines, TRUE);
+	displayed_lines = curr_line_size;
+	write(STDOUT_FILENO, shell_repr, shell_len);
+	return (SUCCESS);
+}
+
 
 void			display_shell2(t_line *prompt_lines, t_cursor *cursor, int first_display)
 {

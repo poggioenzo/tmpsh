@@ -1,7 +1,7 @@
 NAME = tmpsh
 
 CC = gcc
-CFLAGS = #-fsanitize=address #-Wall -Wextra -Werror
+CFLAGS = #-g -fsanitize=address #-Wall -Wextra -Werror
 CPPFLAGS = $(addprefix -I , $(INCLUDES_LIST))
 
 include sources.d
@@ -58,4 +58,6 @@ $(DEPENDENCIES_FOLDER)%.d:$(SOURCES_FOLDER)%.c
 
 .PHONY:all clean fclean proper re
 
+ifeq (, $(filter $(MAKECMDGOALS), proper clean fclean))
 include $(DEPENDENCIES)
+endif

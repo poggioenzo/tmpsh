@@ -12,6 +12,7 @@ void		display_chars(t_char *char_lst, t_cursor *cursor, int line, \
 							int *printed_cursor);
 void		update_position(t_char *char_lst);
 int			char_lst_len(t_char *char_lst);
+int			char_lock_len(t_char *char_lst);
 int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor);
 void		display_chars(t_char *char_lst, t_cursor *cursor, int line, \
 		int *printed_cursor);
