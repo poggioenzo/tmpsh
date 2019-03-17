@@ -1,5 +1,19 @@
 #include "edition.h"
 #include <fcntl.h>
+#include "libft.h"
+#include "t_cursor_utils.h"
+#include "t_line_utils.h"
+#include "t_char_utils.h"
+#include "t_caps_utils.h"
+#include "t_char_insert.h"
+#include "display.h"
+#include "termios_setter.h"
+#include <termios.h>
+#include "cursor_dependent_selection.h"
+#include "cursor_move.h"
+#include "shell_setup.h"
+#include "newline_keypress.h"
+#include "history.h"
 
 void		char_analysis(t_line *shell_repr, char *new_char, t_cursor *cursor)
 {
@@ -36,11 +50,30 @@ int				read_loop(void)
 	}
 }
 
+void	show_history(t_hist *history)
+{
+	while (history)
+	{
+		ft_dprintf(fd_debug, "addresses : %p   | prev : %p | len : %d\n", history, history->prev, 
+				ft_strlen(history->line));
+		ft_dprintf(fd_debug, "line : %s|\n", history->line);
+		history = history->next;
+	}
+}
+
 int		main(int argc, char **argv)
 {
-	fd_debug = open("shell_debug",  O_RDWR | O_TRUNC | O_CREAT, 0777);
-	//fd_debug = open("/dev/ttys002",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	t_hist	*history;
+	int		status;
+
+	UNUSED(argc);
+	UNUSED(argv);
 	manage_termios(SETUP);
+	//fd_debug = open("shell_debug",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	fd_debug = open("/dev/ttys002",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	ft_dprintf(fd_debug, "there\n");
+	status = store_history(&history);
+	//show_history(history);
 	read_loop();
 	return (0);
 }

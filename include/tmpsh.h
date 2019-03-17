@@ -1,7 +1,8 @@
 #ifndef TMPSH_H
 # define TMPSH_H
 
-
+#define UNUSED(x) (void) x
+#define ft_getenv(var)	getenv(var)
 
 /*
 ** Cursor structure
@@ -70,11 +71,27 @@ enum	malloc_fail
 # define FAILURE	0
 
 /*
+** History management.
+*/
+
+#define HISTORY_FILE	"~/.tmpsh_history"
+
+typedef struct s_hist	t_hist;
+
+struct s_hist
+{
+	char	*line;
+	t_hist	*next;
+	t_hist	*prev;
+};
+
+/*
 ** Debug functions
 */
 
 void		DEBUG_print_line(t_line *shell_lines, int fd);
 extern int		fd_debug;
+
 
 #include "debug.h"
 

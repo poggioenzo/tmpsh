@@ -70,8 +70,6 @@ static void		cursor_calibration(t_char *char_lst, t_cursor *cursor)
 static void		move_down(t_line *shell_repr, t_cursor *cursor)
 {
 	t_line	*cursor_line;
-	int		lock_len;
-	int		line_len;
 
 	cursor_line = get_cursor_line(shell_repr, cursor);
 	if (!cursor_line->next)
@@ -263,7 +261,6 @@ void			store_prev_word(t_line *shell_repr, t_cursor *curr_cursor,
 static void		previous_word(t_line *shell_repr, t_cursor *cursor)
 {
 	t_cursor	word_cursor;
-	t_char		*char_line;
 
 	word_cursor = (t_cursor){.row = -1, .column = -1};
 	store_prev_word(shell_repr, cursor, &word_cursor);

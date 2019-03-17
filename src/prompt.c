@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/03/10 13:30:03 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/10 17:01:24 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/03/17 12:00:37 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -92,7 +92,6 @@ static char		*parse_prompt_format(char *format)
 char	*format_prompt(void)
 {
 	char	*default_format;
-	int		options;
 
 	default_format = getenv("PROMPT42");
 	if (!default_format)

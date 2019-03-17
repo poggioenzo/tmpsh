@@ -6,7 +6,7 @@
 /*   By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 08:38:27 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/10 16:36:45 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/03/17 19:09:42 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -204,7 +204,8 @@ struct			s_fd
 };
 
 int				get_next_line(int fd, char **line);
-char			*ft_readfile(int fd);
+char			*readfile(char *filename, int mode, int rights);
+char			*fd_readfile(int fd);
 int				ft_readdir(char *directory, char ***strings);
 int				ft_rmdir(char *filename, int recursiv);
 char			*basename(char *filename);

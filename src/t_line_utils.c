@@ -47,7 +47,7 @@ int				free_t_line_lst(t_line **line_lst, int status)
 ** Create a single t_line element, set almost all of his attribute to NULL.
 */
 
-int		create_t_line(t_line **new_line, t_line *prev, int position)
+int		create_t_line(t_line **new_line, int position)
 {
 	if (!(*new_line = (t_line *)malloc(sizeof(t_line))))
 		return (MALLOC_ERROR);
@@ -68,11 +68,11 @@ int		push_end_line(t_line **line_lst)
 	t_line	*tmp_line;
 	
 	if (!*line_lst)
-		return (create_t_line(line_lst, NULL, 0));
+		return (create_t_line(line_lst, 0));
 	tmp_line = *line_lst;
 	while (tmp_line->next)
 		tmp_line = tmp_line->next;
-	return (create_t_line(&tmp_line->next, tmp_line, tmp_line->position + 1));
+	return (create_t_line(&tmp_line->next, tmp_line->position + 1));
 }
 
 /*
@@ -83,7 +83,6 @@ int		push_end_line(t_line **line_lst)
 
 int		is_cursor_last_pos(t_line *line_lst, t_cursor *cursor)
 {
-	t_char	*char_lst;
 	int		row;
 
 	row = 0;

@@ -6,6 +6,7 @@
 
 static int	is_nested(t_line *shell_repr)
 {
+	UNUSED(shell_repr);
 	return (TRUE);
 }
 

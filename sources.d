@@ -17,3 +17,5 @@ SOURCES+=src/t_cursor_utils.c
 SOURCES+=src/t_line_utils.c
 SOURCES+=src/termios_setter.c
 SOURCES+=src/line_deletion.c
+SOURCES+=src/file/replace_home.c
+SOURCES+=src/history.c

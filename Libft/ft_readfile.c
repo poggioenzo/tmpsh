@@ -6,14 +6,44 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 16:11:46 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 16:12:01 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/03/17 19:10:10 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <sys/stat.h>
+#include <fcntl.h>
 
-char	*ft_readfile(int fd)
+static int			file_size(char *filename)
+{
+	struct stat		inode;
+
+	if (stat(filename, &inode) == -1)
+		return (-1);
+	return (inode.st_size);
+}
+
+char	*readfile(char *filename, int mode, int rights)
+{
+	int		len;
+	char	*content;
+	int		fd;
+	int		ret;
+
+	len = file_size(filename);
+	fd = open(filename, mode, rights);
+	if (fd == -1 || len == -1)
+		return (NULL);
+	if (!(content = malloc(sizeof(char) * (len + 1))))
+		return (NULL);
+	ret = read(fd, content, len);
+	content[ret] = '\0';
+	close(fd);
+	return (content);
+}
+
+char	*fd_readfile(int fd)
 {
 	char	*content;
 	int		readed;
