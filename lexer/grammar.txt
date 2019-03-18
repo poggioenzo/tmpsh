@@ -1,0 +1,20 @@
+
+#definition de la grammaire
+
+TERMINATOR:
+	;
+
+WORD:
+	[A-Za-z_][A-Za-z0-9_]*
+
+OPTION:
+	-WORD
+
+ARGUMENT:
+	WORD
+
+COMMAND:
+	COMMAND OPTION
+	COMMAND OPTION
+	COMMAND TERMINATOR
+	WORD
