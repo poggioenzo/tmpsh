@@ -1,5 +1,7 @@
 #Personnal
 
+__pycache__/
+
 tmpsh
 .*.swp
 .*.swo
