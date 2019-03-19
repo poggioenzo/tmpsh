@@ -6,7 +6,7 @@
 #    By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 08:24:35 by simrossi     #+#   ##    ##    #+#        #
-#    Updated: 2019/02/07 08:31:13 by simrossi    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/03/19 15:39:27 by simrossi    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -93,6 +93,7 @@ SRCS = ft_atoi.c \
 	   ft_putnbr_fd.c \
 	   ft_putstr.c \
 	   ft_putstr_fd.c \
+	   ft_strcount.c \
 	   ft_strcat.c \
 	   ft_strchr.c \
 	   ft_strnchr.c \

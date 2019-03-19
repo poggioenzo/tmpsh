@@ -58,6 +58,7 @@ typedef struct	s_caps
 }				t_caps;
 
 t_caps		*g_caps;
+char		g_last_char[5];
 
 enum	malloc_fail
 {
@@ -65,22 +66,30 @@ enum	malloc_fail
 	MALLOC_SUCCESS = 1
 };
 
-# define TRUE	1
-# define FALSE	0
+# define TRUE		1
+# define FALSE		0
+
 # define SUCCESS	1
 # define FAILURE	0
+
+# define GET		2
+# define FREE		1
+# define CREATE		0
 
 /*
 ** History management.
 */
 
-#define HISTORY_FILE	"~/.tmpsh_history"
+# define HISTORY_FILE	"~/.tmpsh_history"
 
 typedef struct s_hist	t_hist;
+
+# define STORED		0b1
 
 struct s_hist
 {
 	char	*line;
+	short	is_tmp;
 	t_hist	*next;
 	t_hist	*prev;
 };

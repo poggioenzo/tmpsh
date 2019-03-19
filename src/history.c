@@ -9,13 +9,15 @@
 ** Allocate a single t_hist element, filling up his field.
 */
 
-static int		create_t_hist(t_hist **hist_node, t_hist *prev, char *content)
+static int		create_t_hist(t_hist **hist_node, t_hist *prev, char *content,
+		int is_tmp)
 {
 	if (!(*hist_node = (t_hist *)malloc(sizeof(t_hist))))
 		return (MALLOC_ERROR);
 	(*hist_node)->line = content;
 	(*hist_node)->next = NULL;
 	(*hist_node)->prev = prev;
+	(*hist_node)->is_tmp = is_tmp;
 	return (MALLOC_SUCCESS);
 }
 
@@ -26,16 +28,16 @@ static int		create_t_hist(t_hist **hist_node, t_hist *prev, char *content)
 ** Push it at the end of our list.
 */
 
-static int		push_t_hist(t_hist **history, char *content)
+static int		push_t_hist(t_hist **history, char *content, int is_tmp)
 {
 	t_hist	*curr_node;
 
 	if (!*history)
-		return (create_t_hist(history, NULL, content));
+		return (create_t_hist(history, NULL, content, is_tmp));
 	curr_node = *history;
 	while (curr_node->next)
 		curr_node = curr_node->next;
-	return (create_t_hist(&curr_node->next, curr_node, content));
+	return (create_t_hist(&curr_node->next, curr_node, content, is_tmp));
 }
 
 /*
@@ -83,7 +85,7 @@ static void	free_history_node(t_hist **hist_node)
 ** Setting up his pointer to NULL, and returning status.
 */
 
-static int		free_history(t_hist **history, int status)
+int		free_history(t_hist **history, int status)
 {
 	t_hist		*tmp_node;
 	t_hist		*next_node;
@@ -108,7 +110,7 @@ static int		free_history(t_hist **history, int status)
 
 static int		extend_history(t_hist ***history, char **new_command)
 {
-	if (push_t_hist(*history, *new_command) == MALLOC_ERROR)
+	if (push_t_hist(*history, *new_command, FALSE) == MALLOC_ERROR)
 		return (MALLOC_ERROR);
 	if (!(*new_command = ft_strnew(0)))
 		return (MALLOC_ERROR);
@@ -238,4 +240,59 @@ int		store_history(t_hist **history)
 	status = read_history_file(history_file, history);
 	ft_strdel(&history_file);
 	return (status == SUCCESS ? status : free_history(history, status));
+}
+
+/*
+** write_line:
+**
+** Format a single command of the history and write it to the given
+** file descriptor.
+** Format like "#123: my_command" followed by a newline.
+*/
+
+static int		write_line(unsigned int index, int hist_fd, char *command)
+{
+	char	*str_index;
+
+	if (!(str_index = ft_utoa(index)))
+		return (MALLOC_ERROR);
+	write(hist_fd, "#", 1);
+	write(hist_fd, str_index, ft_strlen(str_index));
+	write(hist_fd, ": ", 2);
+	write(hist_fd, command, ft_strlen(command));
+	write(hist_fd, "\n", 1);
+	ft_strdel(&str_index);
+	return (SUCCESS);
+}
+
+/*
+** rewrite_history:
+**
+** Write the current content of the t_hist chained list
+** in his appropriate file. Format each line properly.
+*/
+
+int			rewrite_history(t_hist *history)
+{
+	unsigned int	index;
+	int		hist_fd;
+	char	*history_filename;
+
+	if (!(history_filename = replace_home(HISTORY_FILE)))
+		return (MALLOC_ERROR);
+	if ((hist_fd = open(history_filename, O_CREAT | O_WRONLY, 0600)) == -1)
+		return (ft_strdel_out(&history_filename, FAILURE));
+	ft_strdel(&history_filename);
+	index = 0;
+	while (history)
+	{
+		if (write_line(index++, hist_fd, history->line) == MALLOC_ERROR)
+		{
+			close(hist_fd);
+			return (MALLOC_ERROR);
+		}
+		history = history->next;
+	}
+	close(hist_fd);
+	return (SUCCESS);
 }

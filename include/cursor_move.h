@@ -19,6 +19,9 @@
 # define CTRL_A(key) (key[0] == 1)
 # define CTRL_E(key) (key[0] == 5)
 
+# define UP_KEY(key)	(IS_KEYBOARD(key, 0) && key[2] == 65)
+# define DOWN_KEY(key)	(IS_KEYBOARD(key, 0) && key[2] == 66)
+
 void		simple_cursor_move(t_line *shell_repr, char *key, t_cursor *cursor);
 int			is_key_movement(char *key);
 

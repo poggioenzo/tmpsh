@@ -110,6 +110,48 @@ int			line_lst_len(t_line *shell_repr)
 }
 
 /*
+** extract_line:
+**
+** Free the given line selected by his address.
+** Avoid deleting the first line.
+*/
+
+void		extract_line(t_line *shell_repr, t_line *to_del)
+{
+	t_line	*prev_node;
+
+	if (to_del->position == 0)
+		return ;
+	while (shell_repr != to_del)
+	{
+		prev_node = shell_repr;
+		shell_repr = shell_repr->next;
+	}
+	prev_node->next = shell_repr->next;
+	free_t_line(&shell_repr, 0);
+}
+
+/*
+** update_line_lst:
+**
+** Update the position of each line in the t_line chained list.
+*/
+
+void		update_line_lst(t_line *shell_repr)
+{
+	int index;
+
+	index = 0;
+	while (shell_repr)
+	{
+		shell_repr->position = index++;
+		shell_repr = shell_repr->next;
+	}
+}
+
+
+
+/*
 ** get_last_line:
 **
 ** Return the last line of a t_line chained list.

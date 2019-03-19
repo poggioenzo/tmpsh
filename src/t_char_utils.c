@@ -40,6 +40,25 @@ int			push_end_char(t_char **char_node, char letter, int lock)
 	return (MALLOC_SUCCESS);
 }
 
+/*
+** extend_char:
+**
+** Add a t_char list at the end of an other list.
+** Return the position of the junction.
+*/
+
+int		extend_char(t_char *old_chars, t_char *char_to_add)
+{
+	t_char		*start_line;
+
+	start_line = old_chars;
+	while (old_chars->next)
+		old_chars = old_chars->next;
+	old_chars->next = char_to_add;
+	update_position(start_line);
+	return (old_chars->position + 1);
+}
+
 
 /*
 ** update_position:
