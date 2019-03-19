@@ -13,7 +13,6 @@ def main():
 	# pprint(grammar)
 	if len(sys.argv) > 1:
 		command = " ".join(sys.argv[1:])
-		print(command)
 		tokens = tk.tokenize(command, grammar)
 
 
