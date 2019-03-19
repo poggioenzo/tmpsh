@@ -1,6 +1,4 @@
-
 # Grammar
-
 
 - `\` : ESCAPE
 
@@ -24,16 +22,17 @@
 - `<`: read_from
 
 ## Redirection_symbol_fd
-- `>&n`: trunc_to (with n = `1..*`, `-`)
+- `>&n`: trunc_to (with n = `1..*`, )
+- `>&-`: trunc_to_null 
 - `<&n`: read_from_fd (with n = `1..*`)
 
-## Sub_process(X)
-- `${X}`: expansion de variable
-- `$(X)`: substitution de commande
-- `(X)`: block sous-shell
-- `{X}`: commandes groupées
-- `>(X)`: substitution stdin
-- `<(X)`: substitution by file
+## Sub_process(...)
+- `${...}`: expansion de variable
+- `$(...)`: substitution de commande
+- `(...)`: block sous-shell
+- `{...}`: commandes groupées
+- `>(...)`: substitution stdin
+- `<(...)`: substitution by file
 
 # Rules
 
@@ -62,4 +61,4 @@
 - Redirection_symbol
 - FILENAME
 - FILEDESCRIPTOR
-- Sub_process(X)
+- Sub_process(...)
