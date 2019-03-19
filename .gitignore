@@ -1,6 +1,6 @@
 #Personnal
 
-__pycache__/
+lexer/utils/__pycache__/*
 
 tmpsh
 .*.swp
