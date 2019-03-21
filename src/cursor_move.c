@@ -261,6 +261,7 @@ void			store_prev_word(t_line *shell_repr, t_cursor *curr_cursor,
 static void		previous_word(t_line *shell_repr, t_cursor *cursor)
 {
 	t_cursor	word_cursor;
+	t_char		*first_unlock;
 
 	word_cursor = (t_cursor){.row = -1, .column = -1};
 	store_prev_word(shell_repr, cursor, &word_cursor);
@@ -272,7 +273,11 @@ static void		previous_word(t_line *shell_repr, t_cursor *cursor)
 	else
 	{
 		cursor->row = 0;
-		cursor->column = get_unlocked_char(shell_repr->chars)->position;
+		first_unlock = get_unlocked_char(shell_repr->chars);
+		if (first_unlock)
+			cursor->column = first_unlock->position;
+		else
+			cursor->column = char_lst_len(shell_repr->chars);
 	}
 }
 

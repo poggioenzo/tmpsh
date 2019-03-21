@@ -7,9 +7,6 @@
 ** 2 action availble : FREE or CREATE.
 */
 
-#define CREATE	0
-#define FREE	1
-
 int		fd_debug;
 
 static int				manage_shell_repr(int action, t_line **prompt_line, \
