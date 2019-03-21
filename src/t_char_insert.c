@@ -75,9 +75,9 @@ int			del_pos_char(t_char **char_lst, t_cursor *cursor)
 	}
 	if (curr_char->lock == TRUE)
 	{
-		if (char_lst_len(*char_lst) == curr_char->position + 1)
-			return (del_line);
-		return (deletion_succeed);
+		/*if (char_lst_len(*char_lst) == curr_char->position + 1)
+			return (del_line);*/
+		return (del_line);
 	}
 	else if (!prev_char)
 		*char_lst = curr_char->next;

@@ -7,6 +7,7 @@
 int			free_t_char_lst(t_char **char_lst, int status);
 int			create_char(t_char	**char_node, char letter, int position, int lock);
 int			push_end_char(t_char **char_node, char letter, int lock);
+int			extend_char(t_char *old_chars, t_char *char_to_add);
 int			insert_string(t_char **char_lst, char *string, int lock);
 void		display_chars(t_char *char_lst, t_cursor *cursor, int line, \
 							int *printed_cursor);

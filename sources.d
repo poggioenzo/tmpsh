@@ -19,3 +19,4 @@ SOURCES+=src/termios_setter.c
 SOURCES+=src/line_deletion.c
 SOURCES+=src/file/replace_home.c
 SOURCES+=src/history.c
+SOURCES+=src/history_manager.c
