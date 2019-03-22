@@ -6,7 +6,6 @@
 #include "t_bracket_utils.h"
 #include "get_next_char.h"
 
-enum {leave_check = 2, invalid_syntax, not_nested};
 void		show_operand_lst(t_operand *operand_list);
 
 /*
@@ -137,11 +136,9 @@ int		check_separator(t_operand **operand_list, t_char **curr_char,\
 		if (skip_char)
 			*curr_char = (*curr_char)->next;
 		while ((*curr_char)->next && ft_isspace((*curr_char)->next->letter))
-		{
-			if (charset_in_next_char(*curr_char, "&|;"))
-				return (syntax_error((*curr_char)->letter));
 			*curr_char = (*curr_char)->next;
-		}
+		if (charset_in_next_char(*curr_char, "&|;"))
+			return (syntax_error((*curr_char)->next->letter));
 		if ((*curr_char)->next)
 			delete_last_operand(operand_list);
 		else
@@ -442,17 +439,7 @@ int			newline_check(t_line *shell_repr, t_cursor *cursor)
 	operand_list = NULL;
 	status = is_nested(shell_repr, &operand_list);
 	if (status == TRUE)
-	{
-		show_operand_lst(operand_list);
 		add_new_line(shell_repr, operand_list, cursor);
-		DEBUG_print_line(shell_repr, fd_debug);
-		return (SUCCESS);
-	}
-	else if (status == not_nested)
-	{
-		return (SUCCESS);
-	}
-	else if (status == invalid_syntax)
-		return (invalid_syntax);
-	return (status); //temporary return.
+	free_operand_lst(&operand_list, 0);
+	return (status);
 }

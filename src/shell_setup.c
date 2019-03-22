@@ -1,4 +1,10 @@
 #include "shell_setup.h"
+# include "t_cursor_utils.h"
+# include "t_line_utils.h"
+# include "prompt.h"
+# include "t_caps_utils.h"
+# include "t_char_insert.h"
+# include "display.h"
 
 /*
 ** manage_shell_repr:
@@ -9,7 +15,7 @@
 
 int		fd_debug;
 
-static int				manage_shell_repr(int action, t_line **prompt_line, \
+int				manage_shell_repr(int action, t_line **prompt_line, \
 		t_cursor **cursor)
 {
 	static t_line	*static_prompt;

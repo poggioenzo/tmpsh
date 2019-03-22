@@ -9,6 +9,8 @@
 #include "tmpsh.h"
 
 char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line);
-
+char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
+		int *total_lines);
+char			*render_shell(t_line *prompt_lines);
 
 #endif

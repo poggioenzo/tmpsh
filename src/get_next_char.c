@@ -12,7 +12,6 @@
 
 int	is_next_char(t_char *curr_char, char letter)
 {
-	ft_dprintf(fd_debug, "is next : %d | ptr : %p\n", letter == '\n', curr_char->next);
 	if (letter == '\n' && !curr_char->next)
 			return (1);
 	return (curr_char->next && curr_char->next->letter == letter);
