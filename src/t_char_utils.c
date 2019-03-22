@@ -150,6 +150,19 @@ int			char_lst_len(t_char *char_lst)
 	return (index);
 }
 
+/*
+** get_unlocked_char:
+**
+** Get the first char in t_char list whom is unlocked.
+*/
+
+t_char	*get_unlocked_char(t_char *char_lst)
+{
+	while (char_lst && char_lst->lock == TRUE)
+		char_lst = char_lst->next;
+	return (char_lst);
+}
+
 
 /*
 ** char_lock_len:

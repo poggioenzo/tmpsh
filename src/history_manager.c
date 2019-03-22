@@ -28,13 +28,9 @@ int		history_store(int action, t_hist **history)
 		if (store_history(history) == FAILURE)
 			return (FAILURE);
 		saved_history = *history;
-        ft_dprintf(fd_debug, "It's stored : %p | %p\n", saved_history, *history);
 	}
 	else if (action == GET)
-    {
-        ft_dprintf(fd_debug, "SELECT %p\n", saved_history);
 		*history = saved_history;
-    }
 	else if (action == FREE)
 		free_history(&saved_history, 0);
 	return (SUCCESS);
@@ -174,7 +170,6 @@ static void    clean_lastest_history(int is_repetition, t_line *shell_repr, \
 static void    try_reset_history(char *key, t_hist **history, int is_repetition)
 {
     history_store(GET, history);
-    ft_dprintf(fd_debug, "in : %p\n", *history);
     if (!*history)
         return ;
     if (is_repetition == FALSE && UP_KEY(key))
@@ -268,21 +263,19 @@ static int     add_new_history(t_line *shell_repr, t_cursor *cursor, t_hist *his
 
     cursor_line = get_cursor_line(shell_repr, cursor);
     followed_save = cursor_line->next;
-    cursor_line->next = NULL;
     hist_line = history ? history->line : "\0";
     if (convert_char(hist_line, &cursor_line) == MALLOC_ERROR)
         return (MALLOC_ERROR);
     if (!history)
         return (MALLOC_SUCCESS);
+    cursor_line->next = NULL;
     status = MALLOC_SUCCESS;
     while ((hist_line = ft_strchr(hist_line, '\n')) && status)
     {
         hist_line++;
-        ft_dprintf(fd_debug, "line : %s\n", hist_line);
         status = convert_char(hist_line, &cursor_line->next);
         if (status == MALLOC_SUCCESS)
             cursor_line = cursor_line->next;
-        ft_dprintf(fd_debug, "loop status : %d\n", status);
     }
     cursor_line->next = followed_save;
     return (status);
@@ -296,14 +289,10 @@ int		history_manager(char *key, t_line *shell_repr, t_cursor *cursor)
 
 	check_last_key(&is_repetition);
     clean_lastest_history(is_repetition, shell_repr, cursor, history);
-    ft_dprintf(fd_debug, "from : %p |%s| ", history, history ? history->line : "No content");
     select_current_history(key, &history, is_repetition);
-    ft_dprintf(fd_debug, "to : %p : |%s|\n", history, history ? history->line : "No content");
-    ft_dprintf(fd_debug, "HISTORY : %p\n", history);
     add_new_history(shell_repr, cursor, history);
     update_line_lst(shell_repr);
     cursor_line = get_cursor_line(shell_repr, cursor);
     cursor->column = char_lst_len(cursor_line->chars);
-    DEBUG_print_line(shell_repr, fd_debug);
 	return (0);
 }

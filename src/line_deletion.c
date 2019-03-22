@@ -3,24 +3,6 @@
 #include "t_char_utils.h"
 
 /*
-** update_line_position:
-**
-** Go through each line and update there position, starting from 0.
-*/
-
-void static		update_line_position(t_line *shell_repr)
-{
-	int		index;
-	
-	index = 0;
-	while (shell_repr)
-	{
-		shell_repr->position = index++;
-		shell_repr = shell_repr->next;
-	}
-}
-
-/*
 ** join_end_of_line:
 **
 ** Whenever a line is deleted, try to move the char at the end of the
@@ -68,5 +50,5 @@ void		delete_line(t_line *shell_repr, int position, t_cursor *cursor)
 	prev_line->next = cursor_line->next;
 	cursor->row--;
 	free_t_line(&cursor_line, 0);
-	update_line_position(shell_repr);
+	update_line_lst(shell_repr);
 }

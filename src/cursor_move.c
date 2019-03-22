@@ -190,19 +190,6 @@ static void		next_word(t_line *shell_repr, t_cursor *cursor)
 }
 
 /*
-** get_unlocked_char:
-**
-** Get the first char in t_char list whom is unlocked.
-*/
-
-static t_char	*get_unlocked_char(t_char *char_lst)
-{
-	while (char_lst && char_lst->lock == TRUE)
-		char_lst = char_lst->next;
-	return (char_lst);
-}
-
-/*
 ** is_cursor_pos:
 **
 ** Condition to check according to a t_line and a t_char if we are on
