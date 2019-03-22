@@ -36,6 +36,11 @@ int		syntax_error(char operator)
 int		skip_quote(t_line **shell_repr, t_char **curr_char, \
 				t_operand **operand_list)
 {
+	t_operand	*last_open;
+
+	last_open = get_last_bracket(*operand_list);
+	if (last_open && last_open->open_char == '"')
+		return (SUCCESS);
 	if (push_operand(operand_list, QUOTE, '\'') == MALLOC_ERROR)
 		   return (MALLOC_ERROR);
 	while (get_next_char(shell_repr, curr_char))
@@ -438,6 +443,7 @@ int			newline_check(t_line *shell_repr, t_cursor *cursor)
 	
 	operand_list = NULL;
 	status = is_nested(shell_repr, &operand_list);
+	ft_dprintf(fd_debug, "NESTED : %d\n", status);
 	if (status == TRUE)
 		add_new_line(shell_repr, operand_list, cursor);
 	free_operand_lst(&operand_list, 0);

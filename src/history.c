@@ -28,7 +28,7 @@ static int		create_t_hist(t_hist **hist_node, t_hist *prev, char *content,
 ** Push it at the end of our list.
 */
 
-static int		push_t_hist(t_hist **history, char *content, int is_tmp)
+int		push_t_hist(t_hist **history, char *content, int is_tmp)
 {
 	t_hist	*curr_node;
 
