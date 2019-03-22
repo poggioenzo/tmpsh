@@ -2,6 +2,7 @@
 
 from pprint import pprint
 import utils.file as fl
+from collections import deque as dq
 
 
 def get_grammar(path):
@@ -11,14 +12,14 @@ def get_grammar(path):
 	i = 0
 	grammar = {}
 	while (i < length):
-		if (len(lines[i]) > 0 and lines[i][0] != '\n' and lines[i][0] != '\t' and lines[i][0] != '#'):
-			keyword = lines[i][:-1]
+		if len(lines[i]) > 0 and lines[i][0] not in '\n#\t':
+			keyword = lines[i].split(':')[0].strip()
 			i += 1
 			if keyword not in grammar:
 				grammar[keyword] = []
 			while (1):
 				if len(lines[i]) > 0 and lines[i][0] == '\t':
-					grammar[keyword].append(lines[i][1:])
+					grammar[keyword].append(lines[i].strip())
 				else:
 					break
 				i += 1

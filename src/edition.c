@@ -72,9 +72,9 @@ int		main(int argc, char **argv)
 	UNUSED(argv);
 	manage_termios(SETUP);
 	//fd_debug = open("shell_debug",  O_RDWR | O_TRUNC | O_CREAT, 0777);
-	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	fd_debug = open("/dev/ttys004",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	status = history_store(CREATE, &history);
 	/*rewrite_history(history);*/
 	read_loop();
-	return (0);
+	return (status);
 }

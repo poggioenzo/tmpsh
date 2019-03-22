@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/03/19 14:40:23 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/19 19:24:47 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/03/22 14:58:33 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,7 +27,16 @@
 #ifndef TMPSH_H
 # define TMPSH_H
 
-#define UNUSED(x) (void) x
+#define UNUSED(value) (void)value
+
+typedef struct s_operand	t_operand;
+
+struct s_operand
+{
+	char		open_char;
+	int			type:6;
+	t_operand	*next;
+};
 #define ft_getenv(var)	getenv(var)
 
 /*
