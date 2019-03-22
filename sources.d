@@ -16,3 +16,5 @@ SOURCES+=src/t_char_utils.c
 SOURCES+=src/t_cursor_utils.c
 SOURCES+=src/t_line_utils.c
 SOURCES+=src/termios_setter.c
+SOURCES+=src/t_bracket_utils.c
+SOURCES+=src/get_next_char.c

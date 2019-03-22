@@ -1,7 +1,16 @@
 #ifndef TMPSH_H
 # define TMPSH_H
 
+#define UNUSED(value) (void)value
 
+typedef struct s_operand	t_operand;
+
+struct s_operand
+{
+	char		open_char;
+	int			type:5;
+	t_operand	*next;
+};
 
 /*
 ** Cursor structure

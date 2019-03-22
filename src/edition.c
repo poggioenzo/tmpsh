@@ -38,7 +38,10 @@ int				read_loop(void)
 
 int		main(int argc, char **argv)
 {
-	fd_debug = open("shell_debug",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	UNUSED(argc);
+	UNUSED(argv);
+	//fd_debug = open("shell_debug",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	fd_debug = open("/dev/pts/0",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	manage_termios(SETUP);
 	read_loop();
 	return (0);

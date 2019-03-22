@@ -88,19 +88,6 @@ int			delete_char(t_line *shell_repr, t_cursor *cursor)
 	return (del_pos_char(&shell_repr->chars, cursor));
 }
 
-/*
-** insert_string:
-**
-** Insert an entire string in a t_char list, allocating each char node.
-** Update char position at the end.
-*/
-
-int			insert_string_bis(t_cursor *cursor, t_char **char_lst, 
-		char *string, int lock)
-{
-	return (0);
-}
-
 
 // Will only insert string at the last position
 int			insert_string(t_char **char_lst, char *string, int lock) 

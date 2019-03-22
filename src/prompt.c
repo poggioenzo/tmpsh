@@ -92,7 +92,6 @@ static char		*parse_prompt_format(char *format)
 char	*format_prompt(void)
 {
 	char	*default_format;
-	int		options;
 
 	default_format = getenv("PROMPT42");
 	if (!default_format)

@@ -13,6 +13,7 @@ void		display_chars(t_char *char_lst, t_cursor *cursor, int line, \
 void		update_position(t_char *char_lst);
 int			char_lst_len(t_char *char_lst);
 int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor);
+t_char		*get_unlocked_char(t_char *char_lst);
 void		display_chars(t_char *char_lst, t_cursor *cursor, int line, \
 		int *printed_cursor);
 void		free_t_char(t_char **char_node);

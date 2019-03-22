@@ -23,11 +23,9 @@
 int			hash_function(const char *string, int seed, int size)
 {
 	unsigned long long		hash;
-	int						len_str;
 	unsigned int			tmp_seed;
 
 	hash = 0;
-	len_str = ft_strlen(string);
 	while (*string)
 	{
 		tmp_seed = seed * *string * 5 - seed * size;

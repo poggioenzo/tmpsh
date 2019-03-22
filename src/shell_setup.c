@@ -17,7 +17,6 @@ static int				manage_shell_repr(int action, t_line **prompt_line, \
 {
 	static t_line	*static_prompt;
 	static t_cursor	*static_cursor;
-	int				status;
 
 	if (action == CREATE)
 	{

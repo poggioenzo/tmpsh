@@ -118,6 +118,21 @@ void		display_chars(t_char *char_lst, t_cursor *cursor, int line, \
 	}
 }
 
+/*
+** get_unlocked_char:
+**
+** In a t_char lst, find the first element which isn't set as locked.
+*/
+
+t_char		*get_unlocked_char(t_char *char_lst)
+{
+	if (!char_lst)
+			return (NULL);
+	while (char_lst && char_lst->lock == TRUE)
+			char_lst = char_lst->next;
+	return (char_lst);
+}
+
 int			char_lst_len(t_char *char_lst)
 {
 	int		index;
