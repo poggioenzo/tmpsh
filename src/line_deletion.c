@@ -8,7 +8,7 @@
 ** Go through each line and update there position, starting from 0.
 */
 
-void static		update_line_position(t_line *shell_repr)
+static void		update_line_position(t_line *shell_repr)
 {
 	int		index;
 	

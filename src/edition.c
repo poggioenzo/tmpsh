@@ -77,5 +77,5 @@ int		main(int argc, char **argv)
 	status = history_store(CREATE, &history);
 	/*rewrite_history(history);*/
 	read_loop();
-	return (0);
+	return (status);
 }
