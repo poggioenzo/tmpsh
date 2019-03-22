@@ -6,7 +6,7 @@
 /*   By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 08:38:27 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/10 16:36:45 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/03/19 15:40:13 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -94,7 +94,7 @@ char			*ft_fstrjoin(char **s1, char **s2, int free_s1, \
 char			*ft_strstr(const char *full_str, const char *substring);
 char			*ft_strnstr(const char *full_str, const char *substring,\
 		size_t len);
-
+size_t			ft_strcount(const char *str, char c);
 void			ft_striter(char *str, void (*fct)(char *));
 void			ft_striteri(char *str, void (*fct)(unsigned int, char *));
 char			*ft_strmap(const char *str, char (*fct)(char));
@@ -204,7 +204,8 @@ struct			s_fd
 };
 
 int				get_next_line(int fd, char **line);
-char			*ft_readfile(int fd);
+char			*readfile(char *filename, int mode, int rights);
+char			*fd_readfile(int fd);
 int				ft_readdir(char *directory, char ***strings);
 int				ft_rmdir(char *filename, int recursiv);
 char			*basename(char *filename);

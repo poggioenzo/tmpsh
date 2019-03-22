@@ -1,13 +1,14 @@
 #include "t_line_utils.h"
 #include "libft.h"
 #include "t_char_utils.h"
+
 /*
 ** free_t_line:
 **
 ** Free a single t_line element.
 */
 
-static int		free_t_line(t_line **line_lst, int status)
+int		free_t_line(t_line **line_lst, int status)
 {
 	t_char		*char_lst;
 
@@ -107,6 +108,47 @@ int			line_lst_len(t_line *shell_repr)
 		shell_repr = shell_repr->next;
 	return (shell_repr->position + 1);
 }
+
+/*
+** extract_line:
+**
+** Free the given line selected by his address.
+** Avoid deleting the first line.
+*/
+
+void		extract_line(t_line *shell_repr, t_line *to_del)
+{
+	t_line	*prev_node;
+
+	if (to_del->position == 0)
+		return ;
+	while (shell_repr != to_del)
+	{
+		prev_node = shell_repr;
+		shell_repr = shell_repr->next;
+	}
+	prev_node->next = shell_repr->next;
+	free_t_line(&shell_repr, 0);
+}
+
+/*
+** update_line_lst:
+**
+** Update the position of each line in the t_line chained list.
+*/
+
+void		update_line_lst(t_line *shell_repr)
+{
+	int index;
+
+	index = 0;
+	while (shell_repr)
+	{
+		shell_repr->position = index++;
+		shell_repr = shell_repr->next;
+	}
+}
+
 
 
 /*

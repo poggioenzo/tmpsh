@@ -1,7 +1,7 @@
 NAME = tmpsh
 
 CC = gcc
-CFLAGS =  -fsanitize=address -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address 
 CPPFLAGS = $(addprefix -I , $(INCLUDES_LIST))
 
 include sources.d
@@ -14,7 +14,7 @@ convert_src = $(strip $(call hidden_format, $(1:%.c=%.o)))
 #Transform each %.c source file in the corresponding %.o file in an hidden file format.
 OBJS = $(foreach file, $(SOURCES:%.c=%.o), $(call hidden_format, $(file)))
 
-INCLUDE_FOLDER = include/ Libft/ Libft/hash_table/
+INCLUDE_FOLDER = include/ Libft/ Libft/hash_table/ include/file/
 SOURCES_FOLDER = src/
 DEPENDENCIES_FOLDER = dependencies/
 
@@ -58,4 +58,6 @@ $(DEPENDENCIES_FOLDER)%.d:$(SOURCES_FOLDER)%.c
 
 .PHONY:all clean fclean proper re
 
+ifeq (, $(filter $(MAKECMDGOALS), proper clean fclean))
 include $(DEPENDENCIES)
+endif

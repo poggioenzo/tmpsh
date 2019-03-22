@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:23:55 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/12/07 11:19:05 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/03/17 16:54:32 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -59,7 +59,7 @@ char		*get_big_f(va_list args, t_prt_opt *format_options, int *octets)
 		return (ft_strdup("(not regular file)"));
 	if ((fd = open(filename, O_RDONLY)) == -1)
 		return (ft_strdup("(open failed)"));
-	if (!(content = ft_readfile(fd)))
+	if (!(content = fd_readfile(fd)))
 		return (NULL);
 	*octets = ft_strlen(content);
 	if (format_options->precision != -1 && *octets > format_options->precision)

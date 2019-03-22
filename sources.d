@@ -18,3 +18,7 @@ SOURCES+=src/t_line_utils.c
 SOURCES+=src/termios_setter.c
 SOURCES+=src/t_bracket_utils.c
 SOURCES+=src/get_next_char.c
+SOURCES+=src/line_deletion.c
+SOURCES+=src/file/replace_home.c
+SOURCES+=src/history.c
+SOURCES+=src/history_manager.c

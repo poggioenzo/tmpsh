@@ -14,13 +14,13 @@ int		main(int argc, char **argv, char **environ)
 {
 	pid_t pid;
 	pid_t pgid;
-	char *argv_prog[] = {"cat", argv[1],  NULL};
+	char *argv_prog[] = { "" ,"$PATH",  NULL};
 	int		status;
 	pid_t control;
 
 	pid = tcgetpgrp(1);
 	printf("pid tcgetpgrp : %d\n", pid);
-	sleep(3);
+	sleep(0);
 
 	if ((pid = fork()) == -1)
 	{
@@ -30,7 +30,7 @@ int		main(int argc, char **argv, char **environ)
 	if (pid == 0)
 	{
 		setpgid(0, 0);
-		if (execve("/usr/bin/top", argv_prog, environ) == -1)
+		if (execve("/bin/echo", argv_prog , NULL) == -1)
 			perror("execve");
 	}
 	else
