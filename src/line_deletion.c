@@ -8,7 +8,11 @@
 ** Go through each line and update there position, starting from 0.
 */
 
+<<<<<<< HEAD
 void static		update_line_position(t_line *shell_repr)
+=======
+static void		update_line_position(t_line *shell_repr)
+>>>>>>> 511c68d52e30b362bdd82104232dfb2443ac5869
 {
 	int		index;
 	
