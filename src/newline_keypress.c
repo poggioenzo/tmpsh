@@ -34,8 +34,16 @@ int		syntax_error(char operator)
 ** - MALLOC_ERROR if an allocation error occur.
 */
 
+<<<<<<< HEAD
+
+
+
+
+static int	is_nested(t_line *shell_repr)
+=======
 int		skip_quote(t_line **shell_repr, t_char **curr_char, \
 				t_operand **operand_list)
+>>>>>>> 511c68d52e30b362bdd82104232dfb2443ac5869
 {
 	if (push_operand(operand_list, QUOTE, '\'') == MALLOC_ERROR)
 		   return (MALLOC_ERROR);
