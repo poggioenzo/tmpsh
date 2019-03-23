@@ -1,4 +1,5 @@
 #include "t_char_utils.h"
+#include "char_concatenation.h"
 #include "t_cursor_utils.h"
 #include "t_line_utils.h"
 
@@ -181,5 +182,68 @@ int			char_lock_len(t_char *char_lst)
 		char_lst = char_lst->next;
 	}
 	return (index);
+}
+
+void		get_last_lock(t_char *char_lst, t_char **last_lock)
+{
+	while (char_lst->next && char_lst->next->lock == TRUE)
+		char_lst = char_lst->next;
+	*last_lock = char_lst;
+}
+
+void		get_last_char(t_char *char_lst, t_char **last_char)
+{
+	while (char_lst && (char_lst->lock == TRUE || char_lst->next))
+		char_lst = char_lst->next;
+	*last_char = char_lst;
+}
+
+void		search_prev_pointer(t_char *char_lst, t_char **prev_char,\
+			   	t_char *from)
+{
+	*prev_char = char_lst;
+	while ((*prev_char)->next != from)
+		*prev_char = (*prev_char)->next;
+}
+
+
+char	*delete_char_range(t_char *char_lst, t_char *from,\
+				t_char *to, int get_str)
+{
+	t_char	*prev_char;
+	char	*cutted_str;
+	t_cursor	fake_cursor;
+
+	fake_cursor = (t_cursor){.row = -1, .column = -1};
+	cutted_str = NULL;
+	if (!from)
+		from = get_unlocked_char(char_lst);
+	if (!to)
+		get_last_char(char_lst, &to);
+	if (!from || !to)
+		return (get_str ? ft_strnew(0) : NULL);
+	search_prev_pointer(char_lst, &prev_char, from);
+	prev_char->next = to->next;
+	to->next = NULL;
+	if (get_str)
+		cutted_str = format_char_lst(from, &fake_cursor, 0);
+	free_t_char_lst(&from, 0);
+	update_position(char_lst);
+	return (cutted_str);
+}
+
+
+
+/*
+ * ** get_cursor_char_only:
+ * **
+ * ** Allow us to find the t_char element where the cursor is positionned.
+ * */
+
+t_char	*get_cursor_char_only(t_char *char_lst, t_cursor *cursor)
+{
+	while (char_lst && char_lst->position != cursor->column)
+		char_lst = char_lst->next;
+	return (char_lst);
 }
 

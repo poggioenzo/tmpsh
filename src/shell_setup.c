@@ -5,6 +5,10 @@
 # include "t_caps_utils.h"
 # include "t_char_insert.h"
 # include "display.h"
+# include "history_manager.h"
+#include "termios_setter.h"
+#include "clipboard.h"
+#include <signal.h>
 
 /*
 ** manage_shell_repr:
@@ -37,6 +41,11 @@ int				manage_shell_repr(int action, t_line **prompt_line, \
 		free_t_line_lst(&static_prompt, 0);
 		dealloc_cursor(&static_cursor, 0);
 	}
+	else if (action == GET)
+	{
+		*prompt_line = static_prompt;
+		*cursor = static_cursor;
+	}
 	return (0);
 }
 
@@ -58,8 +67,31 @@ static int				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 	return (MALLOC_SUCCESS);
 }
 
+void	shell_cleaner(void)
+{
+	history_store(FREE, NULL);
+	manage_shell_repr(FREE, NULL, NULL);
+	manage_termios(RESET);
+	clipboard_store(FREE, NULL);
+	free_capabilities_struct(&g_caps, 0);
+}
+
+void	sig_shell_exit(int status)
+{
+	t_line	*shell_repr;
+	t_cursor	*cursor;
+
+	manage_shell_repr(GET, &shell_repr, &cursor);
+	*cursor = (t_cursor){.row = -1, .column = -1};
+	display_shell(shell_repr, cursor, FALSE);
+	ft_printf("%s\n", g_caps->reset_cursor);
+	shell_cleaner();
+	exit(status);
+}
+
 int			signal_setup(void)
 {
+	signal(SIGINT, sig_shell_exit);
 	return (0);
 }
 
@@ -84,6 +116,7 @@ int				shell_preconfig(t_line **shell, t_cursor **cursor)
 		manage_shell_repr(FREE, NULL, NULL);
 		return (MALLOC_ERROR);
 	}
+	signal_setup();
 	ft_printf(g_caps->hide_cursor);
 	display_shell(*shell, *cursor, TRUE);
 	return (MALLOC_SUCCESS);

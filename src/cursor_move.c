@@ -124,19 +124,6 @@ static void		end_line(t_line *shell_repr, t_cursor *cursor)
 }
 
 /*
-** get_cursor_char_only:
-**
-** Allow us to find the t_char element where the cursor is positionned.
-*/
-
-static t_char	*get_cursor_char_only(t_char *char_lst, t_cursor *cursor)
-{
-	while (char_lst && char_lst->position != cursor->column)
-		char_lst = char_lst->next;
-	return (char_lst);
-}
-
-/*
 ** set_last_pos:
 **
 ** Set up to the cursor the last avaible position of the shell.

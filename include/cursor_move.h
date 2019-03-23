@@ -20,6 +20,11 @@
 # define CTRL_E(key) (key[0] == 5)
 # define CTRL_D(key) (key[0] == 4)
 
+# define CTRL_W(key) (key[0] == 23)
+# define CTRL_N(key) (key[0] == 14)
+# define CTRL_L(key) (key[0] == 12)
+# define CTRL_P(key) (key[0] == 16)
+
 # define UP_KEY(key)	(IS_KEYBOARD(key, 0) && key[2] == 65)
 # define DOWN_KEY(key)	(IS_KEYBOARD(key, 0) && key[2] == 66)
 

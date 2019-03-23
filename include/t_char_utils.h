@@ -20,4 +20,7 @@ void		display_chars(t_char *char_lst, t_cursor *cursor, int line, \
 		int *printed_cursor);
 void		free_t_char(t_char **char_node);
 t_char		*get_unlocked_char(t_char *char_lst);
+char		*delete_char_range(t_char *char_lst, t_char *from,\
+				t_char *to, int get_str);
+t_char		*get_cursor_char_only(t_char *char_lst, t_cursor *cursor);
 #endif

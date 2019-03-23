@@ -59,7 +59,7 @@ char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 	int		cursor_displayed;
 
 	line_len = get_repr_len(char_lst, cursor, line);
-	if (!(line_repr = (char *)malloc(sizeof(char) * (line_len))))
+	if (!(line_repr = (char *)malloc(sizeof(char) * (line_len+ 5))))
 		return (NULL);
 	index = 0;
 	cursor_displayed = FALSE;
@@ -183,11 +183,9 @@ char			*render_shell_content(t_line *prompt_lines)
 	char	*shell_str;
 	char	*new_line;
 	char	*newline_tmp;
-	t_cursor	fake_cursor;
 
 	if (!(shell_str = ft_strnew(0)))
 		return (NULL);
-	fake_cursor = (t_cursor){.row = -1, .column = -1};
 	while (prompt_lines)
 	{
 		if (history_formatter(&prompt_lines, &new_line) == MALLOC_ERROR)

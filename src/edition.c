@@ -16,6 +16,7 @@
 #include "history.h"
 #include "history_manager.h"
 #include "char_concatenation.h"
+#include "clipboard.h"
 
 
 int		check_eof(t_line *shell_repr)
@@ -45,6 +46,8 @@ int		char_analysis(t_line *shell_repr, char *new_char, t_cursor *cursor)
 		status = newline_check(shell_repr, cursor);
 	else if (CTRL_D(new_char))
 		status = check_eof(shell_repr);
+	else if (is_clipoard_key(new_char))
+		status = clipoard_manager(new_char, shell_repr, cursor);
 	ft_strcpy(g_last_char, new_char);
 	return (status);
 }
@@ -62,9 +65,8 @@ int				read_loop(t_line **shell_lines, t_cursor **cursor)
 	{
 		ft_bzero(buff, PROMPT_BUFF + 1);
 		read_ret = read(STDIN_FILENO, buff, PROMPT_BUFF);
+		ft_dprintf(fd_debug, "(%d,%d,%d,%d)\n", buff[0], buff[1], buff[2], buff[3] );
 		buff[read_ret] = '\0';
-		dprintf(fd_debug, "(%d, %d, %d, %d, %d), EOF : %d\n", buff[0],buff[1],buff[2],buff[3], buff[4], buff[0] == EOF);
-		dprintf(fd_debug, "EOF %d\n", EOF);
 		if (ft_isprint(buff[(index = 0)]))
 		{
 			while (buff[index])
@@ -85,7 +87,6 @@ int				read_loop(t_line **shell_lines, t_cursor **cursor)
 
 void	show_history(t_hist *history)
 {
-	ft_dprintf(fd_debug, "SHOW HISTORY\n");
 	while (history)
 	{
 		ft_dprintf(fd_debug, "addresses : %p   | prev : %p | len : %d\n", history, history->prev, 
@@ -144,6 +145,8 @@ int		prompt_loop(void)
 	}
 }
 
+
+
 int		main(int argc, char **argv)
 {
 	t_hist	*history;
@@ -151,7 +154,7 @@ int		main(int argc, char **argv)
 
 	UNUSED(argv);
 	manage_termios(SETUP);
-	fd_debug = open("/dev/ttys002",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	fd_debug = open("/dev/pts/4",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	status = history_store(CREATE, &history);
 	/*rewrite_history(history);*/
 	if (argc == 1)

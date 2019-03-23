@@ -22,3 +22,4 @@ SOURCES+=src/line_deletion.c
 SOURCES+=src/file/replace_home.c
 SOURCES+=src/history.c
 SOURCES+=src/history_manager.c
+SOURCES+=src/clipboard.c
