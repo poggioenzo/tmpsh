@@ -3,6 +3,6 @@
 
 # include "tmpsh.h"
 
-# define PROMPT_BUFF	4
+# define PROMPT_BUFF	5
 
 #endif

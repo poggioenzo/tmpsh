@@ -58,6 +58,11 @@ static int				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 	return (MALLOC_SUCCESS);
 }
 
+int			signal_setup(void)
+{
+	return (0);
+}
+
 /*
 ** shell_preconfig:
 **

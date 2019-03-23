@@ -18,6 +18,7 @@
 # define END(key) (IS_KEYBOARD(key, 0) && key[2] == 70)
 # define CTRL_A(key) (key[0] == 1)
 # define CTRL_E(key) (key[0] == 5)
+# define CTRL_D(key) (key[0] == 4)
 
 # define UP_KEY(key)	(IS_KEYBOARD(key, 0) && key[2] == 65)
 # define DOWN_KEY(key)	(IS_KEYBOARD(key, 0) && key[2] == 66)

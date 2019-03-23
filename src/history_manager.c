@@ -17,6 +17,7 @@
 **            giving also the pointer to history.
 ** - GET : Give the capacity to get the current allocated history.
 ** - FREE : Free the space allocated to the t_hist chained list.
+** - STORE : Register the new history in the store.
 */
 
 int		history_store(int action, t_hist **history)
@@ -29,6 +30,8 @@ int		history_store(int action, t_hist **history)
 			return (FAILURE);
 		saved_history = *history;
 	}
+	else if (action == STORE)
+		saved_history = *history;
 	else if (action == GET)
 		*history = saved_history;
 	else if (action == FREE)
@@ -37,39 +40,7 @@ int		history_store(int action, t_hist **history)
 }
 
 
-/*
-** history_formatter:
-**
-** Format a single string in a t_char * format into a char * string.
-** Replace the \ followed by a new line into a single line.
-*/
 
-/*static int		history_formatter(t_char *chars_line, char **format)
-{
-	int line_len;
-	int	index;
-
-	line_len = char_lst_len(chars_line);
-	if (!(*format = (char *)malloc(sizeof(char) * line_len)))
-		return (MALLOC_ERROR);
-	index = 0;
-	while (chars_line)
-	{
-		if (chars_line->letter != '\\')
-			(*format)[index++] = chars_line->letter;
-		else
-		{
-			if (chars_line->next && chars_line->next->letter == '\n')
-				chars_line = chars_line->next;
-			else
-				(*format)[index++] = chars_line->letter;
-		}
-		chars_line = chars_line->next;
-	}
-	(*format)[index] = '\0';
-	return (MALLOC_SUCCESS);
-}
-*/
 /*
 ** get_last_history_node:
 **
@@ -278,6 +249,7 @@ static int     add_new_history(t_line *shell_repr, t_cursor *cursor, t_hist *his
             cursor_line = cursor_line->next;
     }
     cursor_line->next = followed_save;
+    update_line_lst(shell_repr);
     return (status);
 }
 
@@ -290,9 +262,9 @@ int		history_manager(char *key, t_line *shell_repr, t_cursor *cursor)
 	check_last_key(&is_repetition);
     clean_lastest_history(is_repetition, shell_repr, cursor, history);
     select_current_history(key, &history, is_repetition);
-    add_new_history(shell_repr, cursor, history);
-    update_line_lst(shell_repr);
+    if (add_new_history(shell_repr, cursor, history) == MALLOC_ERROR)
+		return (MALLOC_ERROR);
     cursor_line = get_cursor_line(shell_repr, cursor);
     cursor->column = char_lst_len(cursor_line->chars);
-	return (0);
+	return (SUCCESS);
 }

@@ -17,6 +17,17 @@
 #include "history_manager.h"
 #include "char_concatenation.h"
 
+
+int		check_eof(t_line *shell_repr)
+{
+	t_char	*first_unlock;
+
+	first_unlock = get_unlocked_char(shell_repr->chars);
+	if (!first_unlock && !shell_repr->next)
+		return (not_nested);
+	return (SUCCESS);
+}
+
 int		char_analysis(t_line *shell_repr, char *new_char, t_cursor *cursor)
 {
 	int status;
@@ -32,7 +43,8 @@ int		char_analysis(t_line *shell_repr, char *new_char, t_cursor *cursor)
 		status = history_manager(new_char, shell_repr, cursor);
 	else if (*new_char == '\n')
 		status = newline_check(shell_repr, cursor);
-	ft_dprintf(fd_debug, "status : %d\n", status);
+	else if (CTRL_D(new_char))
+		status = check_eof(shell_repr);
 	ft_strcpy(g_last_char, new_char);
 	return (status);
 }
@@ -42,15 +54,28 @@ int				read_loop(t_line **shell_lines, t_cursor **cursor)
 	int		read_ret;
 	char	buff[PROMPT_BUFF + 1];
 	int			status;
+	int			index;
 
 	shell_preconfig(shell_lines, cursor);
+	status = MALLOC_SUCCESS;
 	while (1)
 	{
-		ft_bzero(buff, PROMPT_BUFF);
+		ft_bzero(buff, PROMPT_BUFF + 1);
 		read_ret = read(STDIN_FILENO, buff, PROMPT_BUFF);
 		buff[read_ret] = '\0';
-		status = char_analysis(*shell_lines, buff, *cursor);
-		ft_dprintf(fd_debug, "char analyse : %d\n", status);
+		dprintf(fd_debug, "(%d, %d, %d, %d, %d), EOF : %d\n", buff[0],buff[1],buff[2],buff[3], buff[4], buff[0] == EOF);
+		dprintf(fd_debug, "EOF %d\n", EOF);
+		if (ft_isprint(buff[(index = 0)]))
+		{
+			while (buff[index])
+			{
+				status = char_analysis(*shell_lines, buff + index++, *cursor);
+				if (status == MALLOC_ERROR)
+					return (MALLOC_ERROR);
+			}
+		}
+		else
+			status = char_analysis(*shell_lines, (char *)buff, *cursor);
 		if (status == MALLOC_ERROR || status == not_nested)
 			return (status);
 		display_shell(*shell_lines, *cursor, FALSE);
@@ -75,17 +100,20 @@ int		register_command(char *shell_str)
 {
 	t_hist	*history;
 	char	*shell_cpy;
+	int		store_history;
 
 	history_store(GET, &history);
-	ft_dprintf(fd_debug, "go HISTORY %p\n", history);
-	show_history(history);
+	store_history = !history ? TRUE : FALSE;
 	shell_cpy = ft_strdup(shell_str);
 	if (!shell_cpy)
 		return (MALLOC_ERROR);
-	if (push_t_hist(&history, shell_cpy, FALSE))
+	else if (!shell_cpy[0])
+		return (ft_strdel_out(&shell_cpy, SUCCESS));
+	if (push_t_hist(&history, shell_cpy, FALSE) == MALLOC_ERROR)
 		return (ft_strdel_out(&shell_cpy, MALLOC_ERROR));
-	show_history(history);
-	return (MALLOC_SUCCESS);
+	if (store_history)
+		history_store(STORE, &history);
+	return (rewrite_history(history));
 }
 
 int		prompt_loop(void)
@@ -100,18 +128,15 @@ int		prompt_loop(void)
 		shell_repr = NULL;
 		cursor = NULL;
 		status = read_loop(&shell_repr, &cursor);
-		ft_dprintf(fd_debug, "MIDDLE point, status %d\n", status);	
 		if (status == not_nested)
 		{
-			ft_dprintf(fd_debug, "STARTING point\n");	
-			shell_str = render_shell(shell_repr);
-			register_command(shell_str);
+			shell_str = render_shell_content(shell_repr); //unprotected malloc
+			register_command(shell_str); //unprotected malloc
 			*cursor = (t_cursor){.row = -1, .column = -1};
 			display_shell(shell_repr, cursor, FALSE);
 			ft_printf("\n");
 		}
 		manage_shell_repr(FREE, NULL, NULL);
-		ft_dprintf(fd_debug, "Here I go, status == %d\n", status == MALLOC_ERROR);
 		if (status == MALLOC_ERROR)
 			return (status);
 		//lexer()
@@ -126,7 +151,7 @@ int		main(int argc, char **argv)
 
 	UNUSED(argv);
 	manage_termios(SETUP);
-	fd_debug = open("/dev/pts/4",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	fd_debug = open("/dev/ttys002",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	status = history_store(CREATE, &history);
 	/*rewrite_history(history);*/
 	if (argc == 1)
