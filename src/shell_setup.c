@@ -76,7 +76,7 @@ void	shell_cleaner(void)
 	free_capabilities_struct(&g_caps, 0);
 }
 
-void	sig_shell_exit(int status)
+void	shell_exit(int status)
 {
 	t_line	*shell_repr;
 	t_cursor	*cursor;
@@ -91,7 +91,7 @@ void	sig_shell_exit(int status)
 
 int			signal_setup(void)
 {
-	signal(SIGINT, sig_shell_exit);
+	signal(SIGINT, shell_exit);
 	return (0);
 }
 
