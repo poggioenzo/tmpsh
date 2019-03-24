@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/03/19 14:40:22 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/23 11:34:56 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/03/24 17:45:27 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -124,7 +124,7 @@ struct s_hist
 */
 
 void		DEBUG_print_line(t_line *shell_lines, int fd);
-extern int		fd_debug;
+int		fd_debug;
 void	show_history(t_hist *history);
 
 

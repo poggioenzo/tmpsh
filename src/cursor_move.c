@@ -165,7 +165,7 @@ static void		next_word(t_line *shell_repr, t_cursor *cursor)
 		if (char_line)
 			break ;
 		cursor_line = cursor_line->next;
-		char_line = cursor_line ? cursor_line->chars : NULL;
+		char_line = cursor_line ? get_unlocked_char(cursor_line->chars) : NULL;
 	}
 	if (cursor_line)
 	{

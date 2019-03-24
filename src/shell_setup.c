@@ -1,6 +1,7 @@
 #include "shell_setup.h"
 # include "t_cursor_utils.h"
 # include "t_line_utils.h"
+# include "t_char_utils.h"
 # include "prompt.h"
 # include "t_caps_utils.h"
 # include "t_char_insert.h"
@@ -8,6 +9,7 @@
 # include "history_manager.h"
 #include "termios_setter.h"
 #include "clipboard.h"
+#include "signal_handler.h"
 #include <signal.h>
 
 /*
@@ -16,8 +18,6 @@
 ** Storage function to create or free our t_line and cursor structs.
 ** 2 action availble : FREE or CREATE.
 */
-
-int		fd_debug;
 
 int				manage_shell_repr(int action, t_line **prompt_line, \
 		t_cursor **cursor)
@@ -43,8 +43,10 @@ int				manage_shell_repr(int action, t_line **prompt_line, \
 	}
 	else if (action == GET)
 	{
-		*prompt_line = static_prompt;
-		*cursor = static_cursor;
+		if (prompt_line)
+			*prompt_line = static_prompt;
+		if (cursor)
+			*cursor = static_cursor;
 	}
 	return (0);
 }
@@ -67,6 +69,13 @@ static int				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 	return (MALLOC_SUCCESS);
 }
 
+/*
+** shell_cleaner:
+**
+** Memory utils to clean up all different element allocated statically for
+** the shell.
+*/
+
 void	shell_cleaner(void)
 {
 	history_store(FREE, NULL);
@@ -76,7 +85,14 @@ void	shell_cleaner(void)
 	free_capabilities_struct(&g_caps, 0);
 }
 
-void	shell_exit(int status)
+/*
+** shell_exit:
+**
+** Leave properly the shell, free all allocated content.
+** Print a last time the current shell to remove the fake cursor.
+*/
+
+void		shell_exit(int status)
 {
 	t_line	*shell_repr;
 	t_cursor	*cursor;
@@ -88,13 +104,6 @@ void	shell_exit(int status)
 	shell_cleaner();
 	exit(status);
 }
-
-int			signal_setup(void)
-{
-	signal(SIGINT, shell_exit);
-	return (0);
-}
-
 /*
 ** shell_preconfig:
 **

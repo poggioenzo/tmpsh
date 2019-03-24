@@ -14,7 +14,9 @@ convert_src = $(strip $(call hidden_format, $(1:%.c=%.o)))
 #Transform each %.c source file in the corresponding %.o file in an hidden file format.
 OBJS = $(foreach file, $(SOURCES:%.c=%.o), $(call hidden_format, $(file)))
 
-INCLUDE_FOLDER = include/ Libft/ Libft/hash_table/ include/file/
+LIB_INCLUDES = Libft/ Libft/hash_table
+
+INCLUDE_FOLDER = include/
 SOURCES_FOLDER = src/
 DEPENDENCIES_FOLDER = dependencies/
 
@@ -26,6 +28,8 @@ select_dir = $(shell python -c "files = '$(1)'; files = set(files.split(' ')); p
 INCLUDES = $(patsubst $(SOURCES_FOLDER)%.c, $(INCLUDE_FOLDER)%.h, $(SOURCES))
 INCLUDES_LIST := $(foreach file, $(INCLUDES), $(dir $(file)))
 INCLUDES_LIST := $(call select_dir, $(INCLUDES_LIST))
+
+INCLUDES_LIST += $(LIB_INCLUDES)
 
 all: $(NAME)
 

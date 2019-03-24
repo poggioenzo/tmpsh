@@ -77,23 +77,6 @@ static void	check_last_key(int *is_repetition)
 }
 
 /*
-** line_proper:
-**
-** Use to clean up the line wherever the cursor is positionned.
-** Delete the unlocked part of a t_char list.
-*/
-
-static void    line_proper(t_line *cursor_line)
-{
-    t_char  *char_lst;
-
-    char_lst = cursor_line->chars;
-    while (char_lst->next && char_lst->next->lock == TRUE)
-        char_lst = char_lst->next;
-    free_t_char_lst(&char_lst->next, 0);
-}
-
-/*
 ** del_extra_lines:
 **
 ** Cut extra lines if the lastest history was on multiple lines.

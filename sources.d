@@ -1,4 +1,7 @@
 # This auto-generated file please don't edit it.
+
+SOURCES_DIR = src/
+
 SOURCES+=src/char_concatenation.c
 SOURCES+=src/cursor_dependent_selection.c
 SOURCES+=src/cursor_move.c
@@ -23,3 +26,12 @@ SOURCES+=src/file/replace_home.c
 SOURCES+=src/history.c
 SOURCES+=src/history_manager.c
 SOURCES+=src/clipboard.c
+SOURCES+=src/signal_handler.c
+
+CURSOR_MOVEMENT_DIR = cursor_movement/
+
+CURSOR_MOVEMENT_SRCS := standard_move.c
+CURSOR_MOVEMENT_SRCS := $(addprefix $(CURSOR_MOVEMENT_DIR), $(CURSOR_MOVEMENT_SRCS))
+
+
+SOURCES += $(addprefix $(SOURCES_DIR), $(CURSOR_MOVEMENT_SRCS))

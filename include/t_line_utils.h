@@ -12,5 +12,5 @@ int		line_lst_len(t_line *shell_repr);
 t_line		*get_last_line(t_line *shell_repr);
 void		extract_line(t_line *shell_repr, t_line *to_del);
 void		update_line_lst(t_line *shell_repr);
-
+void    line_proper(t_line *cursor_line);
 #endif

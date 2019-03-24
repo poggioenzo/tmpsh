@@ -66,6 +66,8 @@ int			display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
 	int			shell_len;
 	char		*shell_repr;
 
+	DEBUG_print_line(prompt_lines, fd_debug);
+
 	if (!(shell_repr = concat_shell(prompt_lines, cursor, &curr_line_size)))
 		return (MALLOC_ERROR);
 	shell_len = ft_strlen(shell_repr);

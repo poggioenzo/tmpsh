@@ -154,7 +154,7 @@ int		main(int argc, char **argv)
 
 	UNUSED(argv);
 	manage_termios(SETUP);
-	fd_debug = open("/dev/pts/4",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	fd_debug = open("/dev/ttys002",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	status = history_store(CREATE, &history);
 	/*rewrite_history(history);*/
 	if (argc == 1)
