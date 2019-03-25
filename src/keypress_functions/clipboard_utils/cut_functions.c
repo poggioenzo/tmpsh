@@ -1,23 +1,17 @@
-#include "clipboard.h"
-#include "cursor_dependent_selection.h"
+#include "cut_functions.h"
 #include "char_utils.h"
-#include "t_char_insert.h"
-#include "keyboard.h"
+#include "cursor_dependent_selection.h"
+#include "clipboard.h"
 #include "libft.h"
-#include "cursor_move.h"
+#include "t_char_insert.h"
 
-void	clipboard_store(int action, char **clipped_str)
-{
-	static char		*cutted_str = NULL;
-
-	if (action == STORE)
-		cutted_str = *clipped_str;
-	else if (action == GET)
-		*clipped_str = cutted_str;
-	else if (action == FREE)
-		ft_strdel(&cutted_str);
-
-}
+/*
+** line_cut:
+**
+** Called whenever the user expect to cut the current line.
+** Cut the content of the current line and save it inside the
+** clipboard_store.
+*/
 
 int		line_cut(t_line	*shell_repr, t_cursor *cursor)
 {
@@ -35,7 +29,15 @@ int		line_cut(t_line	*shell_repr, t_cursor *cursor)
 	return (MALLOC_SUCCESS);
 }
 
-void	adjust_cursor(t_char *shell_line, t_cursor *cursor)
+/*
+** adjust_cursor:
+**
+** When a word is cutted, check if the new position is valid
+** or adjust if it's not the case. In this case, put the cursor
+** at the first or last position.
+*/
+
+static void	adjust_cursor(t_char *shell_line, t_cursor *cursor)
 {
 	t_char	*unlocked;
 	int		lst_len;
@@ -48,6 +50,14 @@ void	adjust_cursor(t_char *shell_line, t_cursor *cursor)
 	else if (cursor->column < unlocked->position)
 		cursor->column = unlocked->position;
 }
+
+/*
+** cut_next_word:
+**
+** Remove the next word in the current line and save it to the clipboard.
+** Select in the first time the current cursor t_char, skip space and move
+** until we leave a word.
+*/
 
 int		cut_next_word(t_line *shell_repr, t_cursor *cursor)
 {
@@ -67,12 +77,19 @@ int		cut_next_word(t_line *shell_repr, t_cursor *cursor)
 	cut = delete_char_range(shell_repr->chars, cursor_char, word_end, TRUE);
 	if (!cut)
 		return (MALLOC_ERROR);
-	ft_dprintf(fd_debug, "cursor : (%d, %d)\n", cursor->row, cursor->column);
 	adjust_cursor(shell_repr->chars, cursor);
-	ft_dprintf(fd_debug, "cursor AFTER: (%d, %d)\n", cursor->row, cursor->column);
 	clipboard_store(STORE, &cut);
 	return (MALLOC_SUCCESS);
 }
+
+/*
+** cut_prev_word:
+**
+** Remove from the shell the previous word of the current line.
+** Parse the t_line and store each word beginning in a temporary
+** pointer.
+** When we reach the pointer t_char, cut the last founded pointer.
+*/
 
 int		cut_prev_word(t_line *shell_repr, t_cursor *cursor)
 {
@@ -102,10 +119,16 @@ int		cut_prev_word(t_line *shell_repr, t_cursor *cursor)
 	adjust_cursor(shell_repr->chars, cursor);
 	if (!(cut = delete_char_range(shell_repr->chars, last_word, tmp_char, TRUE)))
 		return (MALLOC_ERROR);
-
 	clipboard_store(STORE, &cut);
 	return (MALLOC_SUCCESS);
 }
+
+/*
+** paste_clipboard:
+**
+** Push into the current shell representation the
+** local clipped string.
+*/
 
 int		paste_clipboard(t_line *shell_repr, t_cursor *cursor)
 {
@@ -121,30 +144,3 @@ int		paste_clipboard(t_line *shell_repr, t_cursor *cursor)
 	}
 	return (MALLOC_SUCCESS);
 }
-
-int		is_clipoard_key(char *key)
-{
-	return (CTRL_W(key) || CTRL_N(key) || CTRL_L(key) || CTRL_P(key));
-}
-
-int		clipoard_manager(char *key, t_line *shell_repr, t_cursor *cursor)
-{
-	if (CTRL_W(key))
-		return (cut_prev_word(shell_repr, cursor));
-	else if (CTRL_N(key))
-		return (cut_next_word(shell_repr, cursor));
-	else if (CTRL_L(key))
-		return (line_cut(shell_repr, cursor));
-	else if (CTRL_P(key))
-		return (paste_clipboard(shell_repr, cursor));
-	return (MALLOC_SUCCESS);
-}
-
-
-
-
-
-
-
-
-

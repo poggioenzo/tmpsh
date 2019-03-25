@@ -161,6 +161,7 @@ static int		history_formatter(t_line **shell_repr, char **format)
 	if (!(*format = (char *)malloc(sizeof(char) * line_len + 1)))
 		return (MALLOC_ERROR);
 	index = 0;
+	escape = FALSE;
 	while (char_lst && (char_lst->letter != '\\' || char_lst->next || escape))
 	{
 		if (char_lst->letter == '\\' && escape == FALSE)

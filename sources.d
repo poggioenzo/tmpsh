@@ -55,30 +55,44 @@ NEWLINE_UTILS := char_skip.c \
 
 NEWLINE_UTILS := $(addprefix newline_utils/, $(NEWLINE_UTILS))
 
+CLIPBOARD_UTILS := cut_functions.c
+
+CLIPBOARD_UTILS := $(addprefix clipboard_utils/, $(CLIPBOARD_UTILS))
+
 KEYPRESS_DIR = keypress_functions/
 
 KEYPRESS_SRCS := char_deletion.c \
 				 newline_keypress.c \
+				 clipboard.c \
 				 $(NEWLINE_UTILS) \
+				 $(CLIPBOARD_UTILS)
 
 KEYPRESS_SRCS := $(addprefix $(KEYPRESS_DIR), $(KEYPRESS_SRCS))
+
+PROMPT_CONF :=  prompt.c \
+				prompt_field.c \
+				shell_setup.c \
+
+PROMPT_CONF := $(addprefix prompt/, $(PROMPT_CONF))
+
+CONFIGURATION_DIR = configuration/
+
+CONFIGURATION_SRCS :=  screen_size.c \
+					   signal_handler.c \
+					   t_caps_utils.c \
+					   termios_setter.c \
+					   $(PROMPT_CONF)
+
+CONFIGURATION_SRCS := $(addprefix $(CONFIGURATION_DIR), $(CONFIGURATION_SRCS))
 
 SOURCES+=src/char_concatenation.c
 SOURCES+=src/cursor_dependent_selection.c
 SOURCES+=src/debug.c
 SOURCES+=src/display.c
 SOURCES+=src/edition.c
-SOURCES+=src/prompt.c
-SOURCES+=src/prompt_field.c
-SOURCES+=src/screen_size.c
-SOURCES+=src/shell_setup.c
-SOURCES+=src/t_caps_utils.c
 SOURCES+=src/t_cursor_utils.c
-SOURCES+=src/termios_setter.c
 SOURCES+=src/t_char_insert.c
 SOURCES+=src/file/replace_home.c
-SOURCES+=src/clipboard.c
-SOURCES+=src/signal_handler.c
 
 SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(CURSOR_MOVEMENT_SRCS)) \
@@ -86,4 +100,5 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(HISTORY_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(LINE_UTILS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(KEYPRESS_SRCS)) \
+		   $(addprefix $(SOURCES_DIR), $(CONFIGURATION_SRCS)) \
 
