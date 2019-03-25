@@ -1,7 +1,7 @@
 NAME = tmpsh
 
 CC = gcc
-CFLAGS =# -Wall -Wextra -Werror -g -fsanitize=address 
+CFLAGS = -g -fsanitize=address  #-Wall -Wextra -Werror 
 CPPFLAGS = $(addprefix -I , $(INCLUDES_LIST))
 
 include sources.d

@@ -1,4 +1,6 @@
 #include "standard_move.h"
+#include "cursor_dependent_selection.h"
+#include "char_utils.h"
 
 /*
 ** move_left:

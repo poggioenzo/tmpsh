@@ -1,6 +1,6 @@
 #include "char_concatenation.h"
 #include "libft.h"
-#include "t_char_utils.h"
+#include "char_utils.h"
 #include "screen_size.h"
 
 /*
@@ -154,14 +154,20 @@ static int		history_formatter(t_line **shell_repr, char **format)
 	int line_len;
 	int	index;
 	t_char	*char_lst;
+	int		escape;
 
 	char_lst = get_unlocked_char((*shell_repr)->chars);
 	line_len = char_lst_len(char_lst);
 	if (!(*format = (char *)malloc(sizeof(char) * line_len + 1)))
 		return (MALLOC_ERROR);
 	index = 0;
-	while (char_lst && (char_lst->letter != '\\' || char_lst->next))
+	while (char_lst && (char_lst->letter != '\\' || char_lst->next || escape))
 	{
+		if (char_lst->letter == '\\' && escape == FALSE)
+			escape = TRUE;
+		else
+			escape = FALSE;
+
 		(*format)[index++] = char_lst->letter;
 		char_lst = char_lst->next;
 	}

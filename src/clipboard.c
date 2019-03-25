@@ -1,6 +1,8 @@
 #include "clipboard.h"
 #include "cursor_dependent_selection.h"
-#include "t_char_utils.h"
+#include "char_utils.h"
+#include "t_char_insert.h"
+#include "keyboard.h"
 #include "libft.h"
 #include "cursor_move.h"
 

@@ -4,7 +4,7 @@
 #include "display.h"
 #include "termios_setter.h"
 #include "t_char_utils.h"
-#include "t_line_utils.h"
+#include "line_utils.h"
 #include "shell_setup.h"
 
 

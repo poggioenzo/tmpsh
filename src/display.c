@@ -1,9 +1,10 @@
 #include "display.h"
-#include "t_line_utils.h"
+#include "line_utils.h"
 #include "t_caps_utils.h"
 #include "t_cursor_utils.h"
 #include "screen_size.h"
-#include "t_char_utils.h"
+#include "char_utils.h"
+#include "cursor_dependent_selection.h"
 #include "char_concatenation.h"
 
 /*

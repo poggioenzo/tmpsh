@@ -5,5 +5,6 @@
 
 void		DEBUG_print_char(t_char *char_lst, int fd);
 void		DEBUG_print_line(t_line *shell_lines, int fd);
+void		DEBUG_operand_lst(t_operand *operand_list);
 
 #endif

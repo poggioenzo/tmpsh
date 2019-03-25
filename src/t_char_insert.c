@@ -1,8 +1,8 @@
 #include "t_char_insert.h"
-#include "t_char_utils.h"
-#include "t_cursor_utils.h"
-#include "t_line_utils.h"
-#include "line_deletion.h"
+#include "char_utils.h"
+#include "cursor_dependent_selection.h"
+#include "line_utils.h"
+
 
 /*
 ** appropriate_char_insert:
@@ -55,46 +55,6 @@ int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 	cursor->column++;
 	update_position(cursor_line->chars);
 	return (MALLOC_SUCCESS);
-}
-
-enum deletion {del_line, deletion_succeed};
-
-int			del_pos_char(t_char **char_lst, t_cursor *cursor)
-{
-	t_char	*prev_char;
-	t_char	*curr_char;
-
-	if (cursor->column == 0)
-		return (deletion_succeed);
-	curr_char = *char_lst;
-	prev_char = NULL;
-	while (curr_char && curr_char->position + 1 != cursor->column)
-	{
-		prev_char = curr_char;
-		curr_char = curr_char->next;
-	}
-	if (curr_char->lock == TRUE)
-		return (del_line);
-	else if (!prev_char)
-		*char_lst = curr_char->next;
-	else
-		prev_char->next = curr_char->next;
-	update_position(*char_lst);
-	free_t_char(&curr_char);
-	cursor->column--;
-	return (deletion_succeed);
-}
-
-int			delete_char(t_line *shell_repr, t_cursor *cursor)
-{
-	int status;
-	t_line	*cursor_line;
-
-	cursor_line = get_cursor_line(shell_repr, cursor);
-	status = del_pos_char(&cursor_line->chars, cursor);
-	if (status == del_line)
-		delete_line(shell_repr, cursor_line->position, cursor);
-	return (SUCCESS);
 }
 
 

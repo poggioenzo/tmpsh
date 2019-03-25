@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/03/19 14:40:22 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/24 17:45:27 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/03/25 18:37:43 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,6 +15,10 @@
 # define TMPSH_H
 
 #define UNUSED(value) (void)value
+
+# ifndef NULL
+#  define NULL (void *) 0
+# endif
 
 enum	e_newline {leave_check = 2, invalid_syntax, not_nested};
 

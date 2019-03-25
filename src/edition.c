@@ -2,20 +2,19 @@
 #include <fcntl.h>
 #include "libft.h"
 #include "t_cursor_utils.h"
-#include "t_line_utils.h"
-#include "t_char_utils.h"
+#include "line_utils.h"
+#include "char_utils.h"
 #include "t_caps_utils.h"
 #include "t_char_insert.h"
 #include "display.h"
 #include "termios_setter.h"
-#include <termios.h>
 #include "cursor_dependent_selection.h"
 #include "cursor_move.h"
 #include "shell_setup.h"
 #include "newline_keypress.h"
 #include "history.h"
-#include "history_manager.h"
 #include "char_concatenation.h"
+#include "keyboard.h"
 #include "clipboard.h"
 
 

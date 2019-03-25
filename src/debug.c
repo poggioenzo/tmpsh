@@ -31,3 +31,17 @@ void		DEBUG_print_line(t_line *shell_lines, int fd)
 		shell_lines = shell_lines->next;
 	}
 }
+void		DEBUG_operand_lst(t_operand *operand_list)
+{
+	if (!operand_list)
+		ft_dprintf(fd_debug, "NO OPERAND IN LIST\n");
+	else
+	{
+		while (operand_list)
+		{
+			ft_dprintf(fd_debug, "{operand :%d}-->", operand_list->type);
+			operand_list = operand_list->next;
+		}
+		ft_dprintf(fd_debug, "NULL\n");
+	}
+}
