@@ -3,7 +3,6 @@
 #include "cursor_dependent_selection.h"
 #include "line_utils.h"
 
-
 /*
 ** appropriate_char_insert:
 **
@@ -57,8 +56,14 @@ int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 	return (MALLOC_SUCCESS);
 }
 
+/*
+** insert_string:
+**
+** Insert a entire string at the end of the t_char lst.
+** Optimize the insertion by moving on the current t_char pointer
+** after each insertion.
+*/
 
-// Will only insert string at the last position
 int			insert_string(t_char **char_lst, char *string, int lock) 
 {
 	t_char		**start_char;

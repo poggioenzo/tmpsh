@@ -45,3 +45,14 @@ void		DEBUG_operand_lst(t_operand *operand_list)
 		ft_dprintf(fd_debug, "NULL\n");
 	}
 }
+void	DEBUG_history(t_hist *history)
+{
+	while (history)
+	{
+		ft_dprintf(fd_debug, "addresses : %p   | prev : %p | len : %d\n", history, history->prev, 
+				ft_strlen(history->line));
+		ft_dprintf(fd_debug, "line : %s|\n", history->line);
+		history = history->next;
+	}
+}
+

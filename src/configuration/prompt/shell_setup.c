@@ -103,6 +103,7 @@ void		shell_exit(int status)
 	shell_cleaner();
 	exit(status);
 }
+
 /*
 ** shell_preconfig:
 **

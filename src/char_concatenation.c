@@ -121,9 +121,6 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 	return (shell_str);
 }
 
-static int		history_formatter(t_line **shell_repr, char **format);
-
-
 /*
 ** concat_escaped_line:
 **

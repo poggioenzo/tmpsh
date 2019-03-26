@@ -70,6 +70,21 @@ static void		shell_continue(int status)
 	signal(SIGTSTP, shell_background);
 }
 
+/*
+** shell_reshape:
+**
+** Display again the shell whenever SIGWINCH is received.
+*/
+
+static void		shell_reshape(int status)
+{
+	t_line		*shell_repr;
+	t_cursor	*cursor;
+
+	manage_shell_repr(GET, &shell_repr, &cursor);
+	display_shell(shell_repr, cursor, FALSE);
+}
+
 /* signal_setup:
 **
 ** Link each signal to his corresponding signal handler.
@@ -81,6 +96,7 @@ int				signal_setup(void)
 	signal(SIGQUIT, shell_exit);
 	signal(SIGTSTP, shell_background);
 	signal(SIGCONT, shell_continue);
+	signal(SIGWINCH, shell_reshape);
 	return (0);
 }
 
