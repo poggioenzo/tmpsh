@@ -13,7 +13,6 @@ void			clean_lines(int nb_line, int is_last_line)
 	ft_printf(g_caps->start_line);
 	while (nb_line--)
 	{
-		ft_dprintf(fd_debug, "DEl\n");
 		ft_printf(g_caps->del_line);
 		if (nb_line > 0 || is_last_line == FALSE)
 			ft_printf(g_caps->move_up);
@@ -37,7 +36,6 @@ int			display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
 	if (!(shell_repr = concat_shell(prompt_lines, cursor, &curr_line_size)))
 		return (MALLOC_ERROR);
 	shell_len = ft_strlen(shell_repr);
-	ft_dprintf(fd_debug, "first disply : %d\n", first_display);
 	if (first_display == FALSE)
 		clean_lines(displayed_lines, TRUE);
 	displayed_lines = curr_line_size;

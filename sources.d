@@ -72,8 +72,6 @@ KEYPRESS_SRCS := char_deletion.c \
 
 KEYPRESS_SRCS := $(addprefix $(KEYPRESS_DIR), $(KEYPRESS_SRCS))
 
-$(info KEY : $(KEYPRESS_SRCS))
-
 PROMPT_CONF :=  prompt.c \
 				prompt_field.c \
 				shell_setup.c \

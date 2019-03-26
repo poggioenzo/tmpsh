@@ -15,6 +15,8 @@ convert_src = $(strip $(call hidden_format, $(1:%.c=%.o)))
 OBJS = $(foreach file, $(SOURCES:%.c=%.o), $(call hidden_format, $(file)))
 
 LIB_INCLUDES = Libft/ Libft/hash_table
+LIB = Libft/libft.a
+LIBDIR = $(dir $(LIB))
 
 INCLUDE_FOLDER = include/
 SOURCES_FOLDER = src/
@@ -31,22 +33,30 @@ INCLUDES_LIST := $(call select_dir, $(INCLUDES_LIST))
 
 INCLUDES_LIST += $(LIB_INCLUDES)
 
-all: $(NAME)
+all: get_lib $(NAME)
 
-$(NAME): $(OBJS)
-	make -C Libft
+$(NAME): $(OBJS) $(LIB)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^  Libft/libft.a -o $@
 
 clean:
+	#Use clean rule of lib if the called command is also clean, skip otherwise
+	{ [ "$(MAKECMDGOALS)" = "$@" ] && $(MAKE) -C $(LIBDIR) $@ ;} || true
 	rm -rf $(OBJS)
 
 fclean:clean
+	$(MAKE) -C $(LIBDIR) $@
 	rm -rf $(NAME) shell_debug
 
 proper:fclean
+	$(MAKE) -C $(LIBDIR) $@
 	rm -rf $(DEPENDENCIES)
 
 re: fclean all
+
+$(LIB): get_lib
+
+get_lib:
+	$(MAKE) -C $(LIBDIR)
 
 #######################################
 # Generique rules for %.o and for %.d #
@@ -60,7 +70,7 @@ $(DEPENDENCIES_FOLDER)%.d:$(SOURCES_FOLDER)%.c
 
 .DEFAULT_GOAL = all
 
-.PHONY:all clean fclean proper re
+.PHONY:all clean fclean proper re get_lib
 
 ifeq (, $(filter $(MAKECMDGOALS), proper clean fclean))
 include $(DEPENDENCIES)
