@@ -18,7 +18,6 @@ def get_singlechars(rev_gra_keys):
 	singlechars = set(''.join([k for k in rev_gra_keys
 			if not containalphanum(k)]))
 	singlechars.discard('.')
-	singlechars.discard('$')
 	singlechars.add('\n')
 	return singlechars
 
@@ -52,12 +51,25 @@ def get_grammar_from_path(path):
 		i += 1
 	return grammar
 
+def get_opening_op(reverse):
+	opening_op = {}
+	compose_op = [k for k in reverse if "." in k]
+	for key in compose_op:
+		part = key.split('.')
+		opening_op[part[0]] = [part[1], reverse[key]]
+	return opening_op
+
+def get_begin_opening_op(reverse):
+	return "".join(sorted(set([k[0] for k in reverse])))
+
 class Grammar(object):
 	def __init__(self, path):
 		self.grammar = get_grammar_from_path(path)
 		self.reverse = get_reverse_grammar(self.grammar)
 		self.atomic_op = get_atomic_op(self.reverse.keys())
 		self.singlechars = get_singlechars(self.reverse.keys())
+		self.opening_op = get_opening_op(self.reverse)
+		self.begin_opening_op = get_begin_opening_op(self.opening_op.keys())
 
 def get_grammar(path):
 	return Grammar(path)

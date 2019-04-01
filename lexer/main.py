@@ -14,7 +14,8 @@ def main():
 	# pprint(grammar)
 	if len(sys.argv) > 1:
 		command = " ".join(sys.argv[1:])
-		tokens = tk.tokenize(command, grammar)
+		tokens = []
+		tk.tokenize(command, grammar, tokens)
 		print(tokens)
 	else:
 		print("missing command.")
