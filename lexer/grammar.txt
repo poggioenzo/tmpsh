@@ -2,8 +2,7 @@
 #definition de la grammaire
 
 WORD:
-	[A-Za-z_][A-Za-z0-9_]*
-
+	WORD
 
 COMMAND:
 	COMMAND WORD
