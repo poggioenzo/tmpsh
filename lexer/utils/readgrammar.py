@@ -18,11 +18,7 @@ def containalphanum(key):
 
 
 def get_singlechars(rev_gra_keys):
-    singlechars = set(''.join([k for k in rev_gra_keys
-                               if not containalphanum(k)]))
-    singlechars.discard('.')
-    singlechars.add('\n')
-    return singlechars
+    return set(''.join([k for k in rev_gra_keys if not containalphanum(k)]))
 
 
 def get_atomic_op(rev_gra_keys):
@@ -80,9 +76,12 @@ class Grammar(object):
         self.reverse = get_reverse_grammar(self.grammar)
         self.atomic_op = get_atomic_op(self.reverse.keys())
         self.singlechars = get_singlechars(self.reverse.keys())
+        self.singlechars.discard('.')
+        self.singlechars.add('\n')
         self.opening_op = get_opening_op(self.reverse)
         self.begin_opening_op = get_begin_opening_op(self.opening_op.keys())
         self.no_scope_op = get_no_scope_op(self.atomic_op)
+        self.no_scope_op.remove('\\')
         self.begin_no_scope = get_begin_opening_op(self.no_scope_op)
 
 
