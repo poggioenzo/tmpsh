@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+
 def span_sub(command, grammar, tokens, top=1):
     i = 0
     j = 1
@@ -18,9 +19,12 @@ def span_sub(command, grammar, tokens, top=1):
                     break
                 i += 1
         j += 1
-    if i != 0 and top:
-        tokens.append(command[:i + 1])
+    #i -= 1
+    print([command[:i]])
+    if i >= 0 and top:
+        tokens.append(command[:i])
     return i
+
 
 def span_op(command, grammar, tokens):
     j = 1
@@ -34,24 +38,33 @@ def span_op(command, grammar, tokens):
     tokens.append(command[:j])
     return j
 
+
+def add_token(current, tokens):
+    if current != "":
+        tokens.append(current)
+        current = ""
+    return current
+
+
 def tokenize(command, grammar, tokens):
     length_cmd = len(command)
     current = ""
     i = 0
     while i < length_cmd:
         if command[i] in grammar.begin_opening_op:
-            i += span_sub(command[i:], grammar, tokens) + 1
+            current = add_token(current, tokens)
+            i += span_sub(command[i:], grammar, tokens)
         elif command[i] in grammar.begin_no_scope:
+            current = add_token(current, tokens)
             i += span_op(command[i:], grammar, tokens)
-        elif command[i] == grammar.grammar['ESCAPE'][0]:
+        elif current == "" and command[i] == grammar.grammar['ESCAPE'][0]:
             i += 1
-            tokens.append(command[i])
+            current += command[i]
+            i += 1
         elif command[i] in ' \r\t':
-            if current != "":
-                tokens.append(current)
-                current = ""
+            current = add_token(current, tokens)
+            i += 1
         else:
             current += command[i]
-        i += 1
-    if current != "":
-        tokens.append(current)
+            i += 1
+    add_token(current, tokens)
