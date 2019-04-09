@@ -44,7 +44,6 @@ def get_list_op(reverse):
 
 def get_atomic_compose_op(reverse):
 	atomic_op = get_list_op(reverse)
-	atomic_op.append('\n')
 	compose_op = [k for k in atomic_op if "." in k]
 	for k in compose_op:
 		atomic_op.remove(k)
@@ -80,7 +79,8 @@ def get_escape(grammar):
 
 class Grammar(object):
 	def __init__(self, path):
-		self.grammar = get_grammar_from_path(path) #
+		self.grammar = get_grammar_from_path(path)
+		self.grammar['NEW_LINE'] = '\n'
 		self.reverse = get_reverse_grammar(self.grammar)
 		self.escape = get_escape(self.grammar)
 

@@ -33,8 +33,9 @@ BACKGROUND_JOBS
 END_COMMAND:
 	;
 
-NEW_LINE:
-	\n
+# Must be hardcode...
+# NEW_LINE:
+# 	\n
 
 SEPARATORS_BINAIRE:
 	PIPE
