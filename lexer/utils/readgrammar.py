@@ -35,6 +35,10 @@ def get_reverse_grammar(grammar):
 def containalphanum(key):
 	return any([l.isalnum() for l in key])
 
+# def containupper(key):
+# 	return any([l.isupper() for l in key])
+# useless because if while for are RESERVED_WORD
+
 def get_list_op(reverse):
 	return [key for key in reverse if not containalphanum(key)]
 
