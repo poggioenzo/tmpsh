@@ -13,42 +13,42 @@ class TestTok(unittest.TestCase):
 
 	def testTok0(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/0')
+		command = fl.get_text('unittest/tok/0')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['ls', '-l', '\n'])
 
 	def testTok0_1(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/0_1')
+		command = fl.get_text('unittest/tok/0_1')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['ls', '-l', '\n'])
 
 	def testTok1(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/1')
+		command = fl.get_text('unittest/tok/1')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['ls', '-l', '/', ';', '\n'])
 
 	def testTok2(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/2')
+		command = fl.get_text('unittest/tok/2')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['ls', '-l', '\n/', ';', '\n'])
 
 	def testTok3(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/3')
+		command = fl.get_text('unittest/tok/3')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['ls', '-l', ' /', ';', '\n'])
 
 	def testTok4(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/4')
+		 command = fl.get_text('unittest/tok/4')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(
@@ -56,21 +56,21 @@ class TestTok(unittest.TestCase):
 
 	def testTok5(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/5')
+		command = fl.get_text('unittest/tok/5')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['echo', '"\newline\newline"', '\n'])
 
 	def testTok6(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/6')
+		command = fl.get_text('unittest/tok/6')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['echo', '$( echo (1 && 0))', '\n'])
 
 	def testTok7(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/7')
+		command = fl.get_text('unittest/tok/7')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['echo', '1', '&&', '\n',
@@ -78,7 +78,7 @@ class TestTok(unittest.TestCase):
 
 	def testTok7_1(self):
 		grammar = rg.get_grammar("grammar.txt")
-		command = fl.get_text('unittest/7_1')
+		command = fl.get_text('unittest/tok/7_1')
 		tokens = []
 		tk.tokenize(command, grammar, tokens)
 		self.assertListEqual(tokens, ['<(LOL)', '\n', '" LOL "', '\n',
@@ -89,7 +89,7 @@ class TestTok(unittest.TestCase):
 
 	def testTok8(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/8')
+		 command = fl.get_text('unittest/tok/8')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, ['echo', '"\\""', '&', ';', '$(echo -n 1)',
@@ -98,14 +98,14 @@ class TestTok(unittest.TestCase):
 									   'file2', '\n'])
 	def testTok8_1(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/8_1')
+		 command = fl.get_text('unittest/tok/8_1')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, ['echo', '"\\""','&', "\n"])
 
 	def testTok8_2(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/8_2')
+		 command = fl.get_text('unittest/tok/8_2')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, ['echo', 'text','>>', 'file', '>>',
@@ -113,7 +113,7 @@ class TestTok(unittest.TestCase):
 
 	def testTok8_3(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/8_3')
+		 command = fl.get_text('unittest/tok/8_3')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, ['echo', 'text','||', 'file', '<<',
@@ -123,7 +123,7 @@ class TestTok(unittest.TestCase):
 
 	def testTok9(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/9')
+		 command = fl.get_text('unittest/tok/9')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, ['echo', 'file', '\n', 'VAR', '=', '0', '\n',
@@ -132,7 +132,7 @@ class TestTok(unittest.TestCase):
 
 	def testTok9_1(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/9_1')
+		 command = fl.get_text('unittest/tok/9_1')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, ['echo', 'file', '\n'])
@@ -140,7 +140,7 @@ class TestTok(unittest.TestCase):
 
 	def testTok9_2(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/9_2')
+		 command = fl.get_text('unittest/tok/9_2')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, [ 'VAR', '=', '0', '\n',
@@ -149,14 +149,14 @@ class TestTok(unittest.TestCase):
 
 	def testTok9_3(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/9_3')
+		 command = fl.get_text('unittest/tok/9_3')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, [ 'VAR', '=', '0', '\n'])
 
 	def testTok9_4(self):
 		 grammar = rg.get_grammar("grammar.txt")
-		 command = fl.get_text('unittest/9_4')
+		 command = fl.get_text('unittest/tok/9_4')
 		 tokens = []
 		 tk.tokenize(command, grammar, tokens)
 		 self.assertListEqual(tokens, [ 'VAR', '+=', '0', '\n'])
