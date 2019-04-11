@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+GRAMMAR = 'I WILL CHANGE'
+
+def ops_begin_with(pattern, ops):
+	i = len(pattern)
+	return any([pattern == op[:i] for op in ops])
 
 def trueXor(argv):
     return sum(argv) == 1
@@ -10,82 +15,90 @@ def add_token(current, tokens):
 		current = ""
 	return current
 
-def span_sub(command, grammar, tokens, top=1):
+def span_sub(command, tokens, current, top=1):
 	i = 0
 	j = 1
 	length_cmd = len(command)
-	while j <= grammar.maxlen_opening_op and i == 0:
-		if command[:j] in grammar.opening_op:
+	while j <= GRAMMAR.maxlen_opening_op and i == 0:
+		if command[:j] in GRAMMAR.opening_op:
 			key = command[:j]
 			i += j
 			while i < length_cmd:
-				if command[i] == grammar.escape:
+				if command[i] == GRAMMAR.escape:
 					i += 1
-				elif command[i] == grammar.opening_op[key][0]:
+				elif command[i] == GRAMMAR.opening_op[key][0]:
 					break
-				elif command[i] in grammar.begin_opening_op:
-					i += span_sub(command[i:], grammar, tokens, 0)
+				elif command[i] in GRAMMAR.begin_opening_op:
+					i += span_sub(command[i:], tokens, current, 0)
 				i += 1
 		j += 1
-	if i >= 0 and top:
+	if top:
+		if i > 0:
+			tokens.append(command[:i+1])
+		else:
+			current.append(command[0])
 		i += 1
-		tokens.append(command[:i])
 	return i
 
-def span_op(command, grammar, tokens):
+def span_op(command, tokens, current):
 	j = 1
 	length_cmd = len(command)
-	while j <= grammar.maxlen_atomic_op and j <= length_cmd:
-		if command[:j] in grammar.atomic_op:
+	while j <= GRAMMAR.maxlen_atomic_op and j <= length_cmd:
+		if ops_begin_with(command[:j], GRAMMAR.atomic_op):
 			j += 1
 		else:
 			break
 	j -= 1
-	if command[:j] in grammar.atomic_op:
+	if command[:j] in GRAMMAR.atomic_op:
 		tokens.append(command[:j])
+	else:
+		current.append(command[0])
+		j = 1
 	return j
 
-def select_span(command, grammar, tokens, selection):
+def select_span(command, tokens, current, selection):
 	i = 0
 	if selection[0]:
-		i = span_op(command, grammar, tokens)
+		i = span_op(command, tokens, current)
 	else:
-		i = span_sub(command, grammar, tokens)
+		i = span_sub(command, tokens, current)
 	return i
 
-def span(command, grammar, tokens, current):
+def span(command, tokens, current):
 	j = 0
 	i = 1
 	length_cmd = len(command)
-	maxlen = max(grammar.maxlen_atomic_op, grammar.maxlen_opening_op)
+	maxlen = max(GRAMMAR.maxlen_atomic_op, GRAMMAR.maxlen_opening_op)
 	while j < length_cmd and j < maxlen :
 		j += 1
 		selection = [
-			command[:j] in grammar.atomic_op,
-			command[:j] in grammar.opening_op,
-			command[:j] in grammar.begin_opening_op
+			ops_begin_with(command[:j], GRAMMAR.atomic_op),
+			ops_begin_with(command[:j], GRAMMAR.opening_op)
 		]
 		if trueXor(selection):
-			i = select_span(command, grammar, tokens, selection)
+			i = select_span(command, tokens, current, selection)
 			break
 	if sum(selection) == 0:
 		current.append(command[0])
 	return i
 
 def tokenize(command, grammar, tokens):
+	global GRAMMAR
+	GRAMMAR = grammar
 	length_cmd = len(command)
 	current = ""
 	i = 0
 	while i < length_cmd:
-		if command[i] in grammar.begin_op :
+		if command[i] in GRAMMAR.begin_op :
 			current = add_token(current, tokens)
 			tmp_current = []
-			i += span(command[i:], grammar, tokens, tmp_current)
-			if len(tmp_current):
+			i += span(command[i:],  tokens, tmp_current)
+			if len(tmp_current) == 1:
 				current += tmp_current[0]
-		elif command[i] == grammar.escape:
+		elif command[i] == GRAMMAR.escape:
 			i += 1
-			current += command[i]
+			if i < length_cmd:
+				current += command[i]
 			i += 1
 		elif command[i] in ' \r\t':
 			current = add_token(current, tokens)

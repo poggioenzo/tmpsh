@@ -11,7 +11,6 @@ from pprint import pprint
 
 def main():
 	grammar = rg.get_grammar("grammar.txt")
-	# pprint(grammar)
 	if len(sys.argv) > 1:
 		command = " ".join(sys.argv[1:])
 		tokens = []

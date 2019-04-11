@@ -33,8 +33,9 @@ BACKGROUND_JOBS
 END_COMMAND:
 	;
 
-NEW_LINE:
-	\n
+# Must be hardcode...
+# NEW_LINE:
+# 	\n
 
 SEPARATORS_BINAIRE:
 	PIPE
@@ -105,7 +106,6 @@ COMMAND_SUBSTITUTION:
 VARIABLE_EXPANSION:
 	<(.)
 
-
 QUOTES
 	DOUBLE_QUOTES
 	SINGLE_QUOTES
@@ -115,3 +115,27 @@ DOUBLE_QUOTES:
 
 SINGLE_QUOTES:
 	'.'
+
+RESERVED_WORD:
+	IF
+	LOOP
+
+IF:
+	if.fi
+
+LOOP:
+	WHILE
+	UNTIL
+	FOR
+
+WHILE:
+	while
+
+UNTIL:
+	until
+
+FOR:
+	for
+
+DO:
+	do.done
