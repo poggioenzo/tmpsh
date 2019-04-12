@@ -10,11 +10,10 @@ from collections import deque as dq
 from pprint import pprint
 
 def main():
-	grammar = rg.get_grammar("grammar.txt")
 	if len(sys.argv) > 1:
 		command = " ".join(sys.argv[1:])
 		tokens = []
-		tk.tokenize(command, grammar, tokens)
+		tk.tokenize(command, tokens)
 		print(tokens)
 	else:
 		print("missing command.")
