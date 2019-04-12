@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/03/19 14:40:22 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/25 18:37:43 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/11 11:04:37 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -14,7 +14,10 @@
 #ifndef TMPSH_H
 # define TMPSH_H
 
-#define UNUSED(value) (void)value
+# ifndef UNUSED_VAR
+#  define UNUSED_VAR
+#  define UNUSED(variable)	(void) variable
+# endif
 
 # ifndef NULL
 #  define NULL (void *) 0

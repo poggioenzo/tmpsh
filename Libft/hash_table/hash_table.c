@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/26 19:49:39 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/26 19:49:49 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/10 12:40:57 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -54,7 +54,7 @@ static int		extract_alveol(t_ht_alveol **alveol, char *key)
 ** - The value associated to the key, NULL if nothing is associated.
 */
 
-char			*search_value(t_ht_table *table, char *key)
+void		*search_value(t_ht_table *table, char *key)
 {
 	int				hash;
 	t_ht_alveol		*alveol;

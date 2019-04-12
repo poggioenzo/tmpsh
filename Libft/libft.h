@@ -6,7 +6,7 @@
 /*   By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 08:38:27 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/19 15:40:13 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/11 11:32:39 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,6 +18,49 @@
 # include <stdlib.h>
 # include <wchar.h>
 # include "hash_table.h"
+# include "pylst.h"
+# include "garbage.h"
+
+# define ALLOC_ERROR	0
+# define ALLOC_SUCCESS	1
+# define NO_STATUS		0
+
+# define NO_COPY_BUT_FREE	-1
+
+/*
+** enum e_ctype allow us to check wich type the s_pylst->value is,
+** and to free accordly to the data type.
+*/
+
+enum			e_ctype
+{
+	_char = 0,
+	_chare,
+	_charee,
+	_int,
+	_inte,
+	_pylst,
+	size
+};
+
+/*
+** g_free_fct:
+**
+** Global variable who will contain all freeing function for each data type.
+*/
+
+typedef void (*t_free_fct)(void *);
+
+t_free_fct		g_free_fct[size];
+
+/*
+** PRINTF FUNCTIONS
+*/
+
+# ifndef UNUSED_VAR
+#  define UNUSED_VAR
+#  define UNUSED(variable)		(void)variable
+# endif
 
 int				ft_dprintf(int fd, char *format, ...);
 int				ft_printf(char *format, ...);

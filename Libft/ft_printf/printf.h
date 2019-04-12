@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/29 09:55:42 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/02/02 13:31:12 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/10 10:41:28 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -21,8 +21,6 @@
 # include <fcntl.h>
 
 int			ft_printf(char *format, ...);
-
-# define UNUSED(x) (void) (x)
 
 typedef struct s_prt_opt	t_prt_opt;
 typedef struct s_flags	t_flags;
