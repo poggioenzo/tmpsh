@@ -10,7 +10,7 @@
 
 void		alloc_capabilities_struct(t_caps **capabilities)
 {
-	if (tgetent(getenv("TERM"), NULL) == -1)
+	if (tgetent(ft_getenv("TERM"), NULL) == -1)
 		exit(-1); // WHAT SHOULD I DO ?
 	if (!(*capabilities = (t_caps *)MALLOC(sizeof(t_caps))))
 		exit(-1);

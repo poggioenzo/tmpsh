@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/03/10 16:12:45 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 16:05:23 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 18:18:23 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -76,10 +76,19 @@ char		*add_user(void)
 char		*add_cwd(void)
 {
 	char	*home;
+	char	*cwd_tmp;
 	char	*cwd;
 	int		len_home;
 
-	cwd = getcwd(NULL, 0);
+	cwd_tmp = getcwd(NULL, 0);
+	cwd = NULL;
+	if (cwd_tmp)
+	{
+		cwd = ft_strdup(cwd_tmp);
+		free(cwd_tmp);
+	}
+	if (!cwd)
+		exit(-1);
 	home = getenv("HOME");
 	if (home && *home && cwd && ft_start_with(cwd, home))
 	{
