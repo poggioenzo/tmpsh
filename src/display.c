@@ -26,19 +26,17 @@ void			clean_lines(int nb_line, int is_last_line)
 ** structure.
 */
 
-int			display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
+void		display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
 {
 	static int	displayed_lines = 0;
 	int			curr_line_size;
 	int			shell_len;
 	char		*shell_repr;
 
-	if (!(shell_repr = concat_shell(prompt_lines, cursor, &curr_line_size)))
-		return (MALLOC_ERROR);
+	shell_repr = concat_shell(prompt_lines, cursor, &curr_line_size);
 	shell_len = ft_strlen(shell_repr);
 	if (first_display == FALSE)
 		clean_lines(displayed_lines, TRUE);
 	displayed_lines = curr_line_size;
 	write(STDOUT_FILENO, shell_repr, shell_len);
-	return (SUCCESS);
 }

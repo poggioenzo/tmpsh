@@ -47,14 +47,13 @@ int			free_t_line_lst(t_line **line_lst, int status)
 ** Create a single t_line element, set almost all of his attribute to NULL.
 */
 
-int			create_t_line(t_line **new_line, int position)
+void		create_t_line(t_line **new_line, int position)
 {
 	if (!(*new_line = (t_line *)MALLOC(sizeof(t_line))))
-		return (MALLOC_ERROR);
+		exit(-1);
 	(*new_line)->chars = NULL;
 	(*new_line)->next = NULL;
 	(*new_line)->position = position;
-	return (MALLOC_SUCCESS);
 }
 
 /*
@@ -63,14 +62,17 @@ int			create_t_line(t_line **new_line, int position)
 ** Extend a t_line element, add a new t_line at the end of the current list.
 */
 
-int			push_end_line(t_line **line_lst)
+void			push_end_line(t_line **line_lst)
 {
 	t_line	*tmp_line;
 	
 	if (!*line_lst)
-		return (create_t_line(line_lst, 0));
-	tmp_line = *line_lst;
-	while (tmp_line->next)
-		tmp_line = tmp_line->next;
-	return (create_t_line(&tmp_line->next, tmp_line->position + 1));
+		create_t_line(line_lst, 0);
+	else
+	{
+		tmp_line = *line_lst;
+		while (tmp_line->next)
+			tmp_line = tmp_line->next;
+		create_t_line(&tmp_line->next, tmp_line->position + 1);
+	}
 }

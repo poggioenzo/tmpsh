@@ -10,19 +10,19 @@
 ** or in the middle of the list.
 */
 
-static int		appropriate_char_insert(t_cursor *cursor, t_char *cursor_char,\
+static void		appropriate_char_insert(t_cursor *cursor, t_char *cursor_char,\
 		t_char *prev_char, char letter)
 {
 	t_char	*new_char_node;
 
 	if (!cursor_char && cursor->column == prev_char->position + 1)
-		return (push_end_char(&prev_char, letter, 0));
-	if (create_char(&new_char_node, letter, cursor->column, FALSE) ==
-			MALLOC_ERROR)
-		return (MALLOC_ERROR);
-	new_char_node->next = cursor_char;
-	prev_char->next = new_char_node;
-	return (MALLOC_SUCCESS);
+		push_end_char(&prev_char, letter, FALSE);
+	else
+	{
+		create_char(&new_char_node, letter, cursor->column, FALSE);
+		new_char_node->next = cursor_char;
+		prev_char->next = new_char_node;
+	}
 }
 
 /*
@@ -32,7 +32,7 @@ static int		appropriate_char_insert(t_cursor *cursor, t_char *cursor_char,\
 ** Insert the char according to the cursor position.
 */
 
-int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
+void		insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 {
 	t_char		*cursor_char;
 	t_char		*prev_char;
@@ -40,20 +40,15 @@ int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 
 	cursor_line = get_cursor_line(shell_repr, cursor);
 	if (!cursor_line->chars)
-	{
-		if (push_end_char(&cursor_line->chars, letter, FALSE) == MALLOC_ERROR)
-			return (MALLOC_ERROR);
-	}
+		push_end_char(&cursor_line->chars, letter, FALSE);
 	else
 	{
 		cursor_char = cursor_line->chars;
 		get_cursor_char(cursor, &cursor_char, &prev_char);
-		if (appropriate_char_insert(cursor, cursor_char, prev_char, letter) == MALLOC_ERROR)
-			return (MALLOC_ERROR);
+		appropriate_char_insert(cursor, cursor_char, prev_char, letter);
 	}
 	cursor->column++;
 	update_position(cursor_line->chars);
-	return (MALLOC_SUCCESS);
 }
 
 /*
@@ -64,19 +59,16 @@ int			insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 ** after each insertion.
 */
 
-int			insert_string(t_char **char_lst, char *string, int lock) 
+void		insert_string(t_char **char_lst, char *string, int lock) 
 {
 	t_char		**start_char;
 
 	start_char = char_lst;
 	while (*string)
 	{
-		if (push_end_char(char_lst, *string, lock) == MALLOC_ERROR)
-			return (MALLOC_ERROR);
+		push_end_char(char_lst, *string, lock);
 		char_lst = &(*char_lst)->next;
 		string++;
 	}
 	update_position(*start_char);
-	
-	return (MALLOC_SUCCESS);
 }

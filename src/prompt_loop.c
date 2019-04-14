@@ -128,7 +128,7 @@ int		prompt_loop(void)
 		if (status == not_nested)
 		{
 			shell_str = render_shell_content(shell_repr); //unprotected malloc
-			register_command(shell_str); //unprotected malloc
+			register_command(shell_str);
 			*cursor = (t_cursor){.row = -1, .column = -1};
 			display_shell(shell_repr, cursor, FALSE);
 			ft_printf("\n");

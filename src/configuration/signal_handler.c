@@ -20,6 +20,7 @@ static void		shell_interupt(int status)
 	t_line	*shell_repr;
 	t_cursor	*cursor;
 
+	UNUSED(status);
 	manage_shell_repr(GET, &shell_repr, &cursor);
 	*cursor = (t_cursor){.row = -1, .column = -1};
 	display_shell(shell_repr, cursor, FALSE);
@@ -43,6 +44,7 @@ static void		shell_background(int status)
 	t_line		*shell_repr;
 	t_cursor	fake_cursor;
 
+	UNUSED(status);
 	manage_shell_repr(GET, &shell_repr, NULL);
 	fake_cursor = (t_cursor){.row = -1, .column = -1};
 	display_shell(shell_repr, &fake_cursor, FALSE);
@@ -63,6 +65,7 @@ static void		shell_continue(int status)
 	t_line	*shell_repr;
 	t_cursor	*cursor;
 
+	UNUSED(status);
 	manage_shell_repr(GET, &shell_repr, &cursor);
 	manage_termios(SETUP);
 	ft_printf(g_caps->hide_cursor);
@@ -81,6 +84,7 @@ static void		shell_reshape(int status)
 	t_line		*shell_repr;
 	t_cursor	*cursor;
 
+	UNUSED(status);
 	manage_shell_repr(GET, &shell_repr, &cursor);
 	display_shell(shell_repr, cursor, FALSE);
 }

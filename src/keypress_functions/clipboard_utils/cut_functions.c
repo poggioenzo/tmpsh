@@ -138,9 +138,6 @@ int		paste_clipboard(t_line *shell_repr, t_cursor *cursor)
 	if (!cut)
 		return (SUCCESS);
 	while (*cut)
-	{
-		if (insert_char(shell_repr, *cut++, cursor) == MALLOC_ERROR)
-			return (MALLOC_ERROR);
-	}
+		insert_char(shell_repr, *cut++, cursor);
 	return (MALLOC_SUCCESS);
 }

@@ -11,13 +11,10 @@
 ** command line.
 */
 
-static int     prepare_hist_t_line(t_line **line_to_create)
+static void     prepare_hist_t_line(t_line **line_to_create)
 {
-    if (create_t_line(line_to_create, 0) == MALLOC_ERROR)
-        return (MALLOC_ERROR);
-    if (insert_string(&(*line_to_create)->chars, "> ", TRUE) == MALLOC_ERROR)
-        return (free_t_line(line_to_create, MALLOC_ERROR));
-    return (MALLOC_SUCCESS);
+    create_t_line(line_to_create, 0);
+    insert_string(&(*line_to_create)->chars, "> ", TRUE);
 }
 
 /*
@@ -28,19 +25,12 @@ static int     prepare_hist_t_line(t_line **line_to_create)
 ** Allocate a new line if it's needed.
 */
 
-static int     convert_char(char *history_line, t_line **line_to_fill)
+static void     convert_char(char *history_line, t_line **line_to_fill)
 {
     if (!*line_to_fill)
-    {
-        if (prepare_hist_t_line(line_to_fill) == MALLOC_ERROR)
-            return (MALLOC_ERROR);
-    }
+        prepare_hist_t_line(line_to_fill);
     while (*history_line && *history_line != '\n')
-    {
-        if (!push_end_char(&(*line_to_fill)->chars, *history_line++, FALSE))
-            return (MALLOC_ERROR);
-    }
-    return (MALLOC_SUCCESS);
+        push_end_char(&(*line_to_fill)->chars, *history_line++, FALSE);
 }
 
 /*
@@ -51,30 +41,25 @@ static int     convert_char(char *history_line, t_line **line_to_fill)
 ** to create different t_list node.
 */
 
-int     add_new_history(t_line *shell_repr, t_cursor *cursor, t_hist *history)
+void    add_new_history(t_line *shell_repr, t_cursor *cursor, t_hist *history)
 {
     t_line *cursor_line;
     char    *hist_line;
     t_line  *followed_save;
-    int     status;
 
     cursor_line = get_cursor_line(shell_repr, cursor);
     followed_save = cursor_line->next;
     hist_line = history ? history->line : "\0";
-    if (convert_char(hist_line, &cursor_line) == MALLOC_ERROR)
-        return (MALLOC_ERROR);
+    convert_char(hist_line, &cursor_line);
     if (!history)
-        return (MALLOC_SUCCESS);
+        return ;
     cursor_line->next = NULL;
-    status = MALLOC_SUCCESS;
-    while ((hist_line = ft_strchr(hist_line, '\n')) && status)
+    while ((hist_line = ft_strchr(hist_line, '\n')))
     {
         hist_line++;
-        status = convert_char(hist_line, &cursor_line->next);
-        if (status == MALLOC_SUCCESS)
-            cursor_line = cursor_line->next;
+        convert_char(hist_line, &cursor_line->next);
+        cursor_line = cursor_line->next;
     }
     cursor_line->next = followed_save;
     update_line_lst(shell_repr);
-    return (status);
 }

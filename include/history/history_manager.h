@@ -3,6 +3,6 @@
 
 # include "tmpsh.h"
 
-int		history_manager(char *key, t_line *shell_repr, t_cursor *cursor);
+void	history_manager(char *key, t_line *shell_repr, t_cursor *cursor);
 
 #endif

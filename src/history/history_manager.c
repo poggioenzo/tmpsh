@@ -23,19 +23,15 @@ static void	check_last_key(int *is_repetition)
 }
 
 /*
-** history_manger:
+** history_manager:
 **
 ** Analyse the key given to manipulate the history (UP or DOWN key),
 ** and will behave like expect by the user.
 ** Check if the current hsitory selection is a keypress repetition,
 ** delete the old used history if needed and replace it by a new one.
-**
-** return value:
-** - SUCCESS if all happend properly, MALLOC_ERROR if an allocation
-** failed during the process.
 */
 
-int		history_manager(char *key, t_line *shell_repr, t_cursor *cursor)
+void	history_manager(char *key, t_line *shell_repr, t_cursor *cursor)
 {
 	static int	    is_repetition = FALSE;
 	static t_hist	*history = (void *) 0;
@@ -44,9 +40,7 @@ int		history_manager(char *key, t_line *shell_repr, t_cursor *cursor)
 	check_last_key(&is_repetition);
     clean_lastest_history(is_repetition, shell_repr, cursor, history);
     select_current_history(key, &history, is_repetition);
-    if (add_new_history(shell_repr, cursor, history) == MALLOC_ERROR)
-		return (MALLOC_ERROR);
+    add_new_history(shell_repr, cursor, history);
     cursor_line = get_cursor_line(shell_repr, cursor);
     cursor->column = char_lst_len(cursor_line->chars);
-	return (SUCCESS);
 }

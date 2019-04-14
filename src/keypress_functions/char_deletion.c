@@ -96,7 +96,7 @@ static int			del_pos_char(t_char **char_lst, t_cursor *cursor)
 ** try to delete the current line if needed.
 */
 
-int			delete_char(t_line *shell_repr, t_cursor *cursor)
+void			delete_char(t_line *shell_repr, t_cursor *cursor)
 {
 	int status;
 	t_line	*cursor_line;
@@ -105,5 +105,4 @@ int			delete_char(t_line *shell_repr, t_cursor *cursor)
 	status = del_pos_char(&cursor_line->chars, cursor);
 	if (status == del_line)
 		delete_line(shell_repr, cursor_line->position, cursor);
-	return (SUCCESS);
 }

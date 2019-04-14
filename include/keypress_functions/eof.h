@@ -3,6 +3,6 @@
 
 # include "tmpsh.h"
 
-int		check_eof(t_line *shell_repr);
+void	check_eof(t_line *shell_repr);
 
 #endif

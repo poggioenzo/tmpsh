@@ -29,8 +29,7 @@ int				manage_shell_repr(int action, t_line **prompt_line, \
 		if (alloc_cursor(cursor) == MALLOC_ERROR)
 			return (MALLOC_ERROR);
 		*prompt_line = NULL;
-		if (push_end_line(prompt_line) == MALLOC_ERROR)
-			return (dealloc_cursor(cursor, MALLOC_ERROR));
+		push_end_line(prompt_line);
 		static_prompt = *prompt_line;
 		static_cursor = *cursor;
 		return (MALLOC_SUCCESS);
@@ -62,8 +61,7 @@ static int				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 
 	if ((prompt_format = format_prompt()) == MALLOC_ERROR)
 		return (MALLOC_ERROR);
-	if (insert_string(&shell_lines->chars, prompt_format, 1) == MALLOC_ERROR)
-		return (ft_strdel_out(&prompt_format, MALLOC_ERROR));
+	insert_string(&shell_lines->chars, prompt_format, TRUE);
 	cursor->column += ft_strlen(prompt_format);
 	return (MALLOC_SUCCESS);
 }

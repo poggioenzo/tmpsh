@@ -5,6 +5,6 @@
 
 enum deletion {del_line, deletion_succeed};
 
-int			delete_char(t_line *shell_repr, t_cursor *cursor);
+void		delete_char(t_line *shell_repr, t_cursor *cursor);
 
 #endif

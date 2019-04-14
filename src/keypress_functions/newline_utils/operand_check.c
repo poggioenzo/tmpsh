@@ -12,37 +12,29 @@
 ** Check which kind of separator the current char is between |, || and &&.
 ** Add the right type to the operand chained list.
 ** Ask to skip a char if the separator is using to char.
-**
-** return value:
-** - MALLOC_SUCCESS if the separator have been added, or if it's the
-** background & operator, and we skeep it.
-** - MALLOC_ERROR if an memory allocation failed.
 */
 
-static int		get_separator_type(t_operand **operand_list, t_char *curr_char,\
+static void		get_separator_type(t_operand **operand_list, t_char *curr_char,\
 				int *skip_char)
 {
-	int		status;
-
-	status = MALLOC_SUCCESS;
 	if (curr_char->letter == '&')
 	{
-		if (!is_next_char(curr_char, '&'))
-			return (status);
-		status = push_operand(operand_list, CMDAND, '\0');
-		*skip_char = TRUE;
+		if (is_next_char(curr_char, '&'))
+		{
+			push_operand(operand_list, CMDAND, '\0');
+			*skip_char = TRUE;
+		}
 	}
 	else if (curr_char->letter == '|')
 	{
 		if (is_next_char(curr_char, '|'))
 		{
-			status = push_operand(operand_list, CMDOR, '\0');
+			push_operand(operand_list, CMDOR, '\0');
 			*skip_char = TRUE;
 		}
 		else
-			status = push_operand(operand_list, PIPE, '\0');
+			push_operand(operand_list, PIPE, '\0');
 	}
-	return (status);
 }
 
 /*
@@ -55,21 +47,16 @@ static int		get_separator_type(t_operand **operand_list, t_char *curr_char,\
 **
 ** return value:
 ** - SUCCESS if we can continue the process properly.
-** - MALLOC_ERROR if a memory allocation failed.
+** - syntax_error.
 */
 
 int		check_separator(t_operand **operand_list, t_char **curr_char,\
 				int *go_line)
 {
-		int		status;
 		int		skip_char;
 
 		skip_char = FALSE;
-		status = get_separator_type(operand_list, *curr_char, &skip_char);
-		if (status == MALLOC_ERROR)
-			return (status);
-		else if (status == leave_check)
-			return (SUCCESS);
+		get_separator_type(operand_list, *curr_char, &skip_char);
 		if (skip_char)
 			*curr_char = (*curr_char)->next;
 		while ((*curr_char)->next && ft_isspace((*curr_char)->next->letter))
@@ -89,34 +76,25 @@ int		check_separator(t_operand **operand_list, t_char **curr_char,\
 ** Check if the given char is corresponding to a specific kind of substitution,
 ** it should match with <(), >(), $() or ${} substitution.
 ** If it's the case, append it to the operand chained list.
-**
-** return value:
-** - MALLOC_SUCCESS if the command have been added to the chained list,
-** of if the character isn't a substitution.
-** - MALLOC_ERROR if an allocation failed.
 */
 
-int		check_cmdsubst(t_operand **operand_list, t_char *curr_char, \
+void	check_cmdsubst(t_operand **operand_list, t_char *curr_char, \
 				int *to_skip)
 {
-	int		status;
-
-	status = MALLOC_SUCCESS;
 	if (ft_incharset(curr_char->letter, "<>"))
 	{
 		if (is_next_char(curr_char, '('))
-			status = push_operand(operand_list, CMDSUBST, '(');
+			push_operand(operand_list, CMDSUBST, '(');
 		else
-			return (status);
+			return ;
 	}
 	else if (is_next_char(curr_char, '('))
-		status = push_operand(operand_list, CMDSUBST, '(');
+		push_operand(operand_list, CMDSUBST, '(');
 	else if (is_next_char(curr_char, '{'))
-		status = push_operand(operand_list, BRACEPARAM, '{');
+		push_operand(operand_list, BRACEPARAM, '{');
 	else
-		return (0);
+		return ;
 	*to_skip += 1;
-	return (status);
 }
 
 /*
@@ -130,7 +108,7 @@ int		check_cmdsubst(t_operand **operand_list, t_char *curr_char, \
 ** - MALLOC_ERROR if a memory allocation failed.
 */
 
-int			check_db_quote(t_operand **operand_list)
+void		check_db_quote(t_operand **operand_list)
 {
 	t_operand	*last_open;
 
@@ -138,8 +116,7 @@ int			check_db_quote(t_operand **operand_list)
 	if (last_open && last_open->open_char == '"')
 		delete_operand(operand_list, &last_open);
 	else
-		return (push_operand(operand_list, DQUOTE, '"'));
-	return (SUCCESS);
+		push_operand(operand_list, DQUOTE, '"');
 }
 
 /*
@@ -170,8 +147,7 @@ int		check_closing(t_operand **operand_list, t_char *curr_char)
 			delete_operand_from(operand_list, &last_open);
 		else
 			return (syntax_error(last_open->open_char));
+		return (SUCCESS);
 	}
-	else
-		return (syntax_error(curr_char->letter));
-	return (SUCCESS);
+	return (syntax_error(curr_char->letter));
 }

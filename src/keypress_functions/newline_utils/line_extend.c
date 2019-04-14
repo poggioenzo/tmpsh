@@ -120,14 +120,13 @@ int			add_new_line(t_line *shell_repr, t_operand *operand_list, \
 				t_cursor *cursor)
 {
 	char	*operand_str;
-	int		status;
+	int		status = SUCCESS;
 
-	if (push_end_line(&shell_repr) == MALLOC_ERROR)
-		return (MALLOC_ERROR);
+	push_end_line(&shell_repr);
 	if (format_operand_string(operand_list, &operand_str) == MALLOC_ERROR)
 		return (MALLOC_ERROR);
 	shell_repr = get_last_line(shell_repr);
-	status = insert_string(&shell_repr->chars, operand_str, TRUE);
+	insert_string(&shell_repr->chars, operand_str, TRUE);
 	ft_strdel(&operand_str);
 	if (status == MALLOC_ERROR)
 		return (status);

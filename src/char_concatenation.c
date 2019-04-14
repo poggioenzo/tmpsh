@@ -60,7 +60,7 @@ char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 
 	line_len = get_repr_len(char_lst, cursor, line);
 	if (!(line_repr = (char *)MALLOC(sizeof(char) * (line_len+ 5))))
-		return (NULL);
+		exit(-1);
 	index = 0;
 	cursor_displayed = FALSE;
 	while (char_lst)
@@ -98,16 +98,15 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 	char	*newline_tmp;
 
 	if (!(shell_str = ft_strnew(0)))
-		return (NULL);
+		exit(-1);
 	*total_lines = 0;
 	screen_size(&window);
 	while (prompt_lines)
 	{
-		if (!(new_line = format_char_lst(prompt_lines->chars, cursor, \
-						prompt_lines->position)))
-			return (NULL);
+		new_line = format_char_lst(prompt_lines->chars, cursor, \
+						prompt_lines->position);
 		if (!(shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1)))
-			return (NULL);
+			exit(-1);
 		line_len = char_lst_len(prompt_lines->chars);
 		if (cursor->row == prompt_lines->position && cursor->column == line_len)
 			line_len++;
@@ -116,7 +115,10 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 		prompt_lines = prompt_lines->next;
 		newline_tmp = "\n";
 		if (prompt_lines)
-			shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0); //Unprotected
+		{
+			if (!(shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0)))
+				exit(-1);
+		}
 	}
 	return (shell_str);
 }
