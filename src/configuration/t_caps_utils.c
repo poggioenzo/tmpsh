@@ -8,12 +8,12 @@
 ** attribute of our structure.
 */
 
-int			alloc_capabilities_struct(t_caps **capabilities)
+void		alloc_capabilities_struct(t_caps **capabilities)
 {
 	if (tgetent(getenv("TERM"), NULL) == -1)
-		return (0);
+		exit(-1); // WHAT SHOULD I DO ?
 	if (!(*capabilities = (t_caps *)MALLOC(sizeof(t_caps))))
-		return (MALLOC_ERROR);
+		exit(-1);
 	(*capabilities)->clear = tgetstr("cl", NULL);
 	(*capabilities)->video = tgetstr("mr", NULL);
 	(*capabilities)->reset_video = tgetstr("me", NULL);
@@ -25,7 +25,6 @@ int			alloc_capabilities_struct(t_caps **capabilities)
 	(*capabilities)->start_line = tgetstr("cr", NULL);
 	(*capabilities)->move_up = tgetstr("up", NULL);
 	(*capabilities)->move_down = tgetstr("do", NULL);
-	return (MALLOC_SUCCESS);
 }
 
 int			free_capabilities_struct(t_caps **capabilities, int status)

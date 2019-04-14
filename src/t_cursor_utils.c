@@ -2,13 +2,12 @@
 # include "libft.h"
 # include "t_caps_utils.h"
 
-int		alloc_cursor(t_cursor **cursor)
+void		alloc_cursor(t_cursor **cursor)
 {
 	if (!(*cursor = (t_cursor *)MALLOC(sizeof(t_cursor))))
-		return (MALLOC_ERROR);
+		exit(-1);
 	(*cursor)->row = 0;
 	(*cursor)->column = 0;
-	return (MALLOC_SUCCESS);
 }
 
 int		dealloc_cursor(t_cursor **cursor, int status)

@@ -18,7 +18,7 @@
 ** 3 action availble : GO_FREE, CREATE or GET.
 */
 
-int				manage_shell_repr(int action, t_line **prompt_line, \
+void			manage_shell_repr(int action, t_line **prompt_line, \
 		t_cursor **cursor)
 {
 	static t_line	*static_prompt;
@@ -26,13 +26,11 @@ int				manage_shell_repr(int action, t_line **prompt_line, \
 
 	if (action == CREATE)
 	{
-		if (alloc_cursor(cursor) == MALLOC_ERROR)
-			return (MALLOC_ERROR);
+		alloc_cursor(cursor);
 		*prompt_line = NULL;
 		push_end_line(prompt_line);
 		static_prompt = *prompt_line;
 		static_cursor = *cursor;
-		return (MALLOC_SUCCESS);
 	}
 	else if (action == GO_FREE)
 	{
@@ -46,7 +44,6 @@ int				manage_shell_repr(int action, t_line **prompt_line, \
 		if (cursor)
 			*cursor = static_cursor;
 	}
-	return (0);
 }
 
 /*
@@ -55,15 +52,13 @@ int				manage_shell_repr(int action, t_line **prompt_line, \
 ** Get the prompt representation and add it in the t_line structure.
 */
 
-static int				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
+static void				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 {
 	char	*prompt_format;
 
-	if ((prompt_format = format_prompt()) == MALLOC_ERROR)
-		return (MALLOC_ERROR);
+	prompt_format = format_prompt();
 	insert_string(&shell_lines->chars, prompt_format, TRUE);
 	cursor->column += ft_strlen(prompt_format);
-	return (MALLOC_SUCCESS);
 }
 
 /*
@@ -109,23 +104,13 @@ void		shell_exit(int status)
 ** t_caps struct.
 */
 
-int				shell_preconfig(t_line **shell, t_cursor **cursor)
+void			shell_preconfig(t_line **shell, t_cursor **cursor)
 {
-	int		error;
-
-	error = 1;
-	if (!(manage_shell_repr(CREATE, shell, cursor)))
-		return (MALLOC_ERROR);
-	error = insert_prompt_format(*shell, *cursor) == MALLOC_ERROR ? 0 : 1;
-	error = alloc_capabilities_struct(&g_caps) == MALLOC_ERROR ? 0 : 1;
-	if (error == 0)
-	{
-		manage_shell_repr(GO_FREE, NULL, NULL);
-		return (MALLOC_ERROR);
-	}
+	manage_shell_repr(CREATE, shell, cursor);
+	insert_prompt_format(*shell, *cursor);
+	alloc_capabilities_struct(&g_caps);
 	signal_setup();
 	ft_printf(g_caps->hide_cursor);
 	display_shell(*shell, *cursor, TRUE);
-	return (MALLOC_SUCCESS);
 }
 

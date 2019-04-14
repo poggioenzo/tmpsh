@@ -68,7 +68,7 @@ static void		read_history_file(char *history_filename, t_hist **history)
 	char	*command_to_add;
 
 	while ((command_to_add = get_next_command(history_filename)))
-		extend_history(&history, &command_to_add);
+		push_t_hist(history, command_to_add, FALSE);
 }
 
 /*

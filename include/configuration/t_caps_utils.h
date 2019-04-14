@@ -5,6 +5,6 @@
 # include <stdlib.h>
 # include "tmpsh.h"
 
-int			alloc_capabilities_struct(t_caps **capabilities);
+void		alloc_capabilities_struct(t_caps **capabilities);
 int			free_capabilities_struct(t_caps **capabilities, int status);
 #endif
