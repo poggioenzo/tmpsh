@@ -31,7 +31,7 @@ int		char_analysis(t_line *shell_repr, char *new_char, t_cursor *cursor)
 	else if (CTRL_D(new_char))
 		check_eof(shell_repr);
 	else if (is_clipoard_key(new_char))
-		status = clipoard_manager(new_char, shell_repr, cursor);
+		clipoard_manager(new_char, shell_repr, cursor);
 	ft_strcpy(g_last_char, new_char);
 	return (status);
 }

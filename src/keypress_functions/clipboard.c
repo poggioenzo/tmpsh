@@ -49,15 +49,14 @@ int		is_clipoard_key(char *key)
 ** according to this key.
 */
 
-int		clipoard_manager(char *key, t_line *shell_repr, t_cursor *cursor)
+void	clipoard_manager(char *key, t_line *shell_repr, t_cursor *cursor)
 {
 	if (CTRL_W(key))
-		return (cut_prev_word(shell_repr, cursor));
+		cut_prev_word(shell_repr, cursor);
 	else if (CTRL_N(key))
-		return (cut_next_word(shell_repr, cursor));
+		cut_next_word(shell_repr, cursor);
 	else if (CTRL_L(key))
-		return (line_cut(shell_repr, cursor));
+		line_cut(shell_repr, cursor);
 	else if (CTRL_P(key))
-		return (paste_clipboard(shell_repr, cursor));
-	return (MALLOC_SUCCESS);
+		paste_clipboard(shell_repr, cursor);
 }

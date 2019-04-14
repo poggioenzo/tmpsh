@@ -31,7 +31,11 @@ char	*delete_char_range(t_char *char_lst, t_char *from,\
 	if (!to)
 		get_last_char(char_lst, &to);
 	if (!from || !to)
-		return (get_str ? ft_strnew(0) : NULL);
+	{
+		if (!(cutted_str = ft_strnew(0)))
+			exit(-1);
+		return (cutted_str);
+	}
 	search_prev_char(char_lst, &prev_char, from);
 	prev_char->next = to->next;
 	to->next = NULL;
