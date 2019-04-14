@@ -38,11 +38,7 @@ static int			char_loop(t_line *shell_repr, t_cursor *cursor, char *buffer)
 	if (is_printable_str(buffer))
 	{
 		while (buffer[index])
-		{
 			status = char_analysis(shell_repr, buffer + index++, cursor);
-			if (status == MALLOC_ERROR)
-				return (MALLOC_ERROR);
-		}
 	}
 	else
 		status = char_analysis(shell_repr, buffer, cursor);
@@ -72,7 +68,7 @@ static int				read_loop(t_line **shell_lines, t_cursor **cursor)
 		read_ret = read(STDIN_FILENO, buff, PROMPT_BUFF);
 		buff[read_ret] = '\0';
 		status = char_loop(*shell_lines, *cursor, buff);
-		if (status == MALLOC_ERROR || status == not_nested)
+		if (status == not_nested)
 			return (status);
 		display_shell(*shell_lines, *cursor, FALSE);
 	}
@@ -86,7 +82,7 @@ static int				read_loop(t_line **shell_lines, t_cursor **cursor)
 ** the history file.
 */
 
-static int		register_command(char *shell_str)
+static void		register_command(char *shell_str)
 {
 	t_hist	*history;
 	char	*shell_cpy;
@@ -94,16 +90,17 @@ static int		register_command(char *shell_str)
 
 	history_store(GET, &history);
 	store_history = !history ? TRUE : FALSE;
-	shell_cpy = ft_strdup(shell_str);
-	if (!shell_cpy)
-		return (MALLOC_ERROR);
-	else if (!shell_cpy[0])
-		return (ft_strdel_out(&shell_cpy, SUCCESS));
-	if (push_t_hist(&history, shell_cpy, FALSE) == MALLOC_ERROR)
-		return (ft_strdel_out(&shell_cpy, MALLOC_ERROR));
+	if (!(shell_cpy = ft_strdup(shell_str)))
+		exit(-1);
+	if (shell_cpy[0])
+	{
+		push_t_hist(&history, shell_cpy, FALSE);
+		rewrite_history(history);
+	}
+	else
+		ft_strdel(&shell_cpy);
 	if (store_history)
 		history_store(STORE, &history);
-	return (rewrite_history(history));
 }
 
 /*
@@ -122,7 +119,7 @@ int		prompt_loop(void)
 	t_hist		*history;
 
 	manage_termios(SETUP);
-	status = history_store(CREATE, &history); // UNPROTECTED
+	history_store(CREATE, &history); // UNPROTECTED
 	while (1)
 	{
 		shell_repr = NULL;

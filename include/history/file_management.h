@@ -4,6 +4,6 @@
 # include "tmpsh.h"
 
 int		rewrite_history(t_hist *history);
-int		store_history(t_hist **history);
+void		load_history(t_hist **history);
 
 #endif

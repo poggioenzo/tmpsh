@@ -3,6 +3,6 @@
 
 # include "tmpsh.h"
 
-int		history_store(int action, t_hist **history);
+void	history_store(int action, t_hist **history);
 
 #endif

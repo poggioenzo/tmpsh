@@ -15,19 +15,18 @@
 ** Format like "#123: my_command" followed by a newline.
 */
 
-static int		write_line(unsigned int index, int hist_fd, char *command)
+static void		write_line(unsigned int index, int hist_fd, char *command)
 {
 	char	*str_index;
 
 	if (!(str_index = ft_utoa(index)))
-		return (MALLOC_ERROR);
+		exit(-1);
 	write(hist_fd, "#", 1);
 	write(hist_fd, str_index, ft_strlen(str_index));
 	write(hist_fd, ": ", 2);
 	write(hist_fd, command, ft_strlen(command));
 	write(hist_fd, "\n", 1);
 	ft_strdel(&str_index);
-	return (SUCCESS);
 }
 
 /*
@@ -43,23 +42,18 @@ int			rewrite_history(t_hist *history)
 	int		hist_fd;
 	char	*history_filename;
 
-	if (!(history_filename = replace_home(HISTORY_FILE)))
-		return (MALLOC_ERROR);
-	if ((hist_fd = open(history_filename, O_CREAT | O_WRONLY, 0600)) == -1)
+	history_filename = replace_home(HISTORY_FILE);
+	if ((hist_fd = open(history_filename, O_CREAT | O_WRONLY, 0600)) == -1) // CHECK IF AN ERROR occur
 		return (ft_strdel_out(&history_filename, FAILURE));
 	ft_strdel(&history_filename);
 	index = 0;
 	while (history)
 	{
-		if (write_line(index++, hist_fd, history->line) == MALLOC_ERROR)
-		{
-			close(hist_fd);
-			return (MALLOC_ERROR);
-		}
+		write_line(index++, hist_fd, history->line);
 		history = history->next;
 	}
 	close(hist_fd);
-	return (SUCCESS);
+	return (SUCCESS); // DEPEND OF OPEN
 }
 
 /*
@@ -69,23 +63,12 @@ int			rewrite_history(t_hist *history)
 ** our t_hist chained list.
 */
 
-static int		read_history_file(char *history_filename, t_hist **history)
+static void		read_history_file(char *history_filename, t_hist **history)
 {
 	char	*command_to_add;
 
-	if (!(command_to_add = ft_strnew(0)))
-		return (MALLOC_ERROR);
-	while (get_next_command(history_filename, &command_to_add) == SUCCESS)
-	{
-		if (command_to_add)
-		{
-			if (!extend_history(&history, &command_to_add))
-				return (MALLOC_ERROR);
-		}
-		else
-			return (SUCCESS);
-	}
-	return (FAILURE);
+	while ((command_to_add = get_next_command(history_filename)))
+		extend_history(&history, &command_to_add);
 }
 
 /*
@@ -94,15 +77,12 @@ static int		read_history_file(char *history_filename, t_hist **history)
 ** Store in a t_hist chained list the content of the history file.
 */
 
-int		store_history(t_hist **history)
+void		load_history(t_hist **history)
 {
 	char	*history_file;
-	int		status;
 
 	*history = NULL;
-	if (!(history_file = replace_home(HISTORY_FILE)))
-		return (FAILURE);
-	status = read_history_file(history_file, history);
+	history_file = replace_home(HISTORY_FILE);
+	read_history_file(history_file, history);
 	ft_strdel(&history_file);
-	return (status == SUCCESS ? status : free_history(history, status));
 }

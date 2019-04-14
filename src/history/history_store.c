@@ -15,14 +15,13 @@
 ** - STORE : Register the new history in the store.
 */
 
-int		history_store(int action, t_hist **history)
+void	history_store(int action, t_hist **history)
 {
 	static t_hist	*saved_history;
 
 	if (action == CREATE)
 	{
-		if (store_history(history) == FAILURE)
-			return (FAILURE);
+		load_history(history);
 		saved_history = *history;
 	}
 	else if (action == STORE)
@@ -31,5 +30,4 @@ int		history_store(int action, t_hist **history)
 		*history = saved_history;
 	else if (action == GO_FREE)
 		free_history(&saved_history, 0);
-	return (SUCCESS);
 }

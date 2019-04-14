@@ -58,25 +58,25 @@ static int		command_len(char *command)
 ** to start the next time at a command beginning.
 */
 
-static int			cut_next_command(char **command_list, char **new_cmd)
+static char		*cut_next_command(char **command_list)
 {
 	char	*cursor_pos;
 	int		len;
+	char	*new_cmd;
 
 	cursor_pos = *command_list;
 	if (!*cursor_pos)
-		return (SUCCESS);
+		return (NULL);
 	cursor_pos++;
 	while (ft_isdigit(*cursor_pos))
 		cursor_pos++;
 	cursor_pos += 2;
 	len = command_len(cursor_pos);
-	if (len == 0)
-		return (SUCCESS);
-	*new_cmd = ft_strsub(cursor_pos, 0, len);
+	if (!(new_cmd = ft_strsub(cursor_pos, 0, len)))
+		exit(-1);
 	cursor_pos += len + 1;
 	*command_list = cursor_pos;
-	return (*new_cmd ? SUCCESS : FAILURE);
+	return (new_cmd);
 }
 
 /*
@@ -91,23 +91,22 @@ static int			cut_next_command(char **command_list, char **new_cmd)
 ** FAILURE if the allocation failed.
 */
 
-int		get_next_command(char *filename, char **command)
+char	*get_next_command(char *filename)
 {
 	static char		*history_content = NULL;
 	static int		stored = FALSE;
 	static char		*curr_pos;
-	int				status;
+	char			*command;
 
 	if (!history_content && stored == FALSE)
 	{
-		if (!(history_content = readfile(filename, O_RDWR | O_CREAT, 0600)))
-			return (MALLOC_ERROR);
+		if (!(history_content = readfile(filename, O_RDWR | O_CREAT, 0600))) // WHAT IF AN ERROR OCCUR ?
+			exit(-1);
 		curr_pos = history_content;
 		stored = TRUE;
 	}
-	*command = NULL;
-	status = cut_next_command(&curr_pos, command);
-	if (status == SUCCESS && command == NULL)
+	command = cut_next_command(&curr_pos);
+	if (!command)
 		ft_strdel(&history_content);
-	return (status);
+	return (command);
 }

@@ -3,6 +3,6 @@
 
 # include "tmpsh.h"
 
-int		get_next_command(char *filename, char **command);
+char		*get_next_command(char *filename);
 
 #endif
