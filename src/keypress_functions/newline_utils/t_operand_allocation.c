@@ -7,14 +7,13 @@
 ** Allocate a single t_operand element and set up his attribute.
 */
 
-int		create_operand(t_operand **operand, int type, char open_char)
+void	create_operand(t_operand **operand, int type, char open_char)
 {
 	if (!(*operand = (t_operand *)MALLOC(sizeof(t_operand))))
-			return (MALLOC_ERROR);
+			exit(-1);
 	(*operand)->open_char = open_char;
 	(*operand)->type = type;
 	(*operand)->next = NULL;
-	return (MALLOC_SUCCESS);
 }
 
 /*
@@ -27,14 +26,16 @@ int		create_operand(t_operand **operand, int type, char open_char)
 ** - return MALLOC_SUCCESS if the allocation succes, MALLOC_ERROR otherwise
 */
 
-int		push_operand(t_operand **operand_list, int type, char open_char)
+void		push_operand(t_operand **operand_list, int type, char open_char)
 {
 	if (!*operand_list)
-			return (create_operand(operand_list, type, open_char));
-	while ((*operand_list)->next)
-			operand_list = &(*operand_list)->next;
-	return (create_operand(&(*operand_list)->next, type, open_char));
-
+			create_operand(operand_list, type, open_char);
+	else
+	{
+		while ((*operand_list)->next)
+				operand_list = &(*operand_list)->next;
+		create_operand(&(*operand_list)->next, type, open_char);
+	}
 }
 
 /*

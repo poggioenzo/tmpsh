@@ -7,32 +7,25 @@
 **
 ** Will move position in the shell representation until a single quote will
 ** be found.
-**
-** return value:
-** - SUCCESS if we reach the end of the shell representation, or if a single
-** quote have been found.
-** - MALLOC_ERROR if an allocation error occur.
 */
 
-int		skip_quote(t_line **shell_repr, t_char **curr_char, \
-				t_operand **operand_list)
+void	skip_quote(t_line **shell_repr, t_char **curr_char, \
+		t_operand **operand_list)
 {
 	t_operand	*last_open;
 
 	last_open = get_last_bracket(*operand_list);
 	if (last_open && last_open->open_char == '"')
-		return (SUCCESS);
-	if (push_operand(operand_list, QUOTE, '\'') == MALLOC_ERROR)
-		   return (MALLOC_ERROR);
+		return ;
+	push_operand(operand_list, QUOTE, '\'');
 	while (get_next_char(shell_repr, curr_char))
 	{
 		if ((*curr_char)->letter == '\'')
 		{
 			delete_last_operand(operand_list);
-			return (SUCCESS);
+			break ;
 		}
 	}
-	return (SUCCESS);
 }
 
 /*

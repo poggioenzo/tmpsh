@@ -129,16 +129,14 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 ** Whenever a end of t_line is esacaped, will concat the next line recursively.
 */
 
-int		concat_escaped_line(t_line **shell_repr, char **current_line)
+static void	concat_escaped_line(t_line **shell_repr, char **current_line)
 {
 	char		*new_line;
 
 	*shell_repr = (*shell_repr)->next;
-	if (history_formatter(shell_repr, &new_line) == MALLOC_ERROR)
-		return (ft_strdel_out(current_line, MALLOC_ERROR));
-	*current_line = ft_fstrjoin(current_line, &new_line, 1, 1);
-	return (*current_line ? MALLOC_SUCCESS : MALLOC_ERROR);
-
+	history_formatter(shell_repr, &new_line);
+	if (!(*current_line = ft_fstrjoin(current_line, &new_line, 1, 1)))
+		exit(-1);
 }
 
 /*
@@ -148,7 +146,7 @@ int		concat_escaped_line(t_line **shell_repr, char **current_line)
 ** Replace the \ followed by a new line into a single line.
 */
 
-static int		history_formatter(t_line **shell_repr, char **format)
+static void		history_formatter(t_line **shell_repr, char **format)
 {
 	int line_len;
 	int	index;
@@ -158,7 +156,7 @@ static int		history_formatter(t_line **shell_repr, char **format)
 	char_lst = get_unlocked_char((*shell_repr)->chars);
 	line_len = char_lst_len(char_lst);
 	if (!(*format = (char *)MALLOC(sizeof(char) * line_len + 1)))
-		return (MALLOC_ERROR);
+		exit(-1);
 	index = 0;
 	escape = FALSE;
 	while (char_lst && (char_lst->letter != '\\' || char_lst->next || escape))
@@ -173,8 +171,7 @@ static int		history_formatter(t_line **shell_repr, char **format)
 	}
 	(*format)[index] = '\0';
 	if (char_lst)
-		return (concat_escaped_line(shell_repr, format));
-	return (MALLOC_SUCCESS);
+		concat_escaped_line(shell_repr, format);
 }
 
 /*
@@ -191,23 +188,19 @@ char			*render_shell_content(t_line *prompt_lines)
 	char	*newline_tmp;
 
 	if (!(shell_str = ft_strnew(0)))
-		return (NULL);
+		exit(-1);
 	while (prompt_lines)
 	{
-		if (history_formatter(&prompt_lines, &new_line) == MALLOC_ERROR)
-		{
-			ft_strdel(&new_line);
-			return (NULL);
-		}
+		history_formatter(&prompt_lines, &new_line);
 		if (!(shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1)))
-			return (NULL);
+			exit(-1);
 		prompt_lines = prompt_lines->next;
 		newline_tmp = "\n";
 		if (prompt_lines)
 		{
 			shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0);
 			if (!shell_str)
-				return (NULL);
+				exit(-1);
 		}
 	}
 	return (shell_str);

@@ -92,7 +92,7 @@ int			newline_check(t_line *shell_repr, t_cursor *cursor)
 	operand_list = NULL;
 	status = is_nested(shell_repr, &operand_list);
 	if (status == TRUE)
-		status = add_new_line(shell_repr, operand_list, cursor);
+		add_new_line(shell_repr, operand_list, cursor);
 	free_operand_lst(&operand_list, 0);
 	return (status);
 }
