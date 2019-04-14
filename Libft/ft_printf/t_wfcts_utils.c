@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:08:41 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/29 10:14:08 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:06:46 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,7 +15,7 @@
 
 static void		*free_t_wfcts_element(t_wfcts **node)
 {
-	free(*node);
+	FREE(*node);
 	*node = NULL;
 	return (NULL);
 }

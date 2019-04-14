@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 16:08:34 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 16:09:35 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:07:29 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -62,14 +62,14 @@ static int		delete_dir(char *dirname, int recursiv)
 	{
 		if (!(new_filename = format_file(dirname, file_buf->d_name)))
 		{
-			free(directory);
+			FREE(directory);
 			return (-1);
 		}
 		if (check_upper_dir(dirname, file_buf->d_name) == 0)
 			ft_rmdir(new_filename, recursiv);
-		free(new_filename);
+		FREE(new_filename);
 	}
-	free(directory);
+	FREE(directory);
 	rmdir(dirname);
 	return (0);
 }

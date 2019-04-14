@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 16:04:56 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 16:05:01 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:09:33 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -15,7 +15,7 @@
 
 void	*ft_wstrdel(wchar_t **wstr)
 {
-	free(*wstr);
+	FREE(*wstr);
 	*wstr = NULL;
 	return (NULL);
 }

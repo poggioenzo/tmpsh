@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 16:18:26 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/25 09:32:23 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:05:09 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,7 +23,7 @@ void			*free_manager(t_fct_manager **manager)
 {
 	free_fcts_list(&(*manager)->std_fcts);
 	free_t_wfcts_list(&(*manager)->uni_fcts);
-	free(*manager);
+	FREE(*manager);
 	*manager = NULL;
 	return (NULL);
 }

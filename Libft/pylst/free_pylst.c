@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 10:44:23 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/10 11:15:04 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:11:15 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -30,7 +30,7 @@ int		free_pylst_node(t_pylst **py_node, int status)
 		free_fct = g_free_fct[(*py_node)->ctype];
 		free_fct(&(*py_node)->value);
 	}
-	free(*py_node);
+	FREE(*py_node);
 	*py_node = NULL;
 	return (status);
 }

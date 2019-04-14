@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:12:36 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:12:53 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:06:30 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -24,9 +24,9 @@ int			free_prt_opt(t_prt_opt **format_option, int status)
 {
 	if (*format_option)
 	{
-		free((*format_option)->flag);
-		free((*format_option)->full_specifier);
-		free(*format_option);
+		FREE((*format_option)->flag);
+		FREE((*format_option)->full_specifier);
+		FREE(*format_option);
 		*format_option = NULL;
 	}
 	return (status);

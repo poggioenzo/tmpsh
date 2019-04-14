@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/26 19:47:28 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/10 13:29:09 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:10:20 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,7 +25,7 @@ int				free_alveol(t_ht_alveol **alveol, int status)
 	ft_strdel(&(*alveol)->key);
 	freeing_fct = g_free_fct[(*alveol)->ctype];
 	freeing_fct(&(*alveol)->value);
-	free(*alveol);
+	FREE(*alveol);
 	*alveol = NULL;
 	return (status);
 }

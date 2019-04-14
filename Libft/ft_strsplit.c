@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/30 09:05:06 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:00:26 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:09:12 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,10 +17,10 @@ static char		**clean_tab(char **tab, int size)
 {
 	while (size >= 0)
 	{
-		free(tab[size]);
+		FREE(tab[size]);
 		tab[size--] = NULL;
 	}
-	free(tab);
+	FREE(tab);
 	return (NULL);
 }
 

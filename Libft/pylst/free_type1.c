@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 10:21:29 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/10 11:07:07 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:11:37 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -60,7 +60,7 @@ void			free_inte(void *array_ptr)
 	int		**real_array;
 
 	real_array = (int **)array_ptr;
-	free(*real_array);
+	FREE(*real_array);
 	*real_array = NULL;
 }
 

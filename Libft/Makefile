@@ -6,7 +6,7 @@
 #    By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 08:24:35 by simrossi     #+#   ##    ##    #+#        #
-#    Updated: 2019/04/10 13:45:45 by simrossi    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/04/14 09:24:20 by simrossi    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -173,6 +173,7 @@ SRCS = ft_atoi.c \
 	   find_index.c \
 	   ft_arraylen.c \
 	   free_manager.c \
+	   garbage_alloc.c \
 	   $(SRCS_PRINTF) \
 	   $(SRCS_HASH_TABLE) \
 	   $(SRCS_PYLST) \

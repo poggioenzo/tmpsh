@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/19 06:38:17 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/02/07 14:04:41 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:09:53 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -66,7 +66,7 @@ int				free_fd(t_fd **lst, t_fd *curr_fd, int action, int status)
 		prev_fd = tmp;
 		if ((action == 1 && curr_fd == tmp) || action == 2)
 		{
-			free(tmp);
+			FREE(tmp);
 			if (action == 1)
 				break ;
 		}

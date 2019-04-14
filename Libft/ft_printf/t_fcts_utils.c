@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:10:24 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/29 09:59:52 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:06:01 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -40,7 +40,7 @@ static t_fcts	*node_create(char *key, t_build_fct format_fct)
 
 static void		*free_t_fcts_node(t_fcts **node)
 {
-	free(*node);
+	FREE(*node);
 	*node = NULL;
 	return (NULL);
 }

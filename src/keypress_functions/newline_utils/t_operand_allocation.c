@@ -1,5 +1,5 @@
 #include "t_operand_allocation.h"
-#include <stdlib.h>
+#include "libft.h"
 
 /*
 ** create_operand:
@@ -46,7 +46,7 @@ int		push_operand(t_operand **operand_list, int type, char open_char)
 
 int		free_operand_node(t_operand **operand_node, int status)
 {
-	free(*operand_node);
+	FREE(*operand_node);
 	*operand_node = NULL;
 	return (status);
 }

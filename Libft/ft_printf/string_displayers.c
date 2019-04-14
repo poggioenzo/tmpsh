@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:22:44 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/02/02 13:34:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:05:37 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -70,6 +70,6 @@ int		display_unicode(va_list args, t_prt_opt *option, t_wfcts *prt_manager, \
 	if (!set_unicode_field(option, &format_str, &octets))
 		return (-1);
 	ft_putwstr(format_str, fd);
-	free(format_str);
+	FREE(format_str);
 	return (octets);
 }

@@ -1,6 +1,6 @@
 #include "t_line_allocation.h"
-#include <stdlib.h>
 #include "char_utils.h"
+#include "libft.h"
 
 /*
 ** free_t_line:
@@ -14,7 +14,7 @@ int			free_t_line(t_line **line_lst, int status)
 
 	char_lst = (*line_lst)->chars;
 	free_t_char_lst(&char_lst, status);
-	free(*line_lst);
+	FREE(*line_lst);
 	*line_lst = NULL;
 	return (status);
 }

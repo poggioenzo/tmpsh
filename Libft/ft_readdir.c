@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/02/05 13:14:05 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/02/07 17:27:09 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:07:01 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -50,7 +50,7 @@ static int		delete_subfile(t_subfile **file_lst, int status)
 	{
 		next_file = tmp_file->next;
 		ft_strdel(&tmp_file->filename);
-		free(tmp_file);
+		FREE(tmp_file);
 		tmp_file = next_file;
 	}
 	*file_lst = NULL;

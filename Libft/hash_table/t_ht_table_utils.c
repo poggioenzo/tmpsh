@@ -6,13 +6,13 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/26 19:50:15 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/02/06 11:06:15 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:23:09 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "hash_table.h"
-#include <stdlib.h>
+#include <libft.h>
 
 /*
 ** alloc_item_table:
@@ -49,9 +49,9 @@ int					free_hash_table(t_ht_table **hash_table, int status)
 	index = 0;
 	while (index < (*hash_table)->size)
 		free_alveol_list(&(*hash_table)->items[index++], 0);
-	free((*hash_table)->items);
+	FREE((*hash_table)->items);
 	(*hash_table)->items = NULL;
-	free(*hash_table);
+	FREE(*hash_table);
 	*hash_table = NULL;
 	return (status);
 }

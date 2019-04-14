@@ -30,7 +30,7 @@ int			alloc_capabilities_struct(t_caps **capabilities)
 
 int			free_capabilities_struct(t_caps **capabilities, int status)
 {
-	free(*capabilities);
+	FREE(*capabilities);
 	*capabilities = NULL;
 	return (status);
 }

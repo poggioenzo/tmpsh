@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/03/19 14:40:22 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/11 11:04:37 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:16:39 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -105,7 +105,7 @@ enum	malloc_fail
 
 # define STORE		3
 # define GET		2
-# define FREE		1
+# define GO_FREE	1
 # define CREATE		0
 
 /*

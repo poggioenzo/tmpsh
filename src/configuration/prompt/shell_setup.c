@@ -15,7 +15,7 @@
 ** manage_shell_repr:
 **
 ** Storage function to create or free our t_line and cursor structs.
-** 2 action availble : FREE or CREATE.
+** 3 action availble : GO_FREE, CREATE or GET.
 */
 
 int				manage_shell_repr(int action, t_line **prompt_line, \
@@ -35,7 +35,7 @@ int				manage_shell_repr(int action, t_line **prompt_line, \
 		static_cursor = *cursor;
 		return (MALLOC_SUCCESS);
 	}
-	else if (action == FREE)
+	else if (action == GO_FREE)
 	{
 		free_t_line_lst(&static_prompt, 0);
 		dealloc_cursor(&static_cursor, 0);
@@ -77,10 +77,10 @@ static int				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 
 void	shell_cleaner(void)
 {
-	history_store(FREE, NULL);
-	manage_shell_repr(FREE, NULL, NULL);
+	history_store(GO_FREE, NULL);
+	manage_shell_repr(GO_FREE, NULL, NULL);
 	manage_termios(RESET);
-	clipboard_store(FREE, NULL);
+	clipboard_store(GO_FREE, NULL);
 	free_capabilities_struct(&g_caps, 0);
 }
 
@@ -122,7 +122,7 @@ int				shell_preconfig(t_line **shell, t_cursor **cursor)
 	error = alloc_capabilities_struct(&g_caps) == MALLOC_ERROR ? 0 : 1;
 	if (error == 0)
 	{
-		manage_shell_repr(FREE, NULL, NULL);
+		manage_shell_repr(GO_FREE, NULL, NULL);
 		return (MALLOC_ERROR);
 	}
 	signal_setup();

@@ -6,7 +6,7 @@
 /*   By: epoggio <epoggio@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/15 16:46:16 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/25 08:04:45 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:03:14 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,7 +23,7 @@ int			free_str_array(char ***str, int status)
 		return (status);
 	while ((*str)[index])
 		ft_strdel(&(*str)[index++]);
-	free(*str);
+	FREE(*str);
 	*str = NULL;
 	return (status);
 }

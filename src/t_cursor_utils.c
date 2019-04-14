@@ -13,7 +13,7 @@ int		alloc_cursor(t_cursor **cursor)
 
 int		dealloc_cursor(t_cursor **cursor, int status)
 {
-	free(*cursor);
+	FREE(*cursor);
 	*cursor = NULL;
 	return (status);
 }

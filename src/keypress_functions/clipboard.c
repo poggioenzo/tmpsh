@@ -13,7 +13,7 @@
 **
 ** - GET to get the current clipped string.
 ** - STORE to save the clipped string.
-** - FREE to free the clipped string.
+** - GO_FREE to free the clipped string.
 */
 
 void	clipboard_store(int action, char **clipped_str)
@@ -27,7 +27,7 @@ void	clipboard_store(int action, char **clipped_str)
 	}
 	else if (action == GET)
 		*clipped_str = cutted_str;
-	else if (action == FREE)
+	else if (action == GO_FREE)
 		ft_strdel(&cutted_str);
 }
 

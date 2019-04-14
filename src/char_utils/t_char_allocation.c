@@ -1,5 +1,5 @@
 #include "t_char_allocation.h"
-#include <stdlib.h>
+#include "libft.h"
 
 /*
 ** create_char:
@@ -47,7 +47,7 @@ int			push_end_char(t_char **char_node, char letter, int lock)
 
 void	free_t_char(t_char **char_node)
 {
-	free(*char_node);
+	FREE(*char_node);
 	*char_node = NULL;
 }
 

@@ -39,7 +39,7 @@ static char	**fill_operand_table(void)
 
 static int		free_operand_table(char ***operand_strings, int status)
 {
-	free(*operand_strings);
+	FREE(*operand_strings);
 	*operand_strings = NULL;
 	return (status);
 }

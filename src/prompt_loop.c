@@ -136,7 +136,7 @@ int		prompt_loop(void)
 			display_shell(shell_repr, cursor, FALSE);
 			ft_printf("\n");
 		}
-		manage_shell_repr(FREE, NULL, NULL);
+		manage_shell_repr(GO_FREE, NULL, NULL);
 		if (status == MALLOC_ERROR)
 			return (status);
 		//lexer()

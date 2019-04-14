@@ -46,8 +46,8 @@ int		push_t_hist(t_hist **history, char *content, int is_tmp)
 
 static void	free_history_node(t_hist **hist_node)
 {
-	free((*hist_node)->line);
-	free(*hist_node);
+	FREE((*hist_node)->line);
+	FREE(*hist_node);
 	*hist_node = NULL;
 }
 

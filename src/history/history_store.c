@@ -11,7 +11,7 @@
 ** - CREATE : Store the current HISTORY_FILE into a chained list format,
 **            giving also the pointer to history.
 ** - GET : Give the capacity to get the current allocated history.
-** - FREE : Free the space allocated to the t_hist chained list.
+** - GO_FREE : Free the space allocated to the t_hist chained list.
 ** - STORE : Register the new history in the store.
 */
 
@@ -29,7 +29,7 @@ int		history_store(int action, t_hist **history)
 		saved_history = *history;
 	else if (action == GET)
 		*history = saved_history;
-	else if (action == FREE)
+	else if (action == GO_FREE)
 		free_history(&saved_history, 0);
 	return (SUCCESS);
 }
