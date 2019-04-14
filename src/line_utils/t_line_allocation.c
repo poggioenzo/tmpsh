@@ -49,7 +49,7 @@ int			free_t_line_lst(t_line **line_lst, int status)
 
 int			create_t_line(t_line **new_line, int position)
 {
-	if (!(*new_line = (t_line *)malloc(sizeof(t_line))))
+	if (!(*new_line = (t_line *)MALLOC(sizeof(t_line))))
 		return (MALLOC_ERROR);
 	(*new_line)->chars = NULL;
 	(*new_line)->next = NULL;

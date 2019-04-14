@@ -17,7 +17,7 @@ static char	**fill_operand_table(void)
 {
 	char	**operand_strings;
 
-	if (!(operand_strings = (char **)malloc(sizeof(char *) * NBRE_OPERAND + 100))) /// AVOID +100
+	if (!(operand_strings = (char **)MALLOC(sizeof(char *) * NBRE_OPERAND + 100))) /// AVOID +100
 		return (NULL);
 	operand_strings[CMDSUBST] = CMDSUBST_STR;
 	operand_strings[BRACEPARAM] = BRACEPARAM_STR;
@@ -98,7 +98,7 @@ static int	format_operand_string(t_operand *operand_list, char **operand_str)
 
 	if (!(operand_strings = fill_operand_table()))
 		return (MALLOC_ERROR);
-	if (!(*operand_str = (char *)malloc(sizeof(char) * 3)))
+	if (!(*operand_str = (char *)MALLOC(sizeof(char) * 3)))
 		return (free_operand_table(&operand_strings, MALLOC_ERROR));
 	ft_strcpy(*operand_str, "> ");
 	status = fill_all_strings(&operand_strings, operand_list, &joined_separator);

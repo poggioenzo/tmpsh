@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 16:05:22 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 16:05:43 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:10:13 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,7 +19,7 @@ wchar_t		*ft_wstrdup(wchar_t *wstr)
 	int		len;
 
 	len = ft_wstrlen(wstr);
-	if (!(duplicate = (wchar_t *)malloc(sizeof(wchar_t) * (len + 1))))
+	if (!(duplicate = (wchar_t *)MALLOC(sizeof(wchar_t) * (len + 1))))
 		return (NULL);
 	ft_wstrcpy(duplicate, wstr);
 	return (duplicate);

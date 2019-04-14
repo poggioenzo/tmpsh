@@ -4,7 +4,7 @@
 
 int		alloc_cursor(t_cursor **cursor)
 {
-	if (!(*cursor = (t_cursor *)malloc(sizeof(t_cursor))))
+	if (!(*cursor = (t_cursor *)MALLOC(sizeof(t_cursor))))
 		return (MALLOC_ERROR);
 	(*cursor)->row = 0;
 	(*cursor)->column = 0;

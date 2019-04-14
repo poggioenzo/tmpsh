@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/26 19:47:28 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:10:20 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:11:10 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -65,7 +65,7 @@ int				free_alveol_list(t_ht_alveol **alveol, int status)
 static int		create_alveol(const char *key, void *value, \
 		t_ht_alveol **alveol, int ctype)
 {
-	if (!(*alveol = (t_ht_alveol *)malloc(sizeof(**alveol))))
+	if (!(*alveol = (t_ht_alveol *)MALLOC(sizeof(**alveol))))
 		return (0);
 	(*alveol)->value = value;
 	if (!((*alveol)->key = ft_strdup(key)))

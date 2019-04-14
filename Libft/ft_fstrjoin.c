@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/13 08:38:26 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 14:59:00 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:06:01 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -21,7 +21,7 @@ char	*ft_fstrjoin(char **s1, char **s2, int free_s1, int free_s2)
 
 	first_str_len = ft_strlen(*s1);
 	entire_len = first_str_len + ft_strlen(*s2);
-	if (!(joined_str = (char *)malloc(sizeof(char) * entire_len + 1)))
+	if (!(joined_str = (char *)MALLOC(sizeof(char) * entire_len + 1)))
 	{
 		if (free_s1)
 			ft_strdel(s1);

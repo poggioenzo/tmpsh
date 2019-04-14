@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:15:31 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:56:06 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:03:28 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -30,7 +30,7 @@ static void	*check_precision(wchar_t **wstr, t_prt_opt *options, int *octets)
 	if (options->precision >= 0 && *octets > options->precision)
 	{
 		tmp_wstr = *wstr;
-		if (!(new_format = malloc(sizeof(wchar_t) * (options->precision + 1))))
+		if (!(new_format = MALLOC(sizeof(wchar_t) * (options->precision + 1))))
 			return (ft_wstrdel(wstr));
 		new_len = determine_bytes(*tmp_wstr);
 		index = 0;
@@ -68,7 +68,7 @@ wchar_t		*get_big_c(va_list args, t_prt_opt *options, int *octets)
 	UNUSED(options);
 	value = va_arg(args, wchar_t);
 	*octets += determine_bytes(value);
-	string = (wchar_t *)malloc(sizeof(wchar_t) * 2);
+	string = (wchar_t *)MALLOC(sizeof(wchar_t) * 2);
 	if (!string)
 		return (NULL);
 	string[0] = value;

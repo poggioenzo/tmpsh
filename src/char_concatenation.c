@@ -59,7 +59,7 @@ char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 	int		cursor_displayed;
 
 	line_len = get_repr_len(char_lst, cursor, line);
-	if (!(line_repr = (char *)malloc(sizeof(char) * (line_len+ 5))))
+	if (!(line_repr = (char *)MALLOC(sizeof(char) * (line_len+ 5))))
 		return (NULL);
 	index = 0;
 	cursor_displayed = FALSE;
@@ -155,7 +155,7 @@ static int		history_formatter(t_line **shell_repr, char **format)
 
 	char_lst = get_unlocked_char((*shell_repr)->chars);
 	line_len = char_lst_len(char_lst);
-	if (!(*format = (char *)malloc(sizeof(char) * line_len + 1)))
+	if (!(*format = (char *)MALLOC(sizeof(char) * line_len + 1)))
 		return (MALLOC_ERROR);
 	index = 0;
 	escape = FALSE;

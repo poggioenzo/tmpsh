@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:08:41 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:06:46 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:04:35 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -40,7 +40,7 @@ static t_wfcts	*create_node(char *key, t_unicode_fct format_function)
 {
 	t_wfcts *node;
 
-	if (!(node = (t_wfcts *)malloc(sizeof(t_wfcts))))
+	if (!(node = (t_wfcts *)MALLOC(sizeof(t_wfcts))))
 		return (NULL);
 	node->next = NULL;
 	node->key = key;

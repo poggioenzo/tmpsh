@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 16:05:56 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 16:06:11 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:02:18 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -36,7 +36,7 @@ int		set_number_precision(char **formated_str, int precision)
 	filled_str = NULL;
 	if (precision > len)
 	{
-		if (!(filled_str = (char *)malloc(sizeof(char) * (precision + 1))))
+		if (!(filled_str = (char *)MALLOC(sizeof(char) * (precision + 1))))
 		{
 			ft_strdel(formated_str);
 			return (-1);

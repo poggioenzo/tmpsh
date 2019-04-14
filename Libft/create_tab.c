@@ -6,7 +6,7 @@
 /*   By: epoggio <epoggio@student.le-101.fr>        +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/24 17:38:29 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/25 09:29:29 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:58:10 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -24,7 +24,7 @@ char	**create_tab(int size)
 	int		i;
 	char	**tab;
 
-	if (!(tab = (char **)malloc(sizeof(char *) * (size + 1))))
+	if (!(tab = (char **)MALLOC(sizeof(char *) * (size + 1))))
 		return (NULL);
 	i = 0;
 	while (i <= size)

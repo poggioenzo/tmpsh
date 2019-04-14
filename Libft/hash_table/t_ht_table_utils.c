@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/26 19:50:15 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:23:09 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:11:29 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,7 +25,7 @@ static t_ht_alveol	**alloc_item_table(int size)
 	t_ht_alveol	**table;
 	int			index;
 
-	table = (t_ht_alveol **)malloc(sizeof(t_ht_alveol *) * size);
+	table = (t_ht_alveol **)MALLOC(sizeof(t_ht_alveol *) * size);
 	if (!table)
 		return (NULL);
 	index = 0;
@@ -64,7 +64,7 @@ int					free_hash_table(t_ht_table **hash_table, int status)
 
 int					ht_new_table(t_ht_table **hash_table, int seed, int size)
 {
-	if (!(*hash_table = (t_ht_table *)malloc(sizeof(t_ht_table))))
+	if (!(*hash_table = (t_ht_table *)MALLOC(sizeof(t_ht_table))))
 		return (0);
 	(*hash_table)->size = size;
 	(*hash_table)->seed = seed;

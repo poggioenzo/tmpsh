@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/30 09:05:06 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:09:12 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:08:43 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,7 +38,7 @@ char			**ft_strsplit(const char *str, const char *charset)
 	char	*delim;
 
 	nb_elem = ft_count(str, charset);
-	if (!(tab = (char **)malloc(sizeof(char *) * (nb_elem + 1))))
+	if (!(tab = (char **)MALLOC(sizeof(char *) * (nb_elem + 1))))
 		return (NULL);
 	tab_index = 0;
 	while (nb_elem)

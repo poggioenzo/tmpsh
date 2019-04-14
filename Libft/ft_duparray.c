@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/25 09:31:36 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/25 09:32:48 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:58:53 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -28,7 +28,7 @@ char		**ft_duparray(char **array)
 	char	**duplicate;
 	int		index;
 
-	if (!(duplicate = (char **)malloc(sizeof(char *) * \
+	if (!(duplicate = (char **)MALLOC(sizeof(char *) * \
 						(array_size(array) + 1))))
 		return (NULL);
 	index = 0;

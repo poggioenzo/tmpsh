@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/19 06:38:17 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:09:53 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:10:38 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -30,7 +30,7 @@ static t_fd		*get_fd_elem(t_fd **lst, int fd)
 			return (tmp);
 		tmp = tmp->next;
 	}
-	if (!(fd_node = (t_fd *)malloc(sizeof(t_fd))))
+	if (!(fd_node = (t_fd *)MALLOC(sizeof(t_fd))))
 		return (NULL);
 	fd_node->fd = fd;
 	fd_node->next = *lst;

@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:12:36 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:06:30 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:04:24 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -42,9 +42,9 @@ t_prt_opt	*alloc_option(void)
 {
 	t_prt_opt *option;
 
-	if (!(option = (t_prt_opt *)malloc(sizeof(t_prt_opt))))
+	if (!(option = (t_prt_opt *)MALLOC(sizeof(t_prt_opt))))
 		return (NULL);
-	if (!(option->flag = (t_flags *)malloc(sizeof(t_flags))))
+	if (!(option->flag = (t_flags *)MALLOC(sizeof(t_flags))))
 	{
 		free_prt_opt(&option, 0);
 		return (NULL);

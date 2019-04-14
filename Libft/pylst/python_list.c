@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 10:32:13 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/11 11:31:33 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:12:01 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -23,11 +23,11 @@
 static int		alloc_pylst_node(t_pylst **py_node, void *value, int size, \
 		int ctype)
 {
-	if (!(*py_node = (t_pylst *)malloc(sizeof(t_pylst))))
+	if (!(*py_node = (t_pylst *)MALLOC(sizeof(t_pylst))))
 		return (ALLOC_ERROR);
 	if (size > 0)
 	{
-		if (!((*py_node)->value = malloc(size)))
+		if (!((*py_node)->value = MALLOC(size)))
 			return (free_pylst_node(py_node, ALLOC_ERROR));
 		ft_memcpy((*py_node)->value, value, size);
 	}

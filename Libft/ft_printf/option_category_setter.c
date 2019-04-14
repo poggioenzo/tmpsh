@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:48:23 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:05:21 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:02:30 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -56,7 +56,7 @@ int			set_full_specifier(t_prt_opt *options)
 	if (options->full_specifier)
 		FREE(options->full_specifier);
 	len = ft_strlen(options->modifier) + 1;
-	options->full_specifier = (char *)malloc(sizeof(char) * (len + 1));
+	options->full_specifier = (char *)MALLOC(sizeof(char) * (len + 1));
 	if (!(options->full_specifier))
 		return (0);
 	ft_strcpy(options->full_specifier, options->modifier);

@@ -14,7 +14,7 @@ char		*replace_home(char *filename)
 		return (ft_strdup(filename));
 	home_len = ft_strlen(home);
 	new_len = home_len + (ft_strlen(filename) - 1) + 1;
-	if (!(new_name = (char *)malloc(sizeof(char) * new_len)))
+	if (!(new_name = (char *)MALLOC(sizeof(char) * new_len)))
 		return (NULL);
 	ft_strcpy(new_name, home);
 	ft_strcpy(new_name + home_len, filename + 1);

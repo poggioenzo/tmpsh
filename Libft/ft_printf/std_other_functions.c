@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:23:55 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/17 16:54:32 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:02:55 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -76,7 +76,7 @@ char		*get_percent(va_list args, t_prt_opt *format_options, int *octets)
 
 	UNUSED(args);
 	UNUSED(format_options);
-	if (!(formated_str = (char *)malloc(sizeof(char) * 2)))
+	if (!(formated_str = (char *)MALLOC(sizeof(char) * 2)))
 		return (NULL);
 	formated_str[0] = '%';
 	formated_str[1] = '\0';

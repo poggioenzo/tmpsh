@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 16:11:46 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/03/17 19:10:10 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:05:32 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -35,7 +35,7 @@ char	*readfile(char *filename, int mode, int rights)
 	fd = open(filename, mode, rights);
 	if (fd == -1 || len == -1)
 		return (NULL);
-	if (!(content = malloc(sizeof(char) * (len + 1))))
+	if (!(content = MALLOC(sizeof(char) * (len + 1))))
 		return (NULL);
 	ret = read(fd, content, len);
 	content[ret] = '\0';

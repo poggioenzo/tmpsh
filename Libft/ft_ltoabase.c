@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/30 12:52:11 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 14:59:18 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:00:42 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,7 +38,7 @@ char			*ft_ltoabase(unsigned long long nbr, const char *base)
 		return (ft_strsub(base, 0, 1));
 	base_len = ft_strlen(base);
 	nbr_char = count_digit(nbr, base_len);
-	if (!(itoa_str = (char *)malloc(sizeof(char) * (nbr_char + 1))))
+	if (!(itoa_str = (char *)MALLOC(sizeof(char) * (nbr_char + 1))))
 		return (NULL);
 	itoa_str[nbr_char--] = '\0';
 	while (nbr)

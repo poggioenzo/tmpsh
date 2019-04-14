@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:25:24 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/01/20 18:15:49 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:03:14 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -45,7 +45,7 @@ char	*get_c(va_list args, t_prt_opt *format_options, int *octets)
 
 	UNUSED(format_options);
 	value = va_arg(args, int);
-	if (!(formatted_str = (char *)malloc(sizeof(char) * 2)))
+	if (!(formatted_str = (char *)MALLOC(sizeof(char) * 2)))
 		return (NULL);
 	formatted_str[0] = (char)value;
 	formatted_str[1] = '\0';

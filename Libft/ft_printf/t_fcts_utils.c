@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:10:24 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:06:01 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:04:07 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -24,7 +24,7 @@ static t_fcts	*node_create(char *key, t_build_fct format_fct)
 {
 	t_fcts *node;
 
-	if (!(node = (t_fcts *)malloc(sizeof(t_fcts))))
+	if (!(node = (t_fcts *)MALLOC(sizeof(t_fcts))))
 		return (NULL);
 	node->key = key;
 	node->string_maker = format_fct;

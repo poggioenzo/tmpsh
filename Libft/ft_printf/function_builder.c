@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 16:18:26 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:05:09 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:01:16 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -134,7 +134,7 @@ t_fct_manager	*setup_functions(void)
 {
 	t_fct_manager	*manager;
 
-	if (!(manager = (t_fct_manager *)malloc(sizeof(t_fct_manager))))
+	if (!(manager = (t_fct_manager *)MALLOC(sizeof(t_fct_manager))))
 		return (NULL);
 	manager->std_fcts = setup_standard();
 	manager->uni_fcts = setup_unicode();

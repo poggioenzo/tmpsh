@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:47:40 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:47:42 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:01:43 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -89,7 +89,7 @@ int		set_nbfield(t_prt_opt *option, char **formated_str, int *octets)
 
 	if (*octets < (int)option->field)
 	{
-		if (!(new_str = (char *)malloc(sizeof(char) * (option->field + 1))))
+		if (!(new_str = (char *)MALLOC(sizeof(char) * (option->field + 1))))
 			return (ft_strdel_out(formated_str, 0));
 		if (option->flag->negativ)
 			left_adjust(new_str, *formated_str, *octets, option);

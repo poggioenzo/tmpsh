@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/02/05 13:14:05 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:07:01 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:05:21 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -61,7 +61,7 @@ static int		push_subfile(t_subfile **file_lst, struct dirent *inode)
 {
 	if (!*file_lst)
 	{
-		if (!(*file_lst = (t_subfile *)malloc(sizeof(t_subfile) * 500)))
+		if (!(*file_lst = (t_subfile *)MALLOC(sizeof(t_subfile) * 500)))
 			return (-1);
 		(*file_lst)->next = NULL;
 		if (!((*file_lst)->filename = ft_strdup(inode->d_name)))
@@ -120,7 +120,7 @@ int				ft_readdir(char *directory, char ***files_strings)
 	lst_len = 0;
 	if (read_files(directory, &lst_len, &file_lst) == -1)
 		return (0);
-	if (!(*files_strings = (char **)malloc(sizeof(char *) * (lst_len + 1))))
+	if (!(*files_strings = (char **)MALLOC(sizeof(char *) * (lst_len + 1))))
 		return (delete_subfile(&file_lst, 0));
 	lst_len = 0;
 	tmp_lst = file_lst;

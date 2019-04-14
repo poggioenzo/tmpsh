@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:02:47 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:02:51 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:05:04 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -65,7 +65,7 @@ int				set_unicode_field(t_prt_opt *option, wchar_t **wstr, \
 	if (diff > 0)
 	{
 		old_len = ft_wstrlen(*wstr);
-		new_wstr = (wchar_t *)malloc(sizeof(wchar_t) * (old_len + diff + 1));
+		new_wstr = (wchar_t *)MALLOC(sizeof(wchar_t) * (old_len + diff + 1));
 		if (!new_wstr)
 		{
 			ft_wstrdel(wstr);

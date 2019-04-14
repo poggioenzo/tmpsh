@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:07:00 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:07:43 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:03:45 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,7 +38,7 @@ int				set_strfield(t_prt_opt *options, char **format_str, int *octets)
 	diff = options->field - *octets;
 	if (diff <= 0)
 		return (1);
-	if (!(filled_str = (char *)malloc(sizeof(char) * (options->field + 1))))
+	if (!(filled_str = (char *)MALLOC(sizeof(char) * (options->field + 1))))
 	{
 		ft_strdel(format_str);
 		return (0);

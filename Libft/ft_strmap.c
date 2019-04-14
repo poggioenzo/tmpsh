@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/12 10:57:09 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:00:12 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 10:06:31 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -18,7 +18,7 @@ char	*ft_strmap(char const *str, char (*fct)(char))
 	char	*map_str;
 	int		index;
 
-	if (!(map_str = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1))))
+	if (!(map_str = (char *)MALLOC(sizeof(char) * (ft_strlen(str) + 1))))
 		return (NULL);
 	index = 0;
 	while (*str)

@@ -12,7 +12,7 @@ int			alloc_capabilities_struct(t_caps **capabilities)
 {
 	if (tgetent(getenv("TERM"), NULL) == -1)
 		return (0);
-	if (!(*capabilities = (t_caps *)malloc(sizeof(t_caps))))
+	if (!(*capabilities = (t_caps *)MALLOC(sizeof(t_caps))))
 		return (MALLOC_ERROR);
 	(*capabilities)->clear = tgetstr("cl", NULL);
 	(*capabilities)->video = tgetstr("mr", NULL);

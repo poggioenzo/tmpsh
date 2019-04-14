@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/02/07 08:24:11 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:03:40 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/14 09:58:25 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -20,7 +20,7 @@ char		**ft_array_extend(char **array, char *string, int dup_str)
 	char	**dup_array;
 
 	len = ft_arraylen(array);
-	if (!(dup_array = (char **)malloc(sizeof(char *) * (len + 2))))
+	if (!(dup_array = (char **)MALLOC(sizeof(char *) * (len + 2))))
 		return (NULL);
 	index = 0;
 	while (array[index])

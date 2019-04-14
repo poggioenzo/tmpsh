@@ -10,7 +10,7 @@
 static int		create_t_hist(t_hist **hist_node, t_hist *prev, char *content,
 		int is_tmp)
 {
-	if (!(*hist_node = (t_hist *)malloc(sizeof(t_hist))))
+	if (!(*hist_node = (t_hist *)MALLOC(sizeof(t_hist))))
 		return (MALLOC_ERROR);
 	(*hist_node)->line = content;
 	(*hist_node)->next = NULL;
