@@ -17,31 +17,33 @@ def add_token(current, tokens):
 		current = ""
 	return current
 
-def span_sub(command, tokens, current, top=1):
-	i = 0
-	j = 1
-	length_cmd = len(command)
-	while j <= GRAMMAR.maxlen_opening_op and i == 0 :
-		if command[:j] in GRAMMAR.opening_op:
-			key = command[:j]
-			i += j
-			while i < length_cmd:
-				if command[i] == GRAMMAR.escape:
-					i += 1
-				elif command[i] == GRAMMAR.opening_op[key][0]:
-					if i + 1 < length_cmd and command[i + 1] in ';\n \t\r':
-						break
-				elif command[i] in GRAMMAR.begin_opening_op:
-					i += span_sub(command[i:], tokens, current, 0)
-				i += 1
-		j += 1
-	if top:
-		if i > 0:
-			tokens.append(command[:i+1])
-		else:
-			current.append(command[0])
-		i += 1
-	return i
+
+#
+# def span_sub(command, tokens, current, top=1):
+# 	i = 0
+# 	j = 1
+# 	length_cmd = len(command)
+# 	while j <= GRAMMAR.maxlen_opening_op and i == 0 :
+# 		if command[:j] in GRAMMAR.opening_op:
+# 			key = command[:j]
+# 			i += j
+# 			while i < length_cmd:
+# 				if command[i] == GRAMMAR.escape:
+# 					i += 1
+# 				elif command[i] == GRAMMAR.opening_op[key][0]:
+# 					if i + 1 < length_cmd and command[i + 1] in ';\n \t\r':
+# 						break
+# 				elif command[i] in GRAMMAR.begin_opening_op:
+# 					i += span_sub(command[i:], tokens, current, 0)
+# 				i += 1
+# 		j += 1
+# 	if top:
+# 		if i > 0:
+# 			tokens.append(command[:i+1])
+# 		else:
+# 			current.append(command[0])
+# 		i += 1
+# 	return i
 
 def span(command, tokens, current):
 	j = 1
@@ -53,14 +55,23 @@ def span(command, tokens, current):
 		else:
 			break
 	j -= 1
-	if (command[:j] in GRAMMAR.quotes):
-		i = span_sub(command, tokens, current)
-	elif command[:j] in GRAMMAR.leaf_op:
+	# if (command[:j] in GRAMMAR.quotes):
+	# 	i = span_sub(command, tokens, current)
+	# elif command[:j] in GRAMMAR.leaf_op:
+	if command[:j] in GRAMMAR.leaf_op:
 			tokens.append(command[:j])
 			i = j
 	else:
 		current.append(command[0])
 	return i
+
+# def span_space(command, tokens):
+# 	i += 0
+# 	while (command[:i] in GRAMMAR.spaces):
+# 		pass
+# 	return i
+
+
 
 def tokenize(command, tokens):
 	length_cmd = len(command)
@@ -80,7 +91,7 @@ def tokenize(command, tokens):
 			else:
 				current += GRAMMAR.escape
 			i += 1
-		elif command[i] in ' \r\t':
+		elif command[i] in GRAMMAR.spaces:
 			current = add_token(current, tokens)
 			i += 1
 		else:

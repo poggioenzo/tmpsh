@@ -52,7 +52,7 @@ class TestTok(unittest.TestCase):
 		command = fl.get_text('unittest/tok/5')
 		tokens = []
 		tk.tokenize(command, tokens)
-		self.assertListEqual(tokens, ['echo', '"\newline\newline"', '\n'])
+		self.assertListEqual(tokens, ['echo', '"','\n','ewline','\n','ewline','"', '\n'])
 
 	def testTok6(self):
 		command = fl.get_text('unittest/tok/6')
@@ -71,8 +71,8 @@ class TestTok(unittest.TestCase):
 		command = fl.get_text('unittest/tok/7_1')
 		tokens = []
 		tk.tokenize(command, tokens)
-		self.assertListEqual(tokens, ['<(','LOL',')', '\n', '" LOL "', '\n',
-										'>(','LOL',')', '\n', "'LOL    '",
+		self.assertListEqual(tokens, ['<(','LOL',')', '\n', '"','LOL','"', '\n',
+										'>(','LOL',')', '\n', "'","LOL","'",
 										'\n', '$(','LOL', ')', '\n', '${', 'LOL', '}',
 										 '\n', '{', 'LOL', '}', '\n', '(', 'LOL',')', '\n'])
 
@@ -81,7 +81,7 @@ class TestTok(unittest.TestCase):
 		 command = fl.get_text('unittest/tok/8')
 		 tokens = []
 		 tk.tokenize(command, tokens)
-		 self.assertListEqual(tokens, ['echo', '"\\""', '&', ';', '$(','echo','-n', '1',')',
+		 self.assertListEqual(tokens, ['echo', '"','\\"','"', '&', ';', '$(','echo','-n', '1',')',
 									   '||', '${','echo','\n', '-n', '1','}', ';', '2',
 									   '>&', '-', '>>', 'file', '>>',
 									   'file2', '\n'])
@@ -89,7 +89,7 @@ class TestTok(unittest.TestCase):
 		 command = fl.get_text('unittest/tok/8_1')
 		 tokens = []
 		 tk.tokenize(command, tokens)
-		 self.assertListEqual(tokens, ['echo', '"\\""','&', "\n"])
+		 self.assertListEqual(tokens, ['echo', '"','\\"','"','&', "\n"])
 
 	def testTok8_2(self):
 		 command = fl.get_text('unittest/tok/8_2')
@@ -113,7 +113,7 @@ class TestTok(unittest.TestCase):
 		 tk.tokenize(command, tokens)
 		 self.assertListEqual(tokens, ['echo', '\\f\\i\\l\\e', '\n', 'VAR', '=', '0', '\n',
 									   'VAR', '=', '1', '\n', 'VAR', '+=', '1', '\n',
-									   'echo','"\$VAR \= $VAR"', '\n'])
+									   'echo','"','\$VAR','\=','$VAR','"', '\n'])
 
 	def testTok9_1(self):
 		 command = fl.get_text('unittest/tok/9_1')
@@ -152,7 +152,7 @@ class TestTok(unittest.TestCase):
 		 tokens = []
 		 tk.tokenize(command, tokens)
 		 self.assertListEqual(tokens, ['1', '&&', '0', '||', '$PATH', '+=',
-		 								'"~/tmpsh/bin"',';', '$VAR','=','0', '&', '\n','echo', 'LOL'])
+		 								'"','~/tmpsh/bin', '"',';', '$VAR','=','0', '&', '\n','echo', 'LOL'])
 
 	def testTok12(self):
 		 command = '>(<(echo test > file.txt)) && 		$VAR_TEST| cat << HERE\ntestHERE\nHERE'
@@ -177,25 +177,25 @@ class TestTok(unittest.TestCase):
 		 command = 'echo "qwert""yuiop"'
 		 tokens = []
 		 tk.tokenize(command, tokens)
-		 self.assertListEqual(tokens, ['echo','"qwert""yuiop"'])
+		 self.assertListEqual(tokens, ['echo','"','qwert','"','"','yuiop','"'])
 
 	def testTok16(self):
 		 command = 'echo "qwert"\'yuiop\''
 		 tokens = []
 		 tk.tokenize(command, tokens)
-		 self.assertListEqual(tokens, ['echo','"qwert"\'yuiop\''])
+		 self.assertListEqual(tokens, ['echo','"','qwert','"','\'','yuiop','\''])
 
-	# def testTok16(self):
-	# 	 command = 'echo ${var}_$var${var2}_'
-	# 	 tokens = []
-	# 	 tk.tokenize(command, tokens)
-	# 	 self.assertListEqual(tokens, ['echo','${','var', '}','_$var', '${', 'var','}', '_'])
-	#
-	# def testTok17(self):
-	# 	 command = 'echo "yolo"&&ls'
-	# 	 tokens = []
-	# 	 tk.tokenize(command, tokens)
-	# 	 self.assertListEqual(tokens, ['echo','"yolo"', '&&', 'ls'])
+	def testTok16(self):
+		 command = 'echo ${var}_$var${var2}_'
+		 tokens = []
+		 tk.tokenize(command, tokens)
+		 self.assertListEqual(tokens, ['echo','${','var', '}','_','$var', '${', 'var2','}', '_'])
+
+	def testTok17(self):
+		 command = 'echo "yolo"&&ls'
+		 tokens = []
+		 tk.tokenize(command, tokens)
+		 self.assertListEqual(tokens, ['echo','"','yolo','"', '&&', 'ls'])
 
 if __name__ == '__main__':
 	unittest.main()
