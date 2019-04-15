@@ -6,13 +6,13 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/26 19:50:15 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 10:11:29 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/15 11:47:50 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "hash_table.h"
-#include <libft.h>
+#include "libft.h"
 
 /*
 ** alloc_item_table:
@@ -27,7 +27,7 @@ static t_ht_alveol	**alloc_item_table(int size)
 
 	table = (t_ht_alveol **)MALLOC(sizeof(t_ht_alveol *) * size);
 	if (!table)
-		return (NULL);
+		exit(-1);
 	index = 0;
 	while (index < size)
 		table[index++] = NULL;
@@ -62,13 +62,11 @@ int					free_hash_table(t_ht_table **hash_table, int status)
 ** Allocate a t_ht_table structure.
 */
 
-int					ht_new_table(t_ht_table **hash_table, int seed, int size)
+void				ht_new_table(t_ht_table **hash_table, int seed, int size)
 {
 	if (!(*hash_table = (t_ht_table *)MALLOC(sizeof(t_ht_table))))
-		return (0);
+		exit(-1);
 	(*hash_table)->size = size;
 	(*hash_table)->seed = seed;
-	if (!((*hash_table)->items = alloc_item_table((*hash_table)->size)))
-		return (free_hash_table(hash_table, 0));
-	return (1);
+	(*hash_table)->items = alloc_item_table((*hash_table)->size);
 }

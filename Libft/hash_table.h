@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/26 19:50:57 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/10 13:26:13 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/15 11:51:27 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -33,11 +33,11 @@ typedef struct		s_ht_table
 }					t_ht_table;
 
 int					free_hash_table(t_ht_table **hash_table, int status);
-int					ht_new_table(t_ht_table **hash_table, int seed, int size);
+void				ht_new_table(t_ht_table **hash_table, int seed, int size);
 
 void				delete_value(t_ht_table *table, char *key);
 void				*search_value(t_ht_table *table, char *key);
-int					insert_value(t_ht_table *table, char *key, void *value, \
+void				insert_value(t_ht_table *table, char *key, void *value, \
 								int ctype);
 int					free_alveol(t_ht_alveol **alveol, int status);
 int					free_alveol_list(t_ht_alveol **alveol, int status);

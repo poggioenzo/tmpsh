@@ -32,15 +32,14 @@ int				error_grammar(char ***file_lines, t_ht_table **grammar, int status)
 ** -> Will extract only ESCAPE word.
 */
 
-int		get_keyword(char **keyword, char *line)
+void		get_keyword(char **keyword, char *line)
 {
 	char	**splitted_line;
 
 	if (!(splitted_line = ft_strsplit(line, ":")))
-		return (MALLOC_ERROR);
+		exit(-1);
 	if (!(*keyword = ft_strstrim(splitted_line[0])));
-		return (free_str_array(&splitted_line, MALLOC_ERROR));
-	return (MALLOC_SUCCESS);
+		exit(-1);
 }
 
 
@@ -51,15 +50,15 @@ int		get_keyword(char **keyword, char *line)
 ** Split the current content.
 */
 
-int		get_file_content(char ***lines, char *path)
+void	get_file_content(char ***lines, char *path)
 {
 	char	*text;
 
 	if (!(text = ft_readfile(path)))
-		return (MALLOC_ERROR);
-	*lines = ft_strsplit(text, "\n");
+		exit(-1);
+	if (!(*lines = ft_strsplit(text, "\n")))
+		exit(-1);
 	ft_strdel(&text);
-	return (*lines ? MALLOC_SUCCESS : MALLOC_ERROR);
 }
 
 
@@ -74,20 +73,13 @@ int		fill_keyword_grammar(t_ht_table *grammar, char *keyword, char **lines, \
 	while (ft_strlen(lines[*index]) && lines[*index][0] == '\t' )
 	{
 		if (!(syntax_elem = ft_strstrim(lines[*index])))
-			return (free_pylst(&keyword_syntax, MALLOC_ERROR));
-		status = push_pylst(&keyword_syntax, syntax_elem, NO_COPY_BUT_FREE, \
+			exit(-1);
+		push_pylst(&keyword_syntax, syntax_elem, NO_COPY_BUT_FREE, \
 				_chare);
-		if (status == MALLOC_ERROR)
-		{
-			ft_strdel(&syntax_elem);
-			return (free_pylst(&keyword_syntax, MALLOC_ERROR));
-		}
 		*index += 1;
 	}
-	status = insert_value(grammar, keyword, keyword_syntax, _pylst);
-	if (status == MALLOC_ERROR)
-		return (free_pylst(&keyword_syntax, MALLOC_ERROR));
-	return (MALLOC_SUCCESS);
+	if (!(insert_value(grammar, keyword, keyword_syntax, _pylst)))
+		exit(-1);
 }
 
 int			get_grammar_from_path(char *path, t_ht_table **grammar)
@@ -97,21 +89,18 @@ int			get_grammar_from_path(char *path, t_ht_table **grammar)
 	int		i;
 	char	*keyword;
 
-	if (!get_file_content(&lines, path))
-		return (MALLOC_ERROR);
+	get_file_content(&lines, path);
 	len = ft_arraylen(lines);
 	i = 0;
 	grammar = NULL;
 	if (!ht_new_table(grammar, 61, 30))
-		return (error_grammar(&lines, grammar, MALLOC_ERROR));
+		exit(-1);
 	while (i < length)
 	{
 		if (ft_strlen(lines[i] > 0 && !ft_incharset(lines[i][0], "#\t")))
 		{
-			if (!get_keyword(&keyword, lines[i]))
-				return (error_grammar(&lines, grammar, MALLOC_ERROR));
-			if (!fill_keyword_grammar(*grammar, keyword, lines, &i))
-				return (error_grammar(&lines, grammar, MALLOC_ERROR));
+			get_keyword(&keyword, lines[i]);
+			fill_keyword_grammar(*grammar, keyword, lines, &i);
 		}
 		i++;
 	}

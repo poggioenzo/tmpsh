@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/01/26 19:47:28 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 10:11:10 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/15 11:50:53 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -56,23 +56,18 @@ int				free_alveol_list(t_ht_alveol **alveol, int status)
 ** create_alveol:
 **
 ** Create a new alveol element from a pair key/value.
-**
-** return value:
-** - 1 if the allocation succed
-** - 0 if an error occur.
 */
 
-static int		create_alveol(const char *key, void *value, \
+static void		create_alveol(const char *key, void *value, \
 		t_ht_alveol **alveol, int ctype)
 {
 	if (!(*alveol = (t_ht_alveol *)MALLOC(sizeof(**alveol))))
-		return (0);
+		exit(-1);
 	(*alveol)->value = value;
 	if (!((*alveol)->key = ft_strdup(key)))
-		return (free_alveol(alveol, 0));
+		exit(-1);
 	(*alveol)->ctype = ctype;
 	(*alveol)->next = NULL;
-	return (1);
 }
 
 /*
@@ -82,38 +77,35 @@ static int		create_alveol(const char *key, void *value, \
 ** of the chained list.
 */
 
-static int		insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
+static void	insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
 		int ctype)
 {
 	t_ht_alveol	*tmp_alveol;
 
 	if (!*alveol)
-		return (create_alveol(key, value, alveol, ctype));
-	tmp_alveol = *alveol;
-	while (tmp_alveol->next)
-		tmp_alveol = tmp_alveol->next;
-	return (create_alveol(key, value, &tmp_alveol->next, ctype));
+		create_alveol(key, value, alveol, ctype);
+	else
+	{
+		tmp_alveol = *alveol;
+		while (tmp_alveol->next)
+			tmp_alveol = tmp_alveol->next;
+		create_alveol(key, value, &tmp_alveol->next, ctype);
+	}
 }
 
 /*
 ** insert_value:
 **
 ** Insert a value in the selected table, according to a key.
-**
-** return value:
-** - 1 if the value have been added properly.
-** - 0 if an allocation error occur.
 */
 
-int				insert_value(t_ht_table *table, char *key, void *value, int ctype)
+void			insert_value(t_ht_table *table, char *key, void *value, int ctype)
 {
 	int			hash;
 	t_ht_alveol	**alveol;
 
 	hash = hash_function(key, table->seed, table->size);
 	alveol = &table->items[hash];
-	if (!insert_in_alveol(alveol, key, value, ctype))
-		return (0);
+	insert_in_alveol(alveol, key, value, ctype);
 	table->count++;
-	return (1);
 }

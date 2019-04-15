@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 09:56:55 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/10 13:19:47 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/15 11:29:46 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -37,7 +37,7 @@ struct		s_pylst
 
 
 void		setup_pyfreefct(void);
-int			push_pylst(t_pylst **pylst, void *value, int size, int ctype);
+void		push_pylst(t_pylst **pylst, void *value, int size, int ctype);
 
 /*
 ** Freeing function for each data type

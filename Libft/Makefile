@@ -6,7 +6,7 @@
 #    By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 08:24:35 by simrossi     #+#   ##    ##    #+#        #
-#    Updated: 2019/04/14 09:24:20 by simrossi    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/04/15 11:40:37 by simrossi    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -59,8 +59,7 @@ SRCS_HASH_TABLE := hash_alveol.c \
 
 SRCS_HASH_TABLE := $(addprefix hash_table/, $(SRCS_HASH_TABLE))
 
-SRCS_PYLST := free_type1.c \
-			  python_list.c \
+SRCS_PYLST := python_list.c \
 			  free_pylst.c \
 
 SRCS_PYLST := $(addprefix pylst/, $(SRCS_PYLST))
@@ -173,6 +172,7 @@ SRCS = ft_atoi.c \
 	   find_index.c \
 	   ft_arraylen.c \
 	   free_manager.c \
+	   free_type1.c \
 	   garbage_alloc.c \
 	   $(SRCS_PRINTF) \
 	   $(SRCS_HASH_TABLE) \
