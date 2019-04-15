@@ -46,6 +46,8 @@ class Grammar(object):
 		if symbol_name not in self.grammar:
 			self.grammar[symbol_name] = []
 		self.grammar[symbol_name].append(symbol)
+		if symbol not in self.reverse:
+			self.reverse[symbol] = []
 		self.reverse[symbol].append(symbol_name)
 
 
@@ -61,8 +63,8 @@ class ShellGrammar(Grammar):
 	"""docstring for ."""
 	def __init__(self, path='grammar.txt'):
 		super().__init__(path)
-		self.grammar['NEW_LINE'] = ['\n']
-		self.reverse['\n'] = 'NEW_LINE'
+		self.add_symbol('\n', 'NEW_LINE')
+		self.spaces = [' ', '\t']
 		#self.atomic_op = [], self.compose_op = [], self.leaf_op = []
 		self.get_atomic_compose_leaf_op()
 		self.get_escape()
