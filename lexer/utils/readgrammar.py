@@ -73,7 +73,7 @@ class ShellGrammar(Grammar):
 		if 'QUOTES' in self.grammar:
 			for k in self.grammar['QUOTES']:
 				self.quotes.append(self.grammar[k][0].split('.')[0])
-		#self.opening_op()
+		#self.opening_op = []
 		self.get_opening_op()
 		self.get_begin_op()
 
