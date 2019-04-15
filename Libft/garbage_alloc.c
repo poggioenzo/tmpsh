@@ -6,12 +6,13 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 19:46:00 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 10:36:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/15 19:48:08 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "garbage.h"
+int		ft_printf(char *format, ...);
 
 t_garblst		*g_garbage = NULL;
 

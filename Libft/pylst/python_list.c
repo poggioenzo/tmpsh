@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 10:32:13 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/15 11:29:29 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/15 18:39:06 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -49,8 +49,11 @@ void		push_pylst(t_pylst **pylst, void *value, int size, int ctype)
 {
 	if (!*pylst)
 		alloc_pylst_node(pylst, value, size, ctype);
-	while ((*pylst)->next)
-		pylst = &(*pylst)->next;
-	alloc_pylst_node(&(*pylst)->next, value, size, ctype);
+	else
+	{
+		while ((*pylst)->next)
+			pylst = &(*pylst)->next;
+		alloc_pylst_node(&(*pylst)->next, value, size, ctype);
+	}
 }
 
