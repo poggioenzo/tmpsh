@@ -12,8 +12,7 @@
 ** Can return the string of the deleted pointer if expected.
 **
 ** return value:
-** - The string between from and to newly allocated, NULL if an allocation
-** error occur.
+** - The string between from and to newly allocated.
 ** - Return NULL if the no string is expected, just free pointers.
 */
 

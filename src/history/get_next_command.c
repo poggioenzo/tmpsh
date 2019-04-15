@@ -87,8 +87,7 @@ static char		*cut_next_command(char **command_list)
 ** in one other side to move on in the file.
 **
 ** return value:
-** - SUCCESS if the next command have been found and is properly allocated,
-** FAILURE if the allocation failed.
+** - the string of the new command.
 */
 
 char	*get_next_command(char *filename)

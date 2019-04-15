@@ -6,7 +6,7 @@
 **
 ** Function to manage the memory of the t_hist chained list,
 ** from his creation to his deletion.
-** Avaible action : CREATE, GET or FREE
+** Avaible action : CREATE, GET, GO_FREE or store
 **
 ** - CREATE : Store the current HISTORY_FILE into a chained list format,
 **            giving also the pointer to history.

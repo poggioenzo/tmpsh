@@ -73,7 +73,6 @@ void		move_down(t_line *shell_repr, t_cursor *cursor)
 
 	cursor_line = get_cursor_line(shell_repr, cursor);
 	if (!cursor_line->next)
-
 		return ;
 	cursor->row++;
 	cursor_line = cursor_line->next;

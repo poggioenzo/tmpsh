@@ -24,6 +24,7 @@ void			clean_lines(int nb_line, int is_last_line)
 **
 ** Display the representation of the shell using the t_line and t_char
 ** structure.
+** Write the entire shell in a single write for optimisation.
 */
 
 void		display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)

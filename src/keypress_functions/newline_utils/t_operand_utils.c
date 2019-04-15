@@ -7,7 +7,6 @@
 **
 ** From a given t_operand list, search the last opening bracket element,
 ** which are not a seperator.
-**
 */
 
 t_operand	*get_last_bracket(t_operand *operand_list)

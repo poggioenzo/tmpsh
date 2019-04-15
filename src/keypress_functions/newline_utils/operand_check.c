@@ -102,10 +102,6 @@ void	check_cmdsubst(t_operand **operand_list, t_char *curr_char, \
 **
 ** Whenever a double quote is getting, check if it's closing an other double quote,
 ** otherwise add it to our current operand list.
-**
-** return value:
-** - SUCCESS|MALLOC_SUCCESS if the allocation or deletion succeed.
-** - MALLOC_ERROR if a memory allocation failed.
 */
 
 void		check_db_quote(t_operand **operand_list)

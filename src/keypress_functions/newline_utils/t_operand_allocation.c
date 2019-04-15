@@ -21,9 +21,6 @@ void	create_operand(t_operand **operand, int type, char open_char)
 **
 ** Add at the end of the current list a new t_operand element,
 ** or create a new list if the pointer is NULL.
-**
-** return value:
-** - return MALLOC_SUCCESS if the allocation succes, MALLOC_ERROR otherwise
 */
 
 void		push_operand(t_operand **operand_list, int type, char open_char)

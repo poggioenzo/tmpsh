@@ -11,11 +11,9 @@
 ** Is used to see if some operator aren't close or if we have to go to a new line
 ** if an operator expect it.
 **
-** return value (with pointer):
+** return value (in pointers):
 ** - Will return the operand list at his current state.
-** - MALLOC_SUCCESS/SUCCESS if everything append properly.
 ** - the enum invalid_syntax if there is a syntax error.
-** - MALLOC_ERROR if a memory allocation failed.
 */
 
 static void		char_parsing(t_line *shell_repr, t_operand  **operand_list, int *go_line,\
@@ -58,7 +56,6 @@ static void		char_parsing(t_line *shell_repr, t_operand  **operand_list, int *go
 ** Return value :
 ** - TRUE if we have to go to a newline
 ** - not_nested enum if it's the end of the current command.
-** - MALLOC_ERROR if an memory allocation failed.
 ** - invalid_syntax if the current string isn't valid
 */
 

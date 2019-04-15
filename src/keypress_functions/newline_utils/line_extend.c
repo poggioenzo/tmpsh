@@ -83,10 +83,6 @@ static void	fill_all_strings(char ***operand_strings, t_operand *operand_list, \
 **
 ** Prepare elements to set all operand string in a new t_line node,
 ** and set them all with fill_all_strings.
-**
-** return value:
-** - MALLOC_SUCCESS if the string have been formated properly, MALLOC_ERROR
-** otherwise.
 */
 
 static void	format_operand_string(t_operand *operand_list, char **operand_str)
