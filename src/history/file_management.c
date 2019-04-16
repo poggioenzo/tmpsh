@@ -83,6 +83,8 @@ void		load_history(t_hist **history)
 
 	*history = NULL;
 	history_file = replace_home(HISTORY_FILE);
+	if (access(history_file, R_OK) == -1)
+		return ;
 	read_history_file(history_file, history);
 	ft_strdel(&history_file);
 }

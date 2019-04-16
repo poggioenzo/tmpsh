@@ -99,7 +99,7 @@ char	*get_next_command(char *filename)
 
 	if (!history_content && stored == FALSE)
 	{
-		if (!(history_content = readfile(filename, O_RDWR | O_CREAT, 0600))) // WHAT IF AN ERROR OCCUR ?
+		if (!(history_content = readfile(filename, O_RDONLY | O_CREAT, 0600))) // WHAT IF AN ERROR OCCUR ?
 			exit(-1);
 		curr_pos = history_content;
 		stored = TRUE;

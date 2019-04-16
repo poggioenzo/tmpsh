@@ -84,9 +84,18 @@ CONFIGURATION_SRCS :=  screen_size.c \
 					   signal_handler.c \
 					   t_caps_utils.c \
 					   termios_setter.c \
+					   environ_utils.c \
 					   $(PROMPT_CONF)
 
 CONFIGURATION_SRCS := $(addprefix $(CONFIGURATION_DIR), $(CONFIGURATION_SRCS))
+
+FILE_DIR = file/
+
+FILE_SRCS := replace_home.c \
+			 file_utils.c \
+			 replace_home.c \
+
+FILE_SRCS := $(addprefix $(FILE_DIR), $(FILE_SRCS))
 
 SOURCES+=src/char_concatenation.c
 SOURCES+=src/cursor_dependent_selection.c
@@ -94,7 +103,6 @@ SOURCES+=src/debug.c
 SOURCES+=src/display.c
 SOURCES+=src/edition.c
 SOURCES+=src/t_cursor_utils.c
-SOURCES+=src/file/replace_home.c
 
 SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(CHAR_UTILS)) \
@@ -102,4 +110,5 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(LINE_UTILS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(KEYPRESS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(CONFIGURATION_SRCS)) \
+		   $(addprefix $(SOURCES_DIR), $(FILE_SRCS)) \
 

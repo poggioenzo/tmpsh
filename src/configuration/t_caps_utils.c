@@ -1,5 +1,6 @@
 #include "t_caps_utils.h"
 #include "libft.h"
+#include "environ_utils.h"
 
 /*
 ** alloc_capabilities_struct:

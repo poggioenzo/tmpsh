@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/03/19 14:40:22 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/14 09:16:39 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/16 20:30:55 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,9 +19,12 @@
 #  define UNUSED(variable)	(void) variable
 # endif
 
+
 # ifndef NULL
 #  define NULL (void *) 0
 # endif
+
+char	**g_environ;
 
 enum	e_newline {leave_check = 2, invalid_syntax, not_nested};
 
@@ -33,7 +36,6 @@ struct s_operand
 	int			type:6;
 	t_operand	*next;
 };
-#define ft_getenv(var)	getenv(var)
 
 /*
 ** Cursor structure

@@ -207,7 +207,7 @@ void		hash_alveol_deletion(void)
 
 	//Tab initialization
 	t_ht_table	*new_tab = NULL;
-	int seed = 97; int size = 1;
+	int seed = 97; int size = 1; //Set size to 1
 	ht_new_table(&new_tab, seed, size);
 
 	char *key1 = "first_key"; char *value1 = "NO VALUE BRO";
