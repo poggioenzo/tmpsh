@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 10:21:29 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/15 11:39:36 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/16 12:49:50 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -71,7 +71,17 @@ void			free_inte(void *array_ptr)
 */
 
 void			free_pylst_type(void *pylst_ptr)
-
 {
 	free_pylst((t_pylst **)pylst_ptr, NO_STATUS);
+}
+
+/*
+** free_hash_table:
+**
+** Free an entire t_ht_table.
+*/
+
+void			free_hash_table_type(void *table_ptr)
+{
+	free_hash_table((t_ht_table **)table_ptr, NO_STATUS);
 }

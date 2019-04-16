@@ -6,7 +6,7 @@
 /*   By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 08:38:27 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/15 11:42:36 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/16 16:18:52 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -40,6 +40,7 @@ enum			e_ctype
 	_int,
 	_inte,
 	_pylst,
+	_hash_table,
 	size
 };
 
@@ -52,6 +53,8 @@ enum			e_ctype
 typedef void (*t_free_fct)(void *);
 
 t_free_fct		g_free_fct[size];
+
+void		setup_freefct(void);
 
 /*
 ** PRINTF FUNCTIONS

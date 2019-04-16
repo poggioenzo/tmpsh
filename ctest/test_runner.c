@@ -6,12 +6,20 @@
 #include "libft.h"
 #include "test_runner.h"
 
-#define NUMBER_TEST		3
+#define NUMBER_TEST		11
 
 test_store		test_list[NUMBER_TEST + 1] = {
 	{"simple_chare_pylst", simple_chare_pylst},
 	{"simple_int_pylst", simple_int_pylst},
 	{"multitype_pylst", multitype_pylst},
+	{"hash_creation", hash_creation},
+	{"hash_single_insert", hash_single_insert},
+	{"hash_multiple_insert", hash_multiple_insert},
+	{"hash_insert_single_alveol", hash_insert_single_alveol},
+	{"hash_multitype_insert", hash_multitype_insert},
+	{"hash_single_delete", hash_single_delete},
+	{"hash_multiple_delete", hash_multiple_delete},
+	{"hash_alveol_deletion", hash_alveol_deletion},
 	NULL
 };
 
@@ -43,6 +51,7 @@ int		main(int argc, char **argv)
 	int		status;
 	int		index;
 	
+	setup_freefct();
 	index = 0;
 	while (index < NUMBER_TEST)
 	{
@@ -50,8 +59,10 @@ int		main(int argc, char **argv)
 
 		if (pid == 0)
 		{
-			ft_printf("%s : ", test_list[index].name);
+			ft_printf("%-30s : ", test_list[index].name);
 			test_list[index].test();
+			error_display();
+			exit(0);
 		}
 		else
 		{

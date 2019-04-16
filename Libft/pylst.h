@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 09:56:55 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/15 11:29:46 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/04/16 12:50:20 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -35,7 +35,6 @@ struct		s_pylst
 	t_pylst		*next;
 };
 
-
 void		setup_pyfreefct(void);
 void		push_pylst(t_pylst **pylst, void *value, int size, int ctype);
 
@@ -51,5 +50,6 @@ void			free_chare(void *str_ptr);
 void			free_charee(void *array_ptr);
 void			free_inte(void *array_ptr);
 void			free_pylst_type(void *pylst_ptr);
+void			free_hash_table_type(void *table_ptr);
 
 #endif

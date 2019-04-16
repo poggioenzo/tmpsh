@@ -29,9 +29,6 @@ void	simple_chare_pylst(void)
 	ASSERT_STRCMP(x_test, (char *)pylst->value, str);
 	ASSERT_STRCMP(x_test, (char *)pylst->next->value, str2);
 	ASSERT_STRCMP(x_test, (char *)pylst->next->next->value, str3);
-
-	error_display();
-	exit(0);
 }
 
 void	simple_int_pylst(void)
@@ -56,9 +53,6 @@ void	simple_int_pylst(void)
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 	ASSERT_INTCMP(x_test, *(int *)pylst->next->value, value2);
 	ASSERT_INTCMP(x_test, *(int *)pylst->next->next->value, value3);
-
-	error_display();
-	exit(0);
 }
 
 void	multitype_pylst(void)
@@ -83,7 +77,4 @@ void	multitype_pylst(void)
 	t_pylst	*first_pylst_ptr = (t_pylst *)pylst2->value;
 	ASSERT_INTCMP(x_test, *(int *)first_pylst_ptr->value, value);
 	ASSERT_STRCMP(x_test, (char *)first_pylst_ptr->next->value, str);
-
-	error_display();
-	exit(0);
 }

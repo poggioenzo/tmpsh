@@ -9,7 +9,7 @@ void		error_display();
 */
 
 void	chare_error(int test_number, char *result, char *ref_val, int action);
-void	int_error(int test_number, char result, char ref_val, int action);
+void	int_error(int test_number, int result, int ref_val, int action);
 void		ptr_error(int test_number, void *result, void *ref_val, int action);
 
 #define STORE_ERROR	0
@@ -31,7 +31,7 @@ void		ptr_error(int test_number, void *result, void *ref_val, int action);
 #define ASSERT_PTRCMP(test_nbr, res, ref) test_nbr++; if (res == ref) VALID_TEST; \
 								else { ptr_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST }
 
-#define TEST(result) if (result) display('.', GREEN);\
+#define TEST(test_nbr, result) test_nbr++; if (result) display('.', GREEN);\
 					else display('.', RED);
 
 typedef void (*test_fct)(void);
@@ -49,5 +49,12 @@ typedef struct
 void	simple_chare_pylst(void);
 void	simple_int_pylst(void);
 void	multitype_pylst(void);
-
+void	hash_creation(void);
+void	hash_single_insert(void);
+void	hash_multiple_insert(void);
+void	hash_multitype_insert(void);
+void	hash_insert_single_alveol(void);
+void	hash_single_delete(void);
+void	hash_multiple_delete(void);
+void		hash_alveol_deletion(void);
 #endif
