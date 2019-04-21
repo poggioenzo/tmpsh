@@ -1,0 +1,52 @@
+TEST_NAME = test_shell
+
+TEST_MANAGER= test_runner.c error_display.c
+
+FILES := pylst_test.c  \
+		 hash_table_test.c \
+		 t_line_allocation_test.c
+
+FILES := $(addprefix tests/, $(FILES))
+
+SRCS := $(FILES) \
+		$(TEST_MANAGER)
+
+OBJS = $(SRCS:%.c=%.o)
+
+LIB_TMP = ../libtmp.a
+
+LIB_FT = ../Libft/libft.a
+
+LIBS= $(LIB_TMP) $(LIB_FT)
+
+CPPFLAGS := $(shell find ../include ../Libft . -type d)
+CPPFLAGS := $(addprefix -I, $(CPPFLAGS))
+
+all:$(TEST_NAME)
+
+$(TEST_NAME):$(OBJS) $(LIBS)
+	gcc $^ $(CPPFLAGS)  -o $@
+
+clean:
+	rm -rf $(OBJS)
+
+fclean: clean
+	rm -rf $(TEST_NAME)
+
+re:fclean all
+
+run: $(TEST_NAME)
+	./$(TEST_NAME)
+
+##############################################
+#				Librairies rules			 #
+##############################################
+
+$(LIB_TMP):
+	make test -C $(dir $@)
+
+$(LIB_FT):
+	make -C $(dir $@)
+
+.PHONY: run all clean fclean re $(LIB_TMP)
+.DEFAULT_GOAL = all

@@ -6,7 +6,7 @@
 #include "libft.h"
 #include "test_runner.h"
 
-#define NUMBER_TEST		11
+#define NUMBER_TEST		18
 
 test_store		test_list[NUMBER_TEST + 1] = {
 	{"simple_chare_pylst", simple_chare_pylst},
@@ -20,6 +20,13 @@ test_store		test_list[NUMBER_TEST + 1] = {
 	{"hash_single_delete", hash_single_delete},
 	{"hash_multiple_delete", hash_multiple_delete},
 	{"hash_alveol_deletion", hash_alveol_deletion},
+	{"t_line_allocation", t_line_allocation},
+	{"t_line_lst_allocation", t_line_lst_allocation},
+	{"t_line_longer_lst", t_line_longer_lst},
+	{"t_line_len", t_line_len},
+	{"t_line_update_test", t_line_update_test},
+	{"t_line_get_last_test", t_line_get_last_test},
+	{"t_line_extract_test_simple", t_line_extract_test_simple},
 	NULL
 };
 

@@ -6,6 +6,10 @@ CPPFLAGS = $(addprefix -I , $(INCLUDES_LIST))
 
 include sources.d
 
+ifeq (test, $(MAKECMDGOALS))
+SOURCES := $(filter-out $(MAIN_FILE), $(SOURCES))
+endif 
+
 #according to a given c file, transform it in a hidden file format
 #Exemple : 'my/folder/file.o' will be 'my/folder/.file.o'
 hidden_format = $(shell python -c "file = '$(1)'.split('/');print('/'.join(file[:-1]) + '/.' + file[-1])")
@@ -16,6 +20,7 @@ OBJS = $(foreach file, $(SOURCES:%.c=%.o), $(call hidden_format, $(file)))
 
 LIB_INCLUDES = Libft/ Libft/hash_table
 LIB = Libft/libft.a
+TEST_LIB = libtmp.a
 LIBDIR = $(dir $(LIB))
 
 INCLUDE_FOLDER = include/
@@ -45,7 +50,7 @@ clean:
 
 fclean:clean
 	$(MAKE) -C $(LIBDIR) $@
-	rm -rf $(NAME) shell_debug
+	rm -rf $(NAME) shell_debug $(TEST_LIB)
 
 proper:fclean
 	$(MAKE) -C $(LIBDIR) $@
@@ -57,6 +62,15 @@ $(LIB): get_lib
 
 get_lib:
 	$(MAKE) -C $(LIBDIR)
+
+######################################
+# 			Test rules               #
+######################################
+
+test:$(TEST_LIB)
+
+$(TEST_LIB): $(OBJS) $(LIB)
+	ar -rc $@ $(OBJS)
 
 #######################################
 # Generique rules for %.o and for %.d #
@@ -70,7 +84,7 @@ $(DEPENDENCIES_FOLDER)%.d:$(SOURCES_FOLDER)%.c
 
 .DEFAULT_GOAL = all
 
-.PHONY:all clean fclean proper re get_lib
+.PHONY:all clean fclean proper re get_lib test
 
 ifeq (, $(filter $(MAKECMDGOALS), proper clean fclean))
 include $(DEPENDENCIES)

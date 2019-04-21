@@ -12,7 +12,7 @@
 
 int			line_lst_len(t_line *shell_repr)
 {
-	while (shell_repr)
+	while (shell_repr->next)
 		shell_repr = shell_repr->next;
 	return (shell_repr->position + 1);
 }

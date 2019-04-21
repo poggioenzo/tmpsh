@@ -16,7 +16,7 @@ void	hash_creation(void)
 	int seed = 47;
 	int size = 25;
 	ht_new_table(&new_tab, seed, size);
-	TEST(x_test, new_tab != NULL);
+	ASSERT_TEST(x_test, new_tab != NULL);
 	// Test seed and size.
 	ASSERT_INTCMP(x_test, new_tab->size, size);
 	ASSERT_INTCMP(x_test, new_tab->seed, seed);
@@ -30,7 +30,7 @@ void	hash_creation(void)
 			error = ERROR;
 		index++;
 	}
-	TEST(x_test, error == NO_ERROR);
+	ASSERT_TEST(x_test, error == NO_ERROR);
 }
 
 // Simple test with a single element.

@@ -1,7 +1,8 @@
 # This auto-generated file please don't edit it.
 
-SOURCES_DIR = src/
+MAIN_FILE = src/shell_main.c
 
+SOURCES_DIR = src/
 
 COMMON_SRCS := char_concatenation.c \
 			   cursor_dependent_selection.c \
@@ -9,10 +10,10 @@ COMMON_SRCS := char_concatenation.c \
 			   display.c \
 			   edition.c \
 			   t_cursor_utils.c \
-			   shell_main.c \
 			   prompt_loop.c 
 
-COMMON_SRCS := $(addprefix $(SOURCES_DIR), $(COMMON_SRCS))
+COMMON_SRCS := $(addprefix $(SOURCES_DIR), $(COMMON_SRCS)) \
+			   $(MAIN_FILE)
 
 CHAR_UTILS_DIR = char_utils/
 
