@@ -2,7 +2,15 @@
 
 SOURCES_DIR = src/
 
-COMMON_SRCS	:= prompt_loop.c \
+
+COMMON_SRCS := char_concatenation.c \
+			   cursor_dependent_selection.c \
+			   debug.c \
+			   display.c \
+			   edition.c \
+			   t_cursor_utils.c \
+			   shell_main.c \
+			   prompt_loop.c 
 
 COMMON_SRCS := $(addprefix $(SOURCES_DIR), $(COMMON_SRCS))
 
@@ -94,15 +102,9 @@ FILE_DIR = file/
 FILE_SRCS := replace_home.c \
 			 file_utils.c \
 			 replace_home.c \
+			 path_check.c \
 
 FILE_SRCS := $(addprefix $(FILE_DIR), $(FILE_SRCS))
-
-SOURCES+=src/char_concatenation.c
-SOURCES+=src/cursor_dependent_selection.c
-SOURCES+=src/debug.c
-SOURCES+=src/display.c
-SOURCES+=src/edition.c
-SOURCES+=src/t_cursor_utils.c
 
 SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(CHAR_UTILS)) \
