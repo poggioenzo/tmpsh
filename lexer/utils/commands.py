@@ -17,8 +17,9 @@ class Cmd(object):
 		self.get_end(tags)
 		if ends != []:
 			self.start -= 1
-		self.input_buffer = tags[self.start: self.end]
+		self.tags = tags[self.start: self.end]
 		self.syntax_ok = False
+		self.reduce_shift()
 
 	def get_end(self, tags):
 		i = self.start
@@ -40,23 +41,36 @@ class Cmd(object):
 			i = len_tags
 		self.end = i
 
-	# def reduce(self, stack):
-	# 	len_stack = len(stack)
-	#
-	# 	while i < len_stack:
-	#
-	# 		i += 1
-	#
-	# def reduce_shift(self):
-	# 	self.stack = []
-	# 	i = 0
-	# 	while (i < len_input_buffer):
-	# 		tag = self.tags[i]
-	# 		if tag == 'SPACES':
-	# 			pass
-	#
-	#
-	# 		i += 1
+	def reduce(self):
+		len_stack = len(self.stack)
+		i = 0
+		while i < len_stack:
+			key = ' '.join(self.stack[i-len_stack:])
+			if key in GRAMMAR.reverse:
+				self.stack[i-len_stack:] = self.stack[:i-len_stack] + [GRAMMAR.reverse[key]]
+				self.reduce()
+				break
+			i += 1
+		return (0)
+
+	def reduce_shift(self):
+		self.stack = []
+		i = 0
+		len_tags = len(self.tags)
+		copy = self.tags.copy()
+		while (i < len_tags):
+			tag = self.tags[i]
+			if tag == 'SPACES':
+				copy.pop(0)
+			elif self.reduce():
+				pass
+			elif copy != []: #shift
+				self.stack.append(copy.pop(0))
+			else:
+				break
+			i += 1
+		print(self.stack)
+
 
 
 
