@@ -145,10 +145,10 @@ class testTok00(unittest.TestCase):
 		 self.assertListEqual(tokens, ['>(', '<(', 'echo', ' ', 'test', ' ', '>', ' ', 'file.txt', ')', ')', ' ', '&&', ' \t\t', '$VAR_TEST', '|', ' ', 'cat', ' ', '<<', ' ', 'HERE', '\n', 'testHERE', '\n', 'HERE'])
 
 	def testTok13(self):
-		 command = '                \\\necho \\\\test             '
+		 command = '                 \\\necho \\\\test             '
 		 tokens = []
 		 tk.tokenize(command, tokens)
-		 self.assertListEqual(tokens, ['                ','\\\necho', ' ','\\\\test','             '])
+		 self.assertListEqual(tokens, ['                 ','\\\necho', ' ','\\\\test','             '])
 
 	def testTok14(self):
 		 command = ' $({ () lol'
