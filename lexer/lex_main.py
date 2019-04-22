@@ -1,34 +1,18 @@
 #!/usr/bin/env python3
 
-import utils.readgrammar as rd
-import utils.tokenizer as tk
-from utils.commands import Commands
+import sys
+from utils.commands import ListCommands
+import code
 
-
-global GRAMMAR
-GRAMMAR = rd.get_grammar('grammar.txt')
-
-
-def shift(arg):
-	pass
-
-def reduce(arg):
-	pass
-
-def check(arg):
-	pass
-
-def split_cmd(tokens):
-	pass
-
-
-def lexer(tokens, objectif):
-	reverse = rd.get_reverse_grammar(GRAMMAR)
-	stack = []
-	# while stack != objectif:
-	# 	['B', 'C', 'D']
-	print(reverse)
+def main():
+	if len(sys.argv) == 1:
+		lc = ListCommands("ls -l; echo 'lol' 1;$(echo ls)\\\ncat ../*")
+	else :
+		print(" ".join(sys.argv[1:]))
+		lc = ListCommands(" ".join(sys.argv[1:]))
+	#code.interact(local = locals())
+	print([ lc.tokens[x.start:x.end] for x in lc.tree_commands])
 
 
 if __name__ == '__main__':
-	a=Commands("ls -l")
+	main()
