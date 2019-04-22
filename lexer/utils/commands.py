@@ -9,37 +9,54 @@ GRAMMAR = ShellGrammar()
 class Cmd(object):
 	def __init__(self, start, tags, ends=[]):
 		self.start = start
-		self.end = start #
-		self.sub = [] # list de cmd
-		self.tagsubtitution = []
-		self.get_end(start, tags[start:])
-		self.input_buffer = tags[self.start: self.end]
+		self.end = start
 		self.ends = GRAMMAR.grammar['TERMINATOR']
 		if ends != []:
 			self.ends = ends
+		self.sub = [] # list de cmd
+		self.get_end(tags)
+		if ends != []:
+			self.start -= 1
+		self.input_buffer = tags[self.start: self.end]
 		self.syntax_ok = False
 
-
-	def get_end(self, start, tags):
-		i = 0
+	def get_end(self, tags):
+		i = self.start
 		len_tags = len(tags)
 		while i < len_tags:
-			if tags[i] in self.ends:
+			curr_tag = tags[i]
+			print(i, curr_tag)
+			if curr_tag in self.ends:
 				break
-			i += 1
+			elif curr_tag in GRAMMAR.opening_tags:
+				i += 1
+				subcmd = Cmd(i, tags, [GRAMMAR.opening_tags[curr_tag]])
+				i = subcmd.end
+				self.sub.append(subcmd)
+			else:
+				i += 1
 		i += 1
-		self.end = self.start + i
+		if i > len_tags:
+			i = len_tags
+		self.end = i
 
-	def reduce_shift(self):
-		self.stack = []
-		i = 0
-		len_input_buffer = len(self.input_buffer)
-		while (i < len_input_buffer):
-			tag = self.tags[i]
-			if tag == 'SPACES':
-				pass
-			elif ():
-			i += 1
+	# def reduce(self, stack):
+	# 	len_stack = len(stack)
+	#
+	# 	while i < len_stack:
+	#
+	# 		i += 1
+	#
+	# def reduce_shift(self):
+	# 	self.stack = []
+	# 	i = 0
+	# 	while (i < len_input_buffer):
+	# 		tag = self.tags[i]
+	# 		if tag == 'SPACES':
+	# 			pass
+	#
+	#
+	# 		i += 1
 
 
 
