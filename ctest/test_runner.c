@@ -6,29 +6,55 @@
 #include "libft.h"
 #include "test_runner.h"
 
-#define NUMBER_TEST		18
+#define ADD_TEST(test_name)	g_tests[__COUNTER__] = (test_store){.name = #test_name, .test = test_name}
 
-test_store		test_list[NUMBER_TEST + 1] = {
-	{"simple_chare_pylst", simple_chare_pylst},
-	{"simple_int_pylst", simple_int_pylst},
-	{"multitype_pylst", multitype_pylst},
-	{"hash_creation", hash_creation},
-	{"hash_single_insert", hash_single_insert},
-	{"hash_multiple_insert", hash_multiple_insert},
-	{"hash_insert_single_alveol", hash_insert_single_alveol},
-	{"hash_multitype_insert", hash_multitype_insert},
-	{"hash_single_delete", hash_single_delete},
-	{"hash_multiple_delete", hash_multiple_delete},
-	{"hash_alveol_deletion", hash_alveol_deletion},
-	{"t_line_allocation", t_line_allocation},
-	{"t_line_lst_allocation", t_line_lst_allocation},
-	{"t_line_longer_lst", t_line_longer_lst},
-	{"t_line_len", t_line_len},
-	{"t_line_update_test", t_line_update_test},
-	{"t_line_get_last_test", t_line_get_last_test},
-	{"t_line_extract_test_simple", t_line_extract_test_simple},
-	NULL
-};
+test_store	*g_tests = NULL;
+int		total_tests;
+
+/*
+** fill_tests_functions:
+**
+** Add each test function to the list of test.
+** Each function must be added with the ADD_TEST macro:
+** 
+** example:
+** ADD_TEST(my_new_test);
+*/
+
+void	fill_tests_functions(void)
+{
+	ADD_TEST(simple_chare_pylst);
+	ADD_TEST(simple_int_pylst);
+	ADD_TEST(multitype_pylst);
+	ADD_TEST(hash_creation);
+	ADD_TEST(hash_single_insert);
+	ADD_TEST(hash_multiple_insert);
+	ADD_TEST(hash_insert_single_alveol);
+	ADD_TEST(hash_multitype_insert);
+	ADD_TEST(hash_single_delete);
+	ADD_TEST(hash_multiple_delete);
+	ADD_TEST(hash_alveol_deletion);
+	ADD_TEST(t_line_allocation);
+	ADD_TEST(t_line_lst_allocation);
+	ADD_TEST(t_line_longer_lst);
+	ADD_TEST(t_line_len);
+	ADD_TEST(t_line_update_test);
+	ADD_TEST(t_line_get_last_test);
+	ADD_TEST(t_line_extract_test_simple);
+}
+
+/*
+** function_init:
+**
+** Store in the first time the number of tests using __COUNTER__ macro.
+** Allocate after the g_test variable according to the number of tests.
+*/
+void	function_init(void)
+{
+	total_tests = __COUNTER__;
+	g_tests = (test_store *)malloc(sizeof(test_store) * total_tests);
+	fill_tests_functions();
+}
 
 void	display(char letter, char *color)
 {
@@ -58,16 +84,17 @@ int		main(int argc, char **argv)
 	int		status;
 	int		index;
 	
+	function_init();
 	setup_freefct();
 	index = 0;
-	while (index < NUMBER_TEST)
+	while (index < total_tests)
 	{
 		pid = fork();
 
 		if (pid == 0)
 		{
-			ft_printf("%-30s : ", test_list[index].name);
-			test_list[index].test();
+			ft_printf("%-30s : ", g_tests[index].name);
+			g_tests[index].test();
 			error_display();
 			exit(0);
 		}

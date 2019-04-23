@@ -8,6 +8,7 @@ tmpsh
 .*.swp
 .*.swo
 shell_debug
+test_shell
 
 # Prerequisites
 dependencies/*.d
