@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
-
-import utils.readgrammar as rg
-import utils.tokenizer as tk
-import utils.file as fl
 import sys
-from collections import deque as dq
+from utils.commands import ListCommands
+
 
 from pprint import pprint
 
@@ -13,8 +10,8 @@ def main():
 	if len(sys.argv) > 1:
 		command = " ".join(sys.argv[1:])
 		tokens = []
-		tk.tokenize(command, tokens)
-		print(tokens)
+		command = ListCommands(command)
+		print(command.tokens)
 	else:
 		print("missing command.")
 

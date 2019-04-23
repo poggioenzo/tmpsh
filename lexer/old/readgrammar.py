@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 from pprint import pprint
-import utils.file as fl
-import utils.strcontain as sc
+# import utils.file as fl
+# import utils.strcontain as sc
 #
-# import file as fl
-# import strcontain as sc
+import file as fl
+import strcontain as sc
 
 class Grammar(object):
 	def __init__(self, path):
@@ -47,8 +47,8 @@ class Grammar(object):
 			self.grammar[symbol_name] = []
 		self.grammar[symbol_name].append(symbol)
 		if symbol not in self.reverse:
-			self.reverse[symbol] = {}
-		self.reverse[symbol]= symbol_name
+			self.reverse[symbol] = []
+		self.reverse[symbol].append(symbol_name)
 
 
 	def __str__(self):
@@ -65,12 +65,23 @@ class ShellGrammar(Grammar):
 		super().__init__(path)
 		self.add_symbol('\n', 'NEW_LINE')
 		self.spaces = [' ', '\t']
-		self.get_leaf_op()
+		#self.atomic_op = [], self.compose_op = [], self.leaf_op = []
+		self.get_atomic_compose_leaf_op()
 		self.get_escape()
 		if 'ESCAPE' in self.grammar:
+			# self.atomic_op.remove(self.grammar['ESCAPE'][0])
 			self.leaf_op.remove(self.grammar['ESCAPE'][0])
+		self.quotes = []
+		if 'QUOTES' in self.grammar:
+			for k in self.grammar['QUOTES']:
+				self.quotes.append(self.grammar[k][0])#.split('.')[0])
+		# self.opening_op = []
+		# self.get_opening_op()
+		# self.get_begin_op()
+
+		# self.maxlen_opening_op = self.get_maxlen(self.opening_op)
+		# self.maxlen_atomic_op = self.get_maxlen(self.atomic_op)
 		self.maxlen_leaf_op = self.get_maxlen(self.leaf_op)
-		self.get_opening_tags()
 
 	def get_escape(self):
 		if 'ESCAPE' in self.grammar:
@@ -81,26 +92,37 @@ class ShellGrammar(Grammar):
 	def get_list_op(self, func):
 		return [key for key in self.reverse if not func(key)]
 
-	def get_leaf_op(self):
+	def get_atomic_compose_leaf_op(self):
 		self.leaf_op = self.get_list_op(sc.containalphanum)
+		# self.compose_op = [k for k in self.atomic_op if "." in k]
+		# self.leaf_op = self.atomic_op.copy()
+		# for k in self.compose_op:
+		# 	name = self.reverse[k]
+		# 	k_part = k.split('.')
+		# 	self.atomic_op.remove(k)
+		# 	self.leaf_op.extend(k_part)
+		# 	self.leaf_op.remove(k)
+		# self.leaf_op = sorted(set(self.leaf_op))
+
+	# def get_opening_op(self):
+	# 	self.opening_op = {}
+	# 	for key in self.compose_op:
+	# 		part = key.split('.')
+	# 		self.opening_op[part[0]] = [part[1], self.reverse[key]]
+
+	# def get_begin_op(self):
+	# 	self.begin_op = []
+	# 	self.begin_op.extend(self.get_first(self.atomic_op))
+	# 	self.begin_opening_op = self.get_first(self.opening_op)
+	# 	self.begin_op.extend(self.begin_opening_op)
+	# 	self.begin_op = sorted(set(self.begin_op))
+	# 	self.begin_opening_op = sorted(set(self.begin_opening_op))
 
 	def get_maxlen(self,iter):
 		return max([len(k) for k in iter])
 
 	def get_first(self,iter):
 		return [k[0] for k in iter]
-
-	def get_opening_tags(self):
-		self.opening_tags = {}
-		if 'SUB_PROCESS' in self.grammar and 'QUOTES' in self.grammar:
-			opening_tags = self.grammar['SUB_PROCESS']
-			opening_tags.extend(self.grammar['QUOTES'])
-			for tag in opening_tags:
-				tag_split = tag.split()
-				tag_op = tag_split[0]
-				tag_end =tag_split[-1]
-				self.opening_tags[tag_op] = tag_end
-
 
 
 if __name__ == '__main__':

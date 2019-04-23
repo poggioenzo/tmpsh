@@ -1,3 +1,6 @@
+def containspaces(key):
+	return any([l in [' ', '\t'] for l in key])
+
 def containalphanum(key):
 	return any([l.isalnum() for l in key])
 
