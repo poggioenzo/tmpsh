@@ -1,6 +1,10 @@
 TEST_NAME = test_shell
 
-TEST_MANAGER= test_runner.c error_display.c
+TEST_MANAGER := test_runner.c \
+				error_display.c \
+				runner_utils.c
+
+TEST_MANAGER := $(addprefix utils/, $(TEST_MANAGER))
 
 FILES := pylst_test.c  \
 		 hash_table_test.c \
@@ -9,7 +13,8 @@ FILES := pylst_test.c  \
 FILES := $(addprefix tests/, $(FILES))
 
 SRCS := $(FILES) \
-		$(TEST_MANAGER)
+		$(TEST_MANAGER) \
+		functions_adding.c
 
 OBJS = $(SRCS:%.c=%.o)
 
