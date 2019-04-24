@@ -27,4 +27,9 @@ void	t_line_update_test(void);
 void	t_line_get_last_test(void);
 void	t_line_extract_test_simple(void);
 
+void	t_char_allocation_test(void);
+void	t_char_push_test(void);
+void	t_char_push_harder_test(void);
+void	t_char_length_test(void);
+void	t_char_update_pos_test(void);
 #endif

@@ -8,7 +8,8 @@ TEST_MANAGER := $(addprefix utils/, $(TEST_MANAGER))
 
 FILES := pylst_test.c  \
 		 hash_table_test.c \
-		 t_line_allocation_test.c
+		 t_line_allocation_test.c \
+		 t_char_allocation_tests.c \
 
 FILES := $(addprefix tests/, $(FILES))
 
