@@ -26,7 +26,6 @@ class Cmd(object):
 		len_tags = len(tags)
 		while i < len_tags:
 			curr_tag = tags[i]
-			print(i, curr_tag)
 			if curr_tag in self.ends:
 				break
 			elif curr_tag in GRAMMAR.opening_tags:
@@ -47,9 +46,9 @@ class Cmd(object):
 		while i < len_stack:
 			key = ' '.join(self.stack[i-len_stack:])
 			if key in GRAMMAR.reverse:
-				self.stack[i-len_stack:] = self.stack[:i-len_stack] + [GRAMMAR.reverse[key]]
+				self.stack[i-len_stack:] = self.stack[:i-len_stack - 1] + [GRAMMAR.reverse[key]]
 				self.reduce()
-				break
+				len_stack = len(self.stack)
 			i += 1
 		return (0)
 
@@ -69,9 +68,8 @@ class Cmd(object):
 			else:
 				break
 			i += 1
+		self.reduce()
 		print(self.stack)
-
-
 
 
 
