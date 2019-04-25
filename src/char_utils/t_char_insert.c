@@ -39,14 +39,9 @@ void		insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 	t_line		*cursor_line;
 
 	cursor_line = get_cursor_line(shell_repr, cursor);
-	if (!cursor_line->chars)
-		push_end_char(&cursor_line->chars, letter, FALSE);
-	else
-	{
-		cursor_char = cursor_line->chars;
-		get_cursor_char(cursor, &cursor_char, &prev_char);
-		appropriate_char_insert(cursor, cursor_char, prev_char, letter);
-	}
+	cursor_char = cursor_line->chars;
+	get_cursor_char(cursor, &cursor_char, &prev_char);
+	appropriate_char_insert(cursor, cursor_char, prev_char, letter);
 	cursor->column++;
 	update_position(cursor_line->chars);
 }
