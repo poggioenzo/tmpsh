@@ -2,6 +2,7 @@
 # define TEST_RUNNER_H
 # include "libft.h"
 # include "tests_functions.h"
+# include "errors_builder.h"
 # include <string.h>
 
 typedef void (*test_fct)(void);
@@ -30,6 +31,7 @@ void	ptr_error(int test_number, void *result, void *ref_val, int action);
 
 #define STORE_ERROR	0
 #define SHOW_ERROR	1
+#define TEST_FUNCTION	2
 
 #define RED		"\033[0;1;31m"
 #define GREEN	"\033[0;1;32m"
@@ -38,23 +40,23 @@ void	ptr_error(int test_number, void *result, void *ref_val, int action);
 #define VALID_TEST		display('.', GREEN)
 #define INVALID_TEST	display('.', RED)
 
-#define ASSERT_STRCMP(test_nbr, res, ref) test_nbr++;\
-	if (ft_strequ(res, ref) || res == ref) \
-		VALID_TEST;\
+#define ASSERT_STANDARD(test_nbr, res, ref, check_function) \
+	if (check_function(test_nbr++, res, ref, STORE_ERROR) \
+		VALID_TEST; \
 	else \
-		{ chare_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST; }
+		INVALID_TEST;
+
+#define ASSERT_TCHARCMP(test_nbr, res, ref); \
+		ASSERT_STANDARD(t_char_error_fct(test_nbr, res, ref)
+
+#define ASSERT_STRCMP(test_nbr, res, ref) \
+	ASSERT_STANDARD(_chare_error2, test_nbr, res, ref)
 
 #define ASSERT_INTCMP(test_nbr, res, ref) test_nbr++; \
-	if (res == ref)\
-		VALID_TEST; \
-	else \
-		{ int_error(test_nbr, res, ref, STORE_ERROR) ; INVALID_TEST; }
+	ASSERT_STANDARD(_int_error2(test_nbr, res, ref))
 
 #define ASSERT_PTRCMP(test_nbr, res, ref) test_nbr++; \
-	if (res == ref)\
-		VALID_TEST; \
-	else\
-		{ ptr_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST; }
+	ASSERT_STANDARD(_ptr_error2, test_nbr, res, ref)
 
 #define ASSERT_PTROPE(test_nbr, operation, res, ref) test_nbr++; \
 	if (operation) \

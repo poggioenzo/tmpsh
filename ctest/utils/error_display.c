@@ -1,12 +1,8 @@
 #include "libft.h"
 #include "test_runner.h"
+#include "tmpsh.h"
+#include "errors_builder.h"
 
-#define STRUCT_MAKER(struct_name, type) \
-	typedef struct {\
-		int test;\
-		type result;\
-		type reference;}\
-	struct_name;
 
 #define FUNCTION_ERROR_MAKER(fct_name, struct_name, type, printf_format)		\
 	STRUCT_MAKER(struct_name, type)												\
@@ -36,6 +32,7 @@
 		}																		\
 	}
 
+
 /*
 ** chare_error : Store error for any char * assertion
 */
@@ -61,4 +58,5 @@ void		error_display()
 	DISPLAY_FCT(chare_error);
 	DISPLAY_FCT(int_error);
 	DISPLAY_FCT(ptr_error);
+	DISPLAY_FCT(t_char_error_fct);
 }

@@ -16,8 +16,15 @@ FILES := pylst_test.c  \
 
 FILES := $(addprefix tests/, $(FILES))
 
+ERROR_SRCS := t_char_error.c \
+			  default_error.c \
+
+
+ERROR_SRCS := $(addprefix error_creation/, $(ERROR_SRCS))
+
 SRCS := $(FILES) \
 		$(TEST_MANAGER) \
+		$(ERROR_SRCS) \
 		functions_adding.c
 
 OBJS = $(SRCS:%.c=%.o)
