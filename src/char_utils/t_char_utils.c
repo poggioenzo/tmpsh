@@ -4,19 +4,19 @@
 ** extend_char:
 **
 ** Add a t_char list at the end of an other list.
-** Return the position of the junction.
+** Return the position of the junction to update cursor position.
 */
 
-int		extend_char(t_char *old_chars, t_char *char_to_add)
+int		extend_char(t_char *prev_chars, t_char *char_to_add)
 {
 	t_char		*start_line;
 
-	start_line = old_chars;
-	while (old_chars->next)
-		old_chars = old_chars->next;
-	old_chars->next = char_to_add;
+	start_line = prev_chars;
+	while (prev_chars->next)
+		prev_chars = prev_chars->next;
+	prev_chars->next = char_to_add;
 	update_position(start_line);
-	return (old_chars->position + 1);
+	return (prev_chars->position + 1);
 }
 
 

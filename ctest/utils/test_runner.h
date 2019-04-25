@@ -1,9 +1,23 @@
 #ifndef TEST_RUNNER_H
 # define TEST_RUNNER_H
 # include "libft.h"
+# include "tests_functions.h"
+
+typedef void (*test_fct)(void);
+
+typedef struct
+{
+	char *name;
+	test_fct	test;
+}	test_store;
+
+extern test_store	*g_tests;
+extern int			total_tests;
 
 void		display(char letter, char *color);
 void		error_display();
+void	signal_analysis(int status);
+void	function_init(void);
 
 /*
 ** Functions to display error properly
@@ -11,7 +25,7 @@ void		error_display();
 
 void	chare_error(int test_number, char *result, char *ref_val, int action);
 void	int_error(int test_number, int result, int ref_val, int action);
-void		ptr_error(int test_number, void *result, void *ref_val, int action);
+void	ptr_error(int test_number, void *result, void *ref_val, int action);
 
 #define STORE_ERROR	0
 #define SHOW_ERROR	1
@@ -53,34 +67,4 @@ void		ptr_error(int test_number, void *result, void *ref_val, int action);
 	else \
 		display('.', RED);
 
-typedef void (*test_fct)(void);
-
-typedef struct
-{
-	char *name;
-	test_fct	test;
-}	test_store;
-
-/*
-** TEST FUNCTIONS
-*/
-
-void	simple_chare_pylst(void);
-void	simple_int_pylst(void);
-void	multitype_pylst(void);
-void	hash_creation(void);
-void	hash_single_insert(void);
-void	hash_multiple_insert(void);
-void	hash_multitype_insert(void);
-void	hash_insert_single_alveol(void);
-void	hash_single_delete(void);
-void	hash_multiple_delete(void);
-void		hash_alveol_deletion(void);
-void	t_line_allocation(void);
-void		t_line_lst_allocation(void);
-void		t_line_longer_lst(void);
-void		t_line_len(void);
-void		t_line_update_test(void);
-void		t_line_get_last_test(void);
-void		t_line_extract_test_simple(void);
 #endif
