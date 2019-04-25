@@ -3,7 +3,9 @@
 /*
 ** get_unlocked_char:
 **
-** Get the first char in t_char list whom is unlocked.
+** Return:
+** First unlocked t_char of the list,
+** NULL otherwise.
 */
 
 t_char	*get_unlocked_char(t_char *char_lst)
@@ -29,8 +31,8 @@ void		get_last_lock(t_char *char_lst, t_char **last_lock)
 /*
 ** get_last_char:
 **
-** Return the last char of a t_list which is unlocked, set the last_char
-** pointer to NULL if no element have been found.
+** Return the last t_char list which is unlocked, 
+** set to NULL **last_char if all is locked.
 */
 
 void		get_last_char(t_char *char_lst, t_char **last_char)

@@ -7,8 +7,8 @@
 /*
 ** delete_char_range:
 **
-** Delete inside a t_char list a range of t_char element, starting from from,
-** going to to.
+** Delete inside a t_char list a range of t_char element, starting from 'from',
+** going to 'to'.
 ** Can return the string of the deleted pointer if expected.
 **
 ** return value:
@@ -31,7 +31,7 @@ char	*delete_char_range(t_char *char_lst, t_char *from,\
 		get_last_char(char_lst, &to);
 	if (!from || !to)
 	{
-		if (!(cutted_str = ft_strnew(0)))
+		if (get_str && !(cutted_str = ft_strnew(0)))
 			exit(-1);
 		return (cutted_str);
 	}

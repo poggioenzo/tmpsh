@@ -25,7 +25,7 @@
 			int index = 0;														\
 			struct_name	curr_error;												\
 																				\
-			ft_printf("\n----------------------------");						\
+			ft_printf("\n----------------------------\n");						\
 			while (index < total_error)											\
 			{																	\
 				curr_error = error_lst[index++];								\

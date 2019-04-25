@@ -2,6 +2,7 @@
 # define TEST_RUNNER_H
 # include "libft.h"
 # include "tests_functions.h"
+# include <string.h>
 
 typedef void (*test_fct)(void);
 
@@ -34,32 +35,32 @@ void	ptr_error(int test_number, void *result, void *ref_val, int action);
 #define GREEN	"\033[0;1;32m"
 #define RESET	"\033[0m"
 
-#define VALID_TEST	display('.', GREEN)
-#define INVALID_TEST	display('.', RED);
+#define VALID_TEST		display('.', GREEN)
+#define INVALID_TEST	display('.', RED)
 
 #define ASSERT_STRCMP(test_nbr, res, ref) test_nbr++;\
 	if (ft_strequ(res, ref) || res == ref) \
 		VALID_TEST;\
 	else \
-		{ chare_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST }
+		{ chare_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST; }
 
 #define ASSERT_INTCMP(test_nbr, res, ref) test_nbr++; \
 	if (res == ref)\
 		VALID_TEST; \
 	else \
-		{ int_error(test_nbr, res, ref, STORE_ERROR) ; INVALID_TEST }
+		{ int_error(test_nbr, res, ref, STORE_ERROR) ; INVALID_TEST; }
 
 #define ASSERT_PTRCMP(test_nbr, res, ref) test_nbr++; \
 	if (res == ref)\
 		VALID_TEST; \
 	else\
-		{ ptr_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST }
+		{ ptr_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST; }
 
 #define ASSERT_PTROPE(test_nbr, operation, res, ref) test_nbr++; \
 	if (operation) \
 		VALID_TEST; \
 	else\
-		{ ptr_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST }
+		{ ptr_error(test_nbr, res, ref, STORE_ERROR); INVALID_TEST; }
 
 #define ASSERT_TEST(test_nbr, result) test_nbr++; \
 	if (result) \

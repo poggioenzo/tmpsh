@@ -36,6 +36,13 @@ static void	fill_tests_functions(void)
 	ADD_TEST(t_char_push_harder_test);
 	ADD_TEST(t_char_length_test);
 	ADD_TEST(t_char_update_pos_test);
+
+	ADD_TEST(t_cursor_alloc_test);
+
+	ADD_TEST(search_prev_char_test);
+	ADD_TEST(get_last_lock_test);
+	ADD_TEST(get_unlocked_char_test);
+	ADD_TEST(get_last_char_test);
 }
 
 /*
