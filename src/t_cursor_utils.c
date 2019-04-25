@@ -1,6 +1,6 @@
 #include "t_cursor_utils.h"
-# include "libft.h"
-# include "t_caps_utils.h"
+#include "libft.h"
+#include "t_caps_utils.h"
 
 void		alloc_cursor(t_cursor **cursor)
 {

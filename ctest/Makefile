@@ -10,6 +10,9 @@ FILES := pylst_test.c  \
 		 hash_table_test.c \
 		 t_line_allocation_test.c \
 		 t_char_allocation_tests.c \
+		 t_cursor_alloc.c \
+		 t_char_selection_test.c \
+
 
 FILES := $(addprefix tests/, $(FILES))
 
