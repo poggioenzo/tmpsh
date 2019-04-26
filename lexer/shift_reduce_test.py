@@ -163,6 +163,11 @@ class testShiftReduce(unittest.TestCase):
 		exepted_output = ['A','D','A','D','A',       'D','A','C' , 'D'  ,'A'                    , 'D', 'C', 'C', 'A' , 'C', 'D', 'C']
 		self.assertListEqual(reduce_shift(entry), exepted_output)
 
+	def testShiftReduce021(self):
+		entry = 'SPACES D SPACES E SPACES SPACES SPACES E SPACES D SPACES A D SPACES E SPACES SPACES SPACES'.split()
+		exepted_output = ['C', 'C' , 'A', 'C']
+		self.assertListEqual(reduce_shift(entry), exepted_output)
+
 
 if __name__ == '__main__':
 	#print(GRAMMAR)
