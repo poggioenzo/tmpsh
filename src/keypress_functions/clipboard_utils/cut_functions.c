@@ -128,5 +128,5 @@ void	paste_clipboard(t_line *shell_repr, t_cursor *cursor)
 	if (!cut)
 		return ;
 	while (*cut)
-		insert_char(shell_repr, *cut++, cursor);
+		cursor_insert(shell_repr, *cut++, cursor);
 }

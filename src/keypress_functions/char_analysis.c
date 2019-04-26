@@ -16,7 +16,7 @@
 int		char_analysis(t_line *shell_repr, char *new_char, t_cursor *cursor)
 {
 	if (ft_isprint(*new_char))
-		insert_char(shell_repr, *new_char, cursor);
+		cursor_insert(shell_repr, *new_char, cursor);
 	else if (*new_char == 127)
 		delete_char(shell_repr, cursor);
 	else if (is_key_movement(new_char)) 

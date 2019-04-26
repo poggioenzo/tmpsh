@@ -5,6 +5,6 @@
 # include "cursor_dependent_selection.h"
 
 void		insert_string(t_char **char_lst, char *string, int lock);
-void		insert_char(t_line *shell_repr, char letter, t_cursor *cursor);
-
+void			insert_char(t_char **char_lst, char letter, int lock);
+void		cursor_insert(t_line *shell_repr, char letter, t_cursor *cursor);
 #endif
