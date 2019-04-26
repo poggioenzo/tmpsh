@@ -9,7 +9,7 @@ int		main(int argc, char **argv, char **environ)
 
 	UNUSED(argv);
 	duplicate_environ(environ);
-	fd_debug = open("/dev/ttys001",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	fd_debug = open("/dev/pts/1",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	if (argc == 1)
 		return (prompt_loop());
 	return (status);

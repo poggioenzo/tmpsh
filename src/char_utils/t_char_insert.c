@@ -4,35 +4,12 @@
 #include "line_utils.h"
 
 /*
-** appropriate_char_insert:
+** cursor_insert:
 **
-** Check if we have to add the char at the last position of the t_char *
-** or in the middle of the list.
+** Insert a new char at the cursor position, incrementing his position.
 */
 
-static void		appropriate_char_insert(t_cursor *cursor, t_char *cursor_char,\
-		t_char *prev_char, char letter)
-{
-	t_char	*new_char_node;
-
-	if (!cursor_char && cursor->column == prev_char->position + 1)
-		push_end_char(&prev_char, letter, FALSE);
-	else
-	{
-		create_char(&new_char_node, letter, cursor->column, FALSE);
-		new_char_node->next = cursor_char;
-		prev_char->next = new_char_node;
-	}
-}
-
-/*
-** insert_char:
-**
-** Insert a single char in the chained list of t_char.
-** Insert the char according to the cursor position.
-*/
-
-void		insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
+void		cursor_insert(t_line *shell_repr, char letter, t_cursor *cursor)
 {
 	t_char		*cursor_char;
 	t_char		*prev_char;
@@ -41,29 +18,46 @@ void		insert_char(t_line *shell_repr, char letter, t_cursor *cursor)
 	cursor_line = get_cursor_line(shell_repr, cursor);
 	cursor_char = cursor_line->chars;
 	get_cursor_char(cursor, &cursor_char, &prev_char);
-	appropriate_char_insert(cursor, cursor_char, prev_char, letter);
+	insert_char(&prev_char, letter, FALSE);
 	cursor->column++;
-	update_position(cursor_line->chars);
+}
+
+/*
+** insert_char:
+**
+** Insert a single char just after the given t_char * element.
+** Protection by creating a new node if the given t_char * is NULL.
+*/
+
+void			insert_char(t_char **char_lst, char letter, int lock)
+{
+	t_char	*new_char;
+
+	new_char = NULL;
+	if (!*char_lst)
+		create_char(char_lst, letter, 0, lock);
+	else
+	{
+		create_char(&new_char, letter, (*char_lst)->position + 1, lock);
+		new_char->next = (*char_lst)->next;
+		(*char_lst)->next = new_char;
+		increment_char_end(new_char);
+	}
 }
 
 /*
 ** insert_string:
 **
-** Insert a entire string at the end of the t_char lst.
-** Optimize the insertion by moving on the current t_char pointer
-** after each insertion.
+** Insert from a specific t_char node en entire string.
 */
 
-void		insert_string(t_char **char_lst, char *string, int lock) 
+void	insert_string(t_char **char_lst, char *string, int lock)
 {
-	t_char		**start_char;
-
-	start_char = char_lst;
+	if (*string && !*char_lst)
+		insert_char(char_lst, *string++, lock);
 	while (*string)
 	{
-		push_end_char(char_lst, *string, lock);
-		char_lst = &(*char_lst)->next;
-		string++;
+		insert_char(char_lst, *string++, lock);
+		char_lst = &(*char_lst)->next;		
 	}
-	update_position(*start_char);
 }

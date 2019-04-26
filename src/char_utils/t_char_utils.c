@@ -40,6 +40,25 @@ void		update_position(t_char *char_lst)
 }
 
 /*
+** increment_char_end:
+**
+** Incrementing the end of a t_char line from 1
+** starting from the given t_char position.
+*/
+
+void	increment_char_end(t_char *char_lst)
+{
+	int reference_pos;
+
+	reference_pos = char_lst->position;
+	while (char_lst)
+	{
+		char_lst->position = reference_pos++;
+		char_lst = char_lst->next;
+	}
+}
+
+/*
 ** char_lst_len:
 **
 ** Get the total length of a t_char chained list.
