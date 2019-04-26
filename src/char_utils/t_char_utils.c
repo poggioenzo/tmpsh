@@ -1,5 +1,4 @@
 #include "t_char_utils.h"
-#include "libft.h"
 
 /*
 ** extend_char:
