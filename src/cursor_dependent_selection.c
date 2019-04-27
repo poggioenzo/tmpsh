@@ -39,26 +39,6 @@ t_char	*get_cursor_char(t_cursor *cursor, t_char *char_lst,\
 }
 
 /*
-** is_cursor_last_pos:
-**
-** Check if the cursor is in the last position of the shell.
-*/
-
-int		is_cursor_last_pos(t_line *line_lst, t_cursor *cursor)
-{
-	int		row;
-
-	row = 0;
-	while (line_lst->position != cursor->row)
-	{
-		row++;
-		line_lst = line_lst->next;
-	}
-	return (cursor->column == char_lst_len(line_lst->chars) && 
-			cursor->row == row);
-}
-
-/*
 ** get_cursor_char_only:
 **
 ** Allow us to find the t_char element where the cursor is positionned.
