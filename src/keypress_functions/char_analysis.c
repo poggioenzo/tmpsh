@@ -24,7 +24,10 @@ int		char_analysis(t_line *shell_repr, char *new_char, t_cursor *cursor)
 	else if (UP_KEY(new_char) || DOWN_KEY(new_char))
 		history_manager(new_char, shell_repr, cursor);
 	else if (*new_char == '\n')
+	{
+		ft_strcpy(g_last_char, new_char);
 		return (newline_check(shell_repr, cursor));
+	}
 	else if (CTRL_D(new_char))
 		check_eof(shell_repr);
 	else if (is_clipoard_key(new_char))
