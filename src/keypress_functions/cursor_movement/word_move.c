@@ -11,15 +11,9 @@
 
 static void			set_last_pos(t_line *shell_repr, t_cursor *cursor)
 {
-	t_char	*char_lst;
-
-	while (shell_repr->next)
-		shell_repr = shell_repr->next;
-	char_lst = shell_repr->chars;
-	while (char_lst->next)
-		char_lst = char_lst->next;
+	shell_repr = get_last_line(shell_repr);
 	cursor->row = shell_repr->position;
-	cursor->column = char_lst->position + 1;
+	cursor->column = char_lst_len(shell_repr->chars);
 }
 
 /*
@@ -115,7 +109,6 @@ static void			store_prev_word(t_line *shell_repr, t_cursor *curr_cursor,
 void		previous_word(t_line *shell_repr, t_cursor *cursor)
 {
 	t_cursor	word_cursor;
-	t_char		*first_unlock;
 
 	word_cursor = (t_cursor){.row = -1, .column = -1};
 	store_prev_word(shell_repr, cursor, &word_cursor);
@@ -127,10 +120,6 @@ void		previous_word(t_line *shell_repr, t_cursor *cursor)
 	else
 	{
 		cursor->row = 0;
-		first_unlock = get_unlocked_char(shell_repr->chars);
-		if (first_unlock)
-			cursor->column = first_unlock->position;
-		else
-			cursor->column = char_lst_len(shell_repr->chars);
+		cursor->column = char_lock_len(shell_repr->chars); 
 	}
 }
