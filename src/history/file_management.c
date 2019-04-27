@@ -20,9 +20,10 @@ int			rewrite_history(t_hist *history)
 	char	*history_filename;
 
 	history_filename = replace_home(HISTORY_FILE);
-	if ((hist_fd = open(history_filename, O_CREAT | O_WRONLY, 0600)) == -1) // CHECK IF AN ERROR occur
-		return (ft_strdel_out(&history_filename, FAILURE));
+	hist_fd = open(history_filename, O_CREAT | O_WRONLY, 0600);
 	ft_strdel(&history_filename);
+	if (hist_fd == -1)
+		return (FAILURE);
 	index = 0;
 	while (history)
 	{
