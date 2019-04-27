@@ -73,6 +73,7 @@ int		main(int argc, char **argv)
 		{
 			ft_printf(printf_format, g_tests[index].name);
 			g_tests[index].test();
+			ft_printf("\n");
 			error_display();
 			exit(0);
 		}
@@ -81,7 +82,6 @@ int		main(int argc, char **argv)
 			waitpid(pid, &status, 0);
 			signal_analysis(status);
 		}
-		ft_printf("\n");
 		index++;
 	}
 	return (0);

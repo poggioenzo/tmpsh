@@ -12,6 +12,8 @@ FILES := pylst_test.c  \
 		 t_char_allocation_tests.c \
 		 t_cursor_alloc.c \
 		 t_char_selection_test.c \
+		 t_char_insert_test.c \
+		 cursor_dependent_selection_tests.c \
 
 
 FILES := $(addprefix tests/, $(FILES))

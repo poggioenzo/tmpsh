@@ -43,6 +43,11 @@ static void	fill_tests_functions(void)
 	ADD_TEST(get_last_lock_test);
 	ADD_TEST(get_unlocked_char_test);
 	ADD_TEST(get_last_char_test);
+
+	ADD_TEST(insert_char_test);
+	ADD_TEST(insert_string_test);
+
+	ADD_TEST(get_cursor_line_test);
 }
 
 /*

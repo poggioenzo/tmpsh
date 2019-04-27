@@ -32,7 +32,7 @@ FUNCTION_ERROR_MAKER2(_chare_error2, char_error_cmp, char_tests, char *, \
 ** Test functions for int type.
 */
 
-static int		int_error_cmp(int result, char reference)
+static int		int_error_cmp(int result, int reference)
 {
 	return (result == reference);
 }
@@ -43,7 +43,7 @@ static void	int_error_show(int nb_error, _int_tests *int_list)
 
 	while (index < nb_error)
 	{
-		ft_printf("Test %d :\nresult : %p  | reference : %p\n", \
+		ft_printf("Test %d :\nresult : %d  | reference : %d\n", \
 				int_list[index].test, int_list[index].result, \
 				int_list[index].reference);
 		index++;
@@ -62,6 +62,11 @@ static int		ptr_error_cmp(void *result, void *reference)
 	return (result == reference);
 }
 
+static int		ptr_diff_error(void *result, void *reference)
+{
+	return (result != reference);
+}
+
 static void	ptr_error_show(int nb_error, _ptr_tests *ptr_lst)
 {
 	int		index = 0;
@@ -76,5 +81,8 @@ static void	ptr_error_show(int nb_error, _ptr_tests *ptr_lst)
 }
 
 FUNCTION_ERROR_MAKER2(_ptr_error2, ptr_error_cmp, _ptr_tests, void *, \
+		ptr_error_show)
+
+FUNCTION_ERROR_MAKER2(_ptr_diff_error, ptr_diff_error, _ptr_tests, void *, \
 		ptr_error_show)
 

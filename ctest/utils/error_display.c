@@ -33,30 +33,12 @@
 	}
 
 
-/*
-** chare_error : Store error for any char * assertion
-*/
-
-FUNCTION_ERROR_MAKER(chare_error, t_chareerror, char *, "test %d : result : '%s' | ref : '%s' \n")
-
-/*
-** int_error : Store error for any int assertion.
-*/
-
-FUNCTION_ERROR_MAKER(int_error, t_interror, int, "test %d : result : '%d' | ref : '%d' \n")
-
-/*
-** ptr_error : Store error for any void * assertion.
-*/
-
-FUNCTION_ERROR_MAKER(ptr_error, t_ptrerror, void *, "test %d : result : '%p' | ref : '%p' \n")
-
 #define DISPLAY_FCT(fct_name) fct_name(0, 0, 0, SHOW_ERROR)
 
 void		error_display()
 {
-	DISPLAY_FCT(chare_error);
-	DISPLAY_FCT(int_error);
-	DISPLAY_FCT(ptr_error);
+	DISPLAY_FCT(_chare_error2);
+	DISPLAY_FCT(_int_error2);
+	DISPLAY_FCT(_ptr_error2);
 	DISPLAY_FCT(t_char_error_fct);
 }

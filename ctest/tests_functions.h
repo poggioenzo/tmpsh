@@ -48,4 +48,10 @@ void	get_last_lock_test(void);
 void	get_unlocked_char_test(void);
 void	get_last_char_test(void);
 
+// Test of t_char insertion 
+void	insert_char_test(void);
+void	insert_string_test(void);
+
+// Test for cursors dependent selection
+void	get_cursor_line_test(void);
 #endif
