@@ -82,8 +82,6 @@ void    line_proper(t_line *cursor_line)
 {
     t_char  *char_lst;
 
-    char_lst = cursor_line->chars;
-    while (char_lst->next && char_lst->next->lock == TRUE)
-        char_lst = char_lst->next;
+    get_last_lock(cursor_line->chars, &char_lst);
     free_t_char_lst(&char_lst->next, 0);
 }
