@@ -36,12 +36,10 @@ void		move_left(t_line *shell_repr, t_cursor *cursor)
 
 void		move_right(t_line *shell_repr, t_cursor *cursor)
 {
-	t_char	*curr_char;
 	t_char	*prev_char;
 
 	shell_repr = get_cursor_line(shell_repr, cursor);
-	curr_char = get_cursor_char(cursor, shell_repr->chars, &prev_char);
-	if (curr_char)
+	if (get_cursor_char(cursor, shell_repr->chars, &prev_char))
 		cursor->column++;
 	else if (shell_repr->next)
 	{
