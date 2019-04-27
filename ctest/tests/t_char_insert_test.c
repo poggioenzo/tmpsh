@@ -81,6 +81,16 @@ void	insert_string_test(void)
 	ASSERT_TCHARCMP(x_test, char_lst, reference_chars);
 	
 }
+/*
+** cursor_insert_first_line + cursor_insert_second_line +
+** cursor_insert_third_line
+**
+** Serie of test for cursor_insert.
+** Insert in the same way in 3 different line.
+**
+** /!\ cursor_insert function specificity: A cursor must never be set
+** with cursor->column = 0. /!\
+*/
 
 void	cursor_insert_first_line(void)
 {
@@ -93,34 +103,34 @@ void	cursor_insert_first_line(void)
 	t_cursor cursor;
 	t_line *reference_shell = NULL;
 
-	//Insert a char 'G' in the (0,0) coordo
-	cursor = (t_cursor){.row = 0, .column = 0};
+	//Insert a char 'G' in the (0,1) coordo
+	cursor = (t_cursor){.row = 0, .column = 1};
 	cursor_insert(result_shell, 'G', &cursor);
 	
 	//Create our comparaison shell and perform the test
-	reference_shell = create_ref_shell("Gline0\nline1\nline2");
+	reference_shell = create_ref_shell("lGine0\nline1\nline2");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 0);
-	ASSERT_INTCMP(x_test, cursor.column, 1);
+	ASSERT_INTCMP(x_test, cursor.column, 2);
 
 
 	//Insert a second char 'D' at the current cursor position (0,1)
 	cursor_insert(result_shell, 'D', &cursor);
 
 	//Create our comparaison shell and perform the test
-	reference_shell = create_ref_shell("GDline0\nline1\nline2");
+	reference_shell = create_ref_shell("lGDine0\nline1\nline2");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 0);
-	ASSERT_INTCMP(x_test, cursor.column, 2);
+	ASSERT_INTCMP(x_test, cursor.column, 3);
 
 	//Insert a char at the end of the line
 	cursor.column = char_lst_len(reference_shell->chars);
 	cursor_insert(result_shell, '9', &cursor);
 
 	//Check if the '9' is after the '0' of "GDline0".
-	reference_shell = create_ref_shell("GDline09\nline1\nline2");
+	reference_shell = create_ref_shell("lGDine09\nline1\nline2");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 0);
@@ -140,61 +150,39 @@ void	cursor_insert_second_line(void)
 	t_line *reference_shell = NULL;
 
 	//Insert a char 'G' in the (0,0) coordo
-	cursor = (t_cursor){.row = 1, .column = 0};
+	cursor = (t_cursor){.row = 1, .column = 1};
 	cursor_insert(result_shell, 'G', &cursor);
 	
 	//Create our comparaison shell and perform the test
-	reference_shell = create_ref_shell("line0\nGline1\nline2");
+	reference_shell = create_ref_shell("line0\nlGine1\nline2");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 1);
-	ASSERT_INTCMP(x_test, cursor.column, 1);
+	ASSERT_INTCMP(x_test, cursor.column, 2);
 
 
 	//Insert a second char 'D' at the current cursor position (0,1)
 	cursor_insert(result_shell, 'D', &cursor);
 
 	//Create our comparaison shell and perform the test
-	reference_shell = create_ref_shell("line0\nGDline1\nline2");
+	reference_shell = create_ref_shell("line0\nlGDine1\nline2");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 1);
-	ASSERT_INTCMP(x_test, cursor.column, 2);
+	ASSERT_INTCMP(x_test, cursor.column, 3);
 
 	//Insert a char at the end of the line
 	cursor.column = char_lst_len(reference_shell->next->chars);
 	cursor_insert(result_shell, '9', &cursor);
 
 	//Check if the '9' is after the '0' of "GDline0".
-	reference_shell = create_ref_shell("line0\nGDline19\nline2");
+	reference_shell = create_ref_shell("line0\nlGDine19\nline2");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 1);
 	int line_len = char_lst_len(reference_shell->next->chars);
 	ASSERT_INTCMP(x_test, cursor.column, line_len);
 }
-
-static void print_char_repr(int row, t_char *char_lst)
-{
-	while (char_lst)
-	{
-		ft_printf("%d : ", row);
-		ft_printf("(%d, '%c')->", char_lst->position, char_lst->letter);
-		char_lst = char_lst->next;
-	}
-	ft_printf("NULL\n");
-}
-
-static void	show_shell(t_line *shell_repr, char *message)
-{
-	ft_printf("%s :\n", message);
-	while (shell_repr)
-	{
-		print_char_repr(shell_repr->position, shell_repr->chars);
-		shell_repr = shell_repr->next;
-	}
-}
-
 
 void	cursor_insert_third_line(void)
 {
@@ -208,34 +196,33 @@ void	cursor_insert_third_line(void)
 	t_line *reference_shell = NULL;
 
 	//Insert a char 'G' in the (0,0) coordo
-	cursor = (t_cursor){.row = 2, .column = 0};
+	cursor = (t_cursor){.row = 2, .column = 1};
 	cursor_insert(result_shell, 'G', &cursor);
-	show_shell(result_shell, "RESULT : ");
 	
 	//Create our comparaison shell and perform the test
-	reference_shell = create_ref_shell("line0\nline1\nGline2");
+	reference_shell = create_ref_shell("line0\nline1\nlGine2");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 2);
-	ASSERT_INTCMP(x_test, cursor.column, 1);
+	ASSERT_INTCMP(x_test, cursor.column, 2);
 
 
 	//Insert a second char 'D' at the current cursor position (0,1)
 	cursor_insert(result_shell, 'D', &cursor);
 
 	//Create our comparaison shell and perform the test
-	reference_shell = create_ref_shell("line0\nline1\nGDline2");
+	reference_shell = create_ref_shell("line0\nline1\nlGDine2");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 2);
-	ASSERT_INTCMP(x_test, cursor.column, 2);
+	ASSERT_INTCMP(x_test, cursor.column, 3);
 
 	//Insert a char at the end of the line
 	cursor.column = char_lst_len(reference_shell->next->next->chars);
 	cursor_insert(result_shell, '9', &cursor);
 
 	//Check if the '9' is after the '0' of "GDline0".
-	reference_shell = create_ref_shell("line0\nline1\nGDline29");
+	reference_shell = create_ref_shell("line0\nline1\nlGDine29");
 	ASSERT_TLINECMP(x_test, result_shell, reference_shell);
 	//Check also if the pointer have incremented properly
 	ASSERT_INTCMP(x_test, cursor.row, 2);
