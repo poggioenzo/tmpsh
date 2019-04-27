@@ -54,4 +54,5 @@ void	insert_string_test(void);
 
 // Test for cursors dependent selection
 void	get_cursor_line_test(void);
+void	get_cursor_char_test(void);
 #endif

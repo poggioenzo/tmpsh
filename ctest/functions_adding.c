@@ -48,6 +48,7 @@ static void	fill_tests_functions(void)
 	ADD_TEST(insert_string_test);
 
 	ADD_TEST(get_cursor_line_test);
+	ADD_TEST(get_cursor_char_test);
 }
 
 /*

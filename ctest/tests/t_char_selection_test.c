@@ -9,16 +9,6 @@
 ** ! ALL SELECTION FUNCTIONS WITH A t_char LIST
 ** SHOULD ALWAYS BEEN USED WITH A t_char->lock PART SET TO TRUE !
 */
-static void	show_char(t_char *char_lst)
-{
-	while (char_lst)
-	{
-		ft_printf("(%d, '%c')->", char_lst->position, char_lst->letter);
-		char_lst = char_lst->next;
-	}
-	ft_printf("NULL\n");
-}
-
 
 /*
 ** get_last_char_test -> get_last_char
