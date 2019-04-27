@@ -3,6 +3,7 @@
 import utils.tokenizer as tk
 from utils.readgrammar import ShellGrammar
 import utils.strcontain as sc
+import utils.shift_reduce as sr
 global GRAMMAR
 GRAMMAR = ShellGrammar()
 
@@ -18,8 +19,16 @@ class Cmd(object):
 		if ends != []:
 			self.start -= 1
 		self.tags = tags[self.start: self.end]
-		self.syntax_ok = False
-		self.reduce_shift()
+		self.stack = sr.reduce_shift(self.tags, GRAMMAR)
+		self.incomplete = False
+		self.valid = False
+		self.error_near = -1
+		if self.stack == ['CMD']:
+			self.valid = True
+		else:
+			self.incomplete = sr.incomplete_key(stack, GRAMMAR)
+			self.error_near = -1 # find indice in tags of error
+		print(self.stack)
 
 	def get_end(self, tags):
 		i = self.start
@@ -39,38 +48,6 @@ class Cmd(object):
 		if i > len_tags:
 			i = len_tags
 		self.end = i
-
-	def reduce(self):
-		len_stack = len(self.stack)
-		i = 0
-		while i < len_stack:
-			key = ' '.join(self.stack[i-len_stack:])
-			if key in GRAMMAR.reverse:
-				self.stack[i-len_stack:] = self.stack[:i-len_stack - 1] + [GRAMMAR.reverse[key]]
-				self.reduce()
-				len_stack = len(self.stack)
-			i += 1
-		return (0)
-
-	def reduce_shift(self):
-		self.stack = []
-		i = 0
-		len_tags = len(self.tags)
-		copy = self.tags.copy()
-		while (i < len_tags):
-			tag = self.tags[i]
-			if tag == 'SPACES':
-				copy.pop(0)
-			elif self.reduce():
-				pass
-			elif copy != []: #shift
-				self.stack.append(copy.pop(0))
-			else:
-				break
-			i += 1
-		self.reduce()
-		print(self.stack)
-
 
 
 class ListCommands(object):
