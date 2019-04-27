@@ -113,10 +113,7 @@ void		previous_word(t_line *shell_repr, t_cursor *cursor)
 	word_cursor = (t_cursor){.row = -1, .column = -1};
 	store_prev_word(shell_repr, cursor, &word_cursor);
 	if (word_cursor.row != -1)
-	{
-		cursor->row = word_cursor.row;
-		cursor->column = word_cursor.column;
-	}
+		ft_memcpy(cursor, &word_cursor, sizeof(t_cursor));
 	else
 	{
 		cursor->row = 0;
