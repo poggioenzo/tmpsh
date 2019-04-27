@@ -78,6 +78,8 @@ static void			store_prev_word(t_line *shell_repr, t_cursor *curr_cursor,
 	int			in_word;
 
 	in_word = FALSE;
+	prev_cursor->row = 0;
+	prev_cursor->column = char_lock_len(shell_repr->chars);
 	while (shell_repr && shell_repr->position <= curr_cursor->row)
 	{
 		char_line = get_unlocked_char(shell_repr->chars);
@@ -112,11 +114,5 @@ void		previous_word(t_line *shell_repr, t_cursor *cursor)
 
 	word_cursor = (t_cursor){.row = -1, .column = -1};
 	store_prev_word(shell_repr, cursor, &word_cursor);
-	if (word_cursor.row != -1)
-		ft_memcpy(cursor, &word_cursor, sizeof(t_cursor));
-	else
-	{
-		cursor->row = 0;
-		cursor->column = char_lock_len(shell_repr->chars); 
-	}
+	ft_memcpy(cursor, &word_cursor, sizeof(t_cursor));
 }
