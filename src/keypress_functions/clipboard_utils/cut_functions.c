@@ -61,7 +61,7 @@ void		cut_next_word(t_line *shell_repr, t_cursor *cursor)
 	char	*cut;
 
 	shell_repr = get_cursor_line(shell_repr, cursor);
-	cursor_char = get_cursor_char_only(shell_repr->chars, cursor);
+	cursor_char = get_cursor_char(cursor, shell_repr->chars, NULL);
 	if (!cursor_char)
 		return ;
 	word_end = cursor_char;

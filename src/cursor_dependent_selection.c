@@ -28,25 +28,14 @@ t_char	*get_cursor_char(t_cursor *cursor, t_char *char_lst,\
 {
 	t_char	*cursor_char;
 
-	*prev_char = NULL;
+	if (prev_char)
+		*prev_char = NULL;
 	cursor_char = char_lst;
 	while (cursor_char && cursor_char->position != cursor->column)
 	{
-		*prev_char = cursor_char;
+		if (prev_char)
+			*prev_char = cursor_char;
 		cursor_char = cursor_char->next;
 	}
 	return (cursor_char);
-}
-
-/*
-** get_cursor_char_only:
-**
-** Allow us to find the t_char element where the cursor is positionned.
-*/
-
-t_char	*get_cursor_char_only(t_char *char_lst, t_cursor *cursor)
-{
-	while (char_lst && char_lst->position != cursor->column)
-		char_lst = char_lst->next;
-	return (char_lst);
 }

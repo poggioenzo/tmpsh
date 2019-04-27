@@ -80,3 +80,12 @@ void	get_cursor_char_test(void)
 	get_last_char(test_shell->chars, &last_char_reference);
 	ASSERT_PTRCMP(x_test, prev_char, last_char_reference); 
 }
+
+void	get_cursor_char_only_test(void)
+{
+	int		x_test = 0;
+
+	//Create our reference shell
+	t_line	*test_shell = create_ref_shell("line0\nline1\nline2\nline3");
+
+}

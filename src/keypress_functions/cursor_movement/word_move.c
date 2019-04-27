@@ -35,7 +35,7 @@ void		next_word(t_line *shell_repr, t_cursor *cursor)
 	t_line		*cursor_line;
 
 	cursor_line = get_cursor_line(shell_repr, cursor);
-	char_line = get_cursor_char_only(cursor_line->chars, cursor);
+	char_line = get_cursor_char(cursor, cursor_line->chars, NULL);
 	while (char_line && ft_isalnum(char_line->letter))
 		char_line = char_line->next;
 	while (cursor_line)
