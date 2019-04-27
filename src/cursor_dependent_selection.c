@@ -23,15 +23,19 @@ t_line		*get_cursor_line(t_line *shell_lines, t_cursor *cursor)
 ** Get also the previous element in the same time.
 */
 
-void	get_cursor_char(t_cursor *cursor, t_char **curr_char,\
+t_char	*get_cursor_char(t_cursor *cursor, t_char *char_lst,\
 		t_char **prev_char)
 {
+	t_char	*cursor_char;
+
 	*prev_char = NULL;
-	while (*curr_char && (*curr_char)->position != cursor->column)
+	cursor_char = char_lst;
+	while (cursor_char && cursor_char->position != cursor->column)
 	{
-		*prev_char = *curr_char;
-		*curr_char = (*curr_char)->next;
+		*prev_char = cursor_char;
+		cursor_char = cursor_char->next;
 	}
+	return (cursor_char);
 }
 
 /*

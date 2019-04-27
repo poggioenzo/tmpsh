@@ -11,12 +11,10 @@
 
 void		move_left(t_line *shell_repr, t_cursor *cursor)
 {
-	t_char	*curr_char;
 	t_char	*prev_char;
 
 	shell_repr = get_cursor_line(shell_repr, cursor);
-	curr_char = shell_repr->chars;
-	get_cursor_char(cursor, &curr_char, &prev_char);
+	get_cursor_char(cursor, shell_repr->chars, &prev_char);
 	if (prev_char && prev_char->lock == FALSE)
 		cursor->column--;
 }
@@ -34,8 +32,7 @@ void		move_right(t_line *shell_repr, t_cursor *cursor)
 	t_char	*prev_char;
 
 	shell_repr = get_cursor_line(shell_repr, cursor);
-	curr_char = shell_repr->chars;
-	get_cursor_char(cursor, &curr_char, &prev_char);
+	curr_char = get_cursor_char(cursor, shell_repr->chars, &prev_char);
 	if (curr_char)
 		cursor->column++;
 }

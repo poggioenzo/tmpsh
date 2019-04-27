@@ -11,13 +11,11 @@
 
 void		cursor_insert(t_line *shell_repr, char letter, t_cursor *cursor)
 {
-	t_char		*cursor_char;
 	t_char		*prev_char;
 	t_line		*cursor_line;
 
 	cursor_line = get_cursor_line(shell_repr, cursor);
-	cursor_char = cursor_line->chars;
-	get_cursor_char(cursor, &cursor_char, &prev_char);
+	get_cursor_char(cursor, cursor_line->chars, &prev_char);
 	insert_char(&prev_char, letter, FALSE);
 	cursor->column++;
 }
