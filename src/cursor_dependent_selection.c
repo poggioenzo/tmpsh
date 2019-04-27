@@ -15,6 +15,20 @@ t_line		*get_cursor_line(t_line *shell_lines, t_cursor *cursor)
 	return (shell_lines);
 }
 
+/*
+** get_prev_cursor_line:
+**
+** Get the t_line before the cursor row position
+*/
+
+t_line	*get_prev_cursor_line(t_cursor *cursor, t_line *shell_repr)
+{
+	if (cursor->row == 0)
+		return (NULL);
+	while (shell_repr->next->position != cursor->row)
+		shell_repr = shell_repr->next;
+	return (shell_repr);
+}
 
 /*
 ** get_cursor_char:

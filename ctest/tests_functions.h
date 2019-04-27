@@ -51,6 +51,9 @@ void	get_last_char_test(void);
 // Test of t_char insertion 
 void	insert_char_test(void);
 void	insert_string_test(void);
+void	cursor_insert_first_line(void);
+void	cursor_insert_second_line(void);
+void	cursor_insert_third_line(void);
 
 // Test for cursors dependent selection
 void	get_cursor_line_test(void);

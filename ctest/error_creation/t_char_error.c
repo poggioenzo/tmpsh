@@ -117,7 +117,7 @@ static void	_chars_list_representation(t_char *char_lst)
 	while (char_lst)
 	{
 		ft_printf("(%d, %c)->", char_lst->position, char_lst->letter);
-		char_lst->next;
+		char_lst = char_lst->next;
 	}
 	ft_printf("NULL\n");
 }
@@ -141,6 +141,7 @@ static void	_t_line_error_display(int nb_error, _t_line_type *errors)
 		ft_printf("---- Test %d ----\n", errors[index].test);
 		_single_line_representation(errors[index].result, "Result");
 		_single_line_representation(errors[index].reference, "Reference");
+		index++;
 	}
 
 }

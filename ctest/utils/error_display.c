@@ -41,4 +41,6 @@ void		error_display()
 	DISPLAY_FCT(_int_error2);
 	DISPLAY_FCT(_ptr_error2);
 	DISPLAY_FCT(t_char_error_fct);
+	DISPLAY_FCT(t_line_error_fct);
+	DISPLAY_FCT(_ptr_diff_error);	
 }
