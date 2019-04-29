@@ -28,8 +28,8 @@ def span(command, tokens, current):
 			break
 	j -= 1
 	if command[:j] in GRAMMAR.leaf_op:
-			tokens.append(command[:j])
-			i = j
+		tokens.append(command[:j])
+		i = j
 	else:
 		current.append(command[0])
 	return i
