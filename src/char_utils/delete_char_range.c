@@ -8,7 +8,7 @@
 ** delete_char_range:
 **
 ** Delete inside a t_char list a range of t_char element, starting from 'from',
-** going to 'to'.
+** going to 'to' include.
 ** Can return the string of the deleted pointer if expected.
 **
 ** return value:
