@@ -67,7 +67,7 @@ void		cut_next_word(t_line *shell_repr, t_cursor *cursor)
 	word_end = cursor_char;
 	while (word_end && ft_isspace(word_end->letter))
 		word_end = word_end->next;
-	while (word_end && word_end->next && !ft_isspace(word_end->letter))
+	while (word_end && word_end->next && !ft_isspace(word_end->next->letter))
 		word_end = word_end->next;
 	cut = delete_char_range(shell_repr->chars, cursor_char, word_end, TRUE);
 	adjust_cursor(shell_repr->chars, cursor);
@@ -107,6 +107,7 @@ void		cut_prev_word(t_line *shell_repr, t_cursor *cursor)
 			in_word = FALSE;
 		tmp_char = tmp_char->next;
 	}
+	tmp_char = get_cursor_char(cursor, shell_repr->chars, NULL);
 	cursor->column = last_word ? last_word->position + 1 : 0;
 	adjust_cursor(shell_repr->chars, cursor);
 	cut = delete_char_range(shell_repr->chars, last_word, tmp_char, TRUE);

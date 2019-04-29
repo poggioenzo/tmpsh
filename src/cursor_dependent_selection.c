@@ -1,4 +1,5 @@
 #include "cursor_dependent_selection.h"
+#include "t_line_utils.h"
 #include "char_utils.h"
 #include "libft.h"
 /*
@@ -15,6 +16,12 @@ static int		is_cursor_pos(t_line *shell_repr, t_char *char_lst, \
 			char_lst->position == cursor->column);
 }
 
+/*
+** research_prev_info:
+**
+** Parse the entire shell representation from the first char.
+** Whenever a word start is found, store thoe position.
+*/
 static void	research_prev_info(t_line *shell_repr, t_cursor *cursor, \
 		t_cursor *word_cursor, t_char **search_char)
 {
@@ -23,7 +30,7 @@ static void	research_prev_info(t_line *shell_repr, t_cursor *cursor, \
 	in_word = FALSE;
 	word_cursor->row = 0;
 	word_cursor->column = char_lock_len(shell_repr->chars);
-	while (shell_repr && shell_repr->position <= curr_cursor->row)
+	while (shell_repr && shell_repr->position <= cursor->row)
 	{
 		*search_char = get_unlocked_char(shell_repr->chars);
 		while (*search_char && !is_cursor_pos(shell_repr, *search_char, cursor))
@@ -34,14 +41,21 @@ static void	research_prev_info(t_line *shell_repr, t_cursor *cursor, \
 				word_cursor->row = shell_repr->position;
 				word_cursor->column = (*search_char)->position;
 			}
-			else if (ft_isspace((*search_char)->letter) && in_word = TRUE)
+			else if (ft_isspace((*search_char)->letter) && in_word)
 				in_word = FALSE;
 			*search_char = (*search_char)->next;
 		}
 		in_word = FALSE;
-		shell_repr->next;
+		shell_repr = shell_repr->next;
 	}
 }
+
+/*
+** get_last_word:
+**
+** Get the position of the word preceding the cursor.
+** Store this information in a t_cursor and/or a t_char element if given.
+*/
 
 void	get_last_word(t_line *shell_repr, t_cursor *cursor, \
 		t_cursor *word_cursor, t_char **word_char)
@@ -54,7 +68,10 @@ void	get_last_word(t_line *shell_repr, t_cursor *cursor, \
 	if (word_cursor)
 		ft_memcpy(word_cursor, &word_save, sizeof(t_cursor));
 	if (word_char)
-		*word_char = search_char;
+	{
+		shell_repr = get_cursor_line(shell_repr, word_cursor);
+		*word_char = get_cursor_char(word_cursor, shell_repr->chars, NULL);
+	}
 }
 
 /*
@@ -70,6 +87,12 @@ static void			set_last_pos(t_line *shell_repr, t_cursor *cursor)
 	cursor->column = char_lst_len(shell_repr->chars);
 }
 
+/*
+** skip_empty_char:
+**
+** Skip all carachters which are not newline.
+*/
+
 static void			skip_empty_char(t_line **cursor_line, t_char **search_char)
 {
 	while (*cursor_line)
@@ -81,7 +104,15 @@ static void			skip_empty_char(t_line **cursor_line, t_char **search_char)
 		*cursor_line = (*cursor_line)->next;
 		if (*cursor_line)
 			*search_char = get_unlocked_char((*cursor_line)->chars);
+	}
 }
+
+/*
+** get_next_word:
+**
+** Get the position of the word following the cursor.
+** Store this information in a t_cursor and/or a t_char element if given.
+*/
 
 void		get_next_word(t_line *shell_repr, t_cursor *cursor, \
 		t_cursor *word_cursor, t_char **word_char)
