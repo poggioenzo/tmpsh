@@ -1,0 +1,11 @@
+wishlist:
+	- slice_pylist
+	- join_pylist
+	- delete_after_pylist
+	- key_in_pylist
+	- key_in_hashmap
+	- reverse_hashmap
+	- assertListEqual_pylist
+	- strcontain_upper
+	- strcontain_alphanum
+	- strcontain_spaces
