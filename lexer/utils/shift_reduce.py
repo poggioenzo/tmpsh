@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-def incomplete_key(stack, grammar):
-	# TODO
-	return False
-
 def keyinstack(stack, grammar):
 	len_stack = len(stack)
 	i = 0
@@ -11,6 +7,7 @@ def keyinstack(stack, grammar):
 		key = ' '.join(stack[i:])
 		if key in grammar.reverse:
 			return i
+		del key
 		i += 1
 	return -1
 
