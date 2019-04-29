@@ -19,7 +19,7 @@ class Cmd(object):
 		if ends != []:
 			self.start -= 1
 		self.tags = tags[self.start: self.end]
-		self.stack = sr.reduce_shift(self.tags, GRAMMAR)
+		self.reduce_shift()
 		self.incomplete = False
 		self.valid = False
 		self.error_after = ''
@@ -44,6 +44,26 @@ class Cmd(object):
 				return
 			i += 1
 		self.incomplete = True
+
+
+	def reduce_shift(self):
+		stack = []
+		i = 0
+		len_tags = len(self.tags)
+		while (i < len_tags + 1):
+			instack = sr.keyinstack(stack, GRAMMAR)
+			if instack > -1:
+				stack = sr.reduce_all(stack, instack, GRAMMAR)
+			elif i < len_tags :
+				if self.tags[i] == 'SPACES':
+					pass
+				else:
+					stack.append(self.tags[i])
+				i += 1
+			else:
+				break
+		self.stack = stack
+
 
 
 	def get_end(self, tags):
