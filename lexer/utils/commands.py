@@ -14,7 +14,7 @@ class Cmd(object):
 		self.ends = GRAMMAR.grammar['TERMINATOR']
 		if ends != []:
 			self.ends = ends
-		self.sub = [] # list de cmd
+		self.sub = []
 		self.get_end(tags)
 		if ends != []:
 			self.start -= 1
@@ -22,13 +22,29 @@ class Cmd(object):
 		self.stack = sr.reduce_shift(self.tags, GRAMMAR)
 		self.incomplete = False
 		self.valid = False
-		self.error_near = -1
+		self.error_after = ''
 		if self.stack == ['CMD']:
 			self.valid = True
 		else:
-			self.incomplete = sr.incomplete_key(stack, GRAMMAR)
-			self.error_near = -1 # find indice in tags of error
+			self.is_incomplete_key()
 		print(self.stack)
+		print('valid:', self.valid,'| incomplete:', self.incomplete)
+		if self.error_after != '':
+			print('error after:', self.error_after )
+
+	def is_incomplete_key(self):
+		i = 0
+		len_stack = len(self.stack)
+		stack = self.stack
+		while i < len_stack:
+			if stack[i] in GRAMMAR.opening_tags:
+				pass
+			elif not tk.ops_begin_with(' '.join(stack[i:]), GRAMMAR.reverse):
+				self.error_after = GRAMMAR.grammar[stack[i]]
+				return
+			i += 1
+		self.incomplete = True
+
 
 	def get_end(self, tags):
 		i = self.start
