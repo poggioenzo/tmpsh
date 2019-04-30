@@ -4,6 +4,7 @@ import utils.tokenizer as tk
 from utils.readgrammar import ShellGrammar
 import utils.strcontain as sc
 import utils.shift_reduce as sr
+
 global GRAMMAR
 GRAMMAR = ShellGrammar()
 
@@ -11,21 +12,19 @@ GRAMMAR = ShellGrammar()
 # OPTIMIZE: if error stop lexing return
 
 
-class Cmd(object):
+class Cmd():
     # TODO Facto: don't repeat shift_reduce of sub in upper branch:
     # use sub[i].start and sub[i].stop to replace by sub[i].stack
     def __init__(self, start, tags, ends=[]):
         self.start = start
         self.end = start
-        self.ends = GRAMMAR.grammar['TERMINATOR']
-        if ends != []:
-            self.ends = ends
+        if ends == []:
+            ends = GRAMMAR.grammar['TERMINATOR']
         self.sub = []
-        self.get_end(tags)
-        if ends != []:
+        self.get_end(tags, ends)
+        if ends == []:
             self.start -= 1
         self.tags = tags[self.start: self.end]
-
         self.reduce_shift()
         self.incomplete = False
         self.valid = False
@@ -33,7 +32,8 @@ class Cmd(object):
         if self.stack == ['CMD']:
             self.valid = True
         else:
-            self.is_incomplete_key()
+            pass
+            # self.is_incomplete_key()
         print(self.stack)
         print('valid:', self.valid, '| incomplete:', self.incomplete)
         if self.error_after != '':
@@ -56,7 +56,7 @@ class Cmd(object):
         stack = []
         i = 0
         len_tags = len(self.tags)
-        while (i < len_tags + 1):
+        while i < len_tags + 1:
             instack = sr.keyinstack(stack, GRAMMAR)
             if instack > -1:
                 stack = sr.reduce_all(stack, instack, GRAMMAR)
@@ -64,18 +64,19 @@ class Cmd(object):
                 if self.tags[i] == 'SPACES':
                     pass
                 else:
+                    # check validity
                     stack.append(self.tags[i])
                 i += 1
             else:
                 break
         self.stack = stack
 
-    def get_end(self, tags):
+    def get_end(self, tags, ends):
         i = self.start
         len_tags = len(tags)
         while i < len_tags:
             curr_tag = tags[i]
-            if curr_tag in self.ends:
+            if curr_tag in ends:
                 break
             elif curr_tag in GRAMMAR.opening_tags:
                 i += 1
