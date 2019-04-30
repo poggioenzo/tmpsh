@@ -12,7 +12,8 @@ GRAMMAR = ShellGrammar()
 
 
 class Cmd(object):
-    # TODO Facto: don't repeat shift_reduce of sub in upper branch: use sub[i].start and sub[i].stop to replace by sub[i].stack
+    # TODO Facto: don't repeat shift_reduce of sub in upper branch:
+    # use sub[i].start and sub[i].stop to replace by sub[i].stack
     def __init__(self, start, tags, ends=[]):
         self.start = start
         self.end = start

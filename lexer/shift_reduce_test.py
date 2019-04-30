@@ -106,13 +106,15 @@ class testShiftReduce(unittest.TestCase):
         self.assertListEqual(sr.reduce_shift(entry, GRAMMAR), exepted_output)
 
     def testShiftReduce020(self):
-        entry = '          B   D   B   E   B B C C C  E   B   D E   E   A A B A A B D E C E E B  D    C    D D  B B  E D D C'.split()
-        exepted_output = ['A', 'D', 'A', 'D', 'A',       'D',
-                          'A', 'C', 'D', 'A', 'D', 'C', 'C', 'A', 'C', 'D', 'C']
+        entry = ('         B   D   B   E   B B C C C  E   B   D E   E  A A B A'
+                 + ' A B D E C E E B  D    C    D D  B B  E D D C').split()
+        exepted_output = ['A', 'D', 'A', 'D', 'A',       'D', 'A', 'C', 'D',
+                          'A', 'D', 'C', 'C', 'A', 'C', 'D', 'C']
         self.assertListEqual(sr.reduce_shift(entry, GRAMMAR), exepted_output)
 
     def testShiftReduce021(self):
-        entry = 'SPACES D SPACES E SPACES SPACES SPACES E SPACES D SPACES A D SPACES E SPACES SPACES SPACES'.split()
+        entry = ('SPACES D SPACES E SPACES SPACES SPACES E SPACES D SPACES A D'
+                 + ' SPACES E SPACES SPACES SPACES').split()
         exepted_output = ['C', 'C', 'A', 'C']
         self.assertListEqual(sr.reduce_shift(entry, GRAMMAR), exepted_output)
 
@@ -122,9 +124,11 @@ class testShiftReduce(unittest.TestCase):
         self.assertListEqual(sr.reduce_shift(entry, GRAMMAR), exepted_output)
 
     def testShiftReduce023(self):
-        entry = '          C    C    A A  C    D E  B    E D  E    B    C    A    C    C    A   C    A    C    E     C    A    C    B'.split()
+        entry = ('C C A A C D E  B    E D  E    B    C   A'
+                 + ' C C A C A  C    E     C    A    C    B').split()
         exepted_output = ['C', 'C', 'A', 'C', 'C', 'A', 'C', 'D', 'A', 'C',
-                          'A', 'C', 'C', 'A', 'C', 'A', 'C', 'D', 'C', 'A', 'C', 'A']
+                          'A', 'C', 'C', 'A', 'C', 'A', 'C', 'D', 'C', 'A',
+                                                   'C', 'A']
         self.assertListEqual(sr.reduce_shift(entry, GRAMMAR), exepted_output)
 
 
@@ -136,4 +140,4 @@ if __name__ == '__main__':
     else:
         sys.argv = [sys.argv[0]]
         unittest.main()
-        #print('usage: ./shift_reduce_test.py "TAG [TAG [...]]"')
+        # print('usage: ./shift_reduce_test.py "TAG [TAG [...]]"')
