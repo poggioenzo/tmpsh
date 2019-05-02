@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 
 import sys
+import unittest
 from utils.readgrammar import Grammar
 import utils.shift_reduce as sr
-import unittest
+
 
 GRAMMAR = Grammar("grammar_test.txt")
 
 
-class testShiftReduce(unittest.TestCase):
+class testShiftReduce(unittest.TestCase, object):
 
     def testShiftReduce001(self):
         entry = ''.split()
@@ -128,15 +129,15 @@ class testShiftReduce(unittest.TestCase):
                  + ' C C A C A  C    E     C    A    C    B').split()
         exepted_output = ['C', 'C', 'A', 'C', 'C', 'A', 'C', 'D', 'A', 'C',
                           'A', 'C', 'C', 'A', 'C', 'A', 'C', 'D', 'C', 'A',
-                                                   'C', 'A']
+                          'C', 'A']
         self.assertListEqual(sr.reduce_shift(entry, GRAMMAR), exepted_output)
 
 
 if __name__ == '__main__':
     if len(sys.argv) == 2:
         GRAMMAR = Grammar("grammar_test.txt")
-        stack = sr.reduce_shift(sys.argv[1].upper().split(), GRAMMAR)
-        print(stack)
+        STACK = sr.reduce_shift(sys.argv[1].upper().split(), GRAMMAR)
+        print(STACK)
     else:
         sys.argv = [sys.argv[0]]
         unittest.main()
