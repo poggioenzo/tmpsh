@@ -21,6 +21,7 @@ class Cmd():
         self.valid = True
         self.tags = []
         self.sub = []
+        self.stack = []
         self.error_near = ''
 
         if ends != []:
@@ -102,6 +103,8 @@ class ListCommands():
         self.get_tree_commands()
         print('################## ListCommands ######################\nvalid:',
               self.valid, '| incomplete:', self.incomplete)
+        if self.error != '':
+            print('tmpsh: parse error near `{}\''.format(self.error))
 
     def get_tags(self):
         tags = []
@@ -123,7 +126,7 @@ class ListCommands():
             cmd = Cmd(i, tags, [])
             if not cmd.valid:
                 self.valid = False
-                self.error = cmd.error_near
+                self.error = GRAMMAR.grammar[cmd.error_near][0]
                 break
             if cmd.incomplete:
                 self.incomplete = True
