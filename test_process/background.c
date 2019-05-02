@@ -30,7 +30,7 @@ int		main(int argc, char **argv, char **environ)
 	if (pid == 0)
 	{
 		setpgid(0, 0);
-		if (execve("/bin/echo", argv_prog , NULL) == -1)
+		if (execve("/usr/bin/top", argv_prog , environ) == -1)
 			perror("execve");
 	}
 	else
