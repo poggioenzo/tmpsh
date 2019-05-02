@@ -1,5 +1,18 @@
 #!/usr/bin/env python3
 
+import utils.tokenizer as tk
+
+
+def revkeyinstack(stack, grammar):
+    len_stack = len(stack) - 1
+    while len_stack > -1:
+        key = ' '.join(stack[len_stack:])
+        if tk.ops_begin_with(key, grammar.reverse):
+            return True
+        del key
+        len_stack -= 1
+    return False
+
 
 def keyinstack(stack, grammar):
     len_stack = len(stack)
