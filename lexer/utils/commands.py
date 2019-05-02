@@ -11,71 +11,69 @@ GRAMMAR = ShellGrammar()
 # OPTIMIZE: if error stop lexing return
 
 
-class Cmd(object):
+class Cmd():
     # TODO Facto: don't repeat shift_reduce of sub in upper branch:
     # use sub[i].start and sub[i].stop to replace by sub[i].stack
-    def __init__(self, start, tags, ends=[]):
+    def __init__(self, start, tags, ends):
         self.start = start
         self.end = start
-        self.ends = GRAMMAR.grammar['TERMINATOR']
-        if ends != []:
-            self.ends = ends
-        self.sub = []
-        self.get_end(tags)
-        if ends != []:
-            self.start -= 1
-        self.tags = tags[self.start: self.end]
-
-        self.reduce_shift()
         self.incomplete = False
-        self.valid = False
-        self.error_after = ''
-        if self.stack == ['CMD']:
-            self.valid = True
-        else:
-            self.is_incomplete_key()
-        print(self.stack)
-        print('valid:', self.valid, '| incomplete:', self.incomplete)
-        if self.error_after != '':
-            print('error after:', self.error_after)
+        self.valid = True
+        self.tags = []
+        self.sub = []
+        self.error_near = ''
 
-    # def is_incomplete_key(self):
-    #     i = 0
-    #     len_stack = len(self.stack)
-    #     stack = self.stack
-    #     while i < len_stack:
-    #         if stack[i] in GRAMMAR.opening_tags:
-    #             pass
-    #         elif not tk.ops_begin_with(' '.join(stack[i:]), GRAMMAR.reverse):
-    #             self.error_after = GRAMMAR.grammar[stack[i]]
-    #             return
-    #         i += 1
-    #     self.incomplete = True
+        if ends != []:
+            self.get_end(tags, ends)
+            self.start -= 1
+        else:
+            self.get_end(tags, GRAMMAR.grammar['TERMINATOR'])
+        self.tags = tags[self.start: self.end]
+        self.is_valid()
+        print('valid:', self.valid, '| incomplete:', self.incomplete)
+        if self.error_near != '':
+            print('error after:', self.error_near)
+
+    def is_valid(self):
+        for subcmd in self.sub:
+            if not subcmd.valid:
+                self.valid = False
+                self.error_near = subcmd.error_near
+            if subcmd.incomplete:
+                self.incomplete = True
+        if self.valid:
+            self.reduce_shift()
 
     def reduce_shift(self):
         stack = []
         i = 0
         len_tags = len(self.tags)
-        while (i < len_tags + 1):
+        while i < len_tags + 1:
             instack = sr.keyinstack(stack, GRAMMAR)
             if instack > -1:
                 stack = sr.reduce_all(stack, instack, GRAMMAR)
-            elif i < len_tags:
-                if self.tags[i] == 'SPACES':
-                    pass
-                else:
-                    stack.append(self.tags[i])
-                i += 1
             else:
-                break
-        self.stack = stack
+                if i < len_tags and self.tags[i] == 'SPACES':
+                    pass
+                elif stack == [] or sr.revkeyinstack(stack, GRAMMAR):
+                    if i < len_tags:
+                        stack.append(self.tags[i])
+                else:
+                    self.valid = False
+                    break
+                i += 1
+        if stack != ['CMD'] and self.valid:
+            self.incomplete = True
+        if not self.valid:
+            self.error_near = stack[-1]
+        print(stack)
 
-    def get_end(self, tags):
+    def get_end(self, tags, ends):
         i = self.start
         len_tags = len(tags)
         while i < len_tags:
             curr_tag = tags[i]
-            if curr_tag in self.ends:
+            if curr_tag in ends:
                 break
             elif curr_tag in GRAMMAR.opening_tags:
                 i += 1
@@ -90,14 +88,20 @@ class Cmd(object):
         self.end = i
 
 
-class ListCommands(object):
+class ListCommands():
     def __init__(self, term_inputs):
         self.term_inputs = term_inputs
         self.tokens = []
+        self.tree_commands = []
+        self.error = ''
+        self.valid = True
+        self.incomplete = False
+
         tk.tokenize(term_inputs, self.tokens)
         self.get_tags()
         self.get_tree_commands()
-        self.error = ''
+        print('################## ListCommands ######################\nvalid:',
+              self.valid, '| incomplete:', self.incomplete)
 
     def get_tags(self):
         tags = []
@@ -115,8 +119,14 @@ class ListCommands(object):
         tree_commands = []
         i = 0
         len_tags = len(tags)
-        while i < len_tags:
-            cmd = Cmd(i, tags)
+        while i < len_tags and self.valid:
+            cmd = Cmd(i, tags, [])
+            if not cmd.valid:
+                self.valid = False
+                self.error = cmd.error_near
+                break
+            if cmd.incomplete:
+                self.incomplete = True
             i = cmd.end
             tree_commands.append(cmd)
         self.tree_commands = tree_commands
