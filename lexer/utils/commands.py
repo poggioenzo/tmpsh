@@ -8,12 +8,7 @@ global GRAMMAR
 GRAMMAR = ShellGrammar()
 
 
-# OPTIMIZE: if error stop lexing return
-
-
 class Cmd():
-    # TODO Facto: don't repeat shift_reduce of sub in upper branch:
-    # use sub[i].start and sub[i].stop to replace by sub[i].stack
     def __init__(self, start, tags, ends):
         self.start = start
         self.end = start
@@ -22,7 +17,7 @@ class Cmd():
         self.tags = []
         self.sub = []
         self.stack = []
-        self.error_near = ''
+        self.error_near = -1
 
         if ends != []:
             self.get_end(tags, ends)
@@ -32,8 +27,8 @@ class Cmd():
         self.tags = tags[self.start: self.end]
         self.is_valid()
         print('valid:', self.valid, '| incomplete:', self.incomplete)
-        if self.error_near != '':
-            print('error after:', self.error_near)
+        if self.error_near != -1:
+            print('error near:', self.error_near)
 
     def is_valid(self):
         for subcmd in self.sub:
@@ -49,7 +44,7 @@ class Cmd():
         stack = []
         i = 0
         len_tags = len(self.tags)
-        while i < len_tags + 1:
+        while i <= len_tags:
             instack = sr.keyinstack(stack, GRAMMAR)
             if instack > -1:
                 stack = sr.reduce_all(stack, instack, GRAMMAR)
@@ -61,12 +56,12 @@ class Cmd():
                         stack.append(self.tags[i])
                 else:
                     self.valid = False
+                    self.error_near = i - 1
                     break
                 i += 1
-        if stack != ['CMD'] and self.valid:
+        if self.valid and stack != ['CMD']:
             self.incomplete = True
-        if not self.valid:
-            self.error_near = stack[-1]
+        self.stack = stack
         print(stack)
 
     def get_end(self, tags, ends):
@@ -94,17 +89,23 @@ class ListCommands():
         self.term_inputs = term_inputs
         self.tokens = []
         self.tree_commands = []
+        self.to_complete = []
         self.error = ''
         self.valid = True
         self.incomplete = False
 
+
         tk.tokenize(term_inputs, self.tokens)
         self.get_tags()
         self.get_tree_commands()
-        print('################## ListCommands ######################\nvalid:',
-              self.valid, '| incomplete:', self.incomplete)
+        print('#################### ListCommands ####################')
         if self.error != '':
             print('tmpsh: parse error near `{}\''.format(self.error))
+        if self.incomplete or term_inputs[-1] == '\\':
+            self.incomplete = True
+            self.to_complete.append('>')
+            print('{}'.format(' '.join(self.to_complete).lower()))
+        print('Resume:\nvalid:', self.valid, '| incomplete:', self.incomplete)
 
     def get_tags(self):
         tags = []
@@ -117,6 +118,24 @@ class ListCommands():
                 tags.append('STMT')
         self.tags = tags
 
+    def get_error(self, ind_error):
+        len_tokens = len(self.tokens) - 1
+        while ind_error > len_tokens:
+            ind_error -= 1
+        while ind_error > 0:
+            if self.tags[ind_error] != 'SPACES':
+                self.error = self.tokens[ind_error]
+                break
+            ind_error -= 1
+
+    def get_to_complete(self, stack):
+        i = 0
+        len_stack = len(stack)
+        while i < len_stack:
+            if stack[i] != 'CMD':
+                self.to_complete.append(stack[i])
+            i += 1
+
     def get_tree_commands(self):
         tags = self.tags
         tree_commands = []
@@ -126,10 +145,12 @@ class ListCommands():
             cmd = Cmd(i, tags, [])
             if not cmd.valid:
                 self.valid = False
-                self.error = GRAMMAR.grammar[cmd.error_near][0]
+                self.get_error(i + cmd.error_near)
                 break
             if cmd.incomplete:
                 self.incomplete = True
+                self.get_to_complete(cmd.stack)
+                break
             i = cmd.end
             tree_commands.append(cmd)
         self.tree_commands = tree_commands
