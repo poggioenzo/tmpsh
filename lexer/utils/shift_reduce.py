@@ -41,7 +41,7 @@ def reduce_shift(tags, grammar):
     stack = []
     i = 0
     len_tags = len(tags)
-    while (i < len_tags):
+    while i < len_tags:
         instack = keyinstack(stack, grammar)
         if instack > -1:
             stack = reduce_all(stack, instack, grammar)
