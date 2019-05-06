@@ -12,6 +12,51 @@ class testLexIncomplete(unittest.TestCase):
         self.assertTrue(listc.incomplete)
         self.assertListEqual(['CMDAND', '>'], listc.to_complete)
 
+    def testLexIncompleter002(self):
+        term_inputs = '$( cmd ) &&  '
+        listc = ListCommands(term_inputs)
+        self.assertTrue(listc.valid)
+        self.assertTrue(listc.incomplete)
+        self.assertListEqual(['CMDAND', '>'], listc.to_complete)
+
+    def testLexIncompleter003(self):
+        term_inputs = '$( cmd  &&   '
+        listc = ListCommands(term_inputs)
+        self.assertTrue(listc.valid)
+        self.assertTrue(listc.incomplete)
+        self.assertListEqual(['CMDSUBST1', 'CMDAND', '>'], listc.to_complete)
+
+    def testLexIncompleter004(self):
+        term_inputs = '"'
+        listc = ListCommands(term_inputs)
+        self.assertTrue(listc.valid)
+        self.assertTrue(listc.incomplete)
+        self.assertListEqual(['DQUOTES', '>'], listc.to_complete)
+
+    def testLexIncompleter005(self):
+        term_inputs = '" ""'
+        listc = ListCommands(term_inputs)
+        self.assertTrue(listc.valid)
+        self.assertTrue(listc.incomplete)
+        self.assertListEqual(['DQUOTES', '>'], listc.to_complete)
+
+
+    def testLexIncompleter006(self):
+        term_inputs = '" \\"""'
+        listc = ListCommands(term_inputs)
+        self.assertTrue(listc.valid)
+        self.assertTrue(listc.incomplete)
+        self.assertListEqual(['DQUOTES', '>'], listc.to_complete)
+
+
+    def testLexIncompleter007(self):
+        term_inputs = '\''
+        listc = ListCommands(term_inputs)
+        self.assertTrue(listc.valid)
+        self.assertTrue(listc.incomplete)
+        self.assertListEqual(['QUOTE', '>'], listc.to_complete)
+
+
 
 if __name__ == '__main__':
     unittest.main()
