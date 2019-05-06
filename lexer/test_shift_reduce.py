@@ -109,7 +109,7 @@ class testShiftReduce(unittest.TestCase):
     def testShiftReduce020(self):
         entry = ('         B   D   B   E   B B C C C  E   B   D E   E  A A B A'
                  + ' A B D E C E E B  D    C    D D  B B  E D D C').split()
-        exepted_output = ['A', 'D', 'A', 'D', 'A',       'D', 'A', 'C', 'D',
+        exepted_output = ['A', 'D', 'A', 'D', 'A', 'D', 'A', 'C', 'D',
                           'A', 'D', 'C', 'C', 'A', 'C', 'D', 'C']
         self.assertListEqual(sr.reduce_shift(entry, GRAMMAR), exepted_output)
 
