@@ -94,7 +94,6 @@ class ListCommands():
         self.valid = True
         self.incomplete = False
 
-
         tk.tokenize(term_inputs, self.tokens)
         self.get_tags()
         self.get_tree_commands()
