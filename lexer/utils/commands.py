@@ -137,10 +137,10 @@ class ListCommands():
         self.tags = tags
 
     def get_error(self, ind_error):
-        len_tokens = len(self.tokens) - 1
+        len_tokens = len(self.tokens)
         while ind_error > len_tokens:
             ind_error -= 1
-        while ind_error > 0:
+        while ind_error >= 0:
             if self.tags[ind_error] != 'SPACES':
                 self.error = self.tokens[ind_error]
                 break
