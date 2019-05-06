@@ -8,6 +8,10 @@ global GRAMMAR
 GRAMMAR = ShellGrammar()
 
 
+def split_shift(string):
+    return '\n'.join(['\t{}'.format(x) for x in string.split('\n')])[:-1]
+
+
 class Cmd():
     def __init__(self, start, tags, ends):
         self.start = start
@@ -26,9 +30,6 @@ class Cmd():
             self.get_end(tags, GRAMMAR.grammar['TERMINATOR'])
         self.tags = tags[self.start: self.end]
         self.is_valid()
-        print('valid:', self.valid, '| incomplete:', self.incomplete)
-        if self.error_near != -1:
-            print('error near:', self.error_near)
 
     def is_valid(self):
         for subcmd in self.sub:
@@ -62,7 +63,6 @@ class Cmd():
         if self.valid and stack != ['CMD']:
             self.incomplete = True
         self.stack = stack
-        print(stack)
 
     def get_end(self, tags, ends):
         i = self.start
@@ -83,6 +83,15 @@ class Cmd():
             i = len_tags
         self.end = i
 
+    def __str__(self):
+        str0 = ''
+        str0 += 'Valid:{}, Incomplete:{}\n'.format(self.valid, self.incomplete)
+        str0 += 'Begin:{}, End:{}\n'.format(self.start, self.end)
+        str0 += 'Stack:{}\n'.format(self.stack)
+        if self.sub != []:
+            for subcmd in self.sub:
+                str0 += split_shift(subcmd.__str__())
+        return str0
 
 class ListCommands():
     def __init__(self, term_inputs):
@@ -97,14 +106,24 @@ class ListCommands():
         tk.tokenize(term_inputs, self.tokens)
         self.get_tags()
         self.get_tree_commands()
-        print('#################### ListCommands ####################')
-        if self.error != '':
-            print('tmpsh: parse error near `{}\''.format(self.error))
-        if self.incomplete or term_inputs[-1] == '\\':
+        if self.incomplete or (
+                term_inputs is not '' and term_inputs[-1] == '\\'):
             self.incomplete = True
             self.to_complete.append('>')
-            print('{}'.format(' '.join(self.to_complete).lower()))
-        print('Resume:\nvalid:', self.valid, '| incomplete:', self.incomplete)
+
+    def __str__(self):
+        str0 = ''
+        str0 += 'Tokens:{}\n'.format(self.tokens)
+        str0 += 'Tags:{}\n'.format(self.tags)
+        for cmd in self.tree_commands:
+            str0 += split_shift(cmd.__str__())
+        if not self.valid:
+            str0 += 'Error: {}\n'.format(self.error)
+        elif self.incomplete:
+            str0 += 'To complete: {}\n'.format(self.to_complete)
+        str0 += '->Valid:{}, Incomplete:{}<-'.format(self.valid, self.incomplete)
+        return str0
+
 
     def get_tags(self):
         tags = []
