@@ -9,7 +9,7 @@ import utils.shift_reduce as sr
 GRAMMAR = Grammar("grammar_test.txt")
 
 
-class testShiftReduce(unittest.TestCase, object):
+class testShiftReduce(unittest.TestCase):
 
     def testShiftReduce001(self):
         entry = ''.split()
