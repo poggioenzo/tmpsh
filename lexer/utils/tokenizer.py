@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
-from utils.readgrammar import ShellGrammar
-global GRAMMAR
-GRAMMAR = ShellGrammar()
-
+import utils.global_var as gv
 
 def ops_begin_with(pattern, ops):
     i = len(pattern)
@@ -24,13 +21,13 @@ def span(command, tokens, current):
     j = 1
     i = 1
     length_cmd = len(command)
-    while j <= GRAMMAR.maxlen_leaf_op and j <= length_cmd:
-        if ops_begin_with(command[:j], GRAMMAR.leaf_op):
+    while j <= gv.GRAMMAR.maxlen_leaf_op and j <= length_cmd:
+        if ops_begin_with(command[:j], gv.GRAMMAR.leaf_op):
             j += 1
         else:
             break
     j -= 1
-    if command[:j] in GRAMMAR.leaf_op:
+    if command[:j] in gv.GRAMMAR.leaf_op:
         tokens.append(command[:j])
         i = j
     else:
@@ -41,7 +38,7 @@ def span(command, tokens, current):
 def span_space(command, tokens):
     i = 0
     length_cmd = len(command)
-    while (i < length_cmd and command[i] in GRAMMAR.spaces):
+    while (i < length_cmd and command[i] in gv.GRAMMAR.spaces):
         i += 1
     tokens.append(command[:i])
     return i
@@ -52,20 +49,20 @@ def tokenize(command, tokens):
     current = ""
     i = 0
     while i < length_cmd:
-        if ops_begin_with(command[i], GRAMMAR.leaf_op):
+        if ops_begin_with(command[i], gv.GRAMMAR.leaf_op):
             current = add_token(current, tokens)
             tmp_current = []
             i += span(command[i:],  tokens, tmp_current)
             if len(tmp_current) == 1:
                 current += tmp_current[0]
-        elif command[i] == GRAMMAR.escape:
+        elif command[i] == gv.GRAMMAR.escape:
             i += 1
             if i < length_cmd:
-                current += GRAMMAR.escape + command[i]
+                current += gv.GRAMMAR.escape + command[i]
             else:
-                current += GRAMMAR.escape
+                current += gv.GRAMMAR.escape
             i += 1
-        elif command[i] in GRAMMAR.spaces:
+        elif command[i] in gv.GRAMMAR.spaces:
             current = add_token(current, tokens)
             i += span_space(command[i:], tokens)
         else:

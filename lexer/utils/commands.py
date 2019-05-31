@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
+import utils.global_var as gv
 import utils.tokenizer as tk
-from utils.readgrammar import ShellGrammar
 import utils.strcontain as sc
 import utils.shift_reduce as sr
-global GRAMMAR
-GRAMMAR = ShellGrammar()
 
 
 def split_shift(string):
@@ -27,7 +25,7 @@ class Cmd():
             self.get_end(tags, ends)
             self.start -= 1
         else:
-            self.get_end(tags, GRAMMAR.grammar['TERMINATOR'])
+            self.get_end(tags, gv.GRAMMAR.grammar['TERMINATOR'])
         self.tags = tags[self.start: self.end]
         self.is_valid()
 
@@ -46,13 +44,13 @@ class Cmd():
         i = 0
         len_tags = len(self.tags)
         while i <= len_tags:
-            instack = sr.keyinstack(stack, GRAMMAR)
+            instack = sr.keyinstack(stack, gv.GRAMMAR)
             if instack > -1:
-                stack = sr.reduce_all(stack, instack, GRAMMAR)
+                stack = sr.reduce_all(stack, instack, gv.GRAMMAR)
             else:
                 if i < len_tags and self.tags[i] == 'SPACES':
                     pass
-                elif stack == [] or sr.revkeyinstack(stack, GRAMMAR):
+                elif stack == [] or sr.revkeyinstack(stack, gv.GRAMMAR):
                     if i < len_tags:
                         stack.append(self.tags[i])
                 else:
@@ -71,9 +69,9 @@ class Cmd():
             curr_tag = tags[i]
             if curr_tag in ends:
                 break
-            elif curr_tag in GRAMMAR.opening_tags:
+            elif curr_tag in gv.GRAMMAR.opening_tags:
                 i += 1
-                subcmd = Cmd(i, tags, [GRAMMAR.opening_tags[curr_tag]])
+                subcmd = Cmd(i, tags, [gv.GRAMMAR.opening_tags[curr_tag]])
                 i = subcmd.end
                 self.sub.append(subcmd)
             else:
@@ -128,8 +126,8 @@ class ListCommands():
     def get_tags(self):
         tags = []
         for tok in self.tokens:
-            if tok in GRAMMAR.leaf_op:
-                tags.append(GRAMMAR.reverse[tok])
+            if tok in gv.GRAMMAR.leaf_op:
+                tags.append(gv.GRAMMAR.reverse[tok])
             elif sc.containspaces(tok):
                 tags.append('SPACES')
             else:
