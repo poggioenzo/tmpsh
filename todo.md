@@ -1,3 +1,5 @@
+## Tout le monde
+
 wishlist:
 - slice_pylist(int, int)
 - join_pylist(pylist pl, char* join )
@@ -34,4 +36,21 @@ wishlist:
 	- comparaison char * à char *
 
 
-- Ctrl-L implementation
+## Enzo
+
+- Tokenisation alias replacement
+
+## Simon
+
+### Builtins
+- cd
+- echo
+- unsetenv / setenv / export /env
+- export
+- exit
+- type
+- alias
+- whence
+
+
+- Ctrl - L
