@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 
-
-import utils.readgrammar as rg
+import unittest
 import utils.tokenizer as tk
 import utils.file as fl
-import sys
-import os
-import unittest
 
 
 class testTok00(unittest.TestCase):
