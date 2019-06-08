@@ -43,14 +43,12 @@ wishlist:
 ## Simon
 
 ### Builtins
-- cd
-- echo
-- unsetenv / setenv / export /env
-- export
-- exit
+- ~~cd~~
+- ~~echo~~
+- ~~unsetenv~~ / ~~setenv~~ / export /~~env~~
+- ~~exit~~
 - type
 - alias
-- whence
 
 
 - Ctrl - L
