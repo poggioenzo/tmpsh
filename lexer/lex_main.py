@@ -5,15 +5,10 @@ import sys
 # from utils.commands2 import ListCommands
 from utils.tagstokens import TagsTokens
 
-
-def main():
+if __name__ == '__main__':
     if len(sys.argv) == 1:
-        tt = TagsTokens(
+        TAGSTOKENS = TagsTokens(
             "ls -l; echo 'lol' 1;$(echo ls) \\\ncat ../*")
     else:
-        tt = TagsTokens(" ".join(sys.argv[1:]))
-    print(tt)
-
-
-if __name__ == '__main__':
-    main()
+        TAGSTOKENS = TagsTokens(" ".join(sys.argv[1:]))
+    print(TAGSTOKENS)
