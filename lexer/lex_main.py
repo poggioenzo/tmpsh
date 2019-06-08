@@ -2,8 +2,8 @@
 
 import sys
 # import code
-from utils.commands2 import ListCommands
-from utils.commands2 import TagsTokens
+# from utils.commands2 import ListCommands
+from utils.tagstokens import TagsTokens
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     else:
         tt = TagsTokens(" ".join(sys.argv[1:]))
     print(tt)
-    
+
 
 if __name__ == '__main__':
     main()
