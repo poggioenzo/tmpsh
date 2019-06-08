@@ -104,6 +104,7 @@ BUILTINS_SRCS := cd.c \
 				 env.c \
 				 setenv.c \
 				 unsetenv.c \
+                 echo.c \
 				 exit.c \
 
 BUILTINS_SRCS := $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
