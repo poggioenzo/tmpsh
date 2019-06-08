@@ -31,6 +31,7 @@
 		}																		\
 		else if (action == /*SHOW_ERROR*/1 && total_error)						\
 		{																		\
+			ft_printf("show");																	\
 			print_function(total_error, error_lst);								\
 		}																		\
 	}
@@ -39,6 +40,9 @@
 int 	func_name(int test_number, type result, type reference, int action);
 
 #include "tmpsh.h"
+
+STRUCT_MAKER(_t_pylst_type, void *);
+PROTOTYPE_DISPLAY(t_pylst_error_fct, void *, _t_pylst_type)
 
 STRUCT_MAKER(_t_char_type, t_char *);
 PROTOTYPE_DISPLAY(t_char_error_fct, t_char *, _t_char_type)

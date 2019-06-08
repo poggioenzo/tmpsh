@@ -16,6 +16,10 @@ static void	fill_tests_functions(void)
 	ADD_TEST(simple_chare_pylst);
 	ADD_TEST(simple_int_pylst);
 	ADD_TEST(multitype_pylst);
+	ADD_TEST(len_pylst_test);
+	ADD_TEST(index_pylst_test);
+	ADD_TEST(join_pylst_test);
+	ADD_TEST(slice_pylst_test);
 	ADD_TEST(hash_creation);
 	ADD_TEST(hash_single_insert);
 	ADD_TEST(hash_multiple_insert);

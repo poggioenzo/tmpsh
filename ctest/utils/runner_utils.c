@@ -21,5 +21,6 @@ void	signal_analysis(int status)
 			display('A', RED);
 		else if (kill_signal == SIGABRT)
 			display('X', RED);
+		ft_printf("\n");
 	}
 }

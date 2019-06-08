@@ -78,3 +78,158 @@ void	multitype_pylst(void)
 	ASSERT_INTCMP(x_test, *(int *)first_pylst_ptr->value, value);
 	ASSERT_STRCMP(x_test, (char *)first_pylst_ptr->next->value, str);
 }
+
+void	len_pylst_test(void)
+{
+	int		x_test = 0;
+	t_pylst	*pylst = NULL;
+
+	// Simplie test with few elements
+	int		value = -1500;
+	ASSERT_INTCMP(x_test, len_pylst(pylst), 0);
+	push_pylst(&pylst, &value, 0, _int);
+	ASSERT_INTCMP(x_test, len_pylst(pylst), 1);
+	push_pylst(&pylst, &value, 0, _int);
+	ASSERT_INTCMP(x_test, len_pylst(pylst), 2);
+	push_pylst(&pylst, &value, 0, _int);
+	ASSERT_INTCMP(x_test, len_pylst(pylst), 3);
+	push_pylst(&pylst, &value, 0, _int);
+	ASSERT_INTCMP(x_test, len_pylst(pylst), 4);
+	push_pylst(&pylst, &value, 0, _int);
+	ASSERT_INTCMP(x_test, len_pylst(pylst), 5);
+}
+
+
+void	index_pylst_test(void)
+{
+	int x_test = 0;
+	t_pylst	*pylst = NULL;
+
+	char *value = "mytest";
+	// Test with a single element with positive and negativ index
+	push_pylst(&pylst, &value, 0, _chare);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 0), pylst);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -1), pylst);
+
+	// Test for 2 element, each index, positive and negativ.
+	push_pylst(&pylst, &value, 0, _chare);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 0), pylst);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 1), pylst->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -1), pylst->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -2), pylst);
+
+	// Test for 3, still using the same method
+	push_pylst(&pylst, &value, 0, _chare);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 0), pylst);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 1), pylst->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 2), pylst->next->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -1), pylst->next->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -2), pylst->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -3), pylst);
+
+	// Test with 4.
+	push_pylst(&pylst, &value, 0, _chare);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 0), pylst);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 1), pylst->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 2), pylst->next->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, 3), pylst->next->next->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -1), pylst->next->next->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -2), pylst->next->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -3), pylst->next);
+	ASSERT_PTRCMP(x_test, index_pylst(pylst, -4), pylst);
+}
+
+void	join_pylst_test(void)
+{
+	int		x_test = 0;
+	t_pylst	*pylst = NULL;
+
+	// Single node with "my_str"
+	push_pylst(&pylst, "my_str", 0, _chare);
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "|"), "my_str");
+
+	// 2 nodes : "my_str", "join".
+	// Test multiple separator
+	push_pylst(&pylst, "join", 0, _chare);
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "|"), "my_str|join");
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "fd"), "my_strfdjoin");
+
+	// 3 nodes : "my_str", "join", "move".
+	push_pylst(&pylst, "move", 0, _chare);
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "|"), "my_str|join|move");
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "fd"), "my_strfdjoinfdmove");
+
+	// 4 nodes : "my_str", "join", "move", "last".
+	push_pylst(&pylst, "last", 0, _chare);
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "|"), "my_str|join|move|last");
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "fd"), "my_strfdjoinfdmovefdlast");
+
+	// 5 nodes, with empty string : "my_str", "join", "move", "last", "".
+	// Test multiple separator
+	push_pylst(&pylst, "", 0, _chare);
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "|"), "my_str|join|move|last|");
+	ASSERT_STRCMP(x_test, join_pylst(pylst, "fd"), "my_strfdjoinfdmovefdlastfd");
+}
+
+#define ARRAY(nb_args, strings...) create_ref_pylist(nb_args, strings)
+
+
+
+static void		show_lst(t_pylst *pylst)
+{
+	while (pylst)
+	{
+		ft_printf("%s-->", (char*)pylst->value);
+		pylst = pylst->next;
+	}
+	ft_printf("NULL\n");
+}
+
+void	slice_pylst_test(void)
+{
+	int		x_test = 0;
+	t_pylst *pylst = NULL;
+	t_pylst	*reference;
+
+	// Simple slicing with a single element : "my_str"
+	push_pylst(&pylst, "my_str", 0, _chare);
+	reference = ARRAY(1, "my_str");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), reference);
+
+	// Add a second string "join", and test multiple slicing
+	// ["my_str", "join"]
+	push_pylst(&pylst, "join", 0, _chare);
+	reference = ARRAY(1, "my_str");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), reference);
+	reference = ARRAY(2, "my_str", "join");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 2), reference);
+	reference = ARRAY(1, "my_str");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -1), reference);
+	ASSERT_PTRCMP(x_test, slice_pylst(pylst, 0, -2), NULL);
+	reference = ARRAY(1, "join");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 2), reference);
+	reference = ARRAY(2, "my_str", "join");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, -2, 2), reference);
+
+	// 3th string in the list, "blop", test indexes in all ways
+	// ["my_str", "join", "blop"]
+	push_pylst(&pylst, "blop", 0, _chare);
+	// Testing normal incrementation
+	reference = ARRAY(1, "my_str");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), reference);
+	reference = ARRAY(2, "my_str", "join");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 2), reference);
+	reference = ARRAY(3, "my_str", "join", "blop");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 3), \
+			reference);
+	// Testing by starting going to negative value
+	reference = ARRAY(2, "my_str", "join");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -1), reference);
+	reference = ARRAY(1, "my_str");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -2), reference);
+	ASSERT_PTRCMP(x_test, slice_pylst(pylst, 0, -3), NULL);
+
+
+
+	
+}

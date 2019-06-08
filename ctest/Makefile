@@ -20,6 +20,7 @@ FILES := $(addprefix tests/, $(FILES))
 
 ERROR_SRCS := t_char_error.c \
 			  default_error.c \
+			  t_pylst_error.c \
 
 
 ERROR_SRCS := $(addprefix error_creation/, $(ERROR_SRCS))

@@ -26,6 +26,7 @@ void	function_init(void);
 */
 
 t_char	*create_ref_list(char *string);
+t_pylst		*create_ref_pylist(int nb_args, ...);
 t_line	*create_ref_shell(char *str);
 
 #define STORE_ERROR	0
@@ -47,6 +48,9 @@ t_line	*create_ref_shell(char *str);
 
 #define ASSERT_TCHARCMP(test_nbr, res, ref); \
 		ASSERT_STANDARD(test_nbr, res, ref, t_char_error_fct)
+
+#define ASSERT_PYLSTCMP(test_nbr, res, ref); \
+		ASSERT_STANDARD(test_nbr, res, ref,  t_pylst_error_fct)
 
 #define ASSERT_TLINECMP(test_nbr, res, ref); \
 		ASSERT_STANDARD(test_nbr, res, ref, t_line_error_fct)

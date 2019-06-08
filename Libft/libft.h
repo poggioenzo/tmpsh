@@ -21,6 +21,15 @@
 # include "pylst.h"
 # include "garbage.h"
 
+# ifndef TRUE
+#  define TRUE 1
+# endif
+
+# ifndef FALSE
+#  define FALSE 0
+# endif
+
+
 # define ALLOC_ERROR	0
 # define ALLOC_SUCCESS	1
 # define NO_STATUS		0

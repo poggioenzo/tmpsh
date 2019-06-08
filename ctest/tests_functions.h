@@ -12,6 +12,10 @@
 void	simple_chare_pylst(void);
 void	simple_int_pylst(void);
 void	multitype_pylst(void);
+void	len_pylst_test(void);
+void	index_pylst_test(void);
+void	join_pylst_test(void);
+void	slice_pylst_test(void);
 
 // Tests for hash table
 void	hash_creation(void);
