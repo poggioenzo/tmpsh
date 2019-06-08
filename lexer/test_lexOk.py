@@ -3,6 +3,7 @@
 import unittest
 from utils.commands import ListCommands
 
+
 class testLexOk(unittest.TestCase):
 
     def testLexOk001(self):
@@ -54,6 +55,7 @@ class testLexOk(unittest.TestCase):
         term_inputs = '$PATH = ; $PATH += $FOO'
         listc = ListCommands(term_inputs)
         self.assertTrue(listc.valid)
+
 
 if __name__ == '__main__':
     unittest.main()

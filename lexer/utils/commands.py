@@ -91,6 +91,7 @@ class Cmd():
                 str0 += split_shift(subcmd.__str__())
         return str0
 
+
 class ListCommands():
     def __init__(self, term_inputs):
         self.term_inputs = term_inputs
@@ -119,9 +120,9 @@ class ListCommands():
             str0 += 'Error: {}\n'.format(self.error)
         elif self.incomplete:
             str0 += 'To complete: {}\n'.format(self.to_complete)
-        str0 += '->Valid:{}, Incomplete:{}<-'.format(self.valid, self.incomplete)
+        str0 += '->Valid:{}, Incomplete:{}<-'.format(
+            self.valid, self.incomplete)
         return str0
-
 
     def get_tags(self):
         tags = []

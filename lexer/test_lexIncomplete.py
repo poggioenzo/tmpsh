@@ -3,6 +3,7 @@
 import unittest
 from utils.commands import ListCommands
 
+
 class testLexIncomplete(unittest.TestCase):
 
     def testLexIncompleter001(self):
@@ -77,7 +78,6 @@ class testLexIncomplete(unittest.TestCase):
                               'CMDSUBST2', 'CMDSUBST3', '>'],
                              listc.to_complete)
 
-
     def testLexIncompleter011(self):
         term_inputs = "' $("
         listc = ListCommands(term_inputs)
@@ -85,7 +85,6 @@ class testLexIncomplete(unittest.TestCase):
         self.assertTrue(listc.incomplete)
         self.assertListEqual(['QUOTE', '>'],
                              listc.to_complete)
-
 
 
 if __name__ == '__main__':

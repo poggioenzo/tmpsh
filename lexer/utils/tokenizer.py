@@ -2,6 +2,7 @@
 
 import utils.global_var as gv
 
+
 def ops_begin_with(pattern, ops):
     i = len(pattern)
     for op in ops:
@@ -52,7 +53,7 @@ def tokenize(command, tokens):
         if ops_begin_with(command[i], gv.GRAMMAR.leaf_op):
             current = add_token(current, tokens)
             tmp_current = []
-            i += span(command[i:],  tokens, tmp_current)
+            i += span(command[i:], tokens, tmp_current)
             if len(tmp_current) == 1:
                 current += tmp_current[0]
         elif command[i] == gv.GRAMMAR.escape:
