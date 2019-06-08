@@ -228,8 +228,14 @@ void	slice_pylst_test(void)
 	reference = ARRAY(1, "my_str");
 	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -2), reference);
 	ASSERT_PTRCMP(x_test, slice_pylst(pylst, 0, -3), NULL);
-
-
+	// Testing by starting from the first index
+	reference = ARRAY(1, "join");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 2), reference);
+	reference = ARRAY(2, "join", "blop");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 3), reference);
+	// Testing by starting with the second index
+	reference = ARRAY(1, "blop");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 2, 3), reference);
 
 	
 }
