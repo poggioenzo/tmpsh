@@ -2,8 +2,8 @@
 
 import sys
 import unittest
-from utils.readgrammar import Grammar
 import utils.shift_reduce as sr
+from utils.grammar import Grammar
 
 
 GRAMMAR = Grammar("grammar_test.txt")
