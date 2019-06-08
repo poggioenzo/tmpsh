@@ -98,6 +98,16 @@ CONFIGURATION_SRCS :=  screen_size.c \
 
 CONFIGURATION_SRCS := $(addprefix $(CONFIGURATION_DIR), $(CONFIGURATION_SRCS))
 
+BUILTINS_DIR = builtins/
+
+BUILTINS_SRCS := cd.c \
+				 env.c \
+				 setenv.c \
+				 unsetenv.c \
+				 exit.c \
+
+BUILTINS_SRCS := $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
+
 FILE_DIR = file/
 
 FILE_SRCS := replace_home.c \
@@ -114,4 +124,4 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(KEYPRESS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(CONFIGURATION_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(FILE_SRCS)) \
-
+		   $(addprefix $(SOURCES_DIR), $(BUILTINS_SRCS)) \

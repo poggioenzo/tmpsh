@@ -25,7 +25,7 @@ void		ft_array_remove(char **array, char *string, int free_str)
 	int index;
 
 	index = 0;
-	while (array[index] && array[index] != string)
+	while (array[index] && ft_strequ(array[index], string) == 0)
 		index++;
 	if (!array[index])
 		return ;

@@ -1,6 +1,6 @@
 #ifndef PATH_CHECK_H
 # define PATH_CHECK_H
 
-int		in_path(char *command);
+char	*get_exec_file(char *command);
 
 #endif

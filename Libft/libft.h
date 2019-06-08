@@ -123,6 +123,7 @@ char			*ft_strncpy(char *dest, const char *src, size_t n);
 char			*ft_strdup(const char *src);
 char			**ft_duparray(char **array);
 char			**ft_array_extend(char **array, char *string, int dup_str);
+int				ft_array_in(char **array, char *string);
 char			*ft_strcat(char *dest, const char *src);
 char			*ft_strncat(char *s1, const char *s2, size_t n);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
