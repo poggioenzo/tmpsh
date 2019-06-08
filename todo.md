@@ -32,8 +32,7 @@ wishlist:
 [1, 2, 3, 4, 700, 800, 900, 7, 8, 9]
 ```
 - (hashmap) reverse_hashmap(hashmap hm)
-- assertListEqual_pylist(pylist t)
-	- comparaison char * à char *
+- ~~assertListEqual_pylist(pylist t)~~ create this kind of assertion, see ASSERT_PYLSTCMP
 
 
 ## Enzo
