@@ -1,3 +1,3 @@
-from utils.readgrammar import ShellGrammar
+from utils.shellgrammar import ShellGrammar
 
 GRAMMAR = ShellGrammar()
