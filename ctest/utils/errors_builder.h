@@ -31,7 +31,6 @@
 		}																		\
 		else if (action == /*SHOW_ERROR*/1 && total_error)						\
 		{																		\
-			ft_printf("show");																	\
 			print_function(total_error, error_lst);								\
 		}																		\
 	}

@@ -50,6 +50,8 @@ static void t_pylst_printing(t_pylst *pylst, char *error_msg)
 	{
 		ft_printf("\"%s\"", (char *)pylst->value);
 		pylst = pylst->next;
+		if (pylst)
+			ft_printf(", ");
 	}
 	ft_printf("]\n");
 }

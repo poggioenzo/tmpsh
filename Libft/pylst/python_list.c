@@ -77,6 +77,25 @@ int			len_pylst(t_pylst *pylst)
 }
 
 /*
+** convert_neg_index:
+**
+** Whenever the user is given an negativ index, research his
+** positiv relation.
+*/
+
+static int		convert_neg_index(t_pylst *pylst, int index)
+{
+	int		lst_len;
+
+	if (index < 0)
+	{
+		lst_len = len_pylst(pylst);
+		index = lst_len + index;
+	}
+	return (index);
+}
+
+/*
 ** index_pylst:
 **
 ** Return the t_pylst element of the given index.
@@ -86,13 +105,7 @@ int			len_pylst(t_pylst *pylst)
 
 t_pylst		*index_pylst(t_pylst *pylst, int index)
 {
-	int		lst_len;
-
-	if (index < 0)
-	{
-		lst_len = len_pylst(pylst);
-		index = lst_len + index;
-	}
+	index = convert_neg_index(pylst, index);
 	while (pylst && index--)
 		pylst = pylst->next;
 	return (pylst);
@@ -166,6 +179,7 @@ char	*join_pylst(t_pylst *pylst, char *substr)
 
 t_pylst		*precedence_pylst(t_pylst *pylst, int index)
 {
+	index = convert_neg_index(pylst, index);
 	if (index == 0)
 		return (NULL);
 	return (index_pylst(pylst, index - 1));
@@ -183,9 +197,13 @@ void	del_portion_pylst(t_pylst **pylst, int from, int to)
 	t_pylst	*end;
 	t_pylst	*start_precedence;
 
+	if (from == to)
+		return ;
 	start_precedence = precedence_pylst(*pylst, from);
 	start = start_precedence ? start_precedence->next : *pylst;
 	end = precedence_pylst(*pylst, to);
+	if (!start_precedence && !end)
+		return ;
 	if (start_precedence)
 		start_precedence->next = end->next;
 	else
