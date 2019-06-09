@@ -33,7 +33,8 @@ wishlist:
 ```
 - (hashmap) reverse_hashmap(hashmap hm)
 - ~~assertListEqual_pylist(pylist t)~~ create this kind of assertion, see ASSERT_PYLSTCMP
-
+- int	duplicate_pylist(pylist source, pylist dest)
+	- return (code_error)
 
 ## Enzo
 
