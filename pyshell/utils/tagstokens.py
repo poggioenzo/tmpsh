@@ -41,6 +41,8 @@ class TagsTokens():
                     stk.pop(-1)
             elif tag == 'DQUOTES':
                 _ = stk.append(tag) if stk[-1:][0] != tag else stk.pop(-1)
+                # Ouais on peut clairement developper cette ternaire mais c'est
+                # un kiffe de faire un switch sur une ligne
             elif tag not in ['STMT', 'SPACES'] and stk[-1:][0] == 'DQUOTES':
                 if tag in gv.GRAMMAR.dquotes_opening_tags:
                     stk.append(tag)
