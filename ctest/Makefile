@@ -14,6 +14,7 @@ FILES := pylst_test.c  \
 		 t_char_selection_test.c \
 		 t_char_insert_test.c \
 		 cursor_dependent_selection_tests.c \
+		 grammar_test.c \
 
 
 FILES := $(addprefix tests/, $(FILES))
