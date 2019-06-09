@@ -4,7 +4,7 @@ import unittest
 from utils.commands import ListCommands
 
 
-class testLexIncomplete(unittest.TestCase):
+class TestLexIncomplete(unittest.TestCase):
 
     def testLexIncompleter001(self):
         term_inputs = 'cmd &&'
