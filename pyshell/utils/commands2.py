@@ -40,9 +40,9 @@ class Cmd():
             if subcmd.incomplete:
                 self.incomplete = True
         if self.valid:
-            self.reduce_shift()
+            self.shift_reduce()
 
-    def reduce_shift(self):
+    def shift_reduce(self):
         stack = []
         i = 0
         len_tags = len(self.tags)

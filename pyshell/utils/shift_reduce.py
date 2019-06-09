@@ -38,7 +38,7 @@ def reduce_all(stack, instack, grammar):
     return stack
 
 
-def reduce_shift(tags, grammar):
+def shift_reduce(tags, grammar):
     stack = []
     i = 0
     len_tags = len(tags)
