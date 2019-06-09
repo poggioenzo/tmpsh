@@ -14,5 +14,4 @@ if __name__ == '__main__':
         ENTRY = " ".join(sys.argv[1:])
     TAGSTOKENS = TagsTokens().init_with_input(ENTRY)
     print(TAGSTOKENS)
-
     print(sr.reduce_shift(TAGSTOKENS.tags, gv.GRAMMAR))
