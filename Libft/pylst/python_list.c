@@ -143,6 +143,18 @@ t_pylst		*slice_pylst(t_pylst *pylst, int from, int to)
 }
 
 /*
+** duplicate_pylst:
+**
+** Return a deep copy of the given t_pylst.
+*/
+
+t_pylst		*duplicate_pylst(t_pylst *pylst)
+{
+	return (slice_pylst(pylst, 0, len_pylst(pylst)));
+}
+
+
+/*
 ** join_pylst:
 **
 ** Concat each element of the pylst according to the given char.
@@ -254,19 +266,25 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 	t_pylst		*precedence_from;
 	t_pylst		*precedence_to;
 	t_pylst		*del_slice;
+	t_pylst		*save_head;
 
+	save_head = *old_pylst;
 	precedence_from = precedence_pylst(*old_pylst, from);
 	precedence_to = precedence_pylst(*old_pylst, to);
-	del_slice = precedence_from ? precedence_from->next : *old_pylst;
+	del_slice = NULL;
 	*old_pylst = precedence_from ? *old_pylst : new_pylst;
-	precedence_from->next = new_pylst;
+	if (precedence_from)
+	{
+		del_slice = precedence_from->next;
+		precedence_from->next = new_pylst;
+	}
 	new_pylst = index_pylst(new_pylst, -1);
-	new_pylst->next = precedence_to->next;
-	precedence_to->next = NULL;
+	if (precedence_to)
+	{
+		new_pylst->next = precedence_to->next;
+		precedence_to->next = NULL;
+	}
+	else
+		new_pylst->next = save_head;
 	free_pylst(&del_slice, 0);
-
 }
-
-
-
-

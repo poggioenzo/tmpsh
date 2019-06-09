@@ -173,67 +173,55 @@ void	join_pylst_test(void)
 
 #define PYLST(nb_args, strings...) create_ref_pylist(nb_args, strings)
 
-static void		show_lst(t_pylst *pylst)
+static void		show_lst(t_pylst *pylst, char *message)
 {
+	ft_printf("%s : [", message);
 	while (pylst)
 	{
-		ft_printf("%s-->", (char*)pylst->value);
+		ft_printf("\"%s\"", (char*)pylst->value);
 		pylst = pylst->next;
+		if (pylst)
+			ft_printf(", ");
 	}
-	ft_printf("NULL\n");
+	ft_printf("]\n");
 }
 
 void	slice_pylst_test(void)
 {
 	int		x_test = 0;
 	t_pylst *pylst = NULL;
-	t_pylst	*reference;
 
 	// Simple slicing with a single element : "my_str"
 	push_pylst(&pylst, "my_str", 0, _chare);
-	reference = PYLST(1, "my_str");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), reference);
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), PYLST(1, "my_str"));
 
 	// Add a second string "join", and test multiple slicing
 	// ["my_str", "join"]
 	push_pylst(&pylst, "join", 0, _chare);
-	reference = PYLST(1, "my_str");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), reference);
-	reference = PYLST(2, "my_str", "join");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 2), reference);
-	reference = PYLST(1, "my_str");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -1), reference);
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), PYLST(1, "my_str"));
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 2), PYLST(2, "my_str", "join"));
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -1), PYLST(1, "my_str"));
 	ASSERT_PTRCMP(x_test, slice_pylst(pylst, 0, -2), NULL);
-	reference = PYLST(1, "join");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 2), reference);
-	reference = PYLST(2, "my_str", "join");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, -2, 2), reference);
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 2), PYLST(1, "join"));
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, -2, 2), PYLST(2, "my_str", "join"));
 
 	// 3th string in the list, "blop", test indexes in all ways
 	// ["my_str", "join", "blop"]
 	push_pylst(&pylst, "blop", 0, _chare);
 	// Testing normal incrementation
-	reference = PYLST(1, "my_str");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), reference);
-	reference = PYLST(2, "my_str", "join");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 2), reference);
-	reference = PYLST(3, "my_str", "join", "blop");
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 1), PYLST(1, "my_str"));
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 2), PYLST(2, "my_str", "join"));
 	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, 3), \
-			reference);
+			PYLST(3, "my_str", "join", "blop"));
 	// Testing by starting going to negative value
-	reference = PYLST(2, "my_str", "join");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -1), reference);
-	reference = PYLST(1, "my_str");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -2), reference);
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -1), PYLST(2, "my_str", "join"));
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 0, -2), PYLST(1, "my_str"));
 	ASSERT_PTRCMP(x_test, slice_pylst(pylst, 0, -3), NULL);
 	// Testing by starting from the first index
-	reference = PYLST(1, "join");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 2), reference);
-	reference = PYLST(2, "join", "blop");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 3), reference);
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 2), PYLST(1, "join"));
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 1, 3), PYLST(2, "join", "blop"));
 	// Testing by starting with the second index
-	reference = PYLST(1, "blop");
-	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 2, 3), reference);
+	ASSERT_PYLSTCMP(x_test, slice_pylst(pylst, 2, 3), PYLST(1, "blop"));
 }
 
 void	del_portion_pylst_test(void)
@@ -338,7 +326,7 @@ void	del_negativ_portion_test(void)
 
 void	del_after_pylst_test(void)
 {
-	int		x_test;
+	int		x_test = 0;
 	t_pylst		*lst_to_test = NULL;
 
 	// Delete a single element
@@ -377,4 +365,96 @@ void	del_after_pylst_test(void)
 	lst_to_test = PYLST(3, "a string", "to_test", "more");
 	del_after_pylst(&lst_to_test, -2);
 	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(1, "a string"));
+}
+
+void	replace_pylst_test(void)
+{
+	int		x_test = 0;
+	t_pylst		*lst_to_test = NULL;
+
+	// Replace a single node with a single element
+	push_pylst(&lst_to_test, "a string", 0, _chare);
+	replace_pylst(&lst_to_test, PYLST(1, "WARZA"), 0, 1);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(1, "WARZA"));
+
+	// Replace a single node with mutliple elements
+	replace_pylst(&lst_to_test, PYLST(2, "my_str", "join"), 0, 1);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, "my_str", "join"));
+
+	/* Tests with 2 elements */
+
+	// Replace the first element : 
+	// from ["my_str", "join"] to ["big", "join"]
+	replace_pylst(&lst_to_test, PYLST(1, "big"), 0, 1);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, "big", "join"));
+	// Replace the last element
+	// from ["big", "join"] to ["big", "lol"]
+	replace_pylst(&lst_to_test, PYLST(1, "lol"), 1, 2);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, "big", "lol"));
+
+	// Replace the entire list with a single element
+	// from ["big", "link"] to ["small"]
+	replace_pylst(&lst_to_test, PYLST(1, "small"), 0, 2);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(1, "small"));
+
+	// Replacement with multiple elements
+	// Replace from start, from ["start", "string"] to ["some", "content", "string"]
+	lst_to_test = PYLST(2, "start", "string");
+	replace_pylst(&lst_to_test, PYLST(2, "some", "content"), 0, 1);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(3, "some", "content", "string"));
+	// Replace from end, from ["start", "string"] to ["start", "some", "content"]
+	lst_to_test = PYLST(2, "start", "string");
+	replace_pylst(&lst_to_test, PYLST(2, "some", "content"), 1, 2);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(3, "start", "some", "content"));
+	// Replace the entire list, ["start", "string"] to ["some", "content"].
+	lst_to_test = PYLST(2, "start", "string");
+	replace_pylst(&lst_to_test, PYLST(2, "some", "content"), 0, 2);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, "some", "content"));
+
+	/* Tests with 3 elements */
+
+	// Simple replacement, element by element
+	// replace index 0, from ["a", "long", "test"] to ["some", "long", "test"]
+	lst_to_test = PYLST(3, "a", "long", "test");
+	replace_pylst(&lst_to_test, PYLST(1, "some"), 0, 1);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(3, "some", "long", "test"));
+	// replace index 1, from ["a", "long", "test"] to ["a", "some", "test"]
+	lst_to_test = PYLST(3, "a", "long", "test");
+	replace_pylst(&lst_to_test, PYLST(1, "some"), 1, 2);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(3, "a", "some", "test"));
+	// replace index 2, from ["a", "long", "test"] to ["a", "long", "some"]
+	lst_to_test = PYLST(3, "a", "long", "test");
+	replace_pylst(&lst_to_test, PYLST(1, "some"), 2, 3);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(3, "a", "long", "some"));
+
+	// Replace multiple index at once
+	// From start, from ["a", "long", "some"] to ["a", "string"]
+	replace_pylst(&lst_to_test, PYLST(1, "string"), 1, 3);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, "a", "string"));
+	// From end, from ["a" "long", "some"] to ["string", "some"]
+	lst_to_test = PYLST(3, "a", "long", "some");
+	replace_pylst(&lst_to_test, PYLST(1, "string"), 0, 2);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, "string", "some"));
+}
+
+void	replace_negativ_pylst_test(void)
+{
+	int		x_test = 0;
+	t_pylst	*lst_to_test = NULL;
+
+	// Replace [0:-1] with a single element
+	lst_to_test = PYLST(1, "CONTENT");
+	replace_pylst(&lst_to_test, PYLST(1, "TEST"), 0, -1);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, "TEST", "CONTENT"));
+
+	// Replace [0:-1] starting with 2 elements,
+	// from ["TEST", "CONTENT"] to ["string", "CONTENT"]
+	replace_pylst(&lst_to_test, PYLST(1, "string"), 0, -1);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, "string", "CONTENT"));
+
+	// Replace middle with 3 element, [-2:-1]
+	// From ["TEST", "string", "CONTENT"] to ["TEST", "middle", "CONTENT"]
+	lst_to_test = PYLST(3, "TEST", "string", "CONTENT");
+	replace_pylst(&lst_to_test, PYLST(1, "middle"), -2, -1);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(3, "TEST", "middle", "CONTENT"));
 }

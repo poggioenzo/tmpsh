@@ -13,6 +13,7 @@
 
 static void	fill_tests_functions(void)
 {
+	/* pylst tests */
 	ADD_TEST(simple_chare_pylst);
 	ADD_TEST(simple_int_pylst);
 	ADD_TEST(multitype_pylst);
@@ -20,9 +21,14 @@ static void	fill_tests_functions(void)
 	ADD_TEST(index_pylst_test);
 	ADD_TEST(join_pylst_test);
 	ADD_TEST(slice_pylst_test);
-//	ADD_TEST(del_portion_pylst_test);
+	ADD_TEST(replace_negativ_pylst_test);
+	ADD_TEST(replace_pylst_test);
+	ADD_TEST(del_portion_pylst_test);
 	ADD_TEST(del_negativ_portion_test);
 	ADD_TEST(del_after_pylst_test);
+
+
+	/* Hash table tests */
 	ADD_TEST(hash_creation);
 	ADD_TEST(hash_single_insert);
 	ADD_TEST(hash_multiple_insert);
@@ -31,6 +37,8 @@ static void	fill_tests_functions(void)
 	ADD_TEST(hash_single_delete);
 	ADD_TEST(hash_multiple_delete);
 	ADD_TEST(hash_alveol_deletion);
+
+	/* t_line tests*/
 	ADD_TEST(t_line_allocation);
 	ADD_TEST(t_line_lst_allocation);
 	ADD_TEST(t_line_longer_lst);
@@ -38,12 +46,15 @@ static void	fill_tests_functions(void)
 	ADD_TEST(t_line_update_test);
 	ADD_TEST(t_line_get_last_test);
 	ADD_TEST(t_line_extract_test_simple);
+
+	/* t_char tests */
 	ADD_TEST(t_char_allocation_test);
 	ADD_TEST(t_char_push_test);
 	ADD_TEST(t_char_push_harder_test);
 	ADD_TEST(t_char_length_test);
 	ADD_TEST(t_char_update_pos_test);
 
+	/* tmpsh tests */
 	ADD_TEST(t_cursor_alloc_test);
 
 	ADD_TEST(search_prev_char_test);

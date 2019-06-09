@@ -33,6 +33,7 @@
 		{																		\
 			print_function(total_error, error_lst);								\
 		}																		\
+		return (0);																\
 	}
 
 #define PROTOTYPE_DISPLAY(func_name, type, test_struct) \
