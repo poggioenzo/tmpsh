@@ -130,3 +130,7 @@ class TestShiftReduceHard(unittest.TestCase):
                           'A', 'C', 'C', 'A', 'C', 'A', 'C', 'D', 'C', 'A',
                           'C', 'A']
         self.assertListEqual(sr.reduce_shift(entry, GRAMMAR), exepted_output)
+
+
+if __name__ == '__main__':
+    unittest.main()
