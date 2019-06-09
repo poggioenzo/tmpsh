@@ -7,39 +7,39 @@ import utils.file as fl
 
 class TestTokenisation(unittest.TestCase):
 
-    def test_tok_00(self):
+    def test_tok_001(self):
         command = fl.get_text('unittest/tok/0')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['ls', ' ', '-l', '\n'])
 
-    def test_tok_00_1(self):
+    def test_tok_002(self):
         command = fl.get_text('unittest/tok/0_1')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['ls', ' ', '-l', ' ', '\n'])
 
-    def test_tok_01(self):
+    def test_tok_003(self):
         command = fl.get_text('unittest/tok/1')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['  ', 'ls', ' ', '-l', ' ', '/', ';',
                                       '        ', '\n'])
 
-    def test_tok_02(self):
+    def test_tok_004(self):
         command = fl.get_text('unittest/tok/2')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['ls', ' ', '-l', ' ', '\\\n/',
                                       ' ', ';', '\n'])
 
-    def test_tok_03(self):
+    def test_tok_005(self):
         command = fl.get_text('unittest/tok/3')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['ls', ' ', '-l', ' ', '\\ /', ';', '\n'])
 
-    def test_tok_04(self):
+    def test_tok_006(self):
         command = fl.get_text('unittest/tok/4')
         tokens = []
         tk.tokenize(command, tokens)
@@ -47,14 +47,14 @@ class TestTokenisation(unittest.TestCase):
             tokens, ['echo', ' ', '\\$PATH', ' ', '||', ' ', 'echo',
                      ' ', '$path', '\n'])
 
-    def test_tok_05(self):
+    def test_tok_007(self):
         command = fl.get_text('unittest/tok/5')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['echo', ' ', '"', '\n', 'ewline',
                                       '\n', 'ewline', '"', '\n'])
 
-    def test_tok_06(self):
+    def test_tok_008(self):
         command = fl.get_text('unittest/tok/6')
         tokens = []
         tk.tokenize(command, tokens)
@@ -62,7 +62,7 @@ class TestTokenisation(unittest.TestCase):
                                       ' ', '(', '1', ' ', '&&', ' ', '0', ')',
                                       ')', '\n'])
 
-    def test_tok_07(self):
+    def test_tok_009(self):
         command = fl.get_text('unittest/tok/7')
         tokens = []
         tk.tokenize(command, tokens)
@@ -70,7 +70,7 @@ class TestTokenisation(unittest.TestCase):
                                       '<(', 'LOL', ')', '||', '\n',
                                       'LOL', '\n'])
 
-    def test_tok_07_1(self):
+    def test_tok_010(self):
         command = fl.get_text('unittest/tok/7_1')
         tokens = []
         tk.tokenize(command, tokens)
@@ -82,7 +82,7 @@ class TestTokenisation(unittest.TestCase):
                                       'LOL', '}', '\n', '{', 'LOL', '}', '\n',
                                       '(', 'LOL', ')', '\n'])
 
-    def test_tok_08(self):
+    def test_tok_011(self):
         command = fl.get_text('unittest/tok/8')
         tokens = []
         tk.tokenize(command, tokens)
@@ -93,28 +93,28 @@ class TestTokenisation(unittest.TestCase):
                                       ';', ' ', '2', '>&', '-', ' ', '>>',
                                       'file', ' ', '>>', ' ', 'file2', '\n'])
 
-    def test_tok_08_1(self):
+    def test_tok_012(self):
         command = fl.get_text('unittest/tok/8_1')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['echo', ' ', '"', '\\"', '"',
                                       ' ', '&', '\n'])
 
-    def test_tok_08_2(self):
+    def test_tok_013(self):
         command = fl.get_text('unittest/tok/8_2')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['echo', ' ', 'text', '>>',
                                       'file', ' ', '>>', ' ', 'file2', '\n'])
 
-    def test_tok_08_3(self):
+    def test_tok_014(self):
         command = fl.get_text('unittest/tok/8_3')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['echo', ' ', 'text', '||',
                                       'file', ' ', '<<', ' ', 'file2', '\n'])
 
-    def test_tok_09(self):
+    def test_tok_015(self):
         command = fl.get_text('unittest/tok/9')
         tokens = []
         tk.tokenize(command, tokens)
@@ -124,13 +124,13 @@ class TestTokenisation(unittest.TestCase):
                                       'echo', ' ', '"', '\\$VAR', ' ', '\\=',
                                       ' ', '$VAR', '"', '\n'])
 
-    def test_tok_09_1(self):
+    def test_tok_016(self):
         command = fl.get_text('unittest/tok/9_1')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['echo', ' ', '\\f\\i\\l\\e', '\n'])
 
-    def test_tok_09_2(self):
+    def test_tok_017(self):
         command = fl.get_text('unittest/tok/9_2')
         tokens = []
         tk.tokenize(command, tokens)
@@ -138,13 +138,13 @@ class TestTokenisation(unittest.TestCase):
                                       'VAR', '=', '1', '\n', 'VAR', ' ',
                                       '+=', '1', '\n'])
 
-    def test_tok_09_3(self):
+    def test_tok_018(self):
         command = fl.get_text('unittest/tok/9_3')
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['VAR', ' ', '=', ' ', '0', '\n'])
 
-    def test_tok_09_4(self):
+    def test_tok_019(self):
         command = fl.get_text('unittest/tok/9_4')
         tokens = []
         tk.tokenize(command, tokens)
@@ -153,13 +153,13 @@ class TestTokenisation(unittest.TestCase):
 
 class TestTokenisation2(unittest.TestCase):
 
-    def test_tok_10(self):
+    def test_tok_001(self):
         command = "&&||+==&\\"
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['&&', '||', '+=', '=', '&', '\\'])
 
-    def test_tok_11(self):
+    def test_tok_002(self):
         command = '1 && 0 || $PATH += "~/tmpsh/bin"; $VAR=0 &\necho LOL'
         tokens = []
         tk.tokenize(command, tokens)
@@ -169,7 +169,7 @@ class TestTokenisation2(unittest.TestCase):
                                       '$VAR', '=', '0', ' ', '&', '\n',
                                       'echo', ' ', 'LOL'])
 
-    def test_tok_12(self):
+    def test_tok_003(self):
         command = '''>(<(echo test > file.txt)) && 		$VAR_TEST| cat'''
         command += ' << HERE\ntestHERE\nHERE'''
         tokens = []
@@ -180,35 +180,35 @@ class TestTokenisation2(unittest.TestCase):
                                       'cat', ' ', '<<', ' ', 'HERE', '\n',
                                       'testHERE', '\n', 'HERE'])
 
-    def test_tok_13(self):
+    def test_tok_004(self):
         command = '                 \\\necho \\\\test             '
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['                 ', '\\\necho',
                                       ' ', '\\\\test', '             '])
 
-    def test_tok_14(self):
+    def test_tok_005(self):
         command = ' $({ () lol'
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, [' ', '$(', '{', ' ', '(', ')',
                                       ' ', 'lol'])
 
-    def test_tok_15(self):
+    def test_tok_006(self):
         command = 'echo "qwert""yuiop"'
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['echo', ' ', '"', 'qwert', '"', '"',
                                       'yuiop', '"'])
 
-    def test_tok_16(self):
+    def test_tok_007(self):
         command = 'echo "qwert"\'yuiop\''
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, ['echo', ' ', '"', 'qwert', '"', "'",
                                       'yuiop', "'"])
 
-    def test_tok_17(self):
+    def test_tok_008(self):
         command = 'echo ${var}_$var${var2}_'
         tokens = []
         tk.tokenize(command, tokens)
@@ -216,7 +216,7 @@ class TestTokenisation2(unittest.TestCase):
             tokens, ['echo', ' ', '${', 'var', '}', '_', '$var',
                      '${', 'var2', '}', '_'])
 
-    def test_tok_18(self):
+    def test_tok_009(self):
         command = 'echo "yolo"&&ls'
         tokens = []
         tk.tokenize(command, tokens)
