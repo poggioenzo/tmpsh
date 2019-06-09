@@ -10,6 +10,8 @@ class ShellGrammar(Grammar):
         super().__init__(path)
         self.spaces = [' ', '\t']
         self.escape = ''
+        self.opening_tags = {}
+        self.dquotes_opening_tags = {}
         self.get_escape()
         self.add_symbol('\n', 'NEW_LINE')
         self.get_leaf_op()
@@ -35,12 +37,22 @@ class ShellGrammar(Grammar):
     #     return [k[0] for k in iter]
 
     def get_opening_tags(self):
-        self.opening_tags = {}
-        if 'SUB_PROCESS' in self.grammar and 'QUOTES' in self.grammar:
+        if 'SUB_PROCESS' in self.grammar:
             opening_tags = self.grammar['SUB_PROCESS']
-            opening_tags.extend(self.grammar['QUOTES'])
+            if 'QUOTES' in self.grammar:
+                opening_tags.extend(self.grammar['QUOTES'])
             for tag in opening_tags:
                 tag_split = tag.split()
                 tag_op = tag_split[0]
                 tag_end = tag_split[-1]
                 self.opening_tags[tag_op] = tag_end
+            if 'QUOTES' in self.grammar:
+                self.get_dquotes_opening_tags()
+
+    def get_dquotes_opening_tags(self):
+        if 'BRACEPARAM' in self.opening_tags:
+            self.dquotes_opening_tags['BRACEPARAM'] = \
+                self.opening_tags['BRACEPARAM']
+        if 'CMDSUBST1' in self.opening_tags:
+            self.dquotes_opening_tags['CMDSUBST1'] = \
+                self.opening_tags['CMDSUBST1']
