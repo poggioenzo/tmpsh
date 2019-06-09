@@ -10,7 +10,7 @@ void		grammar_test(void)
 
 	//Var to tests;
 	int		test_value = 125;
-	int		reference_value = 250;
+	int		reference_value = 125;
 
 	ASSERT_INTCMP(x_test, test_value, reference_value);
 }
