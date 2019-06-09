@@ -27,7 +27,8 @@ def keyinstack(stack, grammar):
 
 
 def reduce(stack, instack, grammar):
-    return (stack[:instack] + [grammar.reverse[' '.join(stack[instack:])]])
+    ret = (stack[:instack] + [grammar.reverse[' '.join(stack[instack:])]])
+    return ret
 
 
 def reduce_all(stack, instack, grammar):

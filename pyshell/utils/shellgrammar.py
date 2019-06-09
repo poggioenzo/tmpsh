@@ -6,7 +6,7 @@ from utils.grammar import Grammar
 class ShellGrammar(Grammar):
     """docstring for ."""
 
-    def __init__(self, path='grammar.txt'):
+    def __init__(self, path='grammar/grammar.txt'):
         super().__init__(path)
         self.spaces = [' ', '\t']
         self.escape = ''
