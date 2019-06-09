@@ -2,153 +2,170 @@
 
 import unittest
 import utils.tokenizer as tk
-import utils.file as fl
 
 
 class TestTokenisation(unittest.TestCase):
 
     def test_tok_001(self):
-        command = fl.get_text('unittest/tok/0')
+        soluce = ['ls', ' ', '-l', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['ls', ' ', '-l', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_002(self):
-        command = fl.get_text('unittest/tok/0_1')
+        soluce = ['ls', ' ', '-l', ' ', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['ls', ' ', '-l', ' ', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_003(self):
-        command = fl.get_text('unittest/tok/1')
+        soluce = ['  ', 'ls', ' ', '-l', ' ', '/', ';',
+                  '        ', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['  ', 'ls', ' ', '-l', ' ', '/', ';',
-                                      '        ', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_004(self):
-        command = fl.get_text('unittest/tok/2')
+        soluce = ['ls', ' ', '-l', ' ', '\\\n/',
+                  ' ', ';', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['ls', ' ', '-l', ' ', '\\\n/',
-                                      ' ', ';', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_005(self):
-        command = fl.get_text('unittest/tok/3')
+        soluce = ['ls', ' ', '-l', ' ', '\\ /', ';', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['ls', ' ', '-l', ' ', '\\ /', ';', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_006(self):
-        command = fl.get_text('unittest/tok/4')
+        soluce = ['echo', ' ', '\\$PATH', ' ', '||', ' ', 'echo',
+                  ' ', '$path', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(
-            tokens, ['echo', ' ', '\\$PATH', ' ', '||', ' ', 'echo',
-                     ' ', '$path', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_007(self):
-        command = fl.get_text('unittest/tok/5')
+        soluce = ['echo', ' ', '"', '\n', 'ewline',
+                  '\n', 'ewline', '"', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', '"', '\n', 'ewline',
-                                      '\n', 'ewline', '"', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_008(self):
-        command = fl.get_text('unittest/tok/6')
+        soluce = ['echo', ' ', '$(', ' ', 'echo',
+                  ' ', '(', '1', ' ', '&&', ' ', '0', ')',
+                                      ')', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', '$(', ' ', 'echo',
-                                      ' ', '(', '1', ' ', '&&', ' ', '0', ')',
-                                      ')', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_009(self):
-        command = fl.get_text('unittest/tok/7')
+        soluce = ['echo', ' ', '1', '&&', '\n',
+                  '<(', 'LOL', ')', '||', '\n',
+                  'LOL', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', '1', '&&', '\n',
-                                      '<(', 'LOL', ')', '||', '\n',
-                                      'LOL', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_010(self):
-        command = fl.get_text('unittest/tok/7_1')
+        soluce = [' ', '<(', 'LOL', ')', '\n', '"', ' ',
+                  'LOL', ' ', '"', '\n', '>(', '   ',
+                  'LOL',
+                  ')', '\n', "'", 'LOL', '    ', "'", '\n',
+                  '$(', ' ', 'LOL', ')', '\n', '${', ' ',
+                  'LOL', '}', '\n', '{', 'LOL', '}', '\n',
+                  '(', 'LOL', ')', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, [' ', '<(', 'LOL', ')', '\n', '"', ' ',
-                                      'LOL', ' ', '"', '\n', '>(', '   ',
-                                      'LOL',
-                                      ')', '\n', "'", 'LOL', '    ', "'", '\n',
-                                      '$(', ' ', 'LOL', ')', '\n', '${', ' ',
-                                      'LOL', '}', '\n', '{', 'LOL', '}', '\n',
-                                      '(', 'LOL', ')', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_011(self):
-        command = fl.get_text('unittest/tok/8')
+        soluce = ['echo', ' ', '"', '\\"', '"', ' ', '&',
+                  ';', ' ', '$(', 'echo', ' ', '-n', ' ',
+                  '1', ')', '||',
+                  '${', 'echo', '\n', '-n', ' ', '1', '}',
+                  ';', ' ', '2', '>&', '-', ' ', '>>',
+                  'file', ' ', '>>', ' ', 'file2', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', '"', '\\"', '"', ' ', '&',
-                                      ';', ' ', '$(', 'echo', ' ', '-n', ' ',
-                                      '1', ')', '||',
-                                      '${', 'echo', '\n', '-n', ' ', '1', '}',
-                                      ';', ' ', '2', '>&', '-', ' ', '>>',
-                                      'file', ' ', '>>', ' ', 'file2', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_012(self):
-        command = fl.get_text('unittest/tok/8_1')
+        soluce = ['echo', ' ', '"', '\\"', '"',
+                  ' ', '&', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', '"', '\\"', '"',
-                                      ' ', '&', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_013(self):
-        command = fl.get_text('unittest/tok/8_2')
+        soluce = ['echo', ' ', 'text', '>>',
+                  'file', ' ', '>>', ' ', 'file2', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', 'text', '>>',
-                                      'file', ' ', '>>', ' ', 'file2', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_014(self):
-        command = fl.get_text('unittest/tok/8_3')
+        soluce = ['echo', ' ', 'text', '||',
+                  'file', ' ', '<<', ' ', 'file2', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', 'text', '||',
-                                      'file', ' ', '<<', ' ', 'file2', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_015(self):
-        command = fl.get_text('unittest/tok/9')
+        soluce = ['echo', ' ', '\\f\\i\\l\\e', '\n', 'VAR',
+                  ' ', '=', ' ', '0', '\n', 'VAR', '=',
+                  '1', '\n', 'VAR', ' ', '+=', '1', '\n',
+                  'echo', ' ', '"', '\\$VAR', ' ', '\\=',
+                  ' ', '$VAR', '"', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', '\\f\\i\\l\\e', '\n', 'VAR',
-                                      ' ', '=', ' ', '0', '\n', 'VAR', '=',
-                                      '1', '\n', 'VAR', ' ', '+=', '1', '\n',
-                                      'echo', ' ', '"', '\\$VAR', ' ', '\\=',
-                                      ' ', '$VAR', '"', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_016(self):
-        command = fl.get_text('unittest/tok/9_1')
+        soluce = ['echo', ' ', '\\f\\i\\l\\e', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['echo', ' ', '\\f\\i\\l\\e', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_017(self):
-        command = fl.get_text('unittest/tok/9_2')
+        soluce = ['VAR', ' ', '=', ' ', '0', '\n',
+                  'VAR', '=', '1', '\n', 'VAR', ' ',
+                  '+=', '1', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['VAR', ' ', '=', ' ', '0', '\n',
-                                      'VAR', '=', '1', '\n', 'VAR', ' ',
-                                      '+=', '1', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_018(self):
-        command = fl.get_text('unittest/tok/9_3')
+        soluce = ['VAR', ' ', '=', ' ', '0', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['VAR', ' ', '=', ' ', '0', '\n'])
+        self.assertListEqual(tokens, soluce)
 
     def test_tok_019(self):
-        command = fl.get_text('unittest/tok/9_4')
+        soluce = ['VAR', ' ', '+=', ' ', '0', '\n']
+        command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['VAR', ' ', '+=', ' ', '0', '\n'])
+        self.assertListEqual(tokens, soluce)
 
 
 class TestTokenisation2(unittest.TestCase):

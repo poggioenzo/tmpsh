@@ -1,5 +1,0 @@
-echo \f\i\l\e
-VAR = 0
-VAR=1
-VAR +=1
-echo "\$VAR \= $VAR"
