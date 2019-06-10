@@ -28,11 +28,11 @@ class TagsTokens():
                 self.tags.append('SPACES')
             else:
                 self.tags.append('STMT')
-        self.double_quote_gseture()
-        self.quote_gseture()
+        self.double_quote_gesture()
+        self.quote_gesture()
         return self
 
-    def double_quote_gseture(self):
+    def double_quote_gesture(self):
         len_tags = len(self.tags)
         i = 0
         stk = ['']  # stk for stack
@@ -57,7 +57,7 @@ class TagsTokens():
                     self.tags[i] = 'STMT'
             i += 1
 
-    def quote_gseture(self):
+    def quote_gesture(self):
         len_tags = len(self.tags)
         i = 0
         inquote = False
