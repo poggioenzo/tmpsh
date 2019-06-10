@@ -59,11 +59,6 @@ def shift_reduce(tags, grammar):
 
 
 def tagstokens_shift_reduce(tagstokens, grammar):
-    def find_prev_token(tagstokens, i):
-        if tagstokens.tags[i] == 'SPACES':
-            i -= 1
-        return tagstokens.tokens[i]
-
     stack = []
     i = 0
     len_tags = len(tagstokens.tags)
@@ -79,8 +74,7 @@ def tagstokens_shift_reduce(tagstokens, grammar):
                     stack.append(tagstokens.tags[i])
             else:
                 tagstokens.valid = False
-                tagstokens.token_error = find_prev_token(
-                    tagstokens, i - 1)
+                tagstokens.token_error = tagstokens.find_prev_token(i - 1)
                 break
             i += 1
     if tagstokens.valid and stack != ['CMD']:
