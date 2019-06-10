@@ -1,14 +1,20 @@
 #! /usr/bin/env python3
 
+import pandas as pd
 import utils.global_var as gv
 import utils.tokenizer as tk
 import utils.strcontain as sc
+import utils.shift_reduce as sr
 
 
 class TagsTokens():
     def __init__(self, tokens=None, tags=None):
         self.tokens = tokens if tokens else []
         self.tags = tags if tags else []
+        self.stack = []
+        self.token_error = ''
+        self.valid = True
+        self.incomplete = False
 
     def init_with_input(self, term_inputs):
         tk.tokenize(term_inputs, self.tokens)
@@ -62,7 +68,18 @@ class TagsTokens():
                 self.tags[i] = 'STMT'
             i += 1
 
+    def check_syntax(self):
+        def end_escape(last_tokens):
+            return gv.GRAMMAR.escape == last_tokens[-1]
+        self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
+        if end_escape(self.tokens[-1]):
+            self.incomplete = True
+        return self
+
     def __str__(self):
-        import pandas as pd
-        dataframe = pd.DataFrame([self.tags, self.tokens])
-        return str(dataframe)
+        str0 = '\n'.join(
+            str(pd.DataFrame([self.tags, self.tokens])).split('\n')[1:3])
+        str0 += '\nStack: {}'.format(self.stack)
+        str0 += '\nValid: {} | Incomplete: {} | Token_error: "{}"'.format(
+            self.valid, self.incomplete, self.token_error)
+        return str0
