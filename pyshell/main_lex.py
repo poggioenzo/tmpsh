@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-# import code
-# from utils.commands2 import ListCommands
 from utils.tagstokens import TagsTokens
-import utils.shift_reduce as sr
-import utils.global_var as gv
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
