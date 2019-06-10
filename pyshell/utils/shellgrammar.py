@@ -3,6 +3,10 @@ import utils.strcontain as sc
 from utils.grammar import Grammar
 
 
+def get_maxlen(iterator):
+    return max([len(k) for k in iterator])
+
+
 class ShellGrammar(Grammar):
     """docstring for ."""
 
@@ -29,12 +33,6 @@ class ShellGrammar(Grammar):
 
     def get_leaf_op(self):
         self.leaf_op = self.get_list_op(sc.containalphanum)
-
-    def get_maxlen(self, iter):
-        return max([len(k) for k in iter])
-
-    # def get_first(self, iter):
-    #     return [k[0] for k in iter]
 
     def get_opening_tags(self):
         if 'SUB_PROCESS' in self.grammar:
