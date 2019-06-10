@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import unittest
-import utils.shift_reduce as sr
+import utils.shiftreduce as sr
 from utils.grammar import Grammar
 GRAMMAR = Grammar("grammar/grammar_test.txt")
 

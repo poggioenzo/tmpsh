@@ -4,7 +4,7 @@ import pandas as pd
 import utils.global_var as gv
 import utils.tokenizer as tk
 import utils.strcontain as sc
-import utils.shift_reduce as sr
+import utils.shiftreduce as sr
 
 
 class TagsTokens():
