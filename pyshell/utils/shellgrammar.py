@@ -21,8 +21,14 @@ class ShellGrammar(Grammar):
         self.get_leaf_op()
         if 'ESCAPE' in self.grammar:
             self.leaf_op.remove(self.grammar['ESCAPE'][0])
-        self.maxlen_leaf_op = self.get_maxlen(self.leaf_op)
+        self.maxlen_leaf_op = get_maxlen(self.leaf_op)
         self.get_opening_tags()
+        self.get_abstract_terminator()
+
+    def get_abstract_terminator(self):
+        if 'TERMINATOR' in self.grammar:
+            self.grammar['ABSTRACT_TERMINATOR'] = \
+                self.grammar['TERMINATOR'] + ['BACKGROUND_JOBS']
 
     def get_escape(self):
         if 'ESCAPE' in self.grammar:
