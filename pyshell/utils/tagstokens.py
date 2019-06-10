@@ -69,12 +69,25 @@ class TagsTokens():
             i += 1
 
     def check_syntax(self):
-        def end_escape(last_tokens):
-            return gv.GRAMMAR.escape == last_tokens[-1]
+        def end_escape(lt):
+            return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
         self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
         if end_escape(self.tokens[-1]):
             self.incomplete = True
+        if self.stack[-1] == 'REDIRECTION':
+            self.valid = False
+            self.incomplete = False
+            self.token_error = self.find_prev_token(len(self.tokens) - 1)
+        self.clear_stack()
         return self
+
+    def find_prev_token(self, i):
+        if self.tags[i] == 'SPACES':
+            i -= 1
+        return self.tokens[i]
+
+    def clear_stack(self):
+        self.stack = [elt for elt in self.stack if elt != 'CMD']
 
     def __str__(self):
         str0 = '\n'.join(
