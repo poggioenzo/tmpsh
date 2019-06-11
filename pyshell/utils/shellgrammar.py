@@ -27,8 +27,9 @@ class ShellGrammar(Grammar):
 
     def get_abstract_terminator(self):
         if 'TERMINATOR' in self.grammar:
-            self.grammar['ABSTRACT_TERMINATOR'] = \
-                self.grammar['TERMINATOR'] + ['BACKGROUND_JOBS']
+            self.grammar['ABS_TERMINATOR'] = \
+                self.grammar['TERMINATOR'] + ['BACKGROUND_JOBS',
+                                              'CMDAND', 'CMDOR', 'PIPE']
 
     def get_escape(self):
         if 'ESCAPE' in self.grammar:
