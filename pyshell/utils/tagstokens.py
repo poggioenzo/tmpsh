@@ -15,9 +15,15 @@ class TagsTokens():
         self.token_error = ''
         self.valid = True
         self.incomplete = False
+        self.length = 0
+        self.update_length()
+
+    def update_length(self):
+        self.length = len(self.tokens)
 
     def init_with_input(self, term_inputs):
         tk.tokenize(term_inputs, self.tokens)
+        self.update_length()
         return self.get_tags()
 
     def get_tags(self):
@@ -33,11 +39,10 @@ class TagsTokens():
         return self
 
     def double_quote_gesture(self):
-        len_tags = len(self.tags)
         i = 0
         stk = ['']  # stk for stack
         exit_tag = ''
-        while i < len_tags:
+        while i < self.length:
             tag = self.tags[i]
             if exit_tag == tag:
                 if stk[-1:][0] == 'DQUOTES':
@@ -58,10 +63,9 @@ class TagsTokens():
             i += 1
 
     def quote_gesture(self):
-        len_tags = len(self.tags)
         i = 0
         inquote = False
-        while i < len_tags:
+        while i < self.length:
             if self.tags[i] == 'QUOTE':
                 inquote = not inquote
             elif self.tags[i] not in ['STMT', 'SPACES'] and inquote:
