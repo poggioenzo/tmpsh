@@ -39,7 +39,7 @@ class TagsTokens():
         return self
 
     def double_quote_gesture(self):
-        # TODO: inspire of split_branch(self, tt) to upgrade
+        # TODO: inspire of split_branch(self, tt) to improve code quality
         i = 0
         stk = ['']  # stk for stack
         exit_tag = ['']
