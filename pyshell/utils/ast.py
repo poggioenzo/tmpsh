@@ -46,10 +46,8 @@ class AST():  # AbstractSyntaxTree
                 and_or_begin = ''
             if tag in ['CMDAND', 'CMDOR']:
                 and_or_begin = tag
+            print(wtg)
             i += 1
-        if i == 0:
-            print('LOL')
-            i = 1
         self.list_branch.append(ACB(TT(tt.tokens[begin:i], tt.tags[begin:i]),
                                     and_or_begin,
                                     tag))
@@ -92,6 +90,8 @@ class ACB():  # AbstractCommandBranch
                     self.subast.append(AST(TT(self.tagstokens.tokens[begin:i],
                                               self.tagstokens.tags[begin:i])))
                 wtg.pop(-1)
+            else:
+                print('debug', tag)
             i += 1
 
     def __str__(self):
