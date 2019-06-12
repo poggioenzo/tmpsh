@@ -41,32 +41,37 @@ class TagsTokens():
     def double_quote_gesture(self):
         i = 0
         stk = ['']  # stk for stack
-        exit_tag = ''
+        exit_tag = ['']
         while i < self.length:
             tag = self.tags[i]
-            if exit_tag == tag:
+            if exit_tag[-1] == tag:
                 if stk[-1:][0] == 'DQUOTES':
                     self.tags[i] = 'STMT'
                 else:
-                    exit_tag = ''
+                    exit_tag.pop(-1)
                     stk.pop(-1)
             elif tag == 'DQUOTES':
-                _ = stk.append(tag) if stk[-1:][0] != tag else stk.pop(-1)
-                # Ouais on peut clairement developper cette ternaire mais c'est
-                # un kiffe de faire un switch sur une ligne
+                if stk[-1:][0] != 'DQUOTES':
+                    stk.append(tag)
+                else:
+                    stk.pop(-1)
+                    self.tags[i] = 'END_DQUOTES'
             elif tag not in ['STMT', 'SPACES'] and stk[-1:][0] == 'DQUOTES':
                 if tag in gv.GRAMMAR.dquotes_opening_tags:
                     stk.append(tag)
-                    exit_tag = gv.GRAMMAR.dquotes_opening_tags[tag]
+                    exit_tag.append(gv.GRAMMAR.dquotes_opening_tags[tag])
                 else:
                     self.tags[i] = 'STMT'
             i += 1
+            print(tag)
 
     def quote_gesture(self):
         i = 0
         inquote = False
         while i < self.length:
             if self.tags[i] == 'QUOTE':
+                if inquote:
+                    self.tags[i] = 'END_QUOTE'
                 inquote = not inquote
             elif self.tags[i] not in ['STMT', 'SPACES'] and inquote:
                 self.tags[i] = 'STMT'
