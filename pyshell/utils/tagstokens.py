@@ -64,7 +64,6 @@ class TagsTokens():
                 else:
                     self.tags[i] = 'STMT'
             i += 1
-            print(tag)
 
     def quote_gesture(self):
         i = 0
