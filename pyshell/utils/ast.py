@@ -22,8 +22,8 @@ class AST():  # AbstractSyntaxTree
         self.split_branch(tagstokens)
         self.type = 'ROOT'
 
-    def set_type(self, type):
-        self.type = type
+    def set_type(self, ast_type):
+        self.type = ast_type
 
     def split_branch(self, tt):
         i = 0
@@ -47,12 +47,15 @@ class AST():  # AbstractSyntaxTree
             if tag in ['CMDAND', 'CMDOR']:
                 and_or_begin = tag
             i += 1
+        if i == 0:
+            print('LOL')
+            i = 1
         self.list_branch.append(ACB(TT(tt.tokens[begin:i], tt.tags[begin:i]),
                                     and_or_begin,
                                     tag))
 
     def __str__(self):
-        return '{:_^10}:\n'.format(self.type) + split_shift('\n'.join(
+        return '{:_^12}:\n'.format(self.type) + split_shift('\n'.join(
             [str(branch) for branch in self.list_branch]))
 
 
@@ -66,11 +69,11 @@ class ACB():  # AbstractCommandBranch
         self.subast = []  # list of AST
         self.subcmd_type = []
         self.check_subcmd()
-        # self.set_subast_type()
+        self.set_subast_type()
 
     def set_subast_type(self):
-        for type, sub_ast in zip(self.subcmd_type, self.subast):
-            sub_ast.set_type(type)
+        for type_command, sub_ast in zip(self.subcmd_type, self.subast):
+            sub_ast.set_type(type_command)
 
     def check_subcmd(self):
         i = 0
@@ -81,14 +84,14 @@ class ACB():  # AbstractCommandBranch
             tag = self.tagstokens.tags[i]
             if tag in gv.GRAMMAR.opening_tags:
                 wtg.append(gv.GRAMMAR.opening_tags[tag])
-                begin = i + 1
+                if len(wtg) == 1:
+                    begin = i + 1
+                    self.subcmd_type.append(tag)
             elif wait(wtg, tag):
                 if len(wtg) == 1:
                     self.subast.append(AST(TT(self.tagstokens.tokens[begin:i],
                                               self.tagstokens.tags[begin:i])))
                 wtg.pop(-1)
-            else:
-                print(wait(wtg, tag), wtg, tag)
             i += 1
 
     def __str__(self):
