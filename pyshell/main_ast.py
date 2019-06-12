@@ -6,7 +6,8 @@ from utils.ast import AST
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        ENTRY = "ls $(echo $PATH | sed s/:/\ /g) | grep py"
+        ENTRY = "ls $(echo ${PATH} | sed s/:/\ /g) | grep $( echo py)"
+        print(ENTRY)
     else:
         ENTRY = " ".join(sys.argv[1:])
     TAGSTOKENS = TT().init_with_input(ENTRY).check_syntax()
