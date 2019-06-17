@@ -7,11 +7,11 @@ import utils.strcontain as sc
 import utils.shiftreduce as sr
 
 
-def test(my_function):
+def test(func):
     def wrapper(self, i):
         if self.tags[i] not in gv.GRAMMAR.opening_tags:
             raise Exception("No {} in opening_tags.".format(self.tags[i]))
-        return my_function(self, i)
+        return func(self, i)
     return wrapper
 
 
