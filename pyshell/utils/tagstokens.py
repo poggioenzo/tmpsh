@@ -7,6 +7,14 @@ import utils.strcontain as sc
 import utils.shiftreduce as sr
 
 
+def test(my_function):
+    def wrapper(self, i):
+        if self.tags[i] not in gv.GRAMMAR.opening_tags:
+            raise Exception("No {} in opening_tags.".format(self.tags[i]))
+        return my_function(self, i)
+    return wrapper
+
+
 class TagsTokens():
     def __init__(self, tokens=None, tags=None):
         self.tokens = tokens if tokens else []
@@ -80,6 +88,7 @@ class TagsTokens():
     def check_syntax(self):
         def end_escape(lt):
             return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
+
         self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
         if end_escape(self.tokens[-1]):
             self.incomplete = True
@@ -89,6 +98,21 @@ class TagsTokens():
             self.token_error = self.find_prev_token(len(self.tokens) - 1)
         self.clear_stack()
         return self
+
+    @test
+    def skip_openning_tags(self, i):
+        stack = [gv.GRAMMAR.opening_tags[self.tags[i]]]
+        i += 1
+        while i < self.length:
+            tag = self.tags[i]
+            if stack == []:
+                break
+            elif tag in gv.GRAMMAR.opening_tags:
+                stack.append(gv.GRAMMAR.opening_tags[tag])
+            elif tag == stack[-1]:
+                stack.pop(-1)
+            i += 1
+        return i
 
     def find_prev_token(self, i):
         if self.tags[i] == 'SPACES':
@@ -105,3 +129,6 @@ class TagsTokens():
         str0 += '\nValid: {} | Incomplete: {} | Token_error: "{}"'.format(
             self.valid, self.incomplete, self.token_error)
         return str0
+
+    def __getitem__(self, index):
+        return TagsTokens(self.tokens[index], self.tags[index])
