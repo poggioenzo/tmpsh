@@ -71,15 +71,24 @@ class ACB():  # AbstractCommandBranch
                 self.subcmd_type.append(tag)
                 i = self.tagstokens.skip_openning_tags(i) - 1
                 self.subast.append(AST(self.tagstokens[begin:i]))
+                self.tagstokens[begin - 1:i + 1] = [
+                    ['SUBAST'], ['↓subast{}↓'.format(len(self.subast) - 1)]]
+                i = begin
             i += 1
 
-    # def check_redirection(self):
-    #   pass
+    def check_redirection(self):
+        lentags = self.tagstokens.length - 1
+        tag = ''
+        while lentags >= 0:
+            tag = self.tagstokens.tags[lentags]
+            if tag in gv.GRAMMAR.grammar['REDIRECTION']:
+                lol = 0
+            lentags -= 1
 
     def __str__(self):
         cmd = '{:_^10}'.format(self.begin_andor)
         cmd += '{}'.format(''.join(self.tagstokens.tokens))
-        cmd += '{:_^15}\n'.format(self.tag_end)
+        cmd += '{:_^17}\n'.format(self.tag_end)
         if self.subast != []:
             cmd += split_shift('\n'.join([str(cmd) for cmd in self.subast]))
         return cmd
