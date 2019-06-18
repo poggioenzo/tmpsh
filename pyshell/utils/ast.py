@@ -60,7 +60,8 @@ class ACB():  # AbstractCommandBranch
         self.redirectionfd = []
         self.check_subast()
         self.set_subast_type()
-    
+        self.check_redirection()
+
     @property
     def has_subast(self):
         return len(self.subast) > 0
@@ -87,17 +88,27 @@ class ACB():  # AbstractCommandBranch
 
     def check_redirection(self):
         lentags = self.tagstokens.length - 1
+        previous = 0
         tag = ''
         while lentags >= 0:
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
-                lol = 0
+                self.redirectionfd.append(
+                    RedirectionFD(self.tagstokens[previous], tag))
+                del self.tagstokens[previous]
+                del self.tagstokens[lentags]
+            elif tag != 'SPACES':
+                previous = lentags
             lentags -= 1
+        self.redirectionfd = list(reversed(self.redirectionfd))
 
     def __str__(self):
         cmd = '{:_^10}'.format(self.begin_andor)
         cmd += '{}'.format(''.join(self.tagstokens.tokens))
-        cmd += '{:_^17}\n'.format(self.tag_end)
+        cmd += '{:_^17}'.format(self.tag_end)
+        if self.redirectionfd != []:
+            cmd += ' fd-> ' + ' '.join([str(fd) for fd in self.redirectionfd])
+        cmd += '\n'
         if self.subast != []:
             cmd += split_shift('\n'.join([str(cmd) for cmd in self.subast]))
         return cmd
