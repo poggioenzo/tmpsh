@@ -19,6 +19,10 @@ class TagsTokens():
     def __init__(self, tokens=None, tags=None):
         self.tokens = tokens if tokens else []
         self.tags = tags if tags else []
+        if isinstance(self.tokens, str):
+            self.tokens = [self.tokens]
+        if isinstance(self.tags, str):
+            self.tags = [self.tags]
         self.stack = []
         self.token_error = ''
         self.valid = True
