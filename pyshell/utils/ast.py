@@ -53,14 +53,14 @@ class ACB():  # AbstractCommandBranch
         self.subast = []  # list of AST
         self.subcmd_type = []
         self.redirectionfd = []
-        self.check_subcmd()
+        self.check_subast()
         self.set_subast_type()
 
     def set_subast_type(self):
         for type_command, sub_ast in zip(self.subcmd_type, self.subast):
             sub_ast.set_type(type_command)
 
-    def check_subcmd(self):
+    def check_subast(self):
         i = 0
         begin = 0
         tag = ''
