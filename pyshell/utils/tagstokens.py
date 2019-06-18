@@ -35,8 +35,24 @@ class TagsTokens():
 
     def init_with_input(self, term_inputs):
         tk.tokenize(term_inputs, self.tokens)
+        self.alias_replacement()
         self.update_length()
         return self.get_tags()
+
+    def alias_replacement(self):
+        def prev_tokens_ok(tokens, i):
+            if i == 0:
+                return True
+            ret = self.tokens[i - 1] in gv.GRAMMAR.grammar['ABS_TERMINATOR']
+            ret |= self.tokens[i - 1] in gv.GRAMMAR.opening_tags
+            return ret
+        i = 0
+        len_tok = len(self.tokens)
+        tok = ''
+        while i < len_tok:
+            tok = self.tokens[i]
+            if prev_tokens_ok(self.tokens, i) and tok in gv.ALIAS:
+                pass
 
     def get_tags(self):
         for tok in self.tokens:
