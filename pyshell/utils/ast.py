@@ -48,7 +48,8 @@ class ACB():  # AbstractCommandBranch
     def __init__(self, tt, begin_andor, tag_end):
         self.tagstokens = tt
         self.begin_andor = begin_andor
-        self.tag_end = tag_end
+        self.tag_end = tag_end if tag_end in [
+            'BACKGROUND_JOBS', 'PIPE'] else ''
         self.subast = []  # list of AST
         self.subcmd_type = []
         self.redirectionfd = []
