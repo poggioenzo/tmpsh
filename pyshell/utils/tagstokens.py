@@ -134,8 +134,8 @@ class TagsTokens():
         return TagsTokens(self.tokens[index], self.tags[index])
 
     def __setitem__(self, index, value):
-        # if type(value) != tuple or type(value) != list:
-        #     raise Exception("Setitem value should be a tuple or list."
-        #                     "\n(tag, token) or [[tags],[tokens]]")
+        if not (type(value) == tuple or type(value) == list):
+            raise Exception("Setitem value should be a tuple or list."
+                            "\n(tag, token) or [[tags],[tokens]]")
         self.tags[index], self.tokens[index] = value
         self.update_length()
