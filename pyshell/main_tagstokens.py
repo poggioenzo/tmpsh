@@ -9,5 +9,4 @@ if __name__ == '__main__':
     else:
         ENTRY = " ".join(sys.argv[1:])
     TAGSTOKENS = TagsTokens().init_with_input(ENTRY).check_syntax()
-    print(TAGSTOKENS.tokens)
     print(TAGSTOKENS)
