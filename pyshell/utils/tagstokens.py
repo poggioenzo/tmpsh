@@ -143,3 +143,10 @@ class TagsTokens():
                             "\n(tag, token) or [[tags],[tokens]]")
         self.tags[index], self.tokens[index] = value
         self.update_length()
+
+    def __delitem__(self, key):
+        if not (0 <= key < self.length):
+            raise Exception("IndexError: list index out of range")
+        del self.tags[key]
+        del self.tokens[key]
+        self.update_length()
