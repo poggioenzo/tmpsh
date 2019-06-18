@@ -109,3 +109,6 @@ class RedirectionFD():
     def __init__(self, tagstokens, redirection_type):
         self.tagstokens = tagstokens
         self.type = redirection_type
+
+    def __str__(self):
+        return '{}: {}'.format(self.type, ''.join(self.tagstokens.tokens))
