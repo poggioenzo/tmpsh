@@ -19,8 +19,9 @@ static int		is_cursor_pos(t_line *shell_repr, t_char *char_lst, \
 /*
 ** research_prev_info:
 **
-** Parse the entire shell representation from the first char.
-** Whenever a word start is found, store thoe position.
+** Parse the entire shell representation from the first char
+** until the cursor position to get the cursor's previous char.
+** Whenever a new word start is found, store his position.
 */
 static void	research_prev_info(t_line *shell_repr, t_cursor *cursor, \
 		t_cursor *word_cursor, t_char **search_char)
@@ -168,7 +169,7 @@ t_line	*get_prev_cursor_line(t_cursor *cursor, t_line *shell_repr)
 ** get_cursor_char:
 **
 ** Get the t_char * element corresponding to the selected cursor.
-** Get also the previous element in the same time.
+** Get also the previous t_char if @t_char **prev_char is not NULL.
 ** If the cursor it at the last position, return NULL.
 */
 
