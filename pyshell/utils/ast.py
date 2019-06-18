@@ -16,8 +16,13 @@ class AST():  # AbstractSyntaxTree
         self.type = 'ROOT'
         self.split_branch(tagstokens)
 
-    def set_type(self, ast_type):
-        self.type = ast_type
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, ast_type):
+        self._type = ast_type
 
     def split_branch(self, tt):
         i = 0
@@ -55,10 +60,14 @@ class ACB():  # AbstractCommandBranch
         self.redirectionfd = []
         self.check_subast()
         self.set_subast_type()
+    
+    @property
+    def has_subast(self):
+        return len(self.subast) > 0
 
     def set_subast_type(self):
         for type_command, sub_ast in zip(self.subcmd_type, self.subast):
-            sub_ast.set_type(type_command)
+            sub_ast.type = type_command
 
     def check_subast(self):
         i = 0
