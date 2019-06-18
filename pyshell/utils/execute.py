@@ -5,4 +5,3 @@ class Executor:
     def __init__(self, ast):
         self.ast = ast
         print(ast)
-
