@@ -27,7 +27,7 @@ class AST():  # AbstractSyntaxTree
         while i < tt.length:
             tag = tt.tags[i]
             if tag in gv.GRAMMAR.opening_tags:
-                i = tt.skip_openning_tags(i)
+                i = tt.skip_openning_tags(i) - 1
             elif tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
                 self.list_branch.append(ACB(tt[begin:i], and_or_begin, tag))
                 begin = i + 1
