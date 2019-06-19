@@ -33,7 +33,6 @@ class Executor:
                 if pid != 0:
                     index += 1
                     continue
-            print(pid)
             if self.perfom_subast_command(branch) == True:
                 index += 1
                 continue
@@ -149,8 +148,6 @@ class Executor:
         pid = os.fork()
         if pid == 0:
             #run the child
-            if cmd_args[0] == "echo":
-                print("pid for echo {}: ".format(cmd_args[1]), os.getpid())
             executable = get_execname(cmd_args[0])
             os.execve(executable, cmd_args, os.environ)
         else:
