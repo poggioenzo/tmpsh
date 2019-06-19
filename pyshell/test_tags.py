@@ -72,6 +72,11 @@ class TestTags(unittest.TestCase):
              'PIPE', 'SPACES', 'STMT', 'SPACES', 'HEREDOC', 'SPACES',
              'STMT', 'NEW_LINE', 'STMT', 'NEW_LINE', 'STMT'], tags)
 
+    def test_tags_009(self):
+        term_inputs = ' \\ a  '
+        tags = TagsTokens().init_with_input(term_inputs).tags
+        self.assertEqual(['SPACES', 'STMT', 'SPACES'], tags)
+
 
 class TestTagsDoubleQuotes(unittest.TestCase):
 
