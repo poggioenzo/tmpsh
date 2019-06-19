@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import utils.global_var as gv
-from utils.tagstokens import TagsTokens as TT
 
 
 def split_shift(string):
@@ -9,8 +8,6 @@ def split_shift(string):
 
 
 class AST():  # AbstractSyntaxTree
-    """docstring for AbstractSyntaxTree."""
-
     def __init__(self, tagstokens):
         self.list_branch = []
         self.type = 'ROOT'
@@ -49,8 +46,6 @@ class AST():  # AbstractSyntaxTree
 
 
 class ACB():  # AbstractCommandBranch
-    """docstring for AbstractSyntaxTree."""
-
     def __init__(self, tt, begin_andor, tag_end):
         self.tagstokens = tt
         self.begin_andor = begin_andor
