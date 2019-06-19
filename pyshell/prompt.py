@@ -4,6 +4,8 @@ from cmd import Cmd
 from utils.tagstokens import TagsTokens
 from utils.ast import AST
 from utils.execute import Executor
+from utils.global_var import ENVIRON
+import os, sys
 
 class Prompt(Cmd):
     intro = "tmpsh - Total Mastering Professional Shell"
@@ -11,6 +13,7 @@ class Prompt(Cmd):
     content = ""
     def default(self, line):
         self.content += line
+        print("line : |{}|".format(line))
         TAGSTOKENS = TagsTokens().init_with_input(line).check_syntax()
         if TAGSTOKENS.valid and not TAGSTOKENS.incomplete:
 
@@ -24,5 +27,11 @@ class Prompt(Cmd):
                 str(TAGSTOKENS.token_error)))
             self.prompt = "error prompt > "
 
-if __name__ == "__main__":
+def main(argc, argv, environ):
+    ENVIRON = environ.copy()
     Prompt().cmdloop()
+
+
+
+if __name__ == "__main__":
+    main(len(sys.argv), sys.argv, os.environ)
