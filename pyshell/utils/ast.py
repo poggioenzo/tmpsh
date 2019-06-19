@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import utils.global_var as gv
-from utils.tagstokens import TagsTokens as TT
 
 
 def split_shift(string):
@@ -9,8 +8,6 @@ def split_shift(string):
 
 
 class AST():  # AbstractSyntaxTree
-    """docstring for AbstractSyntaxTree."""
-
     def __init__(self, tagstokens):
         self.list_branch = []
         self.type = 'ROOT'
@@ -49,15 +46,15 @@ class AST():  # AbstractSyntaxTree
 
 
 class ACB():  # AbstractCommandBranch
-    """docstring for AbstractSyntaxTree."""
-
     def __init__(self, tt, begin_andor, tag_end):
         self.tagstokens = tt
         self.begin_andor = begin_andor
-        self.tag_end = tag_end if tag_end in gv.GRAMMAR.grammar['ABS_TERMINATOR'] else '' 
+        self.tag_end = tag_end if tag_end in \
+            gv.GRAMMAR.grammar['ABS_TERMINATOR'] else ''
         self.subast = []  # list of AST
         self.subcmd_type = []
         self.redirectionfd = []
+        self.cursh_subsh_gesture()
         self.check_subast()
         self.set_subast_type()
         self.check_redirection()
@@ -69,6 +66,21 @@ class ACB():  # AbstractCommandBranch
     def set_subast_type(self):
         for type_command, sub_ast in zip(self.subcmd_type, self.subast):
             sub_ast.type = type_command
+
+    def cursh_subsh_gesture(self):
+        i = 0
+        end = 0
+        tag = ''
+        isfirst = True
+        while i < self.tagstokens.length:
+            tag = self.tagstokens.tags[i]
+            if not isfirst and tag in ['CURSH', 'SUBSH']:
+                end = self.tagstokens.skip_openning_tags(i) - 1
+                self.tagstokens.tags[i] = 'STMT'
+                self.tagstokens.tags[end] = 'STMT'
+                i = end
+            isfirst = isfirst and tag == 'SPACES'
+            i += 1
 
     def check_subast(self):
         i = 0

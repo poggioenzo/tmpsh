@@ -35,9 +35,10 @@ class TagsTokens():
 
     def init_with_input(self, term_inputs):
         tk.tokenize(term_inputs, self.tokens)
-        # self.alias_replacement()
         self.update_length()
-        return self.get_tags()
+        self.get_tags()
+        # self.alias_gesture()
+        return self
 
     def find_prev_token(self, i, get_token=True):
         if self.tags[i] == 'SPACES':
@@ -45,23 +46,38 @@ class TagsTokens():
         return self.tokens[i] if get_token else self.tags[i]
 
     # def prev_tokens_ok(self, i):
-    #     if i == 0:
+    #     if i == -1 or (i == 0 and self.tags[0] == 'SPACES'):
     #         return True
-    #     ret = self.tokens[i - 1] in gv.GRAMMAR.grammar['ABS_TERMINATOR']
-    #     ret |= self.tokens[i - 1] in gv.GRAMMAR.opening_tags
+    #     ret = self.find_prev_token(i, False)\
+    #         in gv.GRAMMAR.grammar['ABS_TERMINATOR']
+    #     ret |= self.find_prev_token(i, False)\
+    #         in gv.GRAMMAR.opening_tags
     #     return ret
 
-    # def alias_replacement(self):
+    # def alias_gesture(self):
     #     i = 0
-    #     len_tok = len(self.tokens)
     #     tok = ''
-    #     while i < len_tok:
+    #     local = []
+    #     passed_alias = []
+    #
+    #     while i < self.length:
     #         tok = self.tokens[i]
-    #         if self.prev_tokens_ok(i) and tok in gv.ALIAS:
-    #             pass
+    #         print(passed_alias)
+    #         if self.tags[i] in gv.GRAMMAR.grammar['ABS_TERMINATOR']\
+    #                 or self.tags[i] in gv.GRAMMAR.opening_tags:
+    #             passed_alias = []
+    #         elif self.prev_tokens_ok(i - 1) and tok in gv.ALIAS and\
+    #                 tok not in passed_alias:
+    #             passed_alias.append(tok)
+    #             tk.tokenize(gv.ALIAS[tok], local)
+    #             self.tokens[i:i + 1] = local
+    #             self.get_tags()
+    #             local = []
+    #             i -= 1
     #         i += 1
 
     def get_tags(self):
+        self.tags = []
         for tok in self.tokens:
             if tok in gv.GRAMMAR.leaf_op:
                 self.tags.append(gv.GRAMMAR.reverse[tok])

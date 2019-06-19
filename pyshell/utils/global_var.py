@@ -13,4 +13,4 @@ ENVIRON = {}
 LOCAL_VAR = {}
 LAST_STATUS = 0
 
-JOBS = BackgroundJobs() 
+JOBS = BackgroundJobs()
