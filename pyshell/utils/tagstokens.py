@@ -35,7 +35,7 @@ class TagsTokens():
 
     def init_with_input(self, term_inputs):
         tk.tokenize(term_inputs, self.tokens)
-        self.alias_replacement()
+        # self.alias_replacement()
         self.update_length()
         return self.get_tags()
 
@@ -53,12 +53,13 @@ class TagsTokens():
             tok = self.tokens[i]
             if prev_tokens_ok(self.tokens, i) and tok in gv.ALIAS:
                 pass
+            i += 1
 
     def get_tags(self):
         for tok in self.tokens:
             if tok in gv.GRAMMAR.leaf_op:
                 self.tags.append(gv.GRAMMAR.reverse[tok])
-            elif sc.containspaces(tok):
+            elif sc.containonlyspaces(tok):
                 self.tags.append('SPACES')
             else:
                 self.tags.append('STMT')
@@ -112,7 +113,7 @@ class TagsTokens():
         self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
         if end_escape(self.tokens[-1]):
             self.incomplete = True
-        if self.stack[-1] == 'REDIRECTION':
+        if self.stack != [] and self.stack[-1] == 'REDIRECTION':
             self.valid = False
             self.incomplete = False
             self.token_error = self.find_prev_token(len(self.tokens) - 1)
