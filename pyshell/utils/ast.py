@@ -40,7 +40,8 @@ class AST():  # AbstractSyntaxTree
             if tag in ['CMDAND', 'CMDOR']:
                 and_or_begin = tag
             i += 1
-        self.list_branch.append(ACB(tt[begin:i], and_or_begin, tag))
+        if begin != i:
+            self.list_branch.append(ACB(tt[begin:i], and_or_begin, tag))
 
     def __str__(self):
         return '{:_^12}:\n'.format(self.type) + split_shift('\n'.join(
