@@ -54,6 +54,7 @@ class ACB():  # AbstractCommandBranch
         self.subast = []  # list of AST
         self.subcmd_type = []
         self.redirectionfd = []
+        self.cursh_subsh_gesture()
         self.check_subast()
         self.set_subast_type()
         self.check_redirection()
@@ -65,6 +66,21 @@ class ACB():  # AbstractCommandBranch
     def set_subast_type(self):
         for type_command, sub_ast in zip(self.subcmd_type, self.subast):
             sub_ast.type = type_command
+
+    def cursh_subsh_gesture(self):
+        i = 0
+        end = 0
+        tag = ''
+        isfirst = True
+        while i < self.tagstokens.length:
+            tag = self.tagstokens.tags[i]
+            if not isfirst and tag in ['CURSH', 'SUBSH']:
+                end = self.tagstokens.skip_openning_tags(i) - 1
+                self.tagstokens.tags[i] = 'STMT'
+                self.tagstokens.tags[end] = 'STMT'
+                i = end
+            isfirst = isfirst and tag == 'SPACES'
+            i += 1
 
     def check_subast(self):
         i = 0
