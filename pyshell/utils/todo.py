@@ -6,3 +6,4 @@
 # TODO: error : return tokens
 # TODO: branch on open CMDOR CMDAND end TERMINATOR
 # TODO: assignation en début de commande HOME=/ cd
+# TODO: {} can't be only by terminator
