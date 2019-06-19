@@ -2,7 +2,7 @@ from utils.shellgrammar import ShellGrammar
 from utils.background_jobs import BackgroundJobs
 
 GRAMMAR = ShellGrammar()
-ALIAS = {'all': 'ls -l', 'gall': 'all -G', 'ball': '$(gall)',
+ALIAS = {'all': 'ls -l', 'gall': 'all -G -1', 'ball': '$(gall)',
          'recursion1': 'recursion2',
          'recursion2': 'recursion3',
          'loop1': 'loop2',

@@ -39,21 +39,27 @@ class TagsTokens():
         self.update_length()
         return self.get_tags()
 
-    def alias_replacement(self):
-        def prev_tokens_ok(tokens, i):
-            if i == 0:
-                return True
-            ret = self.tokens[i - 1] in gv.GRAMMAR.grammar['ABS_TERMINATOR']
-            ret |= self.tokens[i - 1] in gv.GRAMMAR.opening_tags
-            return ret
-        i = 0
-        len_tok = len(self.tokens)
-        tok = ''
-        while i < len_tok:
-            tok = self.tokens[i]
-            if prev_tokens_ok(self.tokens, i) and tok in gv.ALIAS:
-                pass
-            i += 1
+    def find_prev_token(self, i, get_token=True):
+        if self.tags[i] == 'SPACES':
+            i -= 1
+        return self.tokens[i] if get_token else self.tags[i]
+
+    # def prev_tokens_ok(self, i):
+    #     if i == 0:
+    #         return True
+    #     ret = self.tokens[i - 1] in gv.GRAMMAR.grammar['ABS_TERMINATOR']
+    #     ret |= self.tokens[i - 1] in gv.GRAMMAR.opening_tags
+    #     return ret
+
+    # def alias_replacement(self):
+    #     i = 0
+    #     len_tok = len(self.tokens)
+    #     tok = ''
+    #     while i < len_tok:
+    #         tok = self.tokens[i]
+    #         if self.prev_tokens_ok(i) and tok in gv.ALIAS:
+    #             pass
+    #         i += 1
 
     def get_tags(self):
         for tok in self.tokens:
@@ -134,11 +140,6 @@ class TagsTokens():
                 stack.pop(-1)
             i += 1
         return i
-
-    def find_prev_token(self, i):
-        if self.tags[i] == 'SPACES':
-            i -= 1
-        return self.tokens[i]
 
     def clear_stack(self):
         self.stack = [elt for elt in self.stack if elt != 'CMD']
