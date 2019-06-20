@@ -169,8 +169,8 @@ class TestSyntaxError(unittest.TestCase):
         terminput = ' {} '
         tagstokens = TagsTokens().init_with_input(terminput).check_syntax()
         print(tagstokens)
-        self.assertFalse(not tagstokens.valid)
-        self.assertEqual(tagstokens.token_error, '')  # '}')
+        self.assertFalse(tagstokens.valid)
+        self.assertEqual(tagstokens.token_error, '}')
 
     def test_syntax_error_009(self):
         terminput = ' ${} '
@@ -293,6 +293,13 @@ class TestSyntaxError2(unittest.TestCase):
         print(tagstokens)
         self.assertFalse(tagstokens.valid)
         self.assertEqual(tagstokens.token_error, '>')
+
+    def test_syntax_error_006(self):
+        terminput = ' () '
+        tagstokens = TagsTokens().init_with_input(terminput).check_syntax()
+        print(tagstokens)
+        self.assertFalse(tagstokens.valid)
+        self.assertEqual(tagstokens.token_error, ')')
 
 
 class TestSyntaxIncomplete(unittest.TestCase):
