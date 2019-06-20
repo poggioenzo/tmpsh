@@ -46,6 +46,8 @@ class ShellGrammar(Grammar):
             opening_tags = self.grammar['SUB_PROCESS']
             if 'QUOTES' in self.grammar:
                 opening_tags.extend(self.grammar['QUOTES'])
+            if 'COMMAND_SH' in self.grammar:
+                opening_tags.extend(self.grammar['COMMAND_SH'])
             for tag in opening_tags:
                 tag_split = tag.split()
                 tag_op = tag_split[0]
