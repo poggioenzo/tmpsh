@@ -25,7 +25,7 @@ class Executor:
         index = 0
         nbr_branch = len(ast.list_branch)
         pid = os.getpid()
-        while index < nbr_branch:
+        while index < nbr_branch and pid > 0:
             branch = ast.list_branch[index]
             #Check if the command have to be launched in background
             if branch.tag_end == "BACKGROUND_JOBS":
@@ -42,9 +42,9 @@ class Executor:
             self.perform_subast_replacement(branch)
             cmd = self.extract_cmd(branch)
             self.exec_command(cmd)
-            if pid == 0:
-                exit(0)
             index += 1
+        if pid == 0:
+            exit(0)
 
     def run_background_process(self, branch):
         """Prepare the current command to be run in background"""
