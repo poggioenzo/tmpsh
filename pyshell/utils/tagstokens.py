@@ -15,6 +15,18 @@ def test(func):
     return wrapper
 
 
+# class TagsTokensMonitor():
+#     """docstring forTagsTokensMonitor."""
+#
+#     def __init__(self, tt):
+#         self.tt = tt
+#         self.i = 0
+#         self.lol = 789
+#
+#     def op_selector(self, i):
+#         pass
+#
+
 class TagsTokens():
     def __init__(self, tokens=None, tags=None):
         self.tokens = tokens if tokens else []
@@ -95,7 +107,6 @@ class TagsTokens():
     #         i += 1
 
     def double_quote_gesture(self):
-        # TODO: inspire of split_branch(self, tt) to improve code quality
         i = 0
         stk = ['']  # stk for stack
         exit_tag = ['']
@@ -113,7 +124,7 @@ class TagsTokens():
                 else:
                     stk.pop(-1)
                     self.tags[i] = 'END_DQUOTES'
-            elif tag not in ['STMT', 'SPACES'] and stk[-1:][0] == 'DQUOTES':
+            elif self.tags[i] != 'STMT' and stk[-1:][0] == 'DQUOTES':
                 if tag in gv.GRAMMAR.dquotes_opening_tags:
                     stk.append(tag)
                     exit_tag.append(gv.GRAMMAR.dquotes_opening_tags[tag])
@@ -129,7 +140,7 @@ class TagsTokens():
                 if inquote:
                     self.tags[i] = 'END_QUOTE'
                 inquote = not inquote
-            elif self.tags[i] is not 'STMT' and inquote:
+            elif self.tags[i] != 'STMT' and inquote:
                 self.tags[i] = 'STMT'
             i += 1
 
