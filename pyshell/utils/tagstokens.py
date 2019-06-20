@@ -128,17 +128,25 @@ class TagsTokens():
                 self.tags[i] = 'STMT'
             i += 1
 
-    def check_syntax(self):
-        def end_escape(lt):
-            return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
-
-        self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
-        if end_escape(self.tokens[-1]):
-            self.incomplete = True
+    def hardcode_error_redirection(self):
         if self.stack != [] and self.stack[-1] == 'REDIRECTION':
             self.valid = False
             self.incomplete = False
             self.token_error = self.find_prev_token(len(self.tokens) - 1)
+
+    def hardcode_error_redirection(self):
+        if self.stack != [] and self.stack[-1] == 'REDIRECTION':
+            self.valid = False
+            self.incomplete = False
+            self.token_error = self.find_prev_token(len(self.tokens) - 1)
+
+    def check_syntax(self):
+        def end_escape(lt):
+            return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
+        self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
+        if end_escape(self.tokens[-1]):
+            self.incomplete = True
+        self.hardcode_error_redirection()
         self.clear_stack()
         return self
 
