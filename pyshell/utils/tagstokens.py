@@ -139,11 +139,8 @@ class TagsTokens():
             self.incomplete = False
             self.token_error = self.find_prev_token(len(self.tokens) - 1)
 
-    def hardcode_error_redirection(self):
-        if self.stack != [] and self.stack[-1] == 'REDIRECTION':
-            self.valid = False
-            self.incomplete = False
-            self.token_error = self.find_prev_token(len(self.tokens) - 1)
+    def hardcode_error_cursh_subsh(self):
+        pass
 
     def check_syntax(self):
         def end_escape(lt):
