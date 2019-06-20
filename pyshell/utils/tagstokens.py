@@ -49,8 +49,6 @@ class TagsTokens():
                 self.tags.append('SPACES')
             else:
                 self.tags.append('STMT')
-        # if self.length > 0:
-        #    self.append_terminator()
         self.double_quote_gesture()
         self.quote_gesture()
         return self
@@ -64,10 +62,6 @@ class TagsTokens():
         self.hardcode_error_redirection()
         self.clear_stack()
         return self
-
-    def append_end(self):
-        if self.tags[-1] in ['END_COMMAND', 'BACKGROUND_JOBS']:
-            pass
 
     # def prev_tokens_ok(self, i):
     #     if i == -1 or (i == 0 and self.tags[0] == 'SPACES'):
