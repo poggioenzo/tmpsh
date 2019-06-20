@@ -5,6 +5,7 @@ import utils.global_var as gv
 import utils.tokenizer as tk
 import utils.strcontain as sc
 import utils.shiftreduce as sr
+from utils.tagstokensmonitor import TagsTokensMonitor as TTM
 
 
 def test(func):
@@ -15,17 +16,9 @@ def test(func):
     return wrapper
 
 
-# class TagsTokensMonitor():
-#     """docstring forTagsTokensMonitor."""
-#
-#     def __init__(self, tt):
-#         self.tt = tt
-#         self.i = 0
-#         self.lol = 789
-#
-#     def op_selector(self, i):
-#         pass
-#
+def end_escape(lt):
+    return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
+
 
 class TagsTokens():
     def __init__(self, tokens=None, tags=None):
@@ -66,45 +59,14 @@ class TagsTokens():
         return self
 
     def check_syntax(self):
-        def end_escape(lt):
-            return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
-        self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
-        if end_escape(self.tokens[-1]):
-            self.incomplete = True
-        self.hardcode_error_redirection()
+        TTM(self)
+        if self.valid:
+            self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
+            if self.length > 0 and end_escape(self.tokens[-1]):
+                self.incomplete = True
+        self.hardcode_error_redirection()  # to do in TTM(self)
         self.clear_stack()
         return self
-
-    # def prev_tokens_ok(self, i):
-    #     if i == -1 or (i == 0 and self.tags[0] == 'SPACES'):
-    #         return True
-    #     ret = self.find_prev_token(i, False)\
-    #         in gv.GRAMMAR.grammar['ABS_TERMINATOR']
-    #     ret |= self.find_prev_token(i, False)\
-    #         in gv.GRAMMAR.opening_tags
-    #     return ret
-
-    # def alias_gesture(self):
-    #     i = 0
-    #     tok = ''
-    #     local = []
-    #     passed_alias = []
-    #
-    #     while i < self.length:
-    #         tok = self.tokens[i]
-    #         print(passed_alias)
-    #         if self.tags[i] in gv.GRAMMAR.grammar['ABS_TERMINATOR']\
-    #                 or self.tags[i] in gv.GRAMMAR.opening_tags:
-    #             passed_alias = []
-    #         elif self.prev_tokens_ok(i - 1) and tok in gv.ALIAS and\
-    #                 tok not in passed_alias:
-    #             passed_alias.append(tok)
-    #             tk.tokenize(gv.ALIAS[tok], local)
-    #             self.tokens[i:i + 1] = local
-    #             self.get_tags()
-    #             local = []
-    #             i -= 1
-    #         i += 1
 
     def double_quote_gesture(self):
         i = 0
@@ -149,9 +111,6 @@ class TagsTokens():
             self.valid = False
             self.incomplete = False
             self.token_error = self.find_prev_token(len(self.tokens) - 1)
-
-    def hardcode_error_cursh_subsh(self):
-        pass
 
     def clear_stack(self):
         self.stack = [elt for elt in self.stack if elt != 'CMD']
