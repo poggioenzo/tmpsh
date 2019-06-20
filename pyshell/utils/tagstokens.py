@@ -34,21 +34,40 @@ class TagsTokens():
         self.length = len(self.tokens)
 
     def init_with_input(self, term_inputs):
-        tk.tokenize(term_inputs, self.tokens)
+        tk.tokenize(term_inputs.strip(), self.tokens)
         self.update_length()
         self.get_tags()
         # self.alias_gesture()
         return self
 
-    def find_prev_token(self, i, get_token=True):
-        if self.tags[i] == 'SPACES':
-            i -= 1
-        return self.tokens[i] if get_token else self.tags[i]
+    def get_tags(self):
+        self.tags = []
+        for tok in self.tokens:
+            if tok in gv.GRAMMAR.leaf_op:
+                self.tags.append(gv.GRAMMAR.reverse[tok])
+            elif sc.containonlyspaces(tok):
+                self.tags.append('SPACES')
+            else:
+                self.tags.append('STMT')
+        # if self.length > 0:
+        #    self.append_terminator()
+        self.double_quote_gesture()
+        self.quote_gesture()
+        return self
 
-    def find_next_token(self, i, get_token=True):
-        if self.tags[i] == 'SPACES' and i + 1 < self.length:
-            i += 1
-        return self.tokens[i] if get_token else self.tags[i]
+    def check_syntax(self):
+        def end_escape(lt):
+            return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
+        self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
+        if end_escape(self.tokens[-1]):
+            self.incomplete = True
+        self.hardcode_error_redirection()
+        self.clear_stack()
+        return self
+
+    def append_end(self):
+        if self.tags[-1] in ['END_COMMAND', 'BACKGROUND_JOBS']:
+            pass
 
     # def prev_tokens_ok(self, i):
     #     if i == -1 or (i == 0 and self.tags[0] == 'SPACES'):
@@ -80,19 +99,6 @@ class TagsTokens():
     #             local = []
     #             i -= 1
     #         i += 1
-
-    def get_tags(self):
-        self.tags = []
-        for tok in self.tokens:
-            if tok in gv.GRAMMAR.leaf_op:
-                self.tags.append(gv.GRAMMAR.reverse[tok])
-            elif sc.containonlyspaces(tok):
-                self.tags.append('SPACES')
-            else:
-                self.tags.append('STMT')
-        self.double_quote_gesture()
-        self.quote_gesture()
-        return self
 
     def double_quote_gesture(self):
         # TODO: inspire of split_branch(self, tt) to improve code quality
@@ -142,16 +148,6 @@ class TagsTokens():
     def hardcode_error_cursh_subsh(self):
         pass
 
-    def check_syntax(self):
-        def end_escape(lt):
-            return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
-        self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
-        if end_escape(self.tokens[-1]):
-            self.incomplete = True
-        self.hardcode_error_redirection()
-        self.clear_stack()
-        return self
-
     def clear_stack(self):
         self.stack = [elt for elt in self.stack if elt != 'CMD']
 
@@ -169,6 +165,16 @@ class TagsTokens():
                 stack.pop(-1)
             i += 1
         return i
+
+    def find_prev_token(self, i, get_token=True):
+        if self.tags[i] == 'SPACES':
+            i -= 1
+        return self.tokens[i] if get_token else self.tags[i]
+
+    def find_next_token(self, i, get_token=True):
+        if self.tags[i] == 'SPACES' and i + 1 < self.length:
+            i += 1
+        return self.tokens[i] if get_token else self.tags[i]
 
     def __str__(self):
         str0 = '\n'.join(
