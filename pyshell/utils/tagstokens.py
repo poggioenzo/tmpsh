@@ -129,7 +129,7 @@ class TagsTokens():
                 if inquote:
                     self.tags[i] = 'END_QUOTE'
                 inquote = not inquote
-            elif self.tags[i] not in ['STMT', 'SPACES'] and inquote:
+            elif self.tags[i] is not 'STMT' and inquote:
                 self.tags[i] = 'STMT'
             i += 1
 

@@ -246,8 +246,8 @@ class TestTagsQuotes(unittest.TestCase):
     def test_tags_quotes_012(self):
         term_inputs = "'\" ${ CMD CMD }\"'"
         tags = TagsTokens().init_with_input(term_inputs).tags
-        self.assertEqual(['QUOTE', 'STMT', 'SPACES', 'STMT', 'SPACES', 'STMT',
-                          'SPACES', 'STMT', 'SPACES', 'STMT', 'STMT',
+        self.assertEqual(['QUOTE', 'STMT', 'STMT', 'STMT', 'STMT', 'STMT',
+                          'STMT', 'STMT', 'STMT', 'STMT', 'STMT',
                           'END_QUOTE'], tags)
 
 
