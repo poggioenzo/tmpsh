@@ -142,6 +142,9 @@ class TagsTokens():
         self.clear_stack()
         return self
 
+    def clear_stack(self):
+        self.stack = [elt for elt in self.stack if elt != 'CMD']
+
     @test
     def skip_openning_tags(self, i):
         stack = [gv.GRAMMAR.opening_tags[self.tags[i]]]
@@ -156,9 +159,6 @@ class TagsTokens():
                 stack.pop(-1)
             i += 1
         return i
-
-    def clear_stack(self):
-        self.stack = [elt for elt in self.stack if elt != 'CMD']
 
     def __str__(self):
         str0 = '\n'.join(
