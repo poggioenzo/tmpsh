@@ -75,7 +75,7 @@ class TestTags(unittest.TestCase):
     def test_tags_009(self):
         term_inputs = ' \\ a  '
         tags = TagsTokens().init_with_input(term_inputs).tags
-        self.assertEqual(['SPACES', 'STMT', 'SPACES'], tags)
+        self.assertEqual(['STMT'], tags)
 
 
 class TestTagsDoubleQuotes(unittest.TestCase):
