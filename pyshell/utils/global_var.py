@@ -1,5 +1,6 @@
 from utils.shellgrammar import ShellGrammar
 from utils.background_jobs import BackgroundJobs
+import os
 
 GRAMMAR = ShellGrammar()
 ALIAS = {'all': 'ls -l', 'gall': 'all -G -1', 'ball': '$(gall)',
@@ -9,7 +10,7 @@ ALIAS = {'all': 'ls -l', 'gall': 'all -G -1', 'ball': '$(gall)',
          'loop2': 'loop3',
          'loop3': 'loop1'}
 
-ENVIRON = {}
+ENVIRON = os.environ
 LOCAL_VAR = {}
 LAST_STATUS = 0
 

@@ -13,7 +13,7 @@ class Prompt(Cmd):
     content = ""
     def default(self, line):
         self.content += line
-        TAGSTOKENS = TagsTokens().init_with_input(line).check_syntax()
+        TAGSTOKENS = TagsTokens().init_with_input(line)#.check_syntax()
         if TAGSTOKENS.valid and not TAGSTOKENS.incomplete:
 
             TREE = AST(TAGSTOKENS)

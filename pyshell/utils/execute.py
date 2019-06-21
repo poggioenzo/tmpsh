@@ -2,17 +2,19 @@
 
 from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
+import utils.environ as environ
 import fcntl
 import sys
 import os
 
 def get_execname(cmd):
+    if "/" in cmd:
+        return cmd
     exec_folders = os.environ["PATH"]
     for folder in exec_folders.split(":"):
         execname = os.path.join(folder, cmd)
         if os.path.isfile(execname):
             return execname
-    print("no exec")
     return None
 
 
@@ -43,8 +45,7 @@ class Executor:
                 index += 1
                 continue
             self.perform_subast_replacement(branch)
-            cmd = self.extract_cmd(branch)
-            self.exec_command(cmd)
+            self.exec_command(branch)
             index += 1
         if pid == 0:
             exit(0)
@@ -55,16 +56,10 @@ class Executor:
         if pid > 0:
             command = "".join(branch.tagstokens.tokens)
             gv.JOBS.add_job(pid, command)
+            gv.LAST_STATUS = 0
         else:
             os.setpgid(0, 0)
         return pid
-
-    def prepare_substitution_pre_fork(self, type_subst):
-        """
-        When a CMDSUBST is done, prepare his fd according to the expected
-        configuration.
-        """
-        read_fd, write_fd = os.pipe()
 
     def prepare_substitution_fd(self, type_subst, pipe_fd):
         if type_subst == "CMDSUBST1":
@@ -94,7 +89,7 @@ class Executor:
         """Run an ast in a subshell"""
         if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
             pipe_fd = list(os.pipe())
-            non_blocking = subast.type == "CMDSUBST1"
+            non_blocking = True#subast.type == "CMDSUBST1"
             self.configure_pipe_fd(pipe_fd, non_blocking=non_blocking)
         pid = os.fork()
         if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"] and pid == 0:
@@ -103,11 +98,16 @@ class Executor:
             self.run_ast(subast)
             exit(gv.LAST_STATUS)
         else:
-            if subast.type in ["CMDSUBST1", "SUBSH", "CMDSUBST3"]:
+            if subast.type in ["CMDSUBST1", "CMDSUBST3"]:
+                os.waitpid(pid, 0)
+                subast.link_fd = pipe_fd[0]
+            elif subast.type == "CMDSUBST2":
+                subast.link_fd = pipe_fd[1]
+            elif subast.type == "SUBSH":
                 self.analyse_status(pid)
 
     def perfom_subast_command(self, branch):
-        """Run each command of subast which are not variable replacement"""
+        """Run each subast which are other shell commands."""
         index = 0
         nbr_subast = len(branch.subast)
         runned = False
@@ -136,6 +136,19 @@ class Executor:
             index += 1
         pass
 
+    def replace_ast_tag(self, branch):
+        index = 0
+        pos_subast = 0
+        while index < branch.tagstokens.length:
+            tag = branch.tagstokens.tags[index]
+            if tag == "SUBAST":
+                if branch.subast[pos_subast].type in \
+                        ["QUOTE", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3", "BRACEPARAM"]:
+                    branch.tagstokens.tags[index] = "STMT"
+                pos_subast += 1
+            index += 1
+        
+
     def perform_subast_replacement(self, branch):
         """Inside a branch, replace each subast element"""
         index = 0
@@ -145,7 +158,18 @@ class Executor:
             if subast.type == "QUOTE":
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
                 self.replace_subast(branch, index, content)
+            elif subast.type == "CMDSUBST1":
+                content = os.read(subast.link_fd, 800000).decode()
+                self.replace_subast(branch, index, content)
+            elif subast.type in ["CMDSUBST2", "CMDSUBST3"]:
+                content = "/dev/fd/" + str(subast.link_fd)
+                self.replace_subast(branch, index, content)
+            elif subast.type == "BRACEPARAM":
+                var = subast.list_branch[0].tagstokens.tokens[0]
+                content = gv.LOCAL_VAR.get(var, "")
+                self.replace_subast(branch, index, content)
             index += 1
+        self.replace_ast_tag(branch)
         pass
 
     def find_newstart(self, max_len, index, ast):
@@ -159,7 +183,6 @@ class Executor:
                 return index + 1
             index += 1
         return index
-
 
     def check_andor(self, branch):
         """
@@ -185,22 +208,117 @@ class Executor:
         if os.WIFSTOPPED(return_status):
             #Set job in background
             pass
+    
+    def retrieve_assignation(self, branch):
+        """
+        Find the list of assignation containing in the tagstokens.
+        Return a list of tuples as [(key, mode, value), (...)]
+        """
+        assignation_list = []
+        last_stmt = None
+        index = 0
+        tagstok = branch.tagstokens
+        index_to_del = 0
+        while True and index < tagstok.length:
+            if last_stmt == None and tagstok.tags[index] == "STMT":
+                last_stmt = tagstok.tokens[index]
+            elif tagstok.tags[index] in ["CONCATENATION", "ASSIGNATION_EQUAL"]:
+                index_to_del = index + 2 if tagstok.tags[index + 1] == "SPACE" else index + 1
+                assignation_list.append((last_stmt, tagstok.tags[index], tagstok.tokens[index_to_del]))
+                index = index_to_del
+                last_stmt = None
+            index += 1
+        if len(assignation_list) > 0:
+            del tagstok.tags[:index_to_del + 1]
+            del tagstok.tokens[:index_to_del + 1]
+        tagstok.update_length()
+        print(tagstok)
+        return assignation_list
 
-    def exec_command(self, cmd_args):
+    def variable_set(self, variable_data, only_env=False):
+        """
+        Facility to set the variable according
+        to his key=value. The mode specify if it is
+        a CONCATENATION or an ASSIGNATION_EQUAL.
+        Set up the variable only to the environnement if specified.
+        """
+        mode = variable_data[1]
+        key = variable_data[0]
+        value = variable_data[2]
+        environ.update_var(key, value, mode, only_env)
+
+    def environ_configuration(self, variables):
+        """
+        Before execve a command, set up all of his
+        expected environnement variable
+        """
+        nbr_var = len(variables)
+        index = 0
+        while index < nbr_var:
+            self.variable_set(variables[index], only_env=True)
+            index += 1
+
+    def exec_command(self, branch):
         """Fork + execve a given list of argument"""
-        if (len(cmd_args) == 0):
+        variables = self.retrieve_assignation(branch)
+        cmd_args = self.extract_cmd(branch)
+        if len(cmd_args) == 0:
+            if len(variables) == 1:
+                self.variable_set(variables[0])
             return
         pid = os.fork()
         if pid == 0:
             #run the child
+            self.environ_configuration(variables)
             executable = get_execname(cmd_args[0])
+            if executable == None:
+                print("Command not found : {}".format(cmd_args[0]))
+                exit(127)
             os.execve(executable, cmd_args, os.environ)
         else:
             #Get status from the father
             self.analyse_status(pid)
 
+    def analyse_string_variable(self, string):
+        """
+        Parse an entire string and create his
+        representation with each variable converted.
+        Take care of escaped variables.
+        """
+        index_var = []
+        index = 0
+        len_str = len(string)
+        if len_str == 0:
+            return
+        escaped = string[0] == "\\"
+        final_str = ""
+        while index < len_str:
+            if escaped == False and string[index] == "$":
+                var = string[index:].split()[0] #get first word
+                index += len(var) 
+                var = environ.retrieve_variable(var)
+                final_str += var
+            else:
+                final_str += string[index]
+            index += 1
+        return final_str
+    
+    def replace_variable(self, branch):
+        """
+        For each STMT token, parse the content of each one
+        and tranform variable value
+        """
+        index = 0
+        tagstok = branch.tagstokens
+        while index < tagstok.length:
+            if tagstok.tags[index] == "STMT":
+                variable_str = self.analyse_string_variable(tagstok.tokens[index])
+                tagstok.tokens[index] = variable_str
+            index += 1
+
     def extract_cmd(self, branch):
         """Get only token used to run a command, format argv + environ"""
+        self.replace_variable(branch)
         command = []
         for index in range(branch.tagstokens.length):
             if branch.tagstokens.tags[index] in gv.GRAMMAR.grammar["STMT"]:
