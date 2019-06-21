@@ -5,6 +5,7 @@ import utils.global_var as gv
 import utils.tokenizer as tk
 import utils.strcontain as sc
 import utils.shiftreduce as sr
+from utils.tagstokensmonitor import TagsTokensMonitor as TTM
 
 
 def test(func):
@@ -13,6 +14,10 @@ def test(func):
             raise Exception("No {} in opening_tags.".format(self.tags[i]))
         return func(self, i)
     return wrapper
+
+
+def end_escape(lt):
+    return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
 
 
 class TagsTokens():
@@ -34,47 +39,11 @@ class TagsTokens():
         self.length = len(self.tokens)
 
     def init_with_input(self, term_inputs):
-        tk.tokenize(term_inputs, self.tokens)
+        tk.tokenize(term_inputs.strip(), self.tokens)
         self.update_length()
         self.get_tags()
         # self.alias_gesture()
         return self
-
-    def find_prev_token(self, i, get_token=True):
-        if self.tags[i] == 'SPACES':
-            i -= 1
-        return self.tokens[i] if get_token else self.tags[i]
-
-    # def prev_tokens_ok(self, i):
-    #     if i == -1 or (i == 0 and self.tags[0] == 'SPACES'):
-    #         return True
-    #     ret = self.find_prev_token(i, False)\
-    #         in gv.GRAMMAR.grammar['ABS_TERMINATOR']
-    #     ret |= self.find_prev_token(i, False)\
-    #         in gv.GRAMMAR.opening_tags
-    #     return ret
-
-    # def alias_gesture(self):
-    #     i = 0
-    #     tok = ''
-    #     local = []
-    #     passed_alias = []
-    #
-    #     while i < self.length:
-    #         tok = self.tokens[i]
-    #         print(passed_alias)
-    #         if self.tags[i] in gv.GRAMMAR.grammar['ABS_TERMINATOR']\
-    #                 or self.tags[i] in gv.GRAMMAR.opening_tags:
-    #             passed_alias = []
-    #         elif self.prev_tokens_ok(i - 1) and tok in gv.ALIAS and\
-    #                 tok not in passed_alias:
-    #             passed_alias.append(tok)
-    #             tk.tokenize(gv.ALIAS[tok], local)
-    #             self.tokens[i:i + 1] = local
-    #             self.get_tags()
-    #             local = []
-    #             i -= 1
-    #         i += 1
 
     def get_tags(self):
         self.tags = []
@@ -89,8 +58,17 @@ class TagsTokens():
         self.quote_gesture()
         return self
 
+    def check_syntax(self):
+        TTM(self)
+        if self.valid:
+            self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
+            if self.length > 0 and end_escape(self.tokens[-1]):
+                self.incomplete = True
+        self.hardcode_error_redirection()  # to do in TTM(self)
+        self.clear_stack()
+        return self
+
     def double_quote_gesture(self):
-        # TODO: inspire of split_branch(self, tt) to improve code quality
         i = 0
         stk = ['']  # stk for stack
         exit_tag = ['']
@@ -108,7 +86,7 @@ class TagsTokens():
                 else:
                     stk.pop(-1)
                     self.tags[i] = 'END_DQUOTES'
-            elif tag not in ['STMT', 'SPACES'] and stk[-1:][0] == 'DQUOTES':
+            elif self.tags[i] != 'STMT' and stk[-1:][0] == 'DQUOTES':
                 if tag in gv.GRAMMAR.dquotes_opening_tags:
                     stk.append(tag)
                     exit_tag.append(gv.GRAMMAR.dquotes_opening_tags[tag])
@@ -124,23 +102,18 @@ class TagsTokens():
                 if inquote:
                     self.tags[i] = 'END_QUOTE'
                 inquote = not inquote
-            elif self.tags[i] not in ['STMT', 'SPACES'] and inquote:
+            elif self.tags[i] != 'STMT' and inquote:
                 self.tags[i] = 'STMT'
             i += 1
 
-    def check_syntax(self):
-        def end_escape(lt):
-            return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
-
-        self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
-        if end_escape(self.tokens[-1]):
-            self.incomplete = True
+    def hardcode_error_redirection(self):
         if self.stack != [] and self.stack[-1] == 'REDIRECTION':
             self.valid = False
             self.incomplete = False
             self.token_error = self.find_prev_token(len(self.tokens) - 1)
-        self.clear_stack()
-        return self
+
+    def clear_stack(self):
+        self.stack = [elt for elt in self.stack if elt != 'CMD']
 
     @test
     def skip_openning_tags(self, i):
@@ -157,8 +130,15 @@ class TagsTokens():
             i += 1
         return i
 
-    def clear_stack(self):
-        self.stack = [elt for elt in self.stack if elt != 'CMD']
+    def find_prev_token(self, i, get_token=True):
+        if self.tags[i] == 'SPACES':
+            i -= 1
+        return self.tokens[i] if get_token else self.tags[i]
+
+    def find_next_token(self, i, get_token=True):
+        if self.tags[i] == 'SPACES' and i + 1 < self.length:
+            i += 1
+        return self.tokens[i] if get_token else self.tags[i]
 
     def __str__(self):
         str0 = '\n'.join(

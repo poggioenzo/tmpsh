@@ -75,7 +75,7 @@ class TestTags(unittest.TestCase):
     def test_tags_009(self):
         term_inputs = ' \\ a  '
         tags = TagsTokens().init_with_input(term_inputs).tags
-        self.assertEqual(['SPACES', 'STMT', 'SPACES'], tags)
+        self.assertEqual(['STMT'], tags)
 
 
 class TestTagsDoubleQuotes(unittest.TestCase):
@@ -136,12 +136,12 @@ class TestTagsDoubleQuotes(unittest.TestCase):
                           'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_009(self):
-        term_inputs = '"$(" \'$(CMD)\' ")"'
+        term_inputs = '"$(" \'$( CMD )\' ")"'
         tags = TagsTokens().init_with_input(term_inputs).tags
         self.assertEqual(
-            ['DQUOTES', 'CMDSUBST1', 'DQUOTES', 'SPACES', 'STMT', 'CMDSUBST1',
-             'STMT', 'END_BRACKET', 'STMT', 'SPACES', 'END_DQUOTES',
-             'END_BRACKET', 'END_DQUOTES'], tags)
+            ['DQUOTES', 'CMDSUBST1', 'DQUOTES', 'STMT', 'STMT', 'CMDSUBST1',
+             'SPACES', 'STMT', 'SPACES', 'END_BRACKET', 'STMT', 'STMT',
+             'END_DQUOTES', 'END_BRACKET', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_010(self):
         term_inputs = '"$("CMD")"'
@@ -153,8 +153,8 @@ class TestTagsDoubleQuotes(unittest.TestCase):
     def test_tags_double_quotes_011(self):
         term_inputs = '" CMD  CMD "'
         tags = TagsTokens().init_with_input(term_inputs).tags
-        self.assertEqual(['DQUOTES', 'SPACES', 'STMT', 'SPACES',
-                          'STMT', 'SPACES', 'END_DQUOTES'], tags)
+        self.assertEqual(['DQUOTES', 'STMT', 'STMT', 'STMT',
+                          'STMT', 'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_012(self):
         term_inputs = '"$(")")"'
@@ -246,8 +246,8 @@ class TestTagsQuotes(unittest.TestCase):
     def test_tags_quotes_012(self):
         term_inputs = "'\" ${ CMD CMD }\"'"
         tags = TagsTokens().init_with_input(term_inputs).tags
-        self.assertEqual(['QUOTE', 'STMT', 'SPACES', 'STMT', 'SPACES', 'STMT',
-                          'SPACES', 'STMT', 'SPACES', 'STMT', 'STMT',
+        self.assertEqual(['QUOTE', 'STMT', 'STMT', 'STMT', 'STMT', 'STMT',
+                          'STMT', 'STMT', 'STMT', 'STMT', 'STMT',
                           'END_QUOTE'], tags)
 
 
