@@ -7,6 +7,11 @@ import fcntl
 import sys
 import os
 
+
+DEBUG = open("/dev/ttys007", "w")
+def dprint(string, *args, **kwargs):
+    print(string, *args, file=DEBUG, **kwargs)
+
 def get_execname(cmd):
     if "/" in cmd:
         return cmd
@@ -62,12 +67,12 @@ class Executor:
         return pid
 
     def prepare_substitution_fd(self, type_subst, pipe_fd):
-        if type_subst == "CMDSUBST1":
+        if type_subst in ["CMDSUBST1", "CMDSUBST3"]:
             os.dup2(pipe_fd[1], sys.stdout.fileno())
+            os.close(pipe_fd[0])
         elif type_subst == "CMDSUBST2":
             os.dup2(pipe_fd[0], sys.stdin.fileno())
-        elif type_subst == "CMDSUBST3":
-            os.dup2(pipe_fd[1], sys.stdout.fileno())
+            os.close(pipe_fd[1])
 
     def configure_pipe_fd(self, pipe_fd, non_blocking=False):
         """"""
@@ -89,7 +94,7 @@ class Executor:
         """Run an ast in a subshell"""
         if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
             pipe_fd = list(os.pipe())
-            non_blocking = True#subast.type == "CMDSUBST1"
+            non_blocking = False#subast.type == "CMDSUBST2"
             self.configure_pipe_fd(pipe_fd, non_blocking=non_blocking)
         pid = os.fork()
         if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"] and pid == 0:
@@ -101,8 +106,11 @@ class Executor:
             if subast.type in ["CMDSUBST1", "CMDSUBST3"]:
                 os.waitpid(pid, 0)
                 subast.link_fd = pipe_fd[0]
+                os.close(pipe_fd[1])
             elif subast.type == "CMDSUBST2":
                 subast.link_fd = pipe_fd[1]
+                os.close(pipe_fd[0])
+                subast.pid = pid
             elif subast.type == "SUBSH":
                 self.analyse_status(pid)
 
@@ -232,7 +240,6 @@ class Executor:
             del tagstok.tags[:index_to_del + 1]
             del tagstok.tokens[:index_to_del + 1]
         tagstok.update_length()
-        print(tagstok)
         return assignation_list
 
     def variable_set(self, variable_data, only_env=False):
@@ -258,6 +265,30 @@ class Executor:
             self.variable_set(variables[index], only_env=True)
             index += 1
 
+    def close_branch_fd(self, branch):
+        """Close extra pipe fd of CMDSUBST or PIPE subast"""
+        index = 0
+        nbr_subast = len(branch.subast)
+        while index < nbr_subast:
+            ast = branch.subast[index]
+            if ast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
+                os.close(ast.link_fd)
+            index += 1
+
+    def wait_subast_cmd(self, branch):
+        index = 0
+        nbr_subast = len(branch.subast)
+        while index < nbr_subast:
+            ast = branch.subast[index]
+            if ast.type == "CMDSUBST2":
+                try:
+                    os.waitpid(ast.pid, 0)
+                except ChildProcessError:
+                    pass
+            index += 1
+
+
+
     def exec_command(self, branch):
         """Fork + execve a given list of argument"""
         variables = self.retrieve_assignation(branch)
@@ -277,7 +308,9 @@ class Executor:
             os.execve(executable, cmd_args, os.environ)
         else:
             #Get status from the father
+            self.close_branch_fd(branch)
             self.analyse_status(pid)
+            self.wait_subast_cmd(branch)
 
     def analyse_string_variable(self, string):
         """
