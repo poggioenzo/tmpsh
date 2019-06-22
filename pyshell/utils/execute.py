@@ -22,7 +22,6 @@ def get_execname(cmd):
             return execname
     return None
 
-
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
@@ -144,6 +143,10 @@ class Executor:
         pass
 
     def replace_ast_tag(self, branch):
+        """
+        For each subast, replace in the current branch the subast tag by
+        the STMT tag, to have only STMT to create command.
+        """
         index = 0
         pos_subast = 0
         while index < branch.tagstokens.length:
@@ -154,26 +157,26 @@ class Executor:
                     branch.tagstokens.tags[index] = "STMT"
                 pos_subast += 1
             index += 1
-        
 
     def perform_subast_replacement(self, branch):
-        """Inside a branch, replace each subast element"""
+        """
+        Inside a branch, replace each subast element by the generated content
+        or the cmdsubst /dev/fd file.
+        """
         index = 0
         nbr_ast = len(branch.subast)
         while index < nbr_ast:
             subast = branch.subast[index]
             if subast.type == "QUOTE":
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
-                self.replace_subast(branch, index, content)
             elif subast.type == "CMDSUBST1":
                 content = os.read(subast.link_fd, 800000).decode()
-                self.replace_subast(branch, index, content)
             elif subast.type in ["CMDSUBST2", "CMDSUBST3"]:
                 content = "/dev/fd/" + str(subast.link_fd)
-                self.replace_subast(branch, index, content)
             elif subast.type == "BRACEPARAM":
                 var = subast.list_branch[0].tagstokens.tokens[0]
                 content = gv.LOCAL_VAR.get(var, "")
+            if subast.type in ["BRACEPARAM", "CMDSUBST1","CMDSUBST2","CMDSUBST3","QUOTE"]:
                 self.replace_subast(branch, index, content)
             index += 1
         self.replace_ast_tag(branch)
