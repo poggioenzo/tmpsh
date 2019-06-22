@@ -74,22 +74,27 @@ class Executor:
             os.dup2(pipe_fd[0], sys.stdin.fileno())
             os.close(pipe_fd[1])
 
-    def configure_pipe_fd(self, pipe_fd):
-        """"""
+    def setup_pipe_fd(self):
+        """
+        Create pipe fds, and configure them to be inheritable
+        and start only from RANGE_START.
+        """
+        RANGE_START = 63
         #Change fd value to get fd in range of [63:infinite[
+        pipe_fd = list(os.pipe())
         old_pipe = pipe_fd.copy()
-        pipe_fd[0] = fcntl.fcntl(pipe_fd[0], fcntl.F_DUPFD, 63)
-        pipe_fd[1] = fcntl.fcntl(pipe_fd[1], fcntl.F_DUPFD, 63)
+        pipe_fd[0] = fcntl.fcntl(pipe_fd[0], fcntl.F_DUPFD, RANGE_START)
+        pipe_fd[1] = fcntl.fcntl(pipe_fd[1], fcntl.F_DUPFD, RANGE_START)
         os.set_inheritable(pipe_fd[0], True)
         os.set_inheritable(pipe_fd[1], True)
         os.close(old_pipe[0])
         os.close(old_pipe[1])
+        return pipe_fd
 
     def run_subshell(self, subast):
-        """Run an ast in a subshell"""
+        """Run an ast in a subshell/subprocess"""
         if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
-            pipe_fd = list(os.pipe())
-            self.configure_pipe_fd(pipe_fd)
+            pipe_fd = self.setup_pipe_fd()
         pid = os.fork()
         if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"] and pid == 0:
             self.prepare_substitution_fd(subast.type, pipe_fd)
@@ -264,6 +269,10 @@ class Executor:
             index += 1
 
     def wait_subast_cmd(self, branch):
+        """
+        Try to wait each process of type subast CMDSUBST2 after
+        the command execution
+        """
         index = 0
         nbr_subast = len(branch.subast)
         while index < nbr_subast:
