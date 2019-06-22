@@ -236,27 +236,21 @@ class Executor:
         tagstok.update_length()
         return assignation_list
 
-    def variable_set(self, variable_data, only_env=False):
+    def environ_configuration(self, variables, only_env=False):
         """
-        Facility to set the variable according
+        Facility to set the variables list [(key, mode, value), (...)] according
         to his key=value. The mode specify if it is
         a CONCATENATION or an ASSIGNATION_EQUAL.
         Set up the variable only to the environnement if specified.
         """
-        mode = variable_data[1]
-        key = variable_data[0]
-        value = variable_data[2]
-        environ.update_var(key, value, mode, only_env)
-
-    def environ_configuration(self, variables):
-        """
-        Before execve a command, set up all of his
-        expected environnement variable
-        """
         nbr_var = len(variables)
         index = 0
         while index < nbr_var:
-            self.variable_set(variables[index], only_env=True)
+            variable_data = variables[index]
+            mode = variable_data[1]
+            key = variable_data[0]
+            value = variable_data[2]
+            environ.update_var(key, value, mode, only_env)
             index += 1
 
     def close_branch_fd(self, branch):
@@ -281,20 +275,18 @@ class Executor:
                     pass
             index += 1
 
-
-
     def exec_command(self, branch):
         """Fork + execve a given list of argument"""
         variables = self.retrieve_assignation(branch)
         cmd_args = self.extract_cmd(branch)
         if len(cmd_args) == 0:
             if len(variables) == 1:
-                self.variable_set(variables[0])
+                self.environ_configuration(variables)
             return
         pid = os.fork()
         if pid == 0:
             #run the child
-            self.environ_configuration(variables)
+            self.environ_configuration(variables, only_env=True)
             executable = get_execname(cmd_args[0])
             if executable == None:
                 print("Command not found : {}".format(cmd_args[0]))
