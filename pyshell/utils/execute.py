@@ -74,7 +74,7 @@ class Executor:
             os.dup2(pipe_fd[0], sys.stdin.fileno())
             os.close(pipe_fd[1])
 
-    def configure_pipe_fd(self, pipe_fd, non_blocking=False):
+    def configure_pipe_fd(self, pipe_fd):
         """"""
         #Change fd value to get fd in range of [63:infinite[
         old_pipe = pipe_fd.copy()
@@ -84,18 +84,12 @@ class Executor:
         os.set_inheritable(pipe_fd[1], True)
         os.close(old_pipe[0])
         os.close(old_pipe[1])
-        if non_blocking:
-            opts = fcntl.fcntl(pipe_fd[0], fcntl.F_GETFL)
-            fcntl.fcntl(pipe_fd[0], fcntl.F_SETFL, opts | os.O_NONBLOCK)
-            opts = fcntl.fcntl(pipe_fd[1], fcntl.F_GETFL)
-            fcntl.fcntl(pipe_fd[1], fcntl.F_SETFL, opts | os.O_NONBLOCK)
 
     def run_subshell(self, subast):
         """Run an ast in a subshell"""
         if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
             pipe_fd = list(os.pipe())
-            non_blocking = False#subast.type == "CMDSUBST2"
-            self.configure_pipe_fd(pipe_fd, non_blocking=non_blocking)
+            self.configure_pipe_fd(pipe_fd)
         pid = os.fork()
         if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"] and pid == 0:
             self.prepare_substitution_fd(subast.type, pipe_fd)
