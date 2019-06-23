@@ -6,13 +6,40 @@ import utils.environ as environ
 import fcntl
 import sys
 import os
+import time
+import signal
 
 
-DEBUG = open("/dev/ttys007", "w")
+DEBUG = open("/dev/pts/5", "w")
 def dprint(string, *args, **kwargs):
     print(string, *args, file=DEBUG, **kwargs)
 
+TheFork = os.fork
+
+def forker():
+    start = time.clock()
+    pid = TheFork()
+    end = time.clock() - start
+    if pid != 0:
+        dprint("FORK")
+    return pid
+
+os.fork = forker
+
+def timer(function):
+    def time_wrapper(*args, **kwargs):
+        start = time.clock()
+        res = function(*args, **kwargs)
+        end = time.clock()
+        dprint("{} | Time for {} : {}".format(os.getpid(), function.__name__, end - start))
+        return res
+    return time_wrapper
+
+def sig_ignore(*signal):
+    pass
+
 def get_execname(cmd):
+    cmd = cmd.strip() # ! Get space in STMT with PIPE
     if "/" in cmd:
         return cmd
     exec_folders = os.environ["PATH"]
@@ -26,16 +53,20 @@ class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
         self.ast = ast
+        signal.signal(signal.SIGUSR1, sig_ignore)#signal.SIG_IGN)
         self.run_ast()
 
+    
     def run_ast(self, ast=None):
         if ast == None:
             ast = self.ast
         index = 0
         nbr_branch = len(ast.list_branch)
         pid = os.getpid()
+        input_pipe = None
         while index < nbr_branch and pid > 0:
             branch = ast.list_branch[index]
+            output_pipe = None
             if self.check_andor(branch) == False:
                 index = self.find_newstart(nbr_branch, index, ast)
                 continue
@@ -44,15 +75,36 @@ class Executor:
                 pid = self.run_background_process(branch)
                 if pid != 0:
                     index += 1
+                    input_pipe = None
                     continue
             if self.perfom_subast_command(branch) == True:
                 index += 1
                 continue
             self.perform_subast_replacement(branch)
-            self.exec_command(branch)
+            if branch.tag_end == "PIPE":
+                pipes = self.setup_pipe_fd()
+                output_pipe = pipes[1]
+            self.exec_command(branch, input_pipe, output_pipe)
+            if branch.tag_end == "PIPE":
+                input_pipe = pipes[0]
+            else:
+                input_pipe = None
             index += 1
         if pid == 0:
             exit(0)
+    
+    def prepare_piping(self, input_pipe):
+        pipe_fd = self.setup_pipe_fd()
+        pid = os.fork()
+        if pid == 0:
+            os.dup2(pipe_fd[1], sys.stdout.fileno())
+            os.close(pipe_fd[0])
+        else:
+            os.close(pipe_fd[1])
+            if input_pipe:
+                os.close(input_pipe)
+            input_pipe = pipe_fd[0]
+        return pid, input_pipe
 
     def run_background_process(self, branch):
         """Prepare the current command to be run in background"""
@@ -68,10 +120,10 @@ class Executor:
     def prepare_substitution_fd(self, type_subst, pipe_fd):
         if type_subst in ["CMDSUBST1", "CMDSUBST3"]:
             os.dup2(pipe_fd[1], sys.stdout.fileno())
-            os.close(pipe_fd[0])
         elif type_subst == "CMDSUBST2":
             os.dup2(pipe_fd[0], sys.stdin.fileno())
-            os.close(pipe_fd[1])
+        os.close(pipe_fd[0])
+        os.close(pipe_fd[1])
 
     def setup_pipe_fd(self):
         """
@@ -102,13 +154,11 @@ class Executor:
             exit(gv.LAST_STATUS)
         else:
             if subast.type in ["CMDSUBST1", "CMDSUBST3"]:
-                os.waitpid(pid, 0)
                 subast.link_fd = pipe_fd[0]
                 os.close(pipe_fd[1])
             elif subast.type == "CMDSUBST2":
                 subast.link_fd = pipe_fd[1]
                 os.close(pipe_fd[0])
-                subast.pid = pid
             elif subast.type == "SUBSH":
                 self.analyse_status(pid)
 
@@ -180,7 +230,6 @@ class Executor:
                 self.replace_subast(branch, index, content)
             index += 1
         self.replace_ast_tag(branch)
-        pass
 
     def find_newstart(self, max_len, index, ast):
         """
@@ -271,33 +320,26 @@ class Executor:
                 os.close(ast.link_fd)
             index += 1
 
-    def wait_subast_cmd(self, branch):
-        """
-        Try to wait each process of type subast CMDSUBST2 after
-        the command execution
-        """
-        index = 0
-        nbr_subast = len(branch.subast)
-        while index < nbr_subast:
-            ast = branch.subast[index]
-            if ast.type == "CMDSUBST2":
-                try:
-                    os.waitpid(ast.pid, 0)
-                except ChildProcessError:
-                    pass
-            index += 1
-
-    def exec_command(self, branch):
+    def exec_command(self, branch, input_pipe, output_pipe):
         """Fork + execve a given list of argument"""
+        #Check if the command is only an assignation
         variables = self.retrieve_assignation(branch)
         cmd_args = self.extract_cmd(branch)
         if len(cmd_args) == 0:
             if len(variables) == 1:
+                os.close(input_pipe) if input_pipe else None
+                os.close(output_pipe) if output_pipe else None
                 self.environ_configuration(variables)
             return
         pid = os.fork()
         if pid == 0:
             #run the child
+            if input_pipe != None:
+                os.dup2(input_pipe, sys.stdin.fileno())
+                os.close(input_pipe)
+            if output_pipe != None:
+                os.dup2(output_pipe, sys.stdout.fileno())
+                os.close(output_pipe)
             self.environ_configuration(variables, only_env=True)
             executable = get_execname(cmd_args[0])
             if executable == None:
@@ -306,9 +348,13 @@ class Executor:
             os.execve(executable, cmd_args, os.environ)
         else:
             #Get status from the father
+            if input_pipe:
+                os.close(input_pipe)
+            if output_pipe:
+                os.close(output_pipe)
             self.close_branch_fd(branch)
-            self.analyse_status(pid)
-            self.wait_subast_cmd(branch)
+            if branch.tag_end != "PIPE":
+                self.analyse_status(pid)
 
     def analyse_string_variable(self, string):
         """

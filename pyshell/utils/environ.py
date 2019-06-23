@@ -24,7 +24,6 @@ def update_var(variable, value, type_update, only_env=False):
     variable
     """
     environ_var = getenv(variable)
-    print("TYPE : ", type_update)
     if environ_var != None or only_env:
         if type_update == "CONCATENATION":
             value = environ_var + value

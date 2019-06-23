@@ -4,7 +4,7 @@ import time
 if __name__ == "__main__":
     tty = open("/dev/tty", "w")
     print("start sleeper", file=tty)
-    for i in range(2):
+    for i in range(3):
         print("content {}".format(i))
         time.sleep(1)
     print("end sleeper", file=tty)
