@@ -9,60 +9,89 @@ import utils.global_var as gv
 
 
 class TagsTokensMonitor():
-    """docstring forTagsTokensMonitor."""
+    """docstring for TagsTokensMonitor."""
 
     def __init__(self, tt):
         self.tt = tt
-        self.i = 0
+        self.i = -1
+        self.tag = ''
+        self.token = ''
         self.begin_cmd = True
         self.opened = ['']
         self.passed_alias = []
         self.check()
 
+    def get_tagstokens(self):
+        return self.tt
+
     def reset(self):
         self.begin_cmd = True
         self.passed_alias = []
 
-    def check(self):
-        while self.i < self.tt.length:
-            tag = self.tt.tags[self.i]
-            self.op_selector(tag)
+    def next_tag_token(self):
+        self.i += 1
+        if self.i < self.tt.length:
+            self.tag = self.tt.tags[self.i]
+            self.token = self.tt.tokens[self.i]
 
-    def op_selector(self, tag):
-        if tag == 'STMT':
+    def check(self):
+        while self.i < self.tt.length and self.tt.valid:
+            self.next_tag_token()
+            self.op_selector()
+
+    def op_selector(self):
+        if self.tag == 'STMT':
             self.check_aliases()
-        elif tag == 'BRACEPARAM':
+        elif self.tag == 'BRACEPARAM':
             self.is_braceparam()
-        elif tag == 'DQUOTES':
+        elif self.tag == 'DQUOTES':
             self.is_dquote()
-        elif tag == 'QUOTE':
+        elif self.tag == 'QUOTE':
             self.is_quote()
-        elif tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
+        elif self.tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
             self.is_abs_terminator()
-        elif tag in ['CURSH', 'SUBSH']:
+        elif self.tag in ['CURSH', 'SUBSH']:
             self.in_command_sh()
-        elif tag in gv.GRAMMAR.opening_tags:
+        elif self.tag in gv.GRAMMAR.opening_tags:
             self.in_sub_process()
-        elif tag in gv.GRAMMAR.grammar['REDIRECTION']:
+        elif self.tag in gv.GRAMMAR.grammar['REDIRECTION']:
             self.in_redirection()
-        elif self.opened[-1] == tag:
+        elif self.opened[-1] == self.tag:
             self.opened.pop(-1)
         else:
             self.i += 1
         self.begin_cmd = False
 
     def check_aliases(self):
-
         self.i += 1
 
     def is_braceparam(self):
-        self.i += 1
+        self.next_tag_token()
+        stmt_tag = self.tag
+        self.next_tag_token()
+        if stmt_tag != 'STMT' or self.tag != 'END_BRACE':
+            self.tt.valid = False
+            self.tt.token_error = 'bad substitution'
 
     def is_dquote(self):
-        self.i = self.tt.skip_openning_tags(self.i) + 1
+        end = self.tt.skip_openning_tags(self.i) + 1
+        self.i += 1
+        while self.i < end:
+            self.next_tag_token()
+            self.i += 1
 
     def is_quote(self):
-        self.i = self.tt.skip_openning_tags(self.i) + 1
+        i = self.i
+        inquote = False
+        while i < self.tt.length:
+            if self.tt.tags[i] == 'QUOTE':
+                if inquote:
+                    self.tt.tags[i] = 'END_QUOTE'
+                inquote = not inquote
+            elif self.tt.tags[i] != 'STMT' and inquote:
+                self.tt.tags[i] = 'STMT'
+            i += 1
+        self.i = i
 
     def is_abs_terminator(self):
         self.reset()
