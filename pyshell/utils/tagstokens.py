@@ -54,8 +54,8 @@ class TagsTokens():
                 self.tags.append('SPACES')
             else:
                 self.tags.append('STMT')
-        self.double_quote_gesture()
-        self.quote_gesture()
+        self.double_quote_gesture()  # to do in TTM(self) in check_syntax
+        # self.quote_gesture()  # to do in TTM(self)in check_syntax
         return self
 
     def check_syntax(self):
@@ -94,17 +94,17 @@ class TagsTokens():
                     self.tags[i] = 'STMT'
             i += 1
 
-    def quote_gesture(self):
-        i = 0
-        inquote = False
-        while i < self.length:
-            if self.tags[i] == 'QUOTE':
-                if inquote:
-                    self.tags[i] = 'END_QUOTE'
-                inquote = not inquote
-            elif self.tags[i] != 'STMT' and inquote:
-                self.tags[i] = 'STMT'
-            i += 1
+    # def quote_gesture(self):
+    #     i = 0
+    #     inquote = False
+    #     while i < self.length:
+    #         if self.tags[i] == 'QUOTE':
+    #             if inquote:
+    #                 self.tags[i] = 'END_QUOTE'
+    #             inquote = not inquote
+    #         elif self.tags[i] != 'STMT' and inquote:
+    #             self.tags[i] = 'STMT'
+    #         i += 1
 
     def hardcode_error_redirection(self):
         if self.stack != [] and self.stack[-1] == 'REDIRECTION':
