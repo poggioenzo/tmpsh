@@ -62,7 +62,7 @@ class TagsTokens():
             self.quote_gesture()  # to do in TTM(self)in check_syntax
         return self
 
-    def check_syntax(self,):
+    def check_syntax(self):
         # TTM(self) en production
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
