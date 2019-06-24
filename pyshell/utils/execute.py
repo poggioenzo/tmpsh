@@ -10,7 +10,7 @@ import time
 import signal
 
 
-DEBUG = open("/dev/pts/5", "w")
+DEBUG = open("/dev/ttys003", "w")
 def dprint(string, *args, **kwargs):
     print(string, *args, file=DEBUG, **kwargs)
 
@@ -24,19 +24,15 @@ def forker():
         dprint("FORK")
     return pid
 
-os.fork = forker
+#os.fork = forker
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
         start = time.clock()
         res = function(*args, **kwargs)
         end = time.clock()
-        dprint("{} | Time for {} : {}".format(os.getpid(), function.__name__, end - start))
         return res
     return time_wrapper
-
-def sig_ignore(*signal):
-    pass
 
 def get_execname(cmd):
     cmd = cmd.strip() # ! Get space in STMT with PIPE
@@ -53,9 +49,7 @@ class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
         self.ast = ast
-        signal.signal(signal.SIGUSR1, sig_ignore)#signal.SIG_IGN)
         self.run_ast()
-
     
     def run_ast(self, ast=None):
         if ast == None:
@@ -93,19 +87,6 @@ class Executor:
         if pid == 0:
             exit(0)
     
-    def prepare_piping(self, input_pipe):
-        pipe_fd = self.setup_pipe_fd()
-        pid = os.fork()
-        if pid == 0:
-            os.dup2(pipe_fd[1], sys.stdout.fileno())
-            os.close(pipe_fd[0])
-        else:
-            os.close(pipe_fd[1])
-            if input_pipe:
-                os.close(input_pipe)
-            input_pipe = pipe_fd[0]
-        return pid, input_pipe
-
     def run_background_process(self, branch):
         """Prepare the current command to be run in background"""
         pid = os.fork()
@@ -356,30 +337,6 @@ class Executor:
             if branch.tag_end != "PIPE":
                 self.analyse_status(pid)
 
-    def analyse_string_variable(self, string):
-        """
-        Parse an entire string and create his
-        representation with each variable converted.
-        Take care of escaped variables.
-        """
-        index_var = []
-        index = 0
-        len_str = len(string)
-        if len_str == 0:
-            return
-        escaped = string[0] == "\\"
-        final_str = ""
-        while index < len_str:
-            if escaped == False and string[index] == "$":
-                var = string[index:].split()[0] #get first word
-                index += len(var) 
-                var = environ.retrieve_variable(var)
-                final_str += var
-            else:
-                final_str += string[index]
-            index += 1
-        return final_str
-    
     def replace_variable(self, branch):
         """
         For each STMT token, parse the content of each one
@@ -389,8 +346,10 @@ class Executor:
         tagstok = branch.tagstokens
         while index < tagstok.length:
             if tagstok.tags[index] == "STMT":
-                variable_str = self.analyse_string_variable(tagstok.tokens[index])
-                tagstok.tokens[index] = variable_str
+                stmt_str = tagstok.tokens[index]
+                if stmt_str[0] == "$":
+                    variable_value = environ.retrieve_variable(stmt_str)
+                    tagstok.tokens[index] = variable_value
             index += 1
 
     def extract_cmd(self, branch):
