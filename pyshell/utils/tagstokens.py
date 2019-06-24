@@ -33,7 +33,14 @@ class TagsTokens():
         self.valid = True
         self.incomplete = False
         self.length = 0
+        self.strip()
         self.update_length()
+
+    def strip(self):
+        if len(self.tags) > 0 and self.tags[0] == 'SPACES':
+            self.tokens, self.tags = self[1:]
+        if len(self.tags) > 0 and self.tags[-1] == 'SPACES':
+            self.tokens, self.tags = self[:-1]
 
     def update_length(self):
         self.length = len(self.tokens)
