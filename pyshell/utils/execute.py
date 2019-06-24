@@ -337,24 +337,32 @@ class Executor:
             if branch.tag_end != "PIPE":
                 self.analyse_status(pid)
 
-    def replace_variable(self, branch):
+    def prepare_stmt(self, branch):
         """
-        For each STMT token, parse the content of each one
-        and tranform variable value
+        For each STMT token, tansform variable values.
+        If a STMT is following an other STMT, concat them in a single token.
         """
         index = 0
         tagstok = branch.tagstokens
         while index < tagstok.length:
             if tagstok.tags[index] == "STMT":
                 stmt_str = tagstok.tokens[index]
+                #Replace variable
                 if stmt_str[0] == "$":
                     variable_value = environ.retrieve_variable(stmt_str)
                     tagstok.tokens[index] = variable_value
+                #Join with the previous STMT if needed
+                if index > 0 and tagstok.tags[index - 1] == "STMT":
+                    new_stmt = tagstok.tokens[index - 1] + tagstok.tokens[index]
+                    tagstok.tokens[index - 1:index + 1] = [new_stmt]
+                    del tagstok.tags[index]
+                    tagstok.update_length()
+                    index -= 1
             index += 1
 
     def extract_cmd(self, branch):
         """Get only token used to run a command, format argv + environ"""
-        self.replace_variable(branch)
+        self.prepare_stmt(branch)
         command = []
         for index in range(branch.tagstokens.length):
             if branch.tagstokens.tags[index] in gv.GRAMMAR.grammar["STMT"]:
