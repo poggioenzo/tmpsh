@@ -38,24 +38,28 @@ class TagsTokens():
     def update_length(self):
         self.length = len(self.tokens)
 
-    def init_with_input(self, term_inputs):
+    def init_with_input(self, term_inputs, i=0, quote_gesture=True):
         tk.tokenize(term_inputs.strip(), self.tokens)
         self.update_length()
-        self.get_tags()
+        self.get_tags(i, quote_gesture)
         # self.alias_gesture()
         return self
 
-    def get_tags(self):
-        self.tags = []
-        for tok in self.tokens:
+    def get_tags(self, i=0, quote_gesture=True):
+        self.tags = self.tags[:i]
+        tok = ''
+        while i < self.length:
+            tok = self.tokens[i]
             if tok in gv.GRAMMAR.leaf_op:
                 self.tags.append(gv.GRAMMAR.reverse[tok])
             elif sc.containonlyspaces(tok):
                 self.tags.append('SPACES')
             else:
                 self.tags.append('STMT')
-        self.double_quote_gesture()  # to do in TTM(self) in check_syntax
-        self.quote_gesture()  # to do in TTM(self)in check_syntax
+            i += 1
+        if quote_gesture:
+            self.double_quote_gesture()  # to do in TTM(self) in check_syntax
+            self.quote_gesture()  # to do in TTM(self)in check_syntax
         return self
 
     def check_syntax(self):
