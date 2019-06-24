@@ -141,11 +141,11 @@ class Executor:
                     stdin = pipe_fd[0]
                 elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
                     stdout = pipe_fd[1]
-                self.run_subshell2(subast, stdin=stdin, stdout=stdout)
+                self.run_subshell(subast, stdin=stdin, stdout=stdout)
                 subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
             index += 1
 
-    def run_subshell2(self, ast, stdin=None, stdout=None):
+    def run_subshell(self, ast, stdin=None, stdout=None, wait=False):
         """
         From a given ast, run the command in a subshell.
         Redirect stdin and/or stdout if given.
@@ -166,16 +166,9 @@ class Executor:
                 os.close(stdin)
             if stdout:
                 os.close(stdout)
+            if wait:
+                self.analyse_status(pid)
             return pid
-
-    def run_subshell(self, subast):
-        """Run an ast in a subshell/subprocess"""
-        pid = os.fork()
-        if pid == 0:
-            self.run_ast(subast)
-            exit(gv.LAST_STATUS)
-        else:
-            self.analyse_status(pid)
 
     def perfom_subast_command(self, branch):
         """Run each subast which are other shell commands."""
@@ -185,7 +178,7 @@ class Executor:
         while index < nbr_subast:
             subast = branch.subast[index]
             if subast.type in ["SUBSH"]:
-                self.run_subshell(subast)
+                self.run_subshell(subast, wait=True)
             if subast.type == "CURSH":
                 self.run_ast(subast)
             if subast.type in ["CURSH", "SUBSH"]:
