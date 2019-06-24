@@ -45,22 +45,38 @@ def get_execname(cmd):
             return execname
     return None
 
+def setup_pipe_fd():
+    """
+    Create pipe fds, and configure them to be inheritable
+    and start only from RANGE_START.
+    """
+    RANGE_START = 63
+    #Change fd value to get fd in range of [63:infinite[
+    pipe_fd = list(os.pipe())
+    old_pipe = pipe_fd.copy()
+    pipe_fd[0] = fcntl.fcntl(pipe_fd[0], fcntl.F_DUPFD, RANGE_START)
+    pipe_fd[1] = fcntl.fcntl(pipe_fd[1], fcntl.F_DUPFD, RANGE_START)
+    os.set_inheritable(pipe_fd[0], True)
+    os.set_inheritable(pipe_fd[1], True)
+    os.close(old_pipe[0])
+    os.close(old_pipe[1])
+    return pipe_fd
+
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
-        self.ast = ast
-        self.run_ast()
+        self.run_ast(ast)
     
-    def run_ast(self, ast=None):
-        if ast == None:
-            ast = self.ast
+    def run_ast(self, ast):
         index = 0
         nbr_branch = len(ast.list_branch)
         pid = os.getpid()
-        input_pipe = None
+        saved_input_pipe = None
+        pipes = [None, None]
         while index < nbr_branch and pid > 0:
             branch = ast.list_branch[index]
-            output_pipe = None
+            self.manage_pipe_fd(ast, index, pipes, saved_input_pipe)
+            saved_input_pipe = None #Should use C pointer in manage_pipe_fd to reset value
             if self.check_andor(branch) == False:
                 index = self.find_newstart(nbr_branch, index, ast)
                 continue
@@ -69,25 +85,27 @@ class Executor:
                 pid = self.run_background_process(branch)
                 if pid != 0:
                     index += 1
-                    input_pipe = None
                     continue
             if self.perfom_subast_command(branch) == True:
                 index += 1
                 continue
-            self.prepare_cmd_subst(branch)
             self.perform_subast_replacement(branch)
             if branch.tag_end == "PIPE":
-                pipes = self.setup_pipe_fd()
-                output_pipe = pipes[1]
-            self.exec_command(branch, input_pipe, output_pipe)
-            if branch.tag_end == "PIPE":
-                input_pipe = pipes[0]
-            else:
-                input_pipe = None
+                saved_input_pipe, pipes[1] = setup_pipe_fd()
+            self.exec_command(branch, pipes[0], pipes[1])
             index += 1
         if pid == 0:
             exit(0)
-    
+
+    def manage_pipe_fd(self, ast, index, pipes, saved_input_pipe):
+        """"""
+        pipes[1] = None
+        if index > 0 and ast.list_branch[index - 1].tag_end == "PIPE":
+            pipes[0] = saved_input_pipe
+        else:
+            pipes[0] = None
+
+
     def run_background_process(self, branch):
         """Prepare the current command to be run in background"""
         pid = os.fork()
@@ -99,31 +117,6 @@ class Executor:
             os.setpgid(0, 0)
         return pid
 
-    def prepare_substitution_fd(self, type_subst, pipe_fd):
-        if type_subst in ["CMDSUBST1", "CMDSUBST3"]:
-            os.dup2(pipe_fd[1], sys.stdout.fileno())
-        elif type_subst == "CMDSUBST2":
-            os.dup2(pipe_fd[0], sys.stdin.fileno())
-        os.close(pipe_fd[0])
-        os.close(pipe_fd[1])
-
-    def setup_pipe_fd(self):
-        """
-        Create pipe fds, and configure them to be inheritable
-        and start only from RANGE_START.
-        """
-        RANGE_START = 63
-        #Change fd value to get fd in range of [63:infinite[
-        pipe_fd = list(os.pipe())
-        old_pipe = pipe_fd.copy()
-        pipe_fd[0] = fcntl.fcntl(pipe_fd[0], fcntl.F_DUPFD, RANGE_START)
-        pipe_fd[1] = fcntl.fcntl(pipe_fd[1], fcntl.F_DUPFD, RANGE_START)
-        os.set_inheritable(pipe_fd[0], True)
-        os.set_inheritable(pipe_fd[1], True)
-        os.close(old_pipe[0])
-        os.close(old_pipe[1])
-        return pipe_fd
-
     def prepare_cmd_subst(self, branch):
         """
         For each CMDSUBST, run in a subshell his ast representation.
@@ -134,7 +127,7 @@ class Executor:
         while index < nbr_subast:
             subast = branch.subast[index]
             if subast.type.startswith("CMDSUBST"):
-                pipe_fd = self.setup_pipe_fd()
+                pipe_fd = setup_pipe_fd()
                 stdout = None
                 stdin = None
                 if subast.type == "CMDSUBST2":
@@ -221,6 +214,7 @@ class Executor:
         Inside a branch, replace each subast element by the generated content
         or the cmdsubst /dev/fd file.
         """
+        self.prepare_cmd_subst(branch)
         index = 0
         nbr_ast = len(branch.subast)
         while index < nbr_ast:
@@ -328,26 +322,26 @@ class Executor:
                 os.close(ast.link_fd)
             index += 1
 
-    def exec_command(self, branch, input_pipe, output_pipe):
+    def exec_command(self, branch, stdin, stdout):
         """Fork + execve a given list of argument"""
         #Check if the command is only an assignation
         variables = self.retrieve_assignation(branch)
         cmd_args = self.extract_cmd(branch)
         if len(cmd_args) == 0:
             if len(variables) == 1:
-                os.close(input_pipe) if input_pipe else None
-                os.close(output_pipe) if output_pipe else None
+                os.close(stdin) if stdin else None
+                os.close(stdout) if stdout else None
                 self.environ_configuration(variables)
             return
         pid = os.fork()
         if pid == 0:
             #run the child
-            if input_pipe != None:
-                os.dup2(input_pipe, sys.stdin.fileno())
-                os.close(input_pipe)
-            if output_pipe != None:
-                os.dup2(output_pipe, sys.stdout.fileno())
-                os.close(output_pipe)
+            if stdin != None:
+                os.dup2(stdin, sys.stdin.fileno())
+                os.close(stdin)
+            if stdout != None:
+                os.dup2(stdout, sys.stdout.fileno())
+                os.close(stdout)
             self.environ_configuration(variables, only_env=True)
             executable = get_execname(cmd_args[0])
             if executable == None:
@@ -356,10 +350,10 @@ class Executor:
             os.execve(executable, cmd_args, os.environ)
         else:
             #Get status from the father
-            if input_pipe:
-                os.close(input_pipe)
-            if output_pipe:
-                os.close(output_pipe)
+            if stdin:
+                os.close(stdin)
+            if stdout:
+                os.close(stdout)
             self.close_branch_fd(branch)
             if branch.tag_end != "PIPE":
                 self.analyse_status(pid)
