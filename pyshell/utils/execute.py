@@ -74,6 +74,7 @@ class Executor:
             if self.perfom_subast_command(branch) == True:
                 index += 1
                 continue
+            self.prepare_cmd_subst(branch)
             self.perform_subast_replacement(branch)
             if branch.tag_end == "PIPE":
                 pipes = self.setup_pipe_fd()
@@ -123,25 +124,58 @@ class Executor:
         os.close(old_pipe[1])
         return pipe_fd
 
+    def prepare_cmd_subst(self, branch):
+        """
+        For each CMDSUBST, run in a subshell his ast representation.
+        Do not wait any of those subprocess
+        """
+        index = 0
+        nbr_subast = len(branch.subast)
+        while index < nbr_subast:
+            subast = branch.subast[index]
+            if subast.type.startswith("CMDSUBST"):
+                pipe_fd = self.setup_pipe_fd()
+                stdout = None
+                stdin = None
+                if subast.type == "CMDSUBST2":
+                    stdin = pipe_fd[0]
+                elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
+                    stdout = pipe_fd[1]
+                self.run_subshell2(subast, stdin=stdin, stdout=stdout)
+                subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
+            index += 1
+
+    def run_subshell2(self, ast, stdin=None, stdout=None):
+        """
+        From a given ast, run the command in a subshell.
+        Redirect stdin and/or stdout if given.
+        Do not wait the subshell, return the pid for this purpose.
+        """
+        pid = os.fork()
+        if pid == 0:
+            if stdin:
+                os.dup2(stdin, sys.stdin.fileno())
+                os.close(stdin)
+            if stdout:
+                os.dup2(stdout, sys.stdout.fileno())
+                os.close(stdout)
+            self.run_ast(ast)
+            exit(gv.LAST_STATUS)
+        else:
+            if stdin:
+                os.close(stdin)
+            if stdout:
+                os.close(stdout)
+            return pid
+
     def run_subshell(self, subast):
         """Run an ast in a subshell/subprocess"""
-        if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
-            pipe_fd = self.setup_pipe_fd()
         pid = os.fork()
-        if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"] and pid == 0:
-            self.prepare_substitution_fd(subast.type, pipe_fd)
         if pid == 0:
             self.run_ast(subast)
             exit(gv.LAST_STATUS)
         else:
-            if subast.type in ["CMDSUBST1", "CMDSUBST3"]:
-                subast.link_fd = pipe_fd[0]
-                os.close(pipe_fd[1])
-            elif subast.type == "CMDSUBST2":
-                subast.link_fd = pipe_fd[1]
-                os.close(pipe_fd[0])
-            elif subast.type == "SUBSH":
-                self.analyse_status(pid)
+            self.analyse_status(pid)
 
     def perfom_subast_command(self, branch):
         """Run each subast which are other shell commands."""
@@ -150,7 +184,7 @@ class Executor:
         runned = False
         while index < nbr_subast:
             subast = branch.subast[index]
-            if subast.type in ["SUBSH", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
+            if subast.type in ["SUBSH"]:
                 self.run_subshell(subast)
             if subast.type == "CURSH":
                 self.run_ast(subast)
