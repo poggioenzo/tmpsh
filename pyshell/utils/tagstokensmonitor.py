@@ -147,8 +147,9 @@ class TagsTokensMonitor():
             self.begin_cmd = True
         else:
             self.tt.valid = False
-            self.tt.token_error = '\\n'
+            self.tt.token_error = self.token
         self.begin_cmd = True
+
         # def prev_tokens_ok(self, i):
         #     if i == -1 or (i == 0 and self.tags[0] == 'SPACES'):
         #         return True
