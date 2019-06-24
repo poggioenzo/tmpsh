@@ -70,7 +70,7 @@ class TagsTokens():
         return self
 
     def check_syntax(self):
-        # TTM(self) en production
+        TTM(self)  # en production
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
