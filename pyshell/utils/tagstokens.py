@@ -33,7 +33,14 @@ class TagsTokens():
         self.valid = True
         self.incomplete = False
         self.length = 0
+        self.strip()
         self.update_length()
+
+    def strip(self):
+        if len(self.tags) > 0 and self.tags[0] == 'SPACES':
+            self.tokens, self.tags = self[1:]
+        if len(self.tags) > 0 and self.tags[-1] == 'SPACES':
+            self.tokens, self.tags = self[:-1]
 
     def update_length(self):
         self.length = len(self.tokens)
@@ -152,8 +159,14 @@ class TagsTokens():
             self.valid, self.incomplete, self.token_error)
         return str0
 
+    def copytt(self, begin, end=None):
+        if end is None:
+            end = begin + 1
+        tokens, tags = self[begin:end]
+        return TagsTokens(tokens, tags)
+
     def __getitem__(self, index):
-        return TagsTokens(self.tokens[index], self.tags[index])
+        return (self.tokens[index], self.tags[index])
 
     def __setitem__(self, index, value):
         if not (type(value) == tuple or type(value) == list):
