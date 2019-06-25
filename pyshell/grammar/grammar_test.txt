@@ -11,3 +11,6 @@ C:
 
 D:
 	E
+
+FORBIDDEN:
+	E E
