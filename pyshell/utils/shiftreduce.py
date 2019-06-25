@@ -77,6 +77,6 @@ def tagstokens_shift_reduce(tagstokens, grammar):
                 tagstokens.token_error = tagstokens.find_prev_token(i - 1)
                 break
             i += 1
-    if tagstokens.valid and stack != ['CMD']:
+    if tagstokens.valid and len(stack) > 0 and stack != ['CMD']:
         tagstokens.incomplete = True
     return stack

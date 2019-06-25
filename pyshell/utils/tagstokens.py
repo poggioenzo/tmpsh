@@ -49,7 +49,6 @@ class TagsTokens():
         tk.tokenize(term_inputs.strip(), self.tokens)
         self.update_length()
         self.get_tags(i, quote_gesture)
-        # self.alias_gesture()
         return self
 
     def get_tags(self, i=0, quote_gesture=True):
@@ -64,13 +63,15 @@ class TagsTokens():
             else:
                 self.tags.append('STMT')
             i += 1
+        self.strip()
+        self.update_length()
         if quote_gesture:
             self.double_quote_gesture()  # to do in TTM(self) in check_syntax
             self.quote_gesture()  # to do in TTM(self)in check_syntax
         return self
 
     def check_syntax(self):
-        # TTM(self) en production
+        TTM(self)  # en production
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
