@@ -117,6 +117,8 @@ class ACB():  # AbstractCommandBranch
             elif tag != 'SPACES':
                 previous = lentags
             lentags -= 1
+        self.tagstokens.strip()
+        self.tagstokens.update_length()
         self.redirectionfd = list(reversed(self.redirectionfd))
 
     def __str__(self):
