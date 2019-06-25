@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import unittest
 from utils.tagstokens import TagsTokens
 
@@ -105,3 +107,7 @@ class TestMonitorBasicInvalid(unittest.TestCase):
         self.assertEqual(['BACKGROUND_JOBS'], tt.stack)
         self.assertFalse(tt.valid)
         self.assertFalse(tt.incomplete)
+
+
+if __name__ == '__main__':
+    unittest.main()
