@@ -388,24 +388,21 @@ class Executor:
         """
         index = 0
         nbr_subast = len(branch.subast)
-        saved_std_fd = self.save_std_fd()
-        runned = False
-        while index < nbr_subast and runned == False:
+        while index < nbr_subast:
             subast = branch.subast[index]
-            if subast.type in ["SUBSH"]:
-                self.run_subshell(subast, fds, wait=True)
-                runned = True
-            if subast.type == "CURSH":
-                if fds.stdout != None:
-                    self.run_subshell(subast, fds, wait=False)
-                else:
+            if subast.type in ["SUBSH", "CURSH"]:
+                saved_std_fd = self.save_std_fd()
+                wait = False if fds.stdout != None else True
+                if subast.type == "CURSH" and wait == True:
                     if fds.stdin:
                         replace_fd(fds.stdin, sys.stdin.fileno())
                     self.run_ast(subast)
-                runned = True
+                else:
+                    self.run_subshell(subast, fds, wait)
+                self.restore_std_fd(saved_std_fd)
+                return True
             index += 1
-        self.restore_std_fd(saved_std_fd)
-        return runned
+        return False
 
     def exec_command(self, branch, stdin, stdout):
         """Fork + execve a given list of argument"""
@@ -433,10 +430,8 @@ class Executor:
             os.execve(executable, cmd_args, os.environ)
         else:
             #Get status from the father
-            if stdin:
-                os.close(stdin)
-            if stdout:
-                os.close(stdout)
+            os.close(stdin) if stdin else None
+            os.close(stdout) if stdout else None
             if branch.tag_end != "PIPE":
                 self.analyse_status(pid)
 
