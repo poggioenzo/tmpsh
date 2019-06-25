@@ -98,7 +98,7 @@ class TestMonitorBasicValid(unittest.TestCase):
 class TestMonitorBasicInvalid(unittest.TestCase):
 
     def test_basic_invalid_001(self):
-        """Test terminator alone."""
+        """Test BACKGROUND_JOBS alone."""
         term_input = '&'
         tt = TagsTokens().init_with_input(term_input).check_syntax()
         print(tt)
