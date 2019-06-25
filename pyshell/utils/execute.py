@@ -62,6 +62,30 @@ def setup_pipe_fd():
     os.close(old_pipe[1])
     return pipe_fd
 
+def replace_fd(expected_fd, old_fd):
+    """
+    Replace an fd by the expected fd.
+    Close the extra fd.
+    """
+    os.dup2(expected_fd, old_fd)
+    os.close(expected_fd)
+
+class ManagerFD:
+    def __init__(self):
+        self.stdin = None
+        self.stdout = None
+        self.saved_input_pipe = None
+        self.redirection_list = None
+
+    def manage_pipe_fd(self, ast, index):
+        self.stdout = None
+        if index > 0 and ast.list_branch[index - 1].tag_end == "PIPE":
+            self.stdin = self.saved_input_pipe
+        else:
+            self.stdin = None
+        self.saved_input_pipe = None
+    pass
+
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
@@ -71,12 +95,10 @@ class Executor:
         index = 0
         nbr_branch = len(ast.list_branch)
         pid = os.getpid()
-        saved_input_pipe = None
-        pipes = [None, None]
+        fds = ManagerFD()
         while index < nbr_branch and pid > 0:
             branch = ast.list_branch[index]
-            self.manage_pipe_fd(ast, index, pipes, saved_input_pipe)
-            saved_input_pipe = None #Should use C pointer in manage_pipe_fd to reset value
+            fds.manage_pipe_fd(ast, index)
             if self.check_andor(branch) == False:
                 index = self.find_newstart(nbr_branch, index, ast)
                 continue
@@ -86,25 +108,14 @@ class Executor:
                 if pid != 0:
                     index += 1
                     continue
-            if self.perfom_subast_command(branch) == True:
-                index += 1
-                continue
             self.perform_subast_replacement(branch)
             if branch.tag_end == "PIPE":
-                saved_input_pipe, pipes[1] = setup_pipe_fd()
-            self.exec_command(branch, pipes[0], pipes[1])
+                fds.saved_input_pipe, fds.stdout = setup_pipe_fd()
+            if self.perfom_command_as_subast(branch, fds) == False:
+                self.exec_command(branch, fds.stdin, fds.stdout)
             index += 1
         if pid == 0:
             exit(0)
-
-    def manage_pipe_fd(self, ast, index, pipes, saved_input_pipe):
-        """"""
-        pipes[1] = None
-        if index > 0 and ast.list_branch[index - 1].tag_end == "PIPE":
-            pipes[0] = saved_input_pipe
-        else:
-            pipes[0] = None
-
 
     def run_background_process(self, branch):
         """Prepare the current command to be run in background"""
@@ -128,17 +139,16 @@ class Executor:
             subast = branch.subast[index]
             if subast.type.startswith("CMDSUBST"):
                 pipe_fd = setup_pipe_fd()
-                stdout = None
-                stdin = None
+                fds = ManagerFD()
                 if subast.type == "CMDSUBST2":
-                    stdin = pipe_fd[0]
+                    fds.stdin = pipe_fd[0]
                 elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
-                    stdout = pipe_fd[1]
-                self.run_subshell(subast, stdin=stdin, stdout=stdout)
+                    fds.stdout = pipe_fd[1]
+                self.run_subshell(subast, fds)
                 subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
             index += 1
 
-    def run_subshell(self, ast, stdin=None, stdout=None, wait=False):
+    def run_subshell(self, ast, fds, wait=False):
         """
         From a given ast, run the command in a subshell.
         Redirect stdin and/or stdout if given.
@@ -146,37 +156,54 @@ class Executor:
         """
         pid = os.fork()
         if pid == 0:
-            if stdin:
-                os.dup2(stdin, sys.stdin.fileno())
-                os.close(stdin)
-            if stdout:
-                os.dup2(stdout, sys.stdout.fileno())
-                os.close(stdout)
+            if fds.stdin:
+                replace_fd(fds.stdin, sys.stdin.fileno())
+            if fds.stdout:
+                replace_fd(fds.stdout, sys.stdout.fileno())
             self.run_ast(ast)
             exit(gv.LAST_STATUS)
         else:
-            if stdin:
-                os.close(stdin)
-            if stdout:
-                os.close(stdout)
+            if fds.stdin:
+                os.close(fds.stdin)
+            if fds.stdout:
+                os.close(fds.stdout)
             if wait:
                 self.analyse_status(pid)
             return pid
 
-    def perfom_subast_command(self, branch):
+    def save_std_fd(self):
+        #Save standard fds stdin/stdout/stderr
+        saved_stdin = fcntl.fcntl(0, fcntl.F_DUPFD_CLOEXEC, 100)
+        saved_stdout = fcntl.fcntl(1, fcntl.F_DUPFD_CLOEXEC, 100)
+        saved_stderr = fcntl.fcntl(2, fcntl.F_DUPFD_CLOEXEC, 100)
+        return [saved_stdin, saved_stdout, saved_stderr]
+
+    def restore_std_fd(self, std_fds):
+        replace_fd(std_fds[0], sys.stdin.fileno())
+        replace_fd(std_fds[1], sys.stdout.fileno())
+        replace_fd(std_fds[2], sys.stderr.fileno())
+
+    def perfom_command_as_subast(self, branch, fds):
         """Run each subast which are other shell commands."""
         index = 0
         nbr_subast = len(branch.subast)
+        saved_std_fd = self.save_std_fd()
         runned = False
-        while index < nbr_subast:
+        while index < nbr_subast and runned == False:
             subast = branch.subast[index]
             if subast.type in ["SUBSH"]:
-                self.run_subshell(subast, wait=True)
+                self.run_subshell(subast, fds, wait=True)
+                runned = True
             if subast.type == "CURSH":
-                self.run_ast(subast)
-            if subast.type in ["CURSH", "SUBSH"]:
+                if fds.stdout != None:
+                    self.run_subshell(subast, fds, wait=False)
+                else:
+                    if fds.stdin:
+                        replace_fd(fds.stdin, sys.stdin.fileno())
+                    self.run_ast(subast)
                 runned = True
             index += 1
+        self.restore_std_fd(saved_std_fd)
         return runned
 
 
@@ -337,11 +364,9 @@ class Executor:
         if pid == 0:
             #run the child
             if stdin != None:
-                os.dup2(stdin, sys.stdin.fileno())
-                os.close(stdin)
+                replace_fd(stdin, sys.stdin.fileno())
             if stdout != None:
-                os.dup2(stdout, sys.stdout.fileno())
-                os.close(stdout)
+                replace_fd(stdout, sys.stdout.fileno())
             self.environ_configuration(variables, only_env=True)
             executable = get_execname(cmd_args[0])
             if executable == None:
