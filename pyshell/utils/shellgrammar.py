@@ -43,7 +43,7 @@ class ShellGrammar(Grammar):
 
     def get_opening_tags(self):
         if 'SUB_PROCESS' in self.grammar:
-            opening_tags = self.grammar['SUB_PROCESS']
+            opening_tags = self.grammar['SUB_PROCESS'].copy()
             if 'QUOTES' in self.grammar:
                 opening_tags.extend(self.grammar['QUOTES'])
             if 'COMMAND_SH' in self.grammar:
