@@ -300,7 +300,7 @@ class Executor:
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
             elif subast.type == "CMDSUBST1":
                 content = os.read(subast.link_fd, 800000).decode()
-                if content[-1] == '\n': #SHOULD NOT BE DONE, need one more tokenisation
+                if len(content) > 0 and content[-1] == '\n': #SHOULD NOT BE DONE, need one more tokenisation
                     content = content[:-1]
             elif subast.type in ["CMDSUBST2", "CMDSUBST3"]:
                 content = "/dev/fd/" + str(subast.link_fd)
