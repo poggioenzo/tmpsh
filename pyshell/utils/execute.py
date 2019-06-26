@@ -3,6 +3,7 @@
 from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
 import utils.environ as environ
+import utils.builtins.background as builtin
 import fcntl
 import sys
 import os
@@ -10,7 +11,7 @@ import time
 import signal
 
 
-DEBUG = open("/dev/pts/5", "w")
+DEBUG = open("/dev/pts/4", "w")
 def dprint(string, *args, **kwargs):
     print(string, *args, file=DEBUG, **kwargs)
 
@@ -92,6 +93,7 @@ class Executor:
             index += 1
         if pid == 0:
             exit(0)
+        gv.JOBS.wait_zombie()
     
     def prepare_piping(self, input_pipe):
         pipe_fd = self.setup_pipe_fd()
@@ -331,7 +333,10 @@ class Executor:
                 os.close(output_pipe) if output_pipe else None
                 self.environ_configuration(variables)
             return
-        pid = os.fork()
+        if branch.tag_end == "BACKGROUND_JOBS":
+            pid = 0
+        else:
+            pid = os.fork()
         if pid == 0:
             #run the child
             if input_pipe != None:
@@ -341,6 +346,8 @@ class Executor:
                 os.dup2(output_pipe, sys.stdout.fileno())
                 os.close(output_pipe)
             self.environ_configuration(variables, only_env=True)
+            if cmd_args[0] in ["jobs", "fg"]:
+                return self.run_builtin(cmd_args)
             executable = get_execname(cmd_args[0])
             if executable == None:
                 print("Command not found : {}".format(cmd_args[0]))
@@ -355,6 +362,13 @@ class Executor:
             self.close_branch_fd(branch)
             if branch.tag_end != "PIPE":
                 self.analyse_status(pid)
+
+
+    def run_builtin(self, cmd_args):
+        cmd = "builtin.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
+                dict(os.environ))
+        exec(cmd)
+        return None
 
     def analyse_string_variable(self, string):
         """
