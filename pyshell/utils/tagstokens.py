@@ -33,33 +33,45 @@ class TagsTokens():
         self.valid = True
         self.incomplete = False
         self.length = 0
+        self.strip()
         self.update_length()
+
+    def strip(self):
+        if len(self.tags) > 0 and self.tags[0] == 'SPACES':
+            self.tokens, self.tags = self[1:]
+        if len(self.tags) > 0 and self.tags[-1] == 'SPACES':
+            self.tokens, self.tags = self[:-1]
 
     def update_length(self):
         self.length = len(self.tokens)
 
-    def init_with_input(self, term_inputs):
+    def init_with_input(self, term_inputs, i=0, quote_gesture=True):
         tk.tokenize(term_inputs.strip(), self.tokens)
         self.update_length()
-        self.get_tags()
-        # self.alias_gesture()
+        self.get_tags(i, quote_gesture)
         return self
 
-    def get_tags(self):
-        self.tags = []
-        for tok in self.tokens:
+    def get_tags(self, i=0, quote_gesture=True):
+        self.tags = self.tags[:i]
+        tok = ''
+        while i < self.length:
+            tok = self.tokens[i]
             if tok in gv.GRAMMAR.leaf_op:
                 self.tags.append(gv.GRAMMAR.reverse[tok])
             elif sc.containonlyspaces(tok):
                 self.tags.append('SPACES')
             else:
                 self.tags.append('STMT')
-        self.double_quote_gesture()
-        self.quote_gesture()
+            i += 1
+        self.strip()
+        self.update_length()
+        if quote_gesture:
+            self.double_quote_gesture()  # to do in TTM(self) in check_syntax
+            self.quote_gesture()  # to do in TTM(self)in check_syntax
         return self
 
     def check_syntax(self):
-        TTM(self)
+        # TTM(self)  # en production
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
@@ -148,8 +160,14 @@ class TagsTokens():
             self.valid, self.incomplete, self.token_error)
         return str0
 
+    def copytt(self, begin, end=None):
+        if end is None:
+            end = begin + 1
+        tokens, tags = self[begin:end]
+        return TagsTokens(tokens, tags)
+
     def __getitem__(self, index):
-        return TagsTokens(self.tokens[index], self.tags[index])
+        return (self.tokens[index], self.tags[index])
 
     def __setitem__(self, index, value):
         if not (type(value) == tuple or type(value) == list):

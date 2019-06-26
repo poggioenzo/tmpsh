@@ -32,14 +32,16 @@ class AST():  # AbstractSyntaxTree
             if tag in gv.GRAMMAR.opening_tags:
                 i = tt.skip_openning_tags(i) - 1
             elif tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
-                self.list_branch.append(ACB(tt[begin:i], and_or_begin, tag))
+                self.list_branch.append(
+                    ACB(tt.copytt(begin, i), and_or_begin, tag))
                 begin = i + 1
                 and_or_begin = ''
             if tag in ['CMDAND', 'CMDOR']:
                 and_or_begin = tag
             i += 1
         if begin != i:
-            self.list_branch.append(ACB(tt[begin:i], and_or_begin, tag))
+            self.list_branch.append(
+                ACB(tt.copytt(begin, i), and_or_begin, tag))
 
     def __str__(self):
         return '{:_^12}:\n'.format(self.type) + split_shift('\n'.join(
@@ -47,6 +49,7 @@ class AST():  # AbstractSyntaxTree
 
 
 class ACB():  # AbstractCommandBranch
+    # TODO: trim each branch
     def __init__(self, tt, begin_andor, tag_end):
         self.tagstokens = tt
         self.begin_andor = begin_andor
@@ -69,6 +72,7 @@ class ACB():  # AbstractCommandBranch
             sub_ast.type = type_command
 
     def cursh_subsh_gesture(self):
+        # should be done in TTM
         i = 0
         end = 0
         tag = ''
@@ -93,7 +97,7 @@ class ACB():  # AbstractCommandBranch
                 begin = i + 1
                 self.subcmd_type.append(tag)
                 i = self.tagstokens.skip_openning_tags(i) - 1
-                self.subast.append(AST(self.tagstokens[begin:i]))
+                self.subast.append(AST(self.tagstokens.copytt(begin, i)))
                 self.tagstokens[begin - 1:i + 1] = [
                     ['SUBAST'], ['↓subast{}↓'.format(len(self.subast) - 1)]]
                 i = begin
@@ -107,12 +111,14 @@ class ACB():  # AbstractCommandBranch
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 self.redirectionfd.append(
-                    RedirectionFD(self.tagstokens[previous], tag))
+                    RedirectionFD(self.tagstokens.copytt(previous), tag))
                 del self.tagstokens[previous]
                 del self.tagstokens[lentags]
             elif tag != 'SPACES':
                 previous = lentags
             lentags -= 1
+        self.tagstokens.strip()
+        self.tagstokens.update_length()
         self.redirectionfd = list(reversed(self.redirectionfd))
 
     def __str__(self):
@@ -130,9 +136,10 @@ class ACB():  # AbstractCommandBranch
 class RedirectionFD():
     """docstring forRedirec."""
 
-    def __init__(self, tagstokens, redirection_type):
+    def __init__(self, tagstokens, redirection_type, fd_input=1):
         self.tagstokens = tagstokens
         self.type = redirection_type
+        self.fd_input = fd_input
 
     def __str__(self):
         return '{}: {}'.format(self.type, ''.join(self.tagstokens.tokens))

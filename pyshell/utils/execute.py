@@ -25,19 +25,15 @@ def forker():
         dprint("FORK")
     return pid
 
-os.fork = forker
+#os.fork = forker
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
         start = time.clock()
         res = function(*args, **kwargs)
         end = time.clock()
-        dprint("{} | Time for {} : {}".format(os.getpid(), function.__name__, end - start))
         return res
     return time_wrapper
-
-def sig_ignore(*signal):
-    pass
 
 def get_execname(cmd):
     cmd = cmd.strip() # ! Get space in STMT with PIPE
@@ -50,24 +46,67 @@ def get_execname(cmd):
             return execname
     return None
 
+def setup_pipe_fd():
+    """
+    Create pipe fds, and configure them to be inheritable
+    and start only from RANGE_START.
+    """
+    RANGE_START = 63
+    #Change fd value to get fd in range of [63:infinite[
+    pipe_fd = list(os.pipe())
+    old_pipe = pipe_fd.copy()
+    pipe_fd[0] = fcntl.fcntl(pipe_fd[0], fcntl.F_DUPFD, RANGE_START)
+    pipe_fd[1] = fcntl.fcntl(pipe_fd[1], fcntl.F_DUPFD, RANGE_START)
+    os.set_inheritable(pipe_fd[0], True)
+    os.set_inheritable(pipe_fd[1], True)
+    os.close(old_pipe[0])
+    os.close(old_pipe[1])
+    return pipe_fd
+
+def replace_fd(expected_fd, old_fd):
+    """
+    Replace an fd by the expected fd.
+    Close the extra fd.
+    """
+    os.dup2(expected_fd, old_fd)
+    os.close(expected_fd)
+
+class ManagerFD:
+    def __init__(self):
+        self.stdin = None
+        self.stdout = None
+        self.saved_input_pipe = None
+        self.redirection_list = None
+
+    def manage_pipe_fd(self, ast, index):
+        self.stdout = None
+        if index > 0 and ast.list_branch[index - 1].tag_end == "PIPE":
+            self.stdin = self.saved_input_pipe
+        else:
+            self.stdin = None
+        self.saved_input_pipe = None
+    pass
+
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
-        self.ast = ast
-        signal.signal(signal.SIGUSR1, sig_ignore)#signal.SIG_IGN)
-        self.run_ast()
+        self.run_ast(ast)
 
-    
-    def run_ast(self, ast=None):
-        if ast == None:
-            ast = self.ast
+    def run_ast(self, ast):
+        """
+        Main function to run an entire AST instance in a 
+        recursive way.
+        Go through each branch and run them one by one (or more),
+        running each time the contained command.
+        """
         index = 0
         nbr_branch = len(ast.list_branch)
         pid = os.getpid()
-        input_pipe = None
+        fds = ManagerFD()
         while index < nbr_branch and pid > 0:
             branch = ast.list_branch[index]
-            output_pipe = None
+            self.replace_variable(branch)
+            fds.manage_pipe_fd(ast, index)
             if self.check_andor(branch) == False:
                 index = self.find_newstart(nbr_branch, index, ast)
                 continue
@@ -76,162 +115,22 @@ class Executor:
                 pid = self.run_background_process(branch)
                 if pid != 0:
                     index += 1
-                    input_pipe = None
                     continue
-            if self.perfom_subast_command(branch) == True:
-                index += 1
-                continue
             self.perform_subast_replacement(branch)
+            #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
-                pipes = self.setup_pipe_fd()
-                output_pipe = pipes[1]
-            self.exec_command(branch, input_pipe, output_pipe)
-            if branch.tag_end == "PIPE":
-                input_pipe = pipes[0]
-            else:
-                input_pipe = None
+                fds.saved_input_pipe, fds.stdout = setup_pipe_fd()
+            if self.perfom_command_as_subast(branch, fds) == False:
+                self.exec_command(branch, fds.stdin, fds.stdout)
             index += 1
+        #Exit background process
         if pid == 0:
             exit(0)
         gv.JOBS.wait_zombie()
     
-    def prepare_piping(self, input_pipe):
-        pipe_fd = self.setup_pipe_fd()
-        pid = os.fork()
-        if pid == 0:
-            os.dup2(pipe_fd[1], sys.stdout.fileno())
-            os.close(pipe_fd[0])
-        else:
-            os.close(pipe_fd[1])
-            if input_pipe:
-                os.close(input_pipe)
-            input_pipe = pipe_fd[0]
-        return pid, input_pipe
-
-    def run_background_process(self, branch):
-        """Prepare the current command to be run in background"""
-        pid = os.fork()
-        if pid > 0:
-            command = "".join(branch.tagstokens.tokens)
-            gv.JOBS.add_job(pid, command)
-            gv.LAST_STATUS = 0
-        else:
-            os.setpgid(0, 0)
-        return pid
-
-    def prepare_substitution_fd(self, type_subst, pipe_fd):
-        if type_subst in ["CMDSUBST1", "CMDSUBST3"]:
-            os.dup2(pipe_fd[1], sys.stdout.fileno())
-        elif type_subst == "CMDSUBST2":
-            os.dup2(pipe_fd[0], sys.stdin.fileno())
-        os.close(pipe_fd[0])
-        os.close(pipe_fd[1])
-
-    def setup_pipe_fd(self):
-        """
-        Create pipe fds, and configure them to be inheritable
-        and start only from RANGE_START.
-        """
-        RANGE_START = 63
-        #Change fd value to get fd in range of [63:infinite[
-        pipe_fd = list(os.pipe())
-        old_pipe = pipe_fd.copy()
-        pipe_fd[0] = fcntl.fcntl(pipe_fd[0], fcntl.F_DUPFD, RANGE_START)
-        pipe_fd[1] = fcntl.fcntl(pipe_fd[1], fcntl.F_DUPFD, RANGE_START)
-        os.set_inheritable(pipe_fd[0], True)
-        os.set_inheritable(pipe_fd[1], True)
-        os.close(old_pipe[0])
-        os.close(old_pipe[1])
-        return pipe_fd
-
-    def run_subshell(self, subast):
-        """Run an ast in a subshell/subprocess"""
-        if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
-            pipe_fd = self.setup_pipe_fd()
-        pid = os.fork()
-        if subast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"] and pid == 0:
-            self.prepare_substitution_fd(subast.type, pipe_fd)
-        if pid == 0:
-            self.run_ast(subast)
-            exit(gv.LAST_STATUS)
-        else:
-            if subast.type in ["CMDSUBST1", "CMDSUBST3"]:
-                subast.link_fd = pipe_fd[0]
-                os.close(pipe_fd[1])
-            elif subast.type == "CMDSUBST2":
-                subast.link_fd = pipe_fd[1]
-                os.close(pipe_fd[0])
-            elif subast.type == "SUBSH":
-                self.analyse_status(pid)
-
-    def perfom_subast_command(self, branch):
-        """Run each subast which are other shell commands."""
-        index = 0
-        nbr_subast = len(branch.subast)
-        runned = False
-        while index < nbr_subast:
-            subast = branch.subast[index]
-            if subast.type in ["SUBSH", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
-                self.run_subshell(subast)
-            if subast.type == "CURSH":
-                self.run_ast(subast)
-            if subast.type in ["CURSH", "SUBSH"]:
-                runned = True
-            index += 1
-        return runned
-
-
-    def replace_subast(self, branch, change_index, content):
-        """Replace in a tagstoken list the content given by the subast"""
-        index = 0
-        pos_subast = 0
-        while index < branch.tagstokens.length and pos_subast <= change_index:
-            tag = branch.tagstokens.tags[index]
-            if tag == "SUBAST":
-                if change_index == pos_subast:
-                    branch.tagstokens.tokens[index] = content
-                pos_subast += 1
-            index += 1
-        pass
-
-    def replace_ast_tag(self, branch):
-        """
-        For each subast, replace in the current branch the subast tag by
-        the STMT tag, to have only STMT to create command.
-        """
-        index = 0
-        pos_subast = 0
-        while index < branch.tagstokens.length:
-            tag = branch.tagstokens.tags[index]
-            if tag == "SUBAST":
-                if branch.subast[pos_subast].type in \
-                        ["QUOTE", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3", "BRACEPARAM"]:
-                    branch.tagstokens.tags[index] = "STMT"
-                pos_subast += 1
-            index += 1
-
-    def perform_subast_replacement(self, branch):
-        """
-        Inside a branch, replace each subast element by the generated content
-        or the cmdsubst /dev/fd file.
-        """
-        index = 0
-        nbr_ast = len(branch.subast)
-        while index < nbr_ast:
-            subast = branch.subast[index]
-            if subast.type == "QUOTE":
-                content = "".join(subast.list_branch[0].tagstokens.tokens)
-            elif subast.type == "CMDSUBST1":
-                content = os.read(subast.link_fd, 800000).decode()
-            elif subast.type in ["CMDSUBST2", "CMDSUBST3"]:
-                content = "/dev/fd/" + str(subast.link_fd)
-            elif subast.type == "BRACEPARAM":
-                var = subast.list_branch[0].tagstokens.tokens[0]
-                content = gv.LOCAL_VAR.get(var, "")
-            if subast.type in ["BRACEPARAM", "CMDSUBST1","CMDSUBST2","CMDSUBST3","QUOTE"]:
-                self.replace_subast(branch, index, content)
-            index += 1
-        self.replace_ast_tag(branch)
+    ##################################################################
+    ##                  Utils for self.run_ast                      ##
+    ##################################################################
 
     def find_newstart(self, max_len, index, ast):
         """
@@ -258,17 +157,187 @@ class Executor:
             return True
         return False
 
+    def run_background_process(self, branch):
+        """Prepare the current command to be run in background"""
+        pid = os.fork()
+        if pid > 0:
+            command = "".join(branch.tagstokens.tokens)
+            gv.JOBS.add_job(pid, command)
+            gv.LAST_STATUS = 0
+        else:
+            os.setpgid(0, 0)
+        return pid
+
+    def replace_variable(self, branch):
+        """
+        Replace each variable within a single branch.
+        Make a recursive calling if there is any dquotes element inside
+        the branch.
+        """
+        index = 0
+        index_subast = 0
+        while index < branch.tagstokens.length:
+            tag = branch.tagstokens.tags[index]
+            token = branch.tagstokens.tokens[index]
+            if tag == "STMT" and token[0] == "$":
+                variable = environ.retrieve_variable(token)
+                branch.tagstokens.tokens[index] = variable
+            elif tag == "SUBAST":
+                if branch.subast[index_subast].type == "DQUOTES":
+                    self.replace_variable(branch.subast[index_subast].list_branch[0])
+                index_subast += 1
+            index += 1
+
+    ##################################################################
+    ##          Functions to run a branch's subast list             ##
+    ##################################################################
+
+    def run_subshell(self, ast, fds, wait=False):
+        """
+        From a given ast, run the command in a subshell.
+        Redirect stdin and/or stdout if given.
+        Wait the subshell and catch his return value if expected.
+        """
+        pid = os.fork()
+        if pid == 0:
+            if fds.stdin:
+                replace_fd(fds.stdin, sys.stdin.fileno())
+            if fds.stdout:
+                replace_fd(fds.stdout, sys.stdout.fileno())
+            self.run_ast(ast)
+            exit(gv.LAST_STATUS)
+        else:
+            if fds.stdin:
+                os.close(fds.stdin)
+            if fds.stdout:
+                os.close(fds.stdout)
+            if wait:
+                self.analyse_status(pid)
+            return pid
+
+    def prepare_cmd_subst(self, branch):
+        """
+        For each CMDSUBST[123] or DQUOTES, run in a subshell his ast representation.
+        Do not wait any of those subprocess.
+        """
+        index = 0
+        nbr_subast = len(branch.subast)
+        while index < nbr_subast:
+            subast = branch.subast[index]
+            if subast.type.startswith("CMDSUBST"):
+                pipe_fd = setup_pipe_fd()
+                fds = ManagerFD()
+                if subast.type == "CMDSUBST2":
+                    fds.stdin = pipe_fd[0]
+                elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
+                    fds.stdout = pipe_fd[1]
+                self.run_subshell(subast, fds)
+                subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
+            elif subast.type == "DQUOTES":
+                self.prepare_cmd_subst(subast.list_branch[0])
+            index += 1
+
+    def save_std_fd(self):
+        """
+        Save actual stdin/stdout/stderr by duplicating their fd, 
+        to be able to retore them further.
+        """
+        #Save standard fds stdin/stdout/stderr
+        #CLOEXEC is set to avoid children to get those fds
+        saved_stdin = fcntl.fcntl(0, fcntl.F_DUPFD_CLOEXEC, 100)
+        saved_stdout = fcntl.fcntl(1, fcntl.F_DUPFD_CLOEXEC, 100)
+        saved_stderr = fcntl.fcntl(2, fcntl.F_DUPFD_CLOEXEC, 100)
+        return [saved_stdin, saved_stdout, saved_stderr]
+
+    def restore_std_fd(self, std_fds):
+        """
+        From saved stdin/stdout/stderr of self.saved_std_fd, restore the
+        each fds.
+        """
+        replace_fd(std_fds[0], sys.stdin.fileno())
+        replace_fd(std_fds[1], sys.stdout.fileno())
+        replace_fd(std_fds[2], sys.stderr.fileno())
+
+
+    def replace_subast(self, branch, change_index, content):
+        """Replace in a tagstoken list the content given by the subast"""
+        index = 0
+        pos_subast = 0
+        while index < branch.tagstokens.length and pos_subast <= change_index:
+            tag = branch.tagstokens.tags[index]
+            if tag == "SUBAST":
+                if change_index == pos_subast:
+                    branch.tagstokens.tokens[index] = content
+                pos_subast += 1
+            index += 1
+        pass
+
+    def replace_ast_tag(self, branch):
+        """
+        For each subast, replace in the current branch the subast tag by
+        the STMT tag, to have only STMT to create command.
+        """
+        index = 0
+        pos_subast = 0
+        while index < branch.tagstokens.length:
+            tag = branch.tagstokens.tags[index]
+            if tag == "SUBAST":
+                if branch.subast[pos_subast].type in \
+                        ["DQUOTES", "QUOTE", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3", "BRACEPARAM"]:
+                    branch.tagstokens.tags[index] = "STMT"
+                pos_subast += 1
+            index += 1
+
+    def perform_subast_replacement(self, branch):
+        """
+        Inside a branch, replace each subast element by the generated content
+        or the cmdsubst /dev/fd file.
+        """
+        self.prepare_cmd_subst(branch)
+        index = 0
+        nbr_ast = len(branch.subast)
+        while index < nbr_ast:
+            subast = branch.subast[index]
+            if subast.type == "QUOTE":
+                content = "".join(subast.list_branch[0].tagstokens.tokens)
+            elif subast.type == "CMDSUBST1":
+                content = os.read(subast.link_fd, 800000).decode()
+                if len(content) > 0 and content[-1] == '\n': #SHOULD NOT BE DONE, need one more tokenisation
+                    content = content[:-1]
+            elif subast.type in ["CMDSUBST2", "CMDSUBST3"]:
+                content = "/dev/fd/" + str(subast.link_fd)
+            elif subast.type == "BRACEPARAM":
+                var = subast.list_branch[0].tagstokens.tokens[0]
+                content = gv.LOCAL_VAR.get(var, "")
+            elif subast.type == "DQUOTES":
+                self.perform_subast_replacement(subast.list_branch[0])
+                content = "".join(subast.list_branch[0].tagstokens.tokens)
+            if subast.type in ["BRACEPARAM", "CMDSUBST1","CMDSUBST2","CMDSUBST3","QUOTE", 
+                    "DQUOTES"]:
+                self.replace_subast(branch, index, content)
+            index += 1
+        self.replace_ast_tag(branch)
+
+    ##################################################################
+    ##     Functions to wait and analyse child + some job control   ##
+    ##################################################################
+
     def analyse_status(self, pid):
         """
         Whenever a child die, behave properly to store information,
         manage background process.
         """
+        ### ADD 128 + n when the program is kill by a signal
         pid, return_status = os.waitpid(pid, 0)
         status = os.WEXITSTATUS(return_status)
         gv.LAST_STATUS = status
         if os.WIFSTOPPED(return_status):
             #Set job in background
             pass
+
+    ##################################################################
+    ##      Command runner with execve or from ast + utils          ##
+    ##################################################################
     
     def retrieve_assignation(self, branch):
         """
@@ -312,25 +381,40 @@ class Executor:
             environ.update_var(key, value, mode, only_env)
             index += 1
 
-    def close_branch_fd(self, branch):
-        """Close extra pipe fd of CMDSUBST or PIPE subast"""
+    def perfom_command_as_subast(self, branch, fds):
+        """
+        If the command is composed of a SUBSH or a CURSH,
+        create a layer for this kind of command and run them.
+        Save and restore the initial stdin/stdout/stderr to
+        prevent change during execution.
+        """
         index = 0
         nbr_subast = len(branch.subast)
         while index < nbr_subast:
-            ast = branch.subast[index]
-            if ast.type in ["CMDSUBST1", "CMDSUBST2", "CMDSUBST3"]:
-                os.close(ast.link_fd)
+            subast = branch.subast[index]
+            if subast.type in ["SUBSH", "CURSH"]:
+                saved_std_fd = self.save_std_fd()
+                wait = False if fds.stdout != None else True
+                if subast.type == "CURSH" and wait == True:
+                    if fds.stdin:
+                        replace_fd(fds.stdin, sys.stdin.fileno())
+                    self.run_ast(subast)
+                else:
+                    self.run_subshell(subast, fds, wait)
+                self.restore_std_fd(saved_std_fd)
+                return True
             index += 1
+        return False
 
-    def exec_command(self, branch, input_pipe, output_pipe):
+    def exec_command(self, branch, stdin, stdout):
         """Fork + execve a given list of argument"""
-        #Check if the command is only an assignation
         variables = self.retrieve_assignation(branch)
         cmd_args = self.extract_cmd(branch)
+        #Check if the command is only an assignation
         if len(cmd_args) == 0:
             if len(variables) == 1:
-                os.close(input_pipe) if input_pipe else None
-                os.close(output_pipe) if output_pipe else None
+                os.close(stdin) if stdin else None
+                os.close(stdout) if stdout else None
                 self.environ_configuration(variables)
             return
         if branch.tag_end == "BACKGROUND_JOBS":
@@ -339,12 +423,10 @@ class Executor:
             pid = os.fork()
         if pid == 0:
             #run the child
-            if input_pipe != None:
-                os.dup2(input_pipe, sys.stdin.fileno())
-                os.close(input_pipe)
-            if output_pipe != None:
-                os.dup2(output_pipe, sys.stdout.fileno())
-                os.close(output_pipe)
+            if stdin != None:
+                replace_fd(stdin, sys.stdin.fileno())
+            if stdout != None:
+                replace_fd(stdout, sys.stdout.fileno())
             self.environ_configuration(variables, only_env=True)
             if cmd_args[0] in ["jobs", "fg"]:
                 return self.run_builtin(cmd_args)
@@ -355,14 +437,10 @@ class Executor:
             os.execve(executable, cmd_args, os.environ)
         else:
             #Get status from the father
-            if input_pipe:
-                os.close(input_pipe)
-            if output_pipe:
-                os.close(output_pipe)
-            self.close_branch_fd(branch)
+            os.close(stdin) if stdin else None
+            os.close(stdout) if stdout else None
             if branch.tag_end != "PIPE":
                 self.analyse_status(pid)
-
 
     def run_builtin(self, cmd_args):
         cmd = "builtin.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
@@ -370,46 +448,24 @@ class Executor:
         exec(cmd)
         return None
 
-    def analyse_string_variable(self, string):
-        """
-        Parse an entire string and create his
-        representation with each variable converted.
-        Take care of escaped variables.
-        """
-        index_var = []
-        index = 0
-        len_str = len(string)
-        if len_str == 0:
-            return
-        escaped = string[0] == "\\"
-        final_str = ""
-        while index < len_str:
-            if escaped == False and string[index] == "$":
-                var = string[index:].split()[0] #get first word
-                index += len(var) 
-                var = environ.retrieve_variable(var)
-                final_str += var
-            else:
-                final_str += string[index]
-            index += 1
-        return final_str
-    
-    def replace_variable(self, branch):
-        """
-        For each STMT token, parse the content of each one
-        and tranform variable value
-        """
+    def join_stmt(self, branch):
+        """If a STMT is following an other STMT, concat them in a single token."""
         index = 0
         tagstok = branch.tagstokens
         while index < tagstok.length:
             if tagstok.tags[index] == "STMT":
-                variable_str = self.analyse_string_variable(tagstok.tokens[index])
-                tagstok.tokens[index] = variable_str
+                #Join with the previous STMT if needed
+                if index > 0 and tagstok.tags[index - 1] == "STMT":
+                    new_stmt = tagstok.tokens[index - 1] + tagstok.tokens[index]
+                    tagstok.tokens[index - 1:index + 1] = [new_stmt]
+                    del tagstok.tags[index]
+                    tagstok.update_length()
+                    index -= 1
             index += 1
 
     def extract_cmd(self, branch):
         """Get only token used to run a command, format argv + environ"""
-        self.replace_variable(branch)
+        self.join_stmt(branch)
         command = []
         for index in range(branch.tagstokens.length):
             if branch.tagstokens.tags[index] in gv.GRAMMAR.grammar["STMT"]:
