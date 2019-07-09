@@ -13,3 +13,16 @@ def get_text(filename):
         text = file_descriptor.read()
         file_descriptor.close()
     return text
+
+def read_fd(fd):
+    """
+    Read the entire content from a given filedescriptor.
+    """
+    BUFFER = 150
+    text = ''
+    while True:
+        content = os.read(fd, BUFFER).decode()
+        if content == "":
+            break
+        test += content
+    return content

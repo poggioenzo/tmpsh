@@ -3,29 +3,19 @@
 from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
 import utils.environ as environ
-import utils.builtins.background as builtin
+import utils.builtins as builtins
 import fcntl
 import sys
 import os
 import time
 import signal
 
+import utils.file
 
-DEBUG = open("/dev/pts/4", "w")
+
+#DEBUG = open("/dev/pts/4", "w")
 def dprint(string, *args, **kwargs):
     print(string, *args, file=DEBUG, **kwargs)
-
-TheFork = os.fork
-
-def forker():
-    start = time.clock()
-    pid = TheFork()
-    end = time.clock() - start
-    if pid != 0:
-        dprint("FORK")
-    return pid
-
-#os.fork = forker
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
@@ -103,6 +93,7 @@ class Executor:
         nbr_branch = len(ast.list_branch)
         pid = os.getpid()
         fds = ManagerFD()
+        pipe_lst = []
         while index < nbr_branch and pid > 0:
             branch = ast.list_branch[index]
             self.replace_variable(branch)
@@ -112,7 +103,7 @@ class Executor:
                 continue
             #Check if the command have to be launched in background
             if branch.tag_end == "BACKGROUND_JOBS":
-                pid = self.run_background_process(branch)
+                pid = self.run_background_process(branch, pipe_lst)
                 if pid != 0:
                     index += 1
                     continue
@@ -120,8 +111,9 @@ class Executor:
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
                 fds.saved_input_pipe, fds.stdout = setup_pipe_fd()
-            if self.perfom_command_as_subast(branch, fds) == False:
-                self.exec_command(branch, fds.stdin, fds.stdout)
+            if self.perfom_command_as_subast(branch, fds, pipe_lst) == False:
+                self.exec_command(branch, fds, pipe_lst)
+            self.check_wait_pipe(ast.list_branch, index, pipe_lst)
             index += 1
         #Exit background process
         if pid == 0:
@@ -131,6 +123,21 @@ class Executor:
     ##################################################################
     ##                  Utils for self.run_ast                      ##
     ##################################################################
+
+    def check_wait_pipe(self, list_branch, index, pipe_lst):
+        """
+        Check according to the index position in the list_branch if
+        some pipe have to be waited.
+        """
+        if index < 1:
+            return 
+        if not (list_branch[index - 1].tag_end == "PIPE" and \
+                list_branch[index].tag_end != "PIPE"):
+            return
+        for pid in pipe_lst:
+            os.waitpid(pid, 0)
+        pipe_lst.clear()
+
 
     def find_newstart(self, max_len, index, ast):
         """
@@ -157,12 +164,13 @@ class Executor:
             return True
         return False
 
-    def run_background_process(self, branch):
+    def run_background_process(self, branch, pipe_pids):
         """Prepare the current command to be run in background"""
         pid = os.fork()
         if pid > 0:
             command = "".join(branch.tagstokens.tokens)
-            gv.JOBS.add_job(pid, command)
+            gv.JOBS.add_job(pid, command, pipe_pids.copy())
+            pipe_pids.clear()
             gv.LAST_STATUS = 0
         else:
             os.setpgid(0, 0)
@@ -198,6 +206,7 @@ class Executor:
         Redirect stdin and/or stdout if given.
         Wait the subshell and catch his return value if expected.
         """
+        #NEED TO WAIT ALL KIND OF SUBSHELL
         pid = os.fork()
         if pid == 0:
             if fds.stdin:
@@ -231,7 +240,8 @@ class Executor:
                     fds.stdin = pipe_fd[0]
                 elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
                     fds.stdout = pipe_fd[1]
-                self.run_subshell(subast, fds)
+                #NEED TO WAIT SUBSHELL
+                subast.pid = self.run_subshell(subast, fds)
                 subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
             elif subast.type == "DQUOTES":
                 self.prepare_cmd_subst(subast.list_branch[0])
@@ -301,7 +311,8 @@ class Executor:
             if subast.type == "QUOTE":
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
             elif subast.type == "CMDSUBST1":
-                content = os.read(subast.link_fd, 800000).decode()
+                content = file.read_fd(subast.link_fd)
+                os.waitpid(subast.pid, 0)
                 if len(content) > 0 and content[-1] == '\n': #SHOULD NOT BE DONE, need one more tokenisation
                     content = content[:-1]
             elif subast.type in ["CMDSUBST2", "CMDSUBST3"]:
@@ -328,6 +339,7 @@ class Executor:
         manage background process.
         """
         ### ADD 128 + n when the program is kill by a signal
+        print("Wait for {}".format(pid))
         pid, return_status = os.waitpid(pid, 0)
         status = os.WEXITSTATUS(return_status)
         gv.LAST_STATUS = status
@@ -381,7 +393,7 @@ class Executor:
             environ.update_var(key, value, mode, only_env)
             index += 1
 
-    def perfom_command_as_subast(self, branch, fds):
+    def perfom_command_as_subast(self, branch, fds, pipe_lst):
         """
         If the command is composed of a SUBSH or a CURSH,
         create a layer for this kind of command and run them.
@@ -394,56 +406,70 @@ class Executor:
             subast = branch.subast[index]
             if subast.type in ["SUBSH", "CURSH"]:
                 saved_std_fd = self.save_std_fd()
-                wait = False if fds.stdout != None else True
+                wait = False if branch.tag_end == "PIPE" else True
                 if subast.type == "CURSH" and wait == True:
                     if fds.stdin:
                         replace_fd(fds.stdin, sys.stdin.fileno())
                     self.run_ast(subast)
                 else:
-                    self.run_subshell(subast, fds, wait)
+                    pid = self.run_subshell(subast, fds, wait)
+                    if branch.tag_end == "PIPE":
+                        pipe_lst.append(pid)
                 self.restore_std_fd(saved_std_fd)
                 return True
             index += 1
         return False
 
-    def exec_command(self, branch, stdin, stdout):
-        """Fork + execve a given list of argument"""
+    def exec_command(self, branch, fds, pipe_lst):
+        """
+        Use to run a simple command, the branch element which is not
+        a SUBSH or a CURSH.
+        Prepare command variables, run within the shell if the command is a
+        builtin, fork otherwise if it's needed.
+        Manage command filedescriptors/pipes.
+        """
         variables = self.retrieve_assignation(branch)
         cmd_args = self.extract_cmd(branch)
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
             if len(variables) == 1:
-                os.close(stdin) if stdin else None
-                os.close(stdout) if stdout else None
+                os.close(fds.stdin) if fds.stdin else None
+                os.close(fds.stdout) if fds.stdout else None
                 self.environ_configuration(variables)
             return
+        if cmd_args[0] in ["jobs", "fg", "cd"]:
+            return self.run_builtin(cmd_args, variables)
         if branch.tag_end == "BACKGROUND_JOBS":
             pid = 0
         else:
             pid = os.fork()
         if pid == 0:
             #run the child
-            if stdin != None:
-                replace_fd(stdin, sys.stdin.fileno())
-            if stdout != None:
-                replace_fd(stdout, sys.stdout.fileno())
+            if fds.stdin != None:
+                replace_fd(fds.stdin, sys.stdin.fileno())
+            if fds.stdout != None:
+                replace_fd(fds.stdout, sys.stdout.fileno())
             self.environ_configuration(variables, only_env=True)
-            if cmd_args[0] in ["jobs", "fg"]:
-                return self.run_builtin(cmd_args)
+            #NEED TO RUN BUILTIN BEFORE FORK
             executable = get_execname(cmd_args[0])
             if executable == None:
                 print("Command not found : {}".format(cmd_args[0]))
                 exit(127)
             os.execve(executable, cmd_args, os.environ)
         else:
+            print("{} - {}".format(pid, cmd_args[0]))
             #Get status from the father
-            os.close(stdin) if stdin else None
-            os.close(stdout) if stdout else None
-            if branch.tag_end != "PIPE":
+            os.close(fds.stdin) if fds.stdin else None
+            os.close(fds.stdout) if fds.stdout else None
+            #NEED TO WAIT ALL PIPES OF THE LOOP
+            if branch.tag_end == "PIPE":
+                pipe_lst.append(pid)
+            else:
                 self.analyse_status(pid)
 
-    def run_builtin(self, cmd_args):
-        cmd = "builtin.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
+    def run_builtin(self, cmd_args, environnement):
+        #HOW DO I MANAGE ENVIRONNEMENT ?
+        cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
                 dict(os.environ))
         exec(cmd)
         return None

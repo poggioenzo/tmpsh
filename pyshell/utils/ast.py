@@ -13,6 +13,7 @@ class AST():  # AbstractSyntaxTree
         self.type = 'ROOT'
         self.split_branch(tagstokens)
         self.link_fd = None
+        self.pid = None
 
     @property
     def type(self):
