@@ -11,7 +11,7 @@ import time
 import signal
 
 
-DEBUG = open("/dev/pts/4", "w")
+DEBUG = open("/dev/pts/5", "w")
 def dprint(string, *args, **kwargs):
     print(string, *args, file=DEBUG, **kwargs)
 
@@ -231,7 +231,7 @@ class Executor:
                     fds.stdin = pipe_fd[0]
                 elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
                     fds.stdout = pipe_fd[1]
-                self.run_subshell(subast, fds)
+                subast.pid = self.run_subshell(subast, fds)
                 subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
             elif subast.type == "DQUOTES":
                 self.prepare_cmd_subst(subast.list_branch[0])
@@ -406,43 +406,46 @@ class Executor:
             index += 1
         return False
 
+    def child_execution(self, argv, fds, variables, forking=True):
+        if argv[0] in ["jobs", "fg"]:
+            return self.run_builtin(argv, variables)
+        pid = os.fork() if forking else 0
+        if pid == 0:
+            if fds.stdin:
+                replace_fd(fds.stdin, sys.stdin.fileno())
+            if fds.stdout:
+                replace_fd(fds.stdout, sys.stdout.fileno())
+            self.environ_configuration(variables, only_env=True)
+            executable = get_execname(argv[0])
+            if executable == None:
+                print("Command not found : {}".format(cmd_args[0]))
+                exit(127)
+            os.execve(executable, cmd_args, gv.ENVIRON)
+        else:
+            if fds.stdin:
+                os.close(fds.stdin)
+            if fds.stdout:
+                os.close(fds.stdout)
+            return pid
+
+
+
     def exec_command(self, branch, stdin, stdout):
         """Fork + execve a given list of argument"""
         variables = self.retrieve_assignation(branch)
         cmd_args = self.extract_cmd(branch)
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
-            if len(variables) == 1:
-                os.close(stdin) if stdin else None
-                os.close(stdout) if stdout else None
-                self.environ_configuration(variables)
-            return
-        if branch.tag_end == "BACKGROUND_JOBS":
-            pid = 0
-        else:
-            pid = os.fork()
-        if pid == 0:
-            #run the child
-            if stdin != None:
-                replace_fd(stdin, sys.stdin.fileno())
-            if stdout != None:
-                replace_fd(stdout, sys.stdout.fileno())
-            self.environ_configuration(variables, only_env=True)
-            if cmd_args[0] in ["jobs", "fg"]:
-                return self.run_builtin(cmd_args)
-            executable = get_execname(cmd_args[0])
-            if executable == None:
-                print("Command not found : {}".format(cmd_args[0]))
-                exit(127)
-            os.execve(executable, cmd_args, os.environ)
-        else:
-            #Get status from the father
             os.close(stdin) if stdin else None
             os.close(stdout) if stdout else None
-            if branch.tag_end != "PIPE":
-                self.analyse_status(pid)
+            self.environ_configuration(variables)
+            return
+        forking = False if branch.tag_end == "BACKGROUND_JOBS" else False
+        pid = self.child_execution(cmd_args, fds, variables, forking)
+        if branch.tag_end != "PIPE":
+            self.analyse_status(pid)
 
-    def run_builtin(self, cmd_args):
+    def run_builtin(self, cmd_args, variables):
         cmd = "builtin.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
                 dict(os.environ))
         exec(cmd)
