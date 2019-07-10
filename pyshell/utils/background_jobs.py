@@ -11,9 +11,11 @@ class BackgroundJobs:
     def __init__(self):
         self.list_jobs = []
 
-    def add_job(self, pid, command, pipes_pid):
+    def add_job(self, pid, branch, pipes_pid):
         """Add a new process in the background process group"""
-        self.list_jobs.append((pid, command, pipes_pid))
+        command = "".join(branch.tagstokens.tokens)
+        self.list_jobs.append((pid, command, pipes_pid.copy()))
+        pipes_pid.clear()
 
     def __iter__(self):
         self.index = 0

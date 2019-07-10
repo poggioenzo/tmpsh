@@ -4,13 +4,13 @@ from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
 import utils.environ as environ
 import utils.builtins as builtins
+import utils.file as file
 import fcntl
 import sys
 import os
 import time
 import signal
 
-import utils.file as file
 
 #DEBUG = open("/dev/pts/7", "w")
 def dprint(string, *args, **kwargs):
@@ -100,12 +100,6 @@ class Executor:
             if self.check_andor(branch) == False:
                 index = self.find_newstart(nbr_branch, index, ast)
                 continue
-            #Check if the command have to be launched in background
-            if branch.tag_end == "BACKGROUND_JOBS":
-                pid = self.run_background_process(branch, pipe_lst)
-                if pid != 0:
-                    index += 1
-                    continue
             self.perform_subast_replacement(branch)
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
@@ -162,18 +156,6 @@ class Executor:
         elif branch.begin_andor == "CMDOR" and gv.LAST_STATUS != 0:
             return True
         return False
-
-    def run_background_process(self, branch, pipe_pids):
-        """Prepare the current command to be run in background"""
-        pid = os.fork()
-        if pid > 0:
-            command = "".join(branch.tagstokens.tokens)
-            gv.JOBS.add_job(pid, command, pipe_pids.copy())
-            pipe_pids.clear()
-            gv.LAST_STATUS = 0
-        else:
-            os.setpgid(0, 0)
-        return pid
 
     def replace_variable(self, branch):
         """
@@ -422,13 +404,13 @@ class Executor:
             index += 1
         return False
 
-    def child_execution(self, argv, fds, variables, forking=True):
+    def child_execution(self, argv, fds, variables, background=False):
         if argv[0] in ["jobs", "fg"]:
             return self.run_builtin(argv, variables)
-        pid = os.fork() if forking else 0
+        pid = os.fork()
         if pid == 0:
             os.setpgid(0, 0)
-            if forking == True and os.isatty(sys.stdin.fileno()):
+            if background == False and os.isatty(sys.stdin.fileno()):
                 os.tcsetpgrp(0, os.getpgrp())
             signal_setter = lambda signum:signal.signal(signum, signal.SIG_DFL)
             reset_signal = [signal.SIGINT, signal.SIGQUIT, signal.SIGTSTP, signal.SIGTTIN, \
@@ -446,7 +428,7 @@ class Executor:
             os.execve(executable, argv, gv.ENVIRON)
         else:
             os.setpgid(pid, 0)
-            if os.isatty(sys.stdin.fileno()):
+            if background == False and os.isatty(sys.stdin.fileno()):
                 os.tcsetpgrp(0, pid)
             if fds.stdin:
                 os.close(fds.stdin)
@@ -473,12 +455,15 @@ class Executor:
             if len(variables) == 1:
                 self.environ_configuration(variables)
             return
-        forking = False if branch.tag_end == "BACKGROUND_JOBS" else True
-        pid = self.child_execution(cmd_args, fds, variables, forking)
+        pid = self.child_execution(cmd_args, fds, variables, \
+                background=branch.tag_end == "BACKGROUND_JOBS")
         if pid == None:
             return
         if branch.tag_end == "PIPE":
             pipe_lst.append(pid)
+        elif branch.tag_end == "BACKGROUND_JOBS":
+            gv.LAST_STATUS = 0
+            gv.JOBS.add_job(pid, branch, pipe_lst)
         else:
             self.analyse_status(pid)
 

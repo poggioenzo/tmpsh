@@ -27,7 +27,6 @@ def fg(argv, environ):
     os.kill(expected_jobs_pid, signal.SIGCONT)
     pid, status = os.waitpid(expected_jobs_pid, 0)
     gv.JOBS.remove(index)
-
     return 0
 
 
