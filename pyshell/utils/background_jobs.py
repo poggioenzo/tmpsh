@@ -36,6 +36,14 @@ class BackgroundJobs:
     def remove(self, index):
         self.list_jobs.pop(index)
 
+    def relaunch(self, index):
+        pid = self.get_index_pid(index)
+        os.tcsetpgrp(0, pid)
+        pid, status = os.waitpid(pid, 0)
+        
+
+
+
     def wait_job_pipe(self, job_index):
         job_pid, command, pipes_pids = self.list_jobs[job_index]
         pipe_index = 0

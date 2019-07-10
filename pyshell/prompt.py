@@ -7,6 +7,7 @@ from utils.execute import Executor
 from utils.global_var import ENVIRON
 import os, sys
 import string
+import signal
 
 class Prompt(Cmd):
     intro = "tmpsh - Total Mastering Professional Shell"
@@ -29,7 +30,13 @@ class Prompt(Cmd):
                 str(TAGSTOKENS.token_error)))
             self.prompt = "error prompt > "
 
+def init_shell():
+    signal.signal(signal.SIGTSTP, signal.SIG_IGN)
+    signal.signal(signal.SIGTTIN, signal.SIG_IGN)
+    signal.signal(signal.SIGTTOU, signal.SIG_IGN)
+
 def main(argc, argv, environ):
+    init_shell()
     ENVIRON = environ.copy()
     Prompt().cmdloop()
 

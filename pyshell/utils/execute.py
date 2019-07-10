@@ -10,9 +10,9 @@ import os
 import time
 import signal
 
-import utils.file
+import utils.file as file
 
-DEBUG = open("/dev/pts/7", "w")
+#DEBUG = open("/dev/pts/7", "w")
 def dprint(string, *args, **kwargs):
     print(string, *args, file=DEBUG, **kwargs)
 
@@ -172,9 +172,7 @@ class Executor:
             pipe_pids.clear()
             gv.LAST_STATUS = 0
         else:
-            print("before background : {} | PGID = {}".format(os.isatty(0), os.getpgid(0)))
             os.setpgid(0, 0)
-            print("after background : {} | PGID = {}".format(os.isatty(0), os.getpgid(0)))
         return pid
 
     def replace_variable(self, branch):
@@ -340,9 +338,12 @@ class Executor:
         manage background process.
         """
         ### ADD 128 + n when the program is kill by a signal
-        pid, return_status = os.waitpid(pid, 0)
+        pid, return_status = os.waitpid(pid, os.WUNTRACED)
+
+        #Restore shell as the foreground process group
+        if os.isatty(sys.stdin.fileno()):
+            os.tcsetpgrp(0, os.getpgrp())
         status = os.WEXITSTATUS(return_status)
-        print("RETURN : ", status)
         gv.LAST_STATUS = status
         if os.WIFSTOPPED(return_status):
             #Set job in background
@@ -426,6 +427,13 @@ class Executor:
             return self.run_builtin(argv, variables)
         pid = os.fork() if forking else 0
         if pid == 0:
+            os.setpgid(0, 0)
+            if forking == True and os.isatty(sys.stdin.fileno()):
+                os.tcsetpgrp(0, os.getpgrp())
+            signal_setter = lambda signum:signal.signal(signum, signal.SIG_DFL)
+            reset_signal = [signal.SIGINT, signal.SIGQUIT, signal.SIGTSTP, signal.SIGTTIN, \
+                        signal.SIGTTOU, signal.SIGCHLD]
+            list(map(signal_setter, reset_signal))
             if fds.stdin:
                 replace_fd(fds.stdin, sys.stdin.fileno())
             if fds.stdout:
@@ -438,12 +446,8 @@ class Executor:
             os.execve(executable, argv, gv.ENVIRON)
         else:
             os.setpgid(pid, 0)
-            print("CONTROL : ", os.tcgetpgrp(0))
-            os.tcsetpgrp(0, pid)
-            print("CONTROL : ", os.tcgetpgrp(0))
-            os.waitpid(pid, 0)
-            dprint("HERE")
-            os.tcsetpgrp(0, os.getpid())
+            if os.isatty(sys.stdin.fileno()):
+                os.tcsetpgrp(0, pid)
             if fds.stdin:
                 os.close(fds.stdin)
             if fds.stdout:

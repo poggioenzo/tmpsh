@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 
 def write_file(filename, text):
     with open(filename, 'w') as file_descriptor:
@@ -24,5 +25,5 @@ def read_fd(fd):
         content = os.read(fd, BUFFER).decode()
         if content == "":
             break
-        test += content
-    return content
+        text += content
+    return text
