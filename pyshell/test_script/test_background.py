@@ -49,6 +49,16 @@ def main():
         status = os.waitpid(pid, os.WUNTRACED)
         print("Father end wait.")
         os.tcsetpgrp(0, os.getpgrp())
+        if os.WIFSTOPPED(status[1]):
+            wait_time = 2
+            print("Relaunch if {} seconds.".format(wait_time))
+            time.sleep(wait_time)
+            os.tcsetpgrp(0, pid)
+            os.kill(pid, signal.SIGCONT)
+            status = os.waitpid(pid, os.WUNTRACED)
+            os.tcsetpgrp(0, os.getpgrp())
+            print("End Father.")
+            exit(1)
         read_line()
         term_sig = os.WSTOPSIG(status[1])
         if (term_sig == signal.SIGTSTP):
