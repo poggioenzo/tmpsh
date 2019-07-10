@@ -1,39 +1,65 @@
 #!/usr/bin/env python3
 
+"""
+Module for class AbstractSyntaxTree (AST) and AbstractCommandBranch (ACB).
+
+These classes are done to represente the syntax shell in a tree.
+"""
+
 import utils.global_var as gv
 
 
 def split_shift(string):
+    """Split on \n add \t at the beginnin of each lines join on \n."""
     return '\n'.join(['\t{}'.format(x) for x in string.split('\n')])[:-1]
 
 
-class AST():  # AbstractSyntaxTree
-    def __init__(self, tagstokens):
+class AST():
+    """
+    Class to create AST (AbstractSyntaxTree) object.
+
+    Param:
+        tgtk: TagsTokens object.
+    Attributes:
+        list_branch: list containing AbstractCommandBranch objects.
+        type: a string which indicate the type of AbstractSyntaxTree.
+        link_fd: ???
+    """
+
+    def __init__(self, tgtk):
+        """Constructor for AST object."""
         self.list_branch = []
         self.type = 'ROOT'
-        self.split_branch(tagstokens)
         self.link_fd = None
+        self.split_branch(tgtk)
 
     @property
     def type(self):
+        """Getter for attribute type."""
         return self._type
 
     @type.setter
     def type(self, ast_type):
+        """Setter for attribute type."""
         self._type = ast_type
 
-    def split_branch(self, tt):
+    def split_branch(self, tgtk):
+        """
+        Fill list_branch of ACB separate using tgtk (TagsTokens).
+
+        Each command branch is separate on ABS_TERMINATOR (; || && & ...).
+        """
         i = 0
         begin = 0
         and_or_begin = ''
         tag = ''
-        while i < tt.length:
-            tag = tt.tags[i]
+        while i < tgtk.length:
+            tag = tgtk.tags[i]
             if tag in gv.GRAMMAR.opening_tags:
-                i = tt.skip_openning_tags(i) - 1
+                i = tgtk.skip_openning_tags(i) - 1
             elif tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
                 self.list_branch.append(
-                    ACB(tt.copytt(begin, i), and_or_begin, tag))
+                    ACB(tgtk.copytt(begin, i), and_or_begin, tag))
                 begin = i + 1
                 and_or_begin = ''
             if tag in ['CMDAND', 'CMDOR']:
@@ -41,17 +67,32 @@ class AST():  # AbstractSyntaxTree
             i += 1
         if begin != i:
             self.list_branch.append(
-                ACB(tt.copytt(begin, i), and_or_begin, tag))
+                ACB(tgtk.copytt(begin, i), and_or_begin, tag))
 
     def __str__(self):
+        """Print the type of AST then each branchs of the AST shifted."""
         return '{:_^12}:\n'.format(self.type) + split_shift('\n'.join(
             [str(branch) for branch in self.list_branch]))
 
 
-class ACB():  # AbstractCommandBranch
-    # TODO: trim each branch
-    def __init__(self, tt, begin_andor, tag_end):
-        self.tagstokens = tt
+class ACB():
+    """
+    Class to create ACB (AbstractCommandBranch) object.
+
+    Param:
+        tgtk: TagsTokens object.
+        begin_andor: string which contain the CMDAND, CMDOR or nothing.
+        tag_end: string which contain the last tag of the command in the AST.
+    Attributes:
+        All params are attributes.
+        subast:
+        subcmd_type:
+
+    """
+
+    def __init__(self, tgtk, begin_andor, tag_end):
+        """Constructor for ACB object."""
+        self.tgtk = tgtk
         self.begin_andor = begin_andor
         self.tag_end = tag_end if tag_end in \
             gv.GRAMMAR.grammar['ABS_TERMINATOR'] else ''
@@ -77,12 +118,12 @@ class ACB():  # AbstractCommandBranch
         end = 0
         tag = ''
         isfirst = True
-        while i < self.tagstokens.length:
-            tag = self.tagstokens.tags[i]
+        while i < self.tgtk.length:
+            tag = self.tgtk.tags[i]
             if not isfirst and tag in ['CURSH', 'SUBSH']:
-                end = self.tagstokens.skip_openning_tags(i) - 1
-                self.tagstokens.tags[i] = 'STMT'
-                self.tagstokens.tags[end] = 'STMT'
+                end = self.tgtk.skip_openning_tags(i) - 1
+                self.tgtk.tags[i] = 'STMT'
+                self.tgtk.tags[end] = 'STMT'
                 i = end
             isfirst = isfirst and tag == 'SPACES'
             i += 1
@@ -91,39 +132,39 @@ class ACB():  # AbstractCommandBranch
         i = 0
         begin = 0
         tag = ''
-        while i < self.tagstokens.length:
-            tag = self.tagstokens.tags[i]
+        while i < self.tgtk.length:
+            tag = self.tgtk.tags[i]
             if tag in gv.GRAMMAR.opening_tags:
                 begin = i + 1
                 self.subcmd_type.append(tag)
-                i = self.tagstokens.skip_openning_tags(i) - 1
-                self.subast.append(AST(self.tagstokens.copytt(begin, i)))
-                self.tagstokens[begin - 1:i + 1] = [
+                i = self.tgtk.skip_openning_tags(i) - 1
+                self.subast.append(AST(self.tgtk.copytt(begin, i)))
+                self.tgtk[begin - 1:i + 1] = [
                     ['SUBAST'], ['↓subast{}↓'.format(len(self.subast) - 1)]]
                 i = begin
             i += 1
 
     def check_redirection(self):
-        lentags = self.tagstokens.length - 1
+        lentags = self.tgtk.length - 1
         previous = 0
         tag = ''
         while lentags >= 0:
-            tag = self.tagstokens.tags[lentags]
+            tag = self.tgtk.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 self.redirectionfd.append(
-                    RedirectionFD(self.tagstokens.copytt(previous), tag))
-                del self.tagstokens[previous]
-                del self.tagstokens[lentags]
+                    RedirectionFD(self.tgtk.copytt(previous), tag))
+                del self.tgtk[previous]
+                del self.tgtk[lentags]
             elif tag != 'SPACES':
                 previous = lentags
             lentags -= 1
-        self.tagstokens.strip()
-        self.tagstokens.update_length()
+        self.tgtk.strip()
+        self.tgtk.update_length()
         self.redirectionfd = list(reversed(self.redirectionfd))
 
     def __str__(self):
         cmd = '{:_^10}'.format(self.begin_andor)
-        cmd += '{}'.format(''.join(self.tagstokens.tokens))
+        cmd += '{}'.format(''.join(self.tgtk.tokens))
         cmd += '{:_^17}'.format(self.tag_end)
         if self.redirectionfd != []:
             cmd += ' fd-> ' + ' '.join([str(fd) for fd in self.redirectionfd])
@@ -136,10 +177,10 @@ class ACB():  # AbstractCommandBranch
 class RedirectionFD():
     """docstring forRedirec."""
 
-    def __init__(self, tagstokens, redirection_type, fd_input=1):
-        self.tagstokens = tagstokens
+    def __init__(self, tgtk, redirection_type, fd_input=1):
+        self.tgtk = tgtk
         self.type = redirection_type
         self.fd_input = fd_input
 
     def __str__(self):
-        return '{}: {}'.format(self.type, ''.join(self.tagstokens.tokens))
+        return '{}: {}'.format(self.type, ''.join(self.tgtk.tokens))
