@@ -11,7 +11,6 @@ import os
 import time
 import signal
 
-
 #DEBUG = open("/dev/pts/7", "w")
 def dprint(string, *args, **kwargs):
     print(string, *args, file=DEBUG, **kwargs)
@@ -74,7 +73,6 @@ class ManagerFD:
         else:
             self.stdin = None
         self.saved_input_pipe = None
-    pass
 
 class Executor:
     """From an AST, run each command"""
@@ -405,7 +403,7 @@ class Executor:
         return False
 
     def child_execution(self, argv, fds, variables, background=False):
-        if argv[0] in ["jobs", "fg"]:
+        if argv[0] in ["jobs", "fg", "cd"]:
             return self.run_builtin(argv, variables)
         pid = os.fork()
         if pid == 0:

@@ -2,10 +2,88 @@
 
 import os
 import enum
+import time
+import signal
 
 class WaitState(enum.Enum):
     FINISH = 0
     RUNNING = 1
+
+DEBUG = open("/dev/ttys003", "w")
+
+class Job:
+    def __init__(self, pid, command, job_pipeline):
+        self.pid = pid
+        self.command = command
+        self.status = 0
+        self.complete = False
+        self.pipeline = job_pipeline
+        self.pgid = os.getpgid(self.pid)
+
+    def wait_job_pipe(self):
+        """
+        Check if some pipes of the jobs are still running.
+        Wait each pipe of the job, and remove them from the pipeline
+        list if they are over.
+        """
+        pipe_index = 0
+        nbr_pipe = len(self.pipeline)
+        while pipe_index < nbr_pipe:
+            pid_to_check = self.pipeline[pipe_index]
+            status = os.waitpid(pid_to_check, os.WNOHANG)
+            if status[0] != 0:
+                self.pipeline.remove(pid_to_check)
+                nbr_pipe -= 1
+                continue
+            pipe_index += 1
+        if len(self.pipeline) == 0:
+            return WaitState.FINISH
+        return WaitState.RUNNING
+
+    def is_running(self):
+        """
+        Check if the given jobs is still running. Verify each piped process of the
+        job and the background command herself.
+        """
+        if self.complete == False:
+            status = os.waitpid(self.pid, os.WNOHANG)
+            if status[0] != 0:
+                self.complete = True
+        if self.wait_job_pipe() == WaitState.FINISH and self.complete == True:
+            return WaitState.FINISH
+        return WaitState.RUNNING
+
+    def push_foreground(self):
+        #Check if the job is already over
+        if self.is_running == WaitState.FINISH:
+            print("tmpsh: fg: job has terminated", file=sys.stderr)
+            return
+        print("term control : {} | pgid_job {}".format(os.tcgetpgrp(0), os.getpgid(self.pid)))
+        os.tcsetpgrp(0, self.pgid)
+        print("term control : {} | pgid_job {}".format(os.tcgetpgrp(0), os.getpgid(self.pid)))
+        if self.complete == False:
+            os.kill(self.pid, signal.SIGCONT)
+        while self.complete == False or len(self.pipeline) > 0:
+            #Choose if we need to check the job program, or program in the pipeline
+            if self.complete == False:
+                child_pid, status = os.waitpid(self.pid, os.WUNTRACED)
+            else:
+                child_pid, status = os.waitpid(self.pipeline[0], os.WUNTRACED)
+            #if the waited program is over, behave properly to avoid waiting
+            #it twice.
+            if os.WIFSTOPPED(status) == True:
+                os.tcsetpgrp(0, os.getpgrp())
+                return WaitState.RUNNING
+            elif os.WIFEXITED(status) or os.WIFSIGNALED(status):
+                if child_pid == self.pid:
+                    self.complete = True
+                else:
+                    self.pipeline.pop(0)
+        print("OUT term control : {} | pgid_job {}".format(os.tcgetpgrp(0), os.getpgrp()))
+        os.tcsetpgrp(0, os.getpgrp())
+        print("OUT term control : {} | pgid_job {}".format(os.tcgetpgrp(0), os.getpgid(0)))
+        return WaitState.FINISH
+
 
 class BackgroundJobs:
     def __init__(self):
@@ -13,17 +91,19 @@ class BackgroundJobs:
 
     def add_job(self, pid, branch, pipes_pid):
         """Add a new process in the background process group"""
-        command = "".join(branch.tagstokens.tokens)
-        self.list_jobs.append((pid, command, pipes_pid.copy()))
+        command = "".join(branch.tagstokens.tokens) #NEED TO format the command properly
+        #self.list_jobs.append((pid, command, pipes_pid.copy()))
+        new_job = Job(pid, command, pipes_pid.copy())
+        self.list_jobs.append(new_job)
         pipes_pid.clear()
 
     def __iter__(self):
-        self.index = 0
+        self._index = 0
         return iter(self.list_jobs)
 
     def __next__(self):
-        jobs = self.list_jobs[self.index]
-        self.index += 1
+        jobs = self.list_jobs[self._index]
+        self._index += 1
         return jobs
 
     def __str__(self):
@@ -33,34 +113,20 @@ class BackgroundJobs:
         """
         Return the jobs pid at the given index.
         """
-        return self.list_jobs[index][0]
+        return self.list_jobs[index].pid
+
+    def is_running(self, index):
+        job = self.list_jobs[index]
+        return job.is_running()
 
     def remove(self, index):
         self.list_jobs.pop(index)
 
     def relaunch(self, index):
-        pid = self.get_index_pid(index)
-        os.tcsetpgrp(0, pid)
-        pid, status = os.waitpid(pid, 0)
-        
+        job = self.list_jobs[index]
+        if job.push_foreground() == WaitState.FINISH:
+            self.remove(index)
 
-
-
-    def wait_job_pipe(self, job_index):
-        job_pid, command, pipes_pids = self.list_jobs[job_index]
-        pipe_index = 0
-        nbr_pipe = len(pipes_pids)
-        while pipe_index < nbr_pipe:
-            pid_to_check = pipes_pids[pipe_index]
-            status = os.waitpid(pid_to_check, os.WNOHANG)
-            if status[0] != 0:
-                pipes_pids.remove(pid_to_check)
-                nbr_pipe -= 1
-                continue
-            pipe_index += 1
-        if len(pipes_pids) == 0:
-            return WaitState.FINISH
-        return WaitState.RUNNING
 
     def wait_zombie(self):
         """
@@ -73,15 +139,10 @@ class BackgroundJobs:
         #Check which jobs is over by waiting all of them
         #Add all of those who need to be removed in index_to_del list.
         while index < nbr_job:
-            if self.wait_job_pipe(index) == WaitState.RUNNING:
-                index += 1
-                continue
-            job_pid = self.list_jobs[index][0]
-            task = self.list_jobs[index][1]
-            status = os.waitpid(job_pid, os.WNOHANG)
-            if status[0] != 0:
+            job = self.list_jobs[index]
+            if job.is_running() == WaitState.FINISH:
                 index_to_del.append(index)
-                print("[{}] + Done {}".format(index, task))
+                print("[{}] + Done {}".format(index, job.command))
             index += 1
         index = 0
         #Finally, remove from our joblist those which are over.
@@ -90,3 +151,4 @@ class BackgroundJobs:
             deletion_index = index_to_del[index]
             del self.list_jobs[deletion_index - index]
             index += 1
+
