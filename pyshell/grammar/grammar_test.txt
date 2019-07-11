@@ -8,9 +8,10 @@ B:
 
 C:
 	D D
+	D D C
 
 D:
 	E
 
-FORBIDDEN:
-	E E
+# FORBIDDEN:
+#	E E
