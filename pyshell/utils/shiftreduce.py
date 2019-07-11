@@ -14,14 +14,16 @@ def revkeyinstack(stack, grammar):
     return False
 
 
-def keyinstack(stack, grammar):
+def keyinstack(stack, grammar, next_tag=''):
     len_stack = len(stack)
+    key = ''
+    extend_key = ' '.join(stack + [next_tag])
     i = 0
-    while i < len_stack:
+    while i < len_stack and extend_key not in grammar.reverse:
         key = ' '.join(stack[i:])
-        if key in grammar.reverse:
+        if key in grammar.reverse and extend_key not in grammar.reverse:
+            print(extend_key)
             return i
-        del key
         i += 1
     return -1
 
@@ -31,10 +33,10 @@ def reduce(stack, instack, grammar):
     return ret
 
 
-def reduce_all(stack, instack, grammar):
+def reduce_all(stack, instack, grammar, next_tag):
     while instack > -1:
         stack = reduce(stack, instack, grammar)
-        instack = keyinstack(stack, grammar)
+        instack = keyinstack(stack, grammar, next_tag)
     return stack
 
 
@@ -68,25 +70,35 @@ def reduce_all(stack, instack, grammar):
 #         spaces = 0
 #     return tags
 
+def get_next_tag(tags, len_tags, i):
+    i += 1
+    return tags[i] if i < len_tags else 'G'
+
 
 def shift_reduce(tags, grammar):
     stack = []
     i = 0
-    tags = check_forbidden(tags, grammar)
+    instack = 0
+    # tags = check_forbidden(tags, grammar)
     len_tags = len(tags)
+    next_tag = ''
     while i < len_tags:
-        instack = keyinstack(stack, grammar)
+        next_tag = get_next_tag(tags, len_tags, i)
+        print((i, tags[i], next_tag, stack))
+        instack = keyinstack(stack, grammar, next_tag)
         if instack > -1:
-            stack = reduce_all(stack, instack, grammar)
+            print('Reduce')
+            stack = reduce_all(stack, instack, grammar, next_tag)
         else:
+            print('Shift')
             if tags[i] == 'SPACES':
                 pass
             else:
                 stack.append(tags[i])
             i += 1
-    instack = keyinstack(stack, grammar)
+    instack = keyinstack(stack, grammar, next_tag)
     if instack > -1:
-        stack = reduce_all(stack, instack, grammar)
+        stack = reduce_all(stack, instack, grammar, next_tag)
     return stack
 
 
@@ -95,10 +107,11 @@ def tagstokens_shift_reduce(tagstokens, grammar):
     i = 0
     # tagstokens.tags = check_forbidden(tagstokens.tags, grammar)
     len_tags = len(tagstokens.tags)
+    next_tag = ''
     while i <= len_tags:
         instack = keyinstack(stack, grammar)
         if instack > -1:
-            stack = reduce_all(stack, instack, grammar)
+            stack = reduce_all(stack, instack, grammar, next_tag)
         else:
             if i < len_tags and tagstokens.tags[i] == 'SPACES':
                 pass
