@@ -104,7 +104,7 @@ def tagstokens_shift_reduce(tagstokens, grammar):
     len_tags = len(tagstokens.tags)
     next_tag = ''
 
-    # tagstokens.tags = check_forbidden(tagstokens.tags, grammar)
+    tagstokens.tags = check_forbidden(tagstokens.tags, grammar)
     while i <= len_tags:
         instack = keyinstack(stack, grammar, next_tag)
         if instack > -1:
