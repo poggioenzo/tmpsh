@@ -103,7 +103,7 @@ class TestShiftReduceHard(unittest.TestCase):
 
     def test_shift_reduce_hard_019(self):
         entry = 'E E E D A A E E A B A A'.split()
-        exepted_output = ['C', 'C', 'A', 'C', 'A']
+        exepted_output = ['FORBIDDEN', 'C', 'D', 'A', 'C', 'A']
         self.assertListEqual(sr.shift_reduce(entry, GRAMMAR), exepted_output)
 
     def test_shift_reduce_hard_020(self):
