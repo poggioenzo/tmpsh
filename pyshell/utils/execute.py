@@ -10,6 +10,7 @@ import sys
 import os
 import time
 import signal
+import termios
 
 #DEBUG = open("/dev/pts/7", "w")
 def dprint(string, *args, **kwargs):
@@ -186,8 +187,12 @@ class Executor:
         Wait the subshell and catch his return value if expected.
         """
         #NEED TO WAIT ALL KIND OF SUBSHELL
+        settings = termios.tcgetattr(0)
         pid = os.fork()
         if pid == 0:
+            os.setpgrp()
+            os.tcsetpgrp(0, os.getpgid(0))
+            gv.JOBS.clear()
             if fds.stdin:
                 replace_fd(fds.stdin, sys.stdin.fileno())
             if fds.stdout:
@@ -195,12 +200,16 @@ class Executor:
             self.run_ast(ast)
             exit(gv.LAST_STATUS)
         else:
+            os.setpgid(pid, 0)
+            os.tcsetpgrp(0, os.getpgid(pid))
             if fds.stdin:
                 os.close(fds.stdin)
             if fds.stdout:
                 os.close(fds.stdout)
             if wait:
-                self.analyse_status(pid)
+                self.analyse_status(pid, "AST")
+            os.tcsetpgrp(0, os.getpgrp())
+            termios.tcsetattr(0, termios.TCSADRAIN, settings)
             return pid
 
     def prepare_cmd_subst(self, branch):
@@ -312,7 +321,7 @@ class Executor:
     ##     Functions to wait and analyse child + some job control   ##
     ##################################################################
 
-    def analyse_status(self, pid):
+    def analyse_status(self, pid, command, pipe_lst=[]):
         """
         Whenever a child die, behave properly to store information,
         manage background process.
@@ -323,11 +332,14 @@ class Executor:
         #Restore shell as the foreground process group
         if os.isatty(sys.stdin.fileno()):
             os.tcsetpgrp(0, os.getpgrp())
-        status = os.WEXITSTATUS(return_status)
-        gv.LAST_STATUS = status
+        if os.WIFSIGNALED(return_status):
+            status = os.WTERMSIG(return_status) + 128
+        if os.WIFEXITED(return_status):
+            status = os.WEXITSTATUS(return_status)
         if os.WIFSTOPPED(return_status):
-            #Set job in background
-            pass
+            status = os.WSTOPSIG(return_status) + 128
+            gv.JOBS.add_job(pid, command, pipe_lst)
+        gv.LAST_STATUS = status
 
     ##################################################################
     ##      Command runner with execve or from ast + utils          ##
@@ -388,7 +400,7 @@ class Executor:
             subast = branch.subast[index]
             if subast.type in ["SUBSH", "CURSH"]:
                 saved_std_fd = self.save_std_fd()
-                wait = False if branch.tag_end == "PIPE" else True
+                wait = branch.tag_end not in ["PIPE", "BACKGROUND_JOBS"]
                 if subast.type == "CURSH" and wait == True:
                     if fds.stdin:
                         replace_fd(fds.stdin, sys.stdin.fileno())
@@ -397,6 +409,9 @@ class Executor:
                     pid = self.run_subshell(subast, fds, wait)
                     if branch.tag_end == "PIPE":
                         pipe_lst.append(pid)
+                    elif branch.tag_end == "BACKGROUND_JOBS":
+                        command = "".join(branch.tagstokens.tokens)
+                        gv.JOBS.add_job(pid, command, pipe_lst)
                 self.restore_std_fd(saved_std_fd)
                 return True
             index += 1
@@ -461,10 +476,11 @@ class Executor:
             pipe_lst.append(pid)
         elif branch.tag_end == "BACKGROUND_JOBS":
             gv.LAST_STATUS = 0
-            gv.JOBS.add_job(pid, branch, pipe_lst)
+            command = "".join(branch.tagstokens.tokens) #NEED TO format the command properly
+            gv.JOBS.add_job(pid, command, pipe_lst)
         else:
-            cmd = branch.get_command()
-            self.analyse_status(pid)
+            command = "".join(branch.tagstokens.tokens) #NEED TO format the command properly
+            self.analyse_status(pid, command, pipe_lst)
 
     def run_builtin(self, cmd_args, variables):
         cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\

@@ -87,10 +87,8 @@ class BackgroundJobs:
     def __init__(self):
         self.list_jobs = []
 
-    def add_job(self, pid, branch, pipes_pid):
+    def add_job(self, pid, command, pipes_pid):
         """Add a new process in the background process group"""
-        command = "".join(branch.tagstokens.tokens) #NEED TO format the command properly
-        #self.list_jobs.append((pid, command, pipes_pid.copy()))
         new_job = Job(pid, command, pipes_pid.copy())
         self.list_jobs.append(new_job)
         pipes_pid.clear()
@@ -124,6 +122,10 @@ class BackgroundJobs:
         job = self.list_jobs[index]
         if job.push_foreground() == WaitState.FINISH:
             self.remove(index)
+
+    def clear(self):
+        self.list_jobs.clear()
+
 
 
     def wait_zombie(self):
