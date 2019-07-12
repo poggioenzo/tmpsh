@@ -463,6 +463,7 @@ class Executor:
             gv.LAST_STATUS = 0
             gv.JOBS.add_job(pid, branch, pipe_lst)
         else:
+            cmd = branch.get_command()
             self.analyse_status(pid)
 
     def run_builtin(self, cmd_args, variables):

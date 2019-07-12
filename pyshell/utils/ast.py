@@ -48,6 +48,9 @@ class AST():  # AbstractSyntaxTree
         return '{:_^12}:\n'.format(self.type) + split_shift('\n'.join(
             [str(branch) for branch in self.list_branch]))
 
+    def get_command(self):
+        pass
+
 
 class ACB():  # AbstractCommandBranch
     # TODO: trim each branch
@@ -132,6 +135,15 @@ class ACB():  # AbstractCommandBranch
         if self.subast != []:
             cmd += split_shift('\n'.join([str(cmd) for cmd in self.subast]))
         return cmd
+    
+    def get_command(self):
+        final_str = ""
+        index = 0
+        while index < self.tagstokens.length:
+            if self.tagstokens.tags[index] in ["SPACES", "STMT"]:
+                final_str += self.tagstokens.tokens[index]
+            index += 1
+        return final_str
 
 
 class RedirectionFD():
