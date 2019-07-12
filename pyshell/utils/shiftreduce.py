@@ -17,12 +17,14 @@ def revkeyinstack(stack, grammar):
 def keyinstack(stack, grammar, next_tag=''):
     len_stack = len(stack)
     key = ''
-    extend_key = ' '.join(stack + [next_tag])
+    extend_key = ''
     i = 0
     while i < len_stack and extend_key not in grammar.reverse:
         key = ' '.join(stack[i:])
-        if key in grammar.reverse and extend_key not in grammar.reverse:
-            print(extend_key)
+        extend_key = key + ' ' + next_tag
+        if key in grammar.reverse:
+            if extend_key in grammar.reverse:
+                break
             return i
         i += 1
     return -1
@@ -40,61 +42,54 @@ def reduce_all(stack, instack, grammar, next_tag):
     return stack
 
 
-# def check_forbidden(tags, grammar):
-#     i = 0
-#     len_tags = len(tags)
-#     instack = []
-#     key = ''
-#     spaces = 0
-#     while i < len_tags:
-#         key = ' '.join(instack)
-#         if key in grammar.reverse and grammar.reverse[key] == 'FORBIDDEN':
-#             if tags[i - len(instack)] == 'SPACES':
-#                 tags[i - len(instack) - 1] = 'FORBIDDEN'
-#             else:
-#                 tags[i - len(instack)] = 'FORBIDDEN'
-#             spaces = 0
-#             instack = []
-#             break
-#         elif tags[i] == 'SPACES':
-#             spaces += 1
-#         elif instack == [] or tk.ops_begin_with(
-#                 key, grammar.grammar['FORBIDDEN']):
-#             instack.append(tags[i])
-#         else:
-#             instack = []
-#         i += 1
-#     key = ' '.join(instack)
-#     if key in grammar.reverse and grammar.reverse[key] == 'FORBIDDEN':
-#         tags[i + spaces - len(instack)] = 'FORBIDDEN'
-#         spaces = 0
-#     return tags
-
-def get_next_tag(tags, len_tags, i):
-    i += 1
-    return tags[i] if i < len_tags else 'G'
+def check_forbidden(tags, grammar):
+    i = 0
+    len_tags = len(tags)
+    instack = []
+    key = ''
+    spaces = 0
+    while i < len_tags:
+        key = ' '.join(instack)
+        if key in grammar.reverse and grammar.reverse[key] == 'FORBIDDEN':
+            if tags[i - len(instack)] == 'SPACES':
+                tags[i - len(instack) - 1] = 'FORBIDDEN'
+            else:
+                tags[i - len(instack)] = 'FORBIDDEN'
+            spaces = 0
+            instack = []
+            break
+        elif tags[i] == 'SPACES':
+            spaces += 1
+        elif instack == [] or tk.ops_begin_with(
+                key, grammar.grammar['FORBIDDEN']):
+            instack.append(tags[i])
+        else:
+            instack = []
+        i += 1
+    key = ' '.join(instack)
+    if key in grammar.reverse and grammar.reverse[key] == 'FORBIDDEN':
+        tags[i + spaces - len(instack)] = 'FORBIDDEN'
+    return tags
 
 
 def shift_reduce(tags, grammar):
     stack = []
     i = 0
     instack = 0
-    # tags = check_forbidden(tags, grammar)
     len_tags = len(tags)
     next_tag = ''
+
+    tags = check_forbidden(tags, grammar)
     while i < len_tags:
-        next_tag = get_next_tag(tags, len_tags, i)
-        print((i, tags[i], next_tag, stack))
+        next_tag = tags[i]
         instack = keyinstack(stack, grammar, next_tag)
         if instack > -1:
-            print('Reduce')
             stack = reduce_all(stack, instack, grammar, next_tag)
         else:
-            print('Shift')
-            if tags[i] == 'SPACES':
+            if next_tag == 'SPACES':
                 pass
             else:
-                stack.append(tags[i])
+                stack.append(next_tag)
             i += 1
     instack = keyinstack(stack, grammar, next_tag)
     if instack > -1:
@@ -105,11 +100,13 @@ def shift_reduce(tags, grammar):
 def tagstokens_shift_reduce(tagstokens, grammar):
     stack = []
     i = 0
-    # tagstokens.tags = check_forbidden(tagstokens.tags, grammar)
+    instack = 0
     len_tags = len(tagstokens.tags)
     next_tag = ''
+
+    # tagstokens.tags = check_forbidden(tagstokens.tags, grammar)
     while i <= len_tags:
-        instack = keyinstack(stack, grammar)
+        instack = keyinstack(stack, grammar, next_tag)
         if instack > -1:
             stack = reduce_all(stack, instack, grammar, next_tag)
         else:
