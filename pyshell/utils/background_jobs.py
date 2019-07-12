@@ -4,12 +4,11 @@ import os
 import enum
 import time
 import signal
+import termios
 
 class WaitState(enum.Enum):
     FINISH = 0
     RUNNING = 1
-
-DEBUG = open("/dev/ttys003", "w")
 
 class Job:
     def __init__(self, pid, command, job_pipeline):
@@ -58,9 +57,8 @@ class Job:
         if self.is_running == WaitState.FINISH:
             print("tmpsh: fg: job has terminated", file=sys.stderr)
             return
-        print("term control : {} | pgid_job {}".format(os.tcgetpgrp(0), os.getpgid(self.pid)))
         os.tcsetpgrp(0, self.pgid)
-        print("term control : {} | pgid_job {}".format(os.tcgetpgrp(0), os.getpgid(self.pid)))
+        attributes = termios.tcgetattr(0)
         if self.complete == False:
             os.kill(self.pid, signal.SIGCONT)
         while self.complete == False or len(self.pipeline) > 0:
@@ -73,15 +71,15 @@ class Job:
             #it twice.
             if os.WIFSTOPPED(status) == True:
                 os.tcsetpgrp(0, os.getpgrp())
+                termios.tcsetattr(0, termios.TCSADRAIN, attributes)
                 return WaitState.RUNNING
             elif os.WIFEXITED(status) or os.WIFSIGNALED(status):
                 if child_pid == self.pid:
                     self.complete = True
                 else:
                     self.pipeline.pop(0)
-        print("OUT term control : {} | pgid_job {}".format(os.tcgetpgrp(0), os.getpgrp()))
         os.tcsetpgrp(0, os.getpgrp())
-        print("OUT term control : {} | pgid_job {}".format(os.tcgetpgrp(0), os.getpgid(0)))
+        termios.tcsetattr(0, termios.TCSADRAIN, attributes)
         return WaitState.FINISH
 
 
