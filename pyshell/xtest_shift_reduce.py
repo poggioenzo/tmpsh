@@ -79,12 +79,12 @@ class TestShiftReduce(unittest.TestCase):
         self.assertListEqual(sr.shift_reduce(entry, GRAMMAR), exepted_output)
 
     def test_shift_reduce_015(self):
-        entry = 'C C D D C C E E'.split()
+        entry = 'C C D D C C E E C C'.split()
         exepted_output = ['A']
         self.assertListEqual(sr.shift_reduce(entry, GRAMMAR), exepted_output)
 
     def test_shift_reduce_016(self):
-        entry = 'C C D D C C E E'.split()
+        entry = 'C C E E C C E E C C'.split()
         exepted_output = ['A']
         self.assertListEqual(sr.shift_reduce(entry, GRAMMAR), exepted_output)
 
@@ -110,7 +110,8 @@ class TestShiftReduceHard(unittest.TestCase):
         entry = ('B D B E B B C C C E B D E E A A B A'
                  + ' A B D E C E E B D C D D B B E D D C').split()
         exepted_output = ['A', 'D', 'A', 'D', 'A', 'D', 'A', 'C', 'D',
-                          'A', 'D', 'C', 'C', 'A', 'C', 'D', 'C']
+                          'A', 'C', 'C', 'A', 'D', 'C', 'C', 'A', 'C',
+                          'D', 'C']
         self.assertListEqual(sr.shift_reduce(entry, GRAMMAR), exepted_output)
 
     def test_shift_reduce_hard_021(self):
