@@ -44,6 +44,8 @@ def retrieve_variable(variable):
     search_value = variable[1:]
     if search_value == "?":
         return str(gv.LAST_STATUS)
+    elif search_value == "$":
+        return str(os.getpid())
     value = getenv(search_value)
     if value == None:
         value = getvar(search_value)

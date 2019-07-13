@@ -4,7 +4,9 @@ from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
 import utils.environ as environ
 import utils.builtins as builtins
+import utils.tmpsh_signal as tmpsh_signal
 import utils.file as file
+import utils.tmpsh_signal
 import fcntl
 import sys
 import os
@@ -60,6 +62,25 @@ def replace_fd(expected_fd, old_fd):
     os.dup2(expected_fd, old_fd)
     os.close(expected_fd)
 
+def replace_std_fd(stdin=None, stdout=None):
+    """
+    Replace two given fd to be current stdout and/or stderr.
+    """
+    if stdin:
+        replace_fd(stdin, sys.stdin.fileno())
+    if stdout:
+        replace_fd(stdout, sys.stdout.fileno())
+
+def close_fds(fd_list):
+    """
+    Close all fds in the given list. The list must end with -1.
+    """
+    index = 0
+    while fd_list[index] != -1:
+        if fd_list[index] is not None:
+            os.close(fd_list[index])
+        index += 1
+
 class ManagerFD:
     def __init__(self):
         self.stdin = None
@@ -89,10 +110,9 @@ class Executor:
         """
         index = 0
         nbr_branch = len(ast.list_branch)
-        pid = os.getpid()
         fds = ManagerFD()
         pipe_lst = []
-        while index < nbr_branch and pid > 0:
+        while index < nbr_branch:
             branch = ast.list_branch[index]
             self.replace_variable(branch)
             fds.manage_pipe_fd(ast, index)
@@ -103,13 +123,10 @@ class Executor:
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
                 fds.saved_input_pipe, fds.stdout = setup_pipe_fd()
-            if self.perfom_command_as_subast(branch, fds, pipe_lst) == False:
+            if self.perform_command_as_subast(branch, fds, pipe_lst) == False:
                 self.exec_command(branch, fds, pipe_lst)
             self.check_wait_pipe(ast.list_branch, index, pipe_lst)
             index += 1
-        #Exit background process
-        if pid == 0:
-            exit(0)
         gv.JOBS.wait_zombie()
     
     ##################################################################
@@ -127,7 +144,8 @@ class Executor:
                 list_branch[index].tag_end != "PIPE"):
             return
         for pid in pipe_lst:
-            os.waitpid(pid, 0)
+            print("wait ", pid)
+            os.waitpid(pid, os.WUNTRACED)
         pipe_lst.clear()
 
 
@@ -180,7 +198,7 @@ class Executor:
     ##          Functions to run a branch's subast list             ##
     ##################################################################
 
-    def run_subshell(self, ast, fds, wait=False):
+    def run_subshell(self, ast, fds, method):
         """
         From a given ast, run the command in a subshell.
         Redirect stdin and/or stdout if given.
@@ -188,28 +206,18 @@ class Executor:
         """
         #NEED TO WAIT ALL KIND OF SUBSHELL
         settings = termios.tcgetattr(0)
-        pid = os.fork()
+        pid, settings = self.fork_prepare(0, method == "BACKGROUND_JOBS")
         if pid == 0:
-            os.setpgrp()
-            os.tcsetpgrp(0, os.getpgid(0))
             gv.JOBS.clear()
-            if fds.stdin:
-                replace_fd(fds.stdin, sys.stdin.fileno())
-            if fds.stdout:
-                replace_fd(fds.stdout, sys.stdout.fileno())
+            replace_std_fd(fds.stdin, fds.stdout)
             self.run_ast(ast)
             exit(gv.LAST_STATUS)
         else:
-            os.setpgid(pid, 0)
-            os.tcsetpgrp(0, os.getpgid(pid))
-            if fds.stdin:
-                os.close(fds.stdin)
-            if fds.stdout:
-                os.close(fds.stdout)
-            if wait:
+            close_fds([fds.stdin, fds.stdout, -1])
+            if method not in ["PIPE", "BACKGROUND_JOBS"]:
                 self.analyse_status(pid, "AST")
             os.tcsetpgrp(0, os.getpgrp())
-            termios.tcsetattr(0, termios.TCSADRAIN, settings)
+            termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, settings)
             return pid
 
     def prepare_cmd_subst(self, branch):
@@ -387,7 +395,7 @@ class Executor:
             environ.update_var(key, value, mode, only_env)
             index += 1
 
-    def perfom_command_as_subast(self, branch, fds, pipe_lst):
+    def perform_command_as_subast(self, branch, fds, pipe_lst):
         """
         If the command is composed of a SUBSH or a CURSH,
         create a layer for this kind of command and run them.
@@ -399,40 +407,44 @@ class Executor:
         while index < nbr_subast:
             subast = branch.subast[index]
             if subast.type in ["SUBSH", "CURSH"]:
-                saved_std_fd = self.save_std_fd()
-                wait = branch.tag_end not in ["PIPE", "BACKGROUND_JOBS"]
-                if subast.type == "CURSH" and wait == True:
-                    if fds.stdin:
-                        replace_fd(fds.stdin, sys.stdin.fileno())
+                if subast.type == "CURSH" and branch.tag_end not in ["PIPE", "BACKGROUND_JOBS"]:
+                    saved_std_fd = self.save_std_fd()
+                    replace_std_fd(fds.stdin, fds.stdout)
                     self.run_ast(subast)
+                    self.restore_std_fd(saved_std_fd)
                 else:
-                    pid = self.run_subshell(subast, fds, wait)
+                    pid = self.run_subshell(subast, fds, branch.tag_end)
                     if branch.tag_end == "PIPE":
                         pipe_lst.append(pid)
                     elif branch.tag_end == "BACKGROUND_JOBS":
                         command = "".join(branch.tagstokens.tokens)
                         gv.JOBS.add_job(pid, command, pipe_lst)
-                self.restore_std_fd(saved_std_fd)
                 return True
             index += 1
         return False
 
+    def fork_prepare(self, pgid=0, background=True):
+        """
+        Fork a new process, and prepare the process to be in foreground
+        or in background.
+        """
+        termios_settings = termios.tcgetattr(sys.stdin.fileno())
+        pid = os.fork()
+        os.setpgid(pid, pgid)
+        if background == False and os.isatty(sys.stdin.fileno()):
+            os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
+        return pid, termios_settings
+
+
+
     def child_execution(self, argv, fds, variables, background=False):
         if argv[0] in ["jobs", "fg", "cd"]:
             return self.run_builtin(argv, variables)
-        pid = os.fork()
+        pid, termios_settings = self.fork_prepare(0, background)
         if pid == 0:
-            os.setpgid(0, 0)
-            if background == False and os.isatty(sys.stdin.fileno()):
-                os.tcsetpgrp(0, os.getpgrp())
-            signal_setter = lambda signum:signal.signal(signum, signal.SIG_DFL)
-            reset_signal = [signal.SIGINT, signal.SIGQUIT, signal.SIGTSTP, signal.SIGTTIN, \
-                        signal.SIGTTOU, signal.SIGCHLD]
-            list(map(signal_setter, reset_signal))
-            if fds.stdin:
-                replace_fd(fds.stdin, sys.stdin.fileno())
-            if fds.stdout:
-                replace_fd(fds.stdout, sys.stdout.fileno())
+            #restore all signals for the child
+            tmpsh_signal.reset_signals()
+            replace_std_fd(fds.stdin, fds.stdout)
             self.environ_configuration(variables, only_env=True)
             executable = get_execname(argv[0])
             if executable == None:
@@ -440,13 +452,8 @@ class Executor:
                 exit(127)
             os.execve(executable, argv, gv.ENVIRON)
         else:
-            os.setpgid(pid, 0)
-            if background == False and os.isatty(sys.stdin.fileno()):
-                os.tcsetpgrp(0, pid)
-            if fds.stdin:
-                os.close(fds.stdin)
-            if fds.stdout:
-                os.close(fds.stdout)
+            print("{} - {}".format(pid, argv[0]))
+            close_fds([fds.stdin, fds.stdout, -1])
             return pid
 
 
@@ -463,8 +470,7 @@ class Executor:
         cmd_args = self.extract_cmd(branch)
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
-            os.close(fds.stdin) if fds.stdin else None
-            os.close(fds.stdout) if fds.stdout else None
+            close_fds([fds.stdin, fds.stdout, -1])
             if len(variables) == 1:
                 self.environ_configuration(variables)
             return
