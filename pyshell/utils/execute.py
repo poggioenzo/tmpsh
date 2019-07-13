@@ -99,6 +99,7 @@ class ManagerFD:
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
+        ast.get_command()
         self.run_ast(ast)
 
     def run_ast(self, ast):
@@ -140,11 +141,12 @@ class Executor:
         """
         if index < 1:
             return 
+        #I don't understand how I'm able to wait my pipes.
+        #Rewrite condition.
         if not (list_branch[index - 1].tag_end == "PIPE" and \
                 list_branch[index].tag_end != "PIPE"):
             return
         for pid in pipe_lst:
-            print("wait ", pid)
             os.waitpid(pid, os.WUNTRACED)
         pipe_lst.clear()
 
@@ -378,7 +380,7 @@ class Executor:
         tagstok.update_length()
         return assignation_list
 
-    def environ_configuration(self, variables, only_env=False):
+    def variables_config(self, variables, only_env=False):
         """
         Facility to set the variables list [(key, mode, value), (...)] according
         to his key=value. The mode specify if it is
@@ -417,8 +419,8 @@ class Executor:
                     if branch.tag_end == "PIPE":
                         pipe_lst.append(pid)
                     elif branch.tag_end == "BACKGROUND_JOBS":
-                        command = "".join(branch.tagstokens.tokens)
-                        gv.JOBS.add_job(pid, command, pipe_lst)
+                        gv.LAST_STATUS = 0
+                        gv.JOBS.add_job(pid, branch.command, pipe_lst)
                 return True
             index += 1
         return False
@@ -435,8 +437,6 @@ class Executor:
             os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
         return pid, termios_settings
 
-
-
     def child_execution(self, argv, fds, variables, background=False):
         if argv[0] in ["jobs", "fg", "cd"]:
             return self.run_builtin(argv, variables)
@@ -445,7 +445,7 @@ class Executor:
             #restore all signals for the child
             tmpsh_signal.reset_signals()
             replace_std_fd(fds.stdin, fds.stdout)
-            self.environ_configuration(variables, only_env=True)
+            self.variables_config(variables, only_env=True)
             executable = get_execname(argv[0])
             if executable == None:
                 print("Command not found : {}".format(argv[0]))
@@ -455,8 +455,6 @@ class Executor:
             print("{} - {}".format(pid, argv[0]))
             close_fds([fds.stdin, fds.stdout, -1])
             return pid
-
-
 
     def exec_command(self, branch, fds, pipe_lst):
         """
@@ -471,8 +469,8 @@ class Executor:
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
             close_fds([fds.stdin, fds.stdout, -1])
-            if len(variables) == 1:
-                self.environ_configuration(variables)
+            if len(variables) >= 1:
+                self.variables_config(variables)
             return
         pid = self.child_execution(cmd_args, fds, variables, \
                 background=branch.tag_end == "BACKGROUND_JOBS")
@@ -482,11 +480,9 @@ class Executor:
             pipe_lst.append(pid)
         elif branch.tag_end == "BACKGROUND_JOBS":
             gv.LAST_STATUS = 0
-            command = "".join(branch.tagstokens.tokens) #NEED TO format the command properly
-            gv.JOBS.add_job(pid, command, pipe_lst)
+            gv.JOBS.add_job(pid, branch.command, pipe_lst)
         else:
-            command = "".join(branch.tagstokens.tokens) #NEED TO format the command properly
-            self.analyse_status(pid, command, pipe_lst)
+            self.analyse_status(pid, branch.command, pipe_lst)
 
     def run_builtin(self, cmd_args, variables):
         cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\

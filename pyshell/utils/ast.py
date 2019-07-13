@@ -14,6 +14,7 @@ class AST():  # AbstractSyntaxTree
         self.split_branch(tagstokens)
         self.link_fd = None
         self.pid = None
+        self.command = None
 
     @property
     def type(self):
@@ -49,6 +50,18 @@ class AST():  # AbstractSyntaxTree
             [str(branch) for branch in self.list_branch]))
 
     def get_command(self):
+        """
+        Format the command of the entire ast.
+        Call the get_command of each branch and concatenate the content
+        of all branches.
+        """
+        index = 0
+        command = ""
+        while index < len(self.list_branch):
+            self.list_branch[index].get_command()
+            command += self.list_branch[index].command
+            index += 1
+        self.command = command
         pass
 
 
@@ -62,6 +75,7 @@ class ACB():  # AbstractCommandBranch
         self.subast = []  # list of AST
         self.subcmd_type = []
         self.redirectionfd = []
+        self.command = None
         self.cursh_subsh_gesture()
         self.check_subast()
         self.set_subast_type()
@@ -103,7 +117,7 @@ class ACB():  # AbstractCommandBranch
                 i = self.tagstokens.skip_openning_tags(i) - 1
                 self.subast.append(AST(self.tagstokens.copytt(begin, i)))
                 self.tagstokens[begin - 1:i + 1] = [
-                    ['SUBAST'], ['↓subast{}↓'.format(len(self.subast) - 1)]]
+                    ['SUBAST'], ['subast {}'.format(len(self.subast) - 1)]]
                 i = begin
             i += 1
 
@@ -137,14 +151,31 @@ class ACB():  # AbstractCommandBranch
         return cmd
     
     def get_command(self):
+        """
+        From each tags/tokens, re-create the command given by the user.
+        Go through each token and concate it the the right way, depending
+        if it a simple token or an other subast.
+        """
         final_str = ""
         index = 0
         while index < self.tagstokens.length:
-            if self.tagstokens.tags[index] in ["SPACES", "STMT"]:
+            if self.tagstokens.tags[index] == "SPACES":
+                final_str += " "
+            elif self.tagstokens.tags[index] == "STMT":
                 final_str += self.tagstokens.tokens[index]
+            elif self.tagstokens.tags[index] == "SUBAST":
+                ast_index = self.tagstokens.tokens[index].split(' ')[-1]
+                subast = self.subast[int(ast_index)]
+                subast.get_command()
+                prefix = gv.GRAMMAR.grammar[subast.type][0]
+                if subast.type in ["BRACEPARAM", "CURSH"]:
+                    suffix = gv.GRAMMAR.grammar["END_BRACE"][0]
+                else:
+                    suffix = gv.GRAMMAR.grammar["END_BRACKET"][0]
+                final_str += prefix + subast.command + suffix
             index += 1
-        return final_str
-
+        end = gv.GRAMMAR.grammar[self.tag_end][0] if self.tag_end != '' else ''
+        self.command = final_str + end
 
 class RedirectionFD():
     """docstring forRedirec."""
