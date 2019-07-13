@@ -96,7 +96,6 @@ class Executor:
         """
         index = 0
         nbr_branch = len(ast.list_branch)
-        pipe_lst = []
         while index < nbr_branch:
             branch = ast.list_branch[index]
             self.replace_variable(branch)
@@ -104,10 +103,12 @@ class Executor:
                 index = self.find_newstart(nbr_branch, index, ast)
                 continue
             self.perform_subast_replacement(branch)
+            branch.pgid = self.check_pgid(ast.list_branch, index)
+            self.check_background(ast.list_branch, index)
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
                 ast.list_branch[index + 1].stdin, branch.stdout = setup_pipe_fd()
-            if self.perform_command_as_subast(branch, pipe_lst) == False:
+            if self.perform_command_as_subast(branch) == False:
                 self.exec_command(branch, pipe_lst)
             self.check_wait_pipe(ast.list_branch, index, pipe_lst)
             index += 1
@@ -116,6 +117,35 @@ class Executor:
     ##################################################################
     ##                  Utils for self.run_ast                      ##
     ##################################################################
+
+    def check_background(self, list_branch, index):
+        """
+        Check if the branch have to be run in background or
+        in foreground.
+        If it's pipe, check the last element of the pipeline to
+        see the behavior to apply.
+        """
+        branch = list_branch[index]
+        if branch.background == True:
+            return True
+        elif list_branch[index].tag_end == "BACKGROUND_JOBS":
+            branch.background = True
+            return True
+        elif list_branch[index].tag_end == "PIPE":
+            branch.background = self.check_background(list_branch, index + 1)
+            return branch.background
+        return False
+
+    def check_pgid(self, list_branch, index):
+        """
+        Verify if the current branch have to use the pipeline
+        pgid.
+        """
+        if index > 1 and list_branch[index - 1].tag_end == "PIPE":
+            return list_branch[index - 1].pgid
+        return 0
+
+
 
     def check_wait_pipe(self, list_branch, index, pipe_lst):
         """
@@ -183,7 +213,7 @@ class Executor:
     ##          Functions to run a branch's subast list             ##
     ##################################################################
 
-    def run_subshell(self, ast, stdin, stdout, background=False):
+    def run_subshell(self, ast, stdin, stdout, background=False, pgid=0):
         """
         From a given ast, run the command in a subshell.
         Redirect stdin and/or stdout if given.
@@ -191,7 +221,7 @@ class Executor:
         """
         #NEED TO WAIT ALL KIND OF SUBSHELL
         settings = termios.tcgetattr(0)
-        pid, settings = self.fork_prepare(0, background)
+        pid, settings = self.fork_prepare(pgid, background)
         if pid == 0:
             gv.JOBS.clear()
             replace_std_fd(stdin, stdout)
@@ -380,7 +410,7 @@ class Executor:
             environ.update_var(key, value, mode, only_env)
             index += 1
 
-    def perform_command_as_subast(self, branch, pipe_lst):
+    def perform_command_as_subast(self, branch):
         """
         If the command is composed of a SUBSH or a CURSH,
         create a layer for this kind of command and run them.
@@ -398,14 +428,12 @@ class Executor:
                     self.run_ast(subast)
                     self.restore_std_fd(saved_std_fd)
                 else:
-                    background = branch.tag_end == "BACKGROUND_JOBS"
                     pid = self.run_subshell(subast, branch.stdin, branch.stdout, \
-                            background)
-                    if branch.tag_end == "PIPE":
-                        pipe_lst.append(pid)
-                    elif branch.tag_end == "BACKGROUND_JOBS":
+                        branch.background, branch.pgid)
+                    branch.pid = pid
+                    if branch.background:
                         gv.LAST_STATUS = 0
-                        gv.JOBS.add_job(pid, branch.command, pipe_lst)
+                        gv.JOBS.add_job(pid, branch.command)
                 return True
             index += 1
         return False
@@ -422,14 +450,14 @@ class Executor:
             os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
         return pid, termios_settings
 
-    def child_execution(self, argv, fds, variables, background=False):
+    def child_execution(self, branch, argv, variables):
         if argv[0] in ["jobs", "fg", "cd"]:
             return self.run_builtin(argv, variables)
-        pid, termios_settings = self.fork_prepare(0, background)
+        pid, termios_settings = self.fork_prepare(branch.pgid, branch.background)
         if pid == 0:
             #restore all signals for the child
             tmpsh_signal.reset_signals()
-            replace_std_fd(fds.stdin, fds.stdout)
+            replace_std_fd(branch.stdin, branch.stdout)
             self.variables_config(variables, only_env=True)
             executable = get_execname(argv[0])
             if executable == None:
@@ -438,10 +466,10 @@ class Executor:
             os.execve(executable, argv, gv.ENVIRON)
         else:
             print("{} - {}".format(pid, argv[0]))
-            close_fds([fds.stdin, fds.stdout, -1])
+            close_fds([branch.stdin, branch.stdout, -1])
             return pid
 
-    def exec_command(self, branch, fds, pipe_lst):
+    def exec_command(self, branch):
         """
         Use to run a simple command, the branch element which is not
         a SUBSH or a CURSH.
@@ -453,21 +481,18 @@ class Executor:
         cmd_args = self.extract_cmd(branch)
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
-            close_fds([fds.stdin, fds.stdout, -1])
+            close_fds([branch.stdin, branch.stdout, -1])
             if len(variables) >= 1:
                 self.variables_config(variables)
             return
-        pid = self.child_execution(cmd_args, fds, variables, \
-                background=branch.tag_end == "BACKGROUND_JOBS")
-        if pid == None:
+        branch.pid = self.child_execution(branch, cmd_args, variables)
+        if branch.pid == None:
             return
-        if branch.tag_end == "PIPE":
-            pipe_lst.append(pid)
-        elif branch.tag_end == "BACKGROUND_JOBS":
+        if branch.background:
             gv.LAST_STATUS = 0
-            gv.JOBS.add_job(pid, branch.command, pipe_lst)
-        else:
-            self.analyse_status(pid, branch.command, pipe_lst)
+            gv.JOBS.add_job(branch.pid, branch.command)
+        elif branch.tag_end != "PIPE":
+            self.analyse_status(branch.pid, branch.command)
 
     def run_builtin(self, cmd_args, variables):
         cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
