@@ -81,21 +81,6 @@ def close_fds(fd_list):
             os.close(fd_list[index])
         index += 1
 
-class ManagerFD:
-    def __init__(self):
-        self.stdin = None
-        self.stdout = None
-        self.saved_input_pipe = None
-        self.redirection_list = None
-
-    def manage_pipe_fd(self, ast, index):
-        self.stdout = None
-        if index > 0 and ast.list_branch[index - 1].tag_end == "PIPE":
-            self.stdin = self.saved_input_pipe
-        else:
-            self.stdin = None
-        self.saved_input_pipe = None
-
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
@@ -111,21 +96,19 @@ class Executor:
         """
         index = 0
         nbr_branch = len(ast.list_branch)
-        fds = ManagerFD()
         pipe_lst = []
         while index < nbr_branch:
             branch = ast.list_branch[index]
             self.replace_variable(branch)
-            fds.manage_pipe_fd(ast, index)
             if self.check_andor(branch) == False:
                 index = self.find_newstart(nbr_branch, index, ast)
                 continue
             self.perform_subast_replacement(branch)
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
-                fds.saved_input_pipe, fds.stdout = setup_pipe_fd()
-            if self.perform_command_as_subast(branch, fds, pipe_lst) == False:
-                self.exec_command(branch, fds, pipe_lst)
+                ast.list_branch[index + 1].stdin, branch.stdout = setup_pipe_fd()
+            if self.perform_command_as_subast(branch, pipe_lst) == False:
+                self.exec_command(branch, pipe_lst)
             self.check_wait_pipe(ast.list_branch, index, pipe_lst)
             index += 1
         gv.JOBS.wait_zombie()
@@ -200,7 +183,7 @@ class Executor:
     ##          Functions to run a branch's subast list             ##
     ##################################################################
 
-    def run_subshell(self, ast, fds, method):
+    def run_subshell(self, ast, stdin, stdout, background=False):
         """
         From a given ast, run the command in a subshell.
         Redirect stdin and/or stdout if given.
@@ -208,10 +191,10 @@ class Executor:
         """
         #NEED TO WAIT ALL KIND OF SUBSHELL
         settings = termios.tcgetattr(0)
-        pid, settings = self.fork_prepare(0, method == "BACKGROUND_JOBS")
+        pid, settings = self.fork_prepare(0, background)
         if pid == 0:
             gv.JOBS.clear()
-            replace_std_fd(fds.stdin, fds.stdout)
+            replace_std_fd(stdin, stdout)
             self.run_ast(ast)
             exit(gv.LAST_STATUS)
         else:
@@ -239,7 +222,7 @@ class Executor:
                 elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
                     fds.stdout = pipe_fd[1]
                 #NEED TO WAIT SUBSHELL
-                subast.pid = self.run_subshell(subast, fds)
+                subast.pid = self.run_subshell(subast, fds.stdin, fds.stdout)
                 subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
             elif subast.type == "DQUOTES":
                 self.prepare_cmd_subst(subast.list_branch[0])
@@ -397,7 +380,7 @@ class Executor:
             environ.update_var(key, value, mode, only_env)
             index += 1
 
-    def perform_command_as_subast(self, branch, fds, pipe_lst):
+    def perform_command_as_subast(self, branch, pipe_lst):
         """
         If the command is composed of a SUBSH or a CURSH,
         create a layer for this kind of command and run them.
@@ -411,11 +394,13 @@ class Executor:
             if subast.type in ["SUBSH", "CURSH"]:
                 if subast.type == "CURSH" and branch.tag_end not in ["PIPE", "BACKGROUND_JOBS"]:
                     saved_std_fd = self.save_std_fd()
-                    replace_std_fd(fds.stdin, fds.stdout)
+                    replace_std_fd(branch.stdin, branch.stdout)
                     self.run_ast(subast)
                     self.restore_std_fd(saved_std_fd)
                 else:
-                    pid = self.run_subshell(subast, fds, branch.tag_end)
+                    background = branch.tag_end == "BACKGROUND_JOBS"
+                    pid = self.run_subshell(subast, branch.stdin, branch.stdout, \
+                            background)
                     if branch.tag_end == "PIPE":
                         pipe_lst.append(pid)
                     elif branch.tag_end == "BACKGROUND_JOBS":

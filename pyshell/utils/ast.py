@@ -76,6 +76,8 @@ class ACB():  # AbstractCommandBranch
         self.subcmd_type = []
         self.redirectionfd = []
         self.command = None
+        self.stdin = None
+        self.stdout = None
         self.cursh_subsh_gesture()
         self.check_subast()
         self.set_subast_type()
