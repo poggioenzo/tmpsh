@@ -196,7 +196,7 @@ class Executor:
             tag = branch.tagstokens.tags[index]
             token = branch.tagstokens.tokens[index]
             if tag == "STMT" and token[0] == "$":
-                variable = environ.retrieve_variable(token)
+                variable = environ.retrieve_variable(token[1:])
                 branch.tagstokens.tokens[index] = variable
             elif tag == "SUBAST":
                 if branch.subast[index_subast].type == "DQUOTES":
@@ -320,7 +320,7 @@ class Executor:
                 content = "/dev/fd/" + str(subast.link_fd)
             elif subast.type == "BRACEPARAM":
                 var = subast.list_branch[0].tagstokens.tokens[0]
-                content = gv.LOCAL_VAR.get(var, "")
+                content = environ.retrieve_variable(var)
             elif subast.type == "DQUOTES":
                 self.perform_subast_replacement(subast.list_branch[0])
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
@@ -449,6 +449,7 @@ class Executor:
             close_fds([job_list[-1].stdin, job_list[-1].stdout, -1])
             if len(variables) >= 1:
                 self.variables_config(variables)
+                job_list[-1].status = 0
             return
         job_list[-1].pid = self.child_execution(job_list[-1], cmd_args, variables)
 

@@ -12,7 +12,7 @@ ALIAS = {'all': 'ls -l', 'gall': 'all -G -1', 'ball': '$(gall)',
          'loop2': 'loop3',
          'loop3': 'loop1'}
 
-ENVIRON = os.environ
+ENVIRON = os.environ.copy()
 LOCAL_VAR = {}
 LAST_STATUS = 0
 

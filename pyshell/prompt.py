@@ -36,7 +36,6 @@ class Prompt(Cmd):
 def main(argc, argv, environ):
     tmpsh_signal.init_signals()
 
-    ENVIRON = environ.copy()
     Prompt().cmdloop()
 
 
