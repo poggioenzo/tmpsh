@@ -432,10 +432,9 @@ class Executor:
         Fork a new process, and prepare the process to be in foreground
         or in background.
         """
-        foreground_allowed = os.tcgetpgrp(0) == os.getpgrp()
         pid = os.fork()
         os.setpgid(pid, pgid)
-        if background == False and foreground_allowed:
+        if background == False:
             os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
         return pid
 
