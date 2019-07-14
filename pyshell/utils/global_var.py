@@ -1,5 +1,7 @@
 from utils.shellgrammar import ShellGrammar
-from utils.background_jobs import BackgroundJobs
+from utils.job_control import BackgroundJobs
+import termios
+import sys
 import os
 
 GRAMMAR = ShellGrammar()
@@ -15,3 +17,4 @@ LOCAL_VAR = {}
 LAST_STATUS = 0
 
 JOBS = BackgroundJobs()
+TCSETTINGS = termios.tcgetattr(sys.stdin.fileno())

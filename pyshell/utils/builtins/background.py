@@ -5,7 +5,7 @@ import signal
 
 def jobs(argv, environ):
     for task in gv.JOBS:
-        print("{} : {}".format(task.pid, task.command))
+        print("{} : {}".format(task[-1].pid, task[-1].command))
 
 def fg(argv, environ):
     if len(argv) == 0:

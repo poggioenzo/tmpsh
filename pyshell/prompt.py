@@ -4,11 +4,12 @@ from cmd import Cmd
 from utils.tagstokens import TagsTokens
 from utils.ast import AST
 from utils.execute import Executor
-from utils.global_var import ENVIRON
+from utils.global_var import ENVIRON, TCSETTINGS
 import utils.tmpsh_signal as tmpsh_signal
 import os, sys
 import string
 import signal
+import termios
 
 class Prompt(Cmd):
     intro = "tmpsh - Total Mastering Professional Shell"
@@ -34,6 +35,7 @@ class Prompt(Cmd):
 
 def main(argc, argv, environ):
     tmpsh_signal.init_signals()
+
     ENVIRON = environ.copy()
     Prompt().cmdloop()
 
