@@ -31,6 +31,12 @@ class Prompt(Cmd):
             print('Close all this command tokens: {}'.format(
                 str(TAGSTOKENS.token_error)))
             self.prompt = "error prompt > "
+    def do_EOF(self, line):
+        print("XEOF {}: {}".format(line, os.getpid()))
+        print("pgid {} pid {} tpgid {}".format(os.getpgid(0), os.getpid(), os.tcgetpgrp(0)))
+        content = sys.stdin.read()
+        print("get : |{}|".format(content))
+        exit(1)
 
 
 def main(argc, argv, environ):

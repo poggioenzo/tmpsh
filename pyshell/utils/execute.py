@@ -82,6 +82,16 @@ def close_fds(fd_list):
             os.close(fd_list[index])
         index += 1
 
+def push_shell_foreground():
+    """
+    Try to retrieve the foreground for the shell if
+    """
+    if os.tcgetpgrp(sys.stdin.fileno()) == os.getpgrp():
+        os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
+        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, gv.TCSETTINGS)
+
+
+
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
@@ -107,8 +117,8 @@ class Executor:
                 job_list.clear()
                 continue
             self.perform_subast_replacement(branch)
-            branch.pgid = self.check_pgid(ast.list_branch, index)
-            self.check_background(ast.list_branch, index)
+            branch.pgid = self.check_pgid(job_list)
+            res = self.check_background(ast.list_branch, index)
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
                 ast.list_branch[index + 1].stdin, branch.stdout = setup_pipe_fd()
@@ -120,8 +130,9 @@ class Executor:
             elif branch.tag_end != "PIPE":
                 if control.analyse_job_status(job_list) == control.WaitState.RUNNING:
                     gv.JOBS.add_job(job_list)
-                os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
-                termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
+                if branch.background == False:
+                    os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
+                    termios.tcsetattr(0, termios.TCSANOW, gv.TCSETTINGS) #termios.TCSADRAIN
                 gv.LAST_STATUS = branch.status
             if branch.tag_end != "PIPE":
                 job_list.clear()
@@ -142,21 +153,34 @@ class Executor:
         branch = list_branch[index]
         if branch.background == True:
             return True
-        elif list_branch[index].tag_end == "BACKGROUND_JOBS":
+        elif branch.tag_end == "BACKGROUND_JOBS":
             branch.background = True
             return True
-        elif list_branch[index].tag_end == "PIPE":
+        elif os.tcgetpgrp(sys.stdin.fileno()) not in [os.getpgrp(), branch.pgid]:
+            branch.background = True
+            return True
+        elif branch.tag_end == "PIPE":
+            list_branch[index + 1].pgid = branch.pgid
             branch.background = self.check_background(list_branch, index + 1)
             return branch.background
         return False
 
-    def check_pgid(self, list_branch, index):
+    def check_pgid(self, job_list):
         """
         Verify if the current branch have to use the pipeline
         pgid.
         """
-        if index > 1 and list_branch[index - 1].tag_end == "PIPE":
-            return list_branch[index - 1].pgid
+        nbr_job = len(job_list)
+        if nbr_job == 1:
+            return 0
+        index = 0
+        while index < nbr_job:
+            job = job_list[index]
+            if job.pgid != 0:
+                return job.pgid
+            if job.pid != None:
+                return os.getpgid(job.pid)
+            index += 1
         return 0
 
     def find_newstart(self, max_len, index, ast):
@@ -408,9 +432,10 @@ class Executor:
         Fork a new process, and prepare the process to be in foreground
         or in background.
         """
+        foreground_allowed = os.tcgetpgrp(0) == os.getpgrp()
         pid = os.fork()
         os.setpgid(pid, pgid)
-        if background == False and os.isatty(sys.stdin.fileno()):
+        if background == False and foreground_allowed:
             os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
         return pid
 
@@ -430,7 +455,6 @@ class Executor:
                 exit(127)
             os.execve(executable, argv, gv.ENVIRON)
         else:
-            print("{} - {}".format(pid, argv[0]))
             close_fds([branch.stdin, branch.stdout, -1])
             return pid
 

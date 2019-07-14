@@ -30,9 +30,6 @@ def analyse_job_status(job_list, mode=os.WUNTRACED):
         #Leave the loop if no pid is get, os.WNOHANG activate
         if pid == 0:
             return WaitState.RUNNING
-        #Restore shell as the foreground process group
-        if os.isatty(sys.stdin.fileno()):
-            os.tcsetpgrp(0, os.getpgrp())
         if os.WIFSIGNALED(return_status):
             job.status = os.WTERMSIG(return_status) + 128
             job.complete = True
@@ -110,7 +107,6 @@ class BackgroundJobs:
             return
         job = self.list_jobs[index]
         foreground_pgid = job[-1].pgid
-        print("Foreground:", foreground_pgid)
         os.tcsetpgrp(sys.stdin.fileno(), foreground_pgid)
         tcsettings = termios.tcgetattr(0)
         os.kill(-foreground_pgid, signal.SIGCONT)

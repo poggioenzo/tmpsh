@@ -80,6 +80,7 @@ class ACB():  # AbstractCommandBranch
         self.stdout = None
         self.background = False
         self.pid = None
+        self.pgid = 0
         self.complete = False
         self.cursh_subsh_gesture()
         self.check_subast()
