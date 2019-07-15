@@ -5,3 +5,7 @@ wishlist:
 	- (hashmap) reverse_hashmap(hashmap hm)
 	- assertListEqual_pylist(pylist t)
 		- comparaison char * à char *
+		
+		
+Lexing:  
+- $$ fait 2 statement.
