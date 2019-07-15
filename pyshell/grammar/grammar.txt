@@ -1,7 +1,6 @@
 # definition shell grammar
 
 STMT:
-	STMT
 	QUOTES
 
 CMD:
