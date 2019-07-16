@@ -112,6 +112,7 @@ class ACB():  # AbstractCommandBranch
             i += 1
 
     def check_subast(self):
+        # TODO: ./main_ast.py 'echo "$PATH""lol""mdr"'
         i = 0
         begin = 0
         tag = ''
