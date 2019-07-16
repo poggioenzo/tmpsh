@@ -143,4 +143,6 @@ class RedirectionFD():
         self.fd_input = fd_input
 
     def __str__(self):
-        return '{}: {}'.format(self.type, ''.join(self.tagstokens.tokens))
+        return '{}: {} source:{}'.format(self.type,
+                                         ''.join(self.tagstokens.tokens),
+                                         self.source)
