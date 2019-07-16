@@ -137,10 +137,10 @@ class ACB():  # AbstractCommandBranch
 class RedirectionFD():
     """docstring forRedirec."""
 
-    def __init__(self, tagstokens, redirection_type, fd_input=1):
+    def __init__(self, tagstokens, redirection_type, source=None):
         self.tagstokens = tagstokens
         self.type = redirection_type
-        self.fd_input = fd_input
+        self.source = source if source else 1
 
     def __str__(self):
         return '{}: {} source:{}'.format(self.type,
