@@ -4,7 +4,6 @@ import utils.global_var as gv
 
 # TODO: alias gesture
 # TODO: {} can't be only by terminator
-# TODO: 2 >> lol
 # TODO: escape $PATH\\
 
 
