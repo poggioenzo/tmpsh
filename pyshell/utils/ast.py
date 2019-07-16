@@ -133,7 +133,6 @@ class ACB():  # AbstractCommandBranch
         tag = ''
         source = None
         while lentags >= 0:
-            print(lentags)
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 if lentags > 0 and \
@@ -156,7 +155,6 @@ class ACB():  # AbstractCommandBranch
             lentags -= 1
         self.tagstokens.strip()
         self.tagstokens.update_length()
-        print(self.tagstokens)
         self.redirectionfd = list(reversed(self.redirectionfd))
 
     def __str__(self):
