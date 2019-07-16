@@ -150,8 +150,13 @@ class TagsTokens():
             i += 1
         return i
 
+    def find_prev_ind_token(self, i):
+        if self.tags[i] == 'SPACES' and i - 1 >= 0:
+            i -= 1
+        return i
+
     def find_prev_token(self, i, get_token=True):
-        if self.tags[i] == 'SPACES':
+        if self.tags[i] == 'SPACES' and i - 1 >= 0:
             i -= 1
         return self.tokens[i] if get_token else self.tags[i]
 
