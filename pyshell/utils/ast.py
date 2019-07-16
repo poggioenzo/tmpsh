@@ -155,7 +155,6 @@ class ACB():  # AbstractCommandBranch
             lentags -= 1
         self.tagstokens.strip()
         self.tagstokens.update_length()
-        print(self.tagstokens)
         self.redirectionfd = list(reversed(self.redirectionfd))
 
     def __str__(self):
