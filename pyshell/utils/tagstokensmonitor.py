@@ -63,7 +63,6 @@ class TagsTokensMonitor():
                 self.opened.pop(-1)
 
             if skip or (self.begin_cmd and self.tag == 'SPACES'):
-                print('LOL')
                 pass
             else:
                 self.begin_cmd = False
@@ -95,9 +94,11 @@ class TagsTokensMonitor():
     def is_quote(self):
         inquote = True
         while inquote and self.next_tag_token():
+            print(self.tag)
             if self.tag == 'QUOTE':
                 self.tt.tags[self.i] = 'END_QUOTE'
                 inquote = False
+                break
             else:
                 self.tt.tags[self.i] = 'STMT'
 
