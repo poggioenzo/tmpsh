@@ -131,13 +131,25 @@ class ACB():  # AbstractCommandBranch
         lentags = self.tagstokens.length - 1
         previous = 0
         tag = ''
+        source = None
         while lentags >= 0:
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
+                if lentags > 0 and \
+                        self.tagstokens.find_prev_token(
+                            lentags - 1).isdigit() and tag != 'HEREDOC':
+                    source = self.tagstokens.find_prev_token(lentags - 1)
                 self.redirectionfd.append(
-                    RedirectionFD(self.tagstokens.copytt(previous), tag))
+                    RedirectionFD(self.tagstokens.copytt(previous),
+                                  tag, source))
                 del self.tagstokens[previous]
                 del self.tagstokens[lentags]
+                if source:
+                    del self.tagstokens[self.tagstokens.find_prev_ind_token(
+                        lentags - 1)]
+                    self.tagstokens.update_length()
+                    lentags = self.tagstokens.length - 1
+                    source = None
             elif tag != 'SPACES':
                 previous = lentags
             lentags -= 1
@@ -155,7 +167,7 @@ class ACB():  # AbstractCommandBranch
         if self.subast != []:
             cmd += split_shift('\n'.join([str(cmd) for cmd in self.subast]))
         return cmd
-    
+
     def get_command(self):
         """
         From each tags/tokens, re-create the command given by the user.
@@ -183,13 +195,23 @@ class ACB():  # AbstractCommandBranch
         end = gv.GRAMMAR.grammar[self.tag_end][0] if self.tag_end != '' else ''
         self.command = final_str + end
 
+
 class RedirectionFD():
     """docstring forRedirec."""
 
-    def __init__(self, tagstokens, redirection_type, fd_input=1):
+    def __init__(self, tagstokens, redirection_type, source=None):
         self.tagstokens = tagstokens
         self.type = redirection_type
-        self.fd_input = fd_input
+        self.source = source if source else 1
+        self.redirect_devnull()
+
+    def redirect_devnull(self):
+        if self.type in ('READ_FROM_FD', 'TRUNC_TO_FD') and \
+                self.tagstokens.length == 1 and \
+                self.tagstokens.tokens[0] == '-':
+            self.tagstokens.tokens[0] = '/dev/null'
 
     def __str__(self):
-        return '{}: {}'.format(self.type, ''.join(self.tagstokens.tokens))
+        return '{}: {} source:{}'.format(self.type,
+                                         ''.join(self.tagstokens.tokens),
+                                         self.source)
