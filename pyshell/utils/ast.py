@@ -133,6 +133,7 @@ class ACB():  # AbstractCommandBranch
         tag = ''
         source = None
         while lentags >= 0:
+            print(lentags)
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 if lentags > 0 and \
@@ -147,8 +148,8 @@ class ACB():  # AbstractCommandBranch
                 if source:
                     del self.tagstokens[self.tagstokens.find_prev_ind_token(
                         lentags - 1)]
-                    if lentags - 1 == 0:
-                        break
+                    self.tagstokens.update_length()
+                    lentags = self.tagstokens.length - 1
                     source = None
             elif tag != 'SPACES':
                 previous = lentags
