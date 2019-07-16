@@ -7,6 +7,8 @@ import utils.strcontain as sc
 import utils.shiftreduce as sr
 from utils.tagstokensmonitor import TagsTokensMonitor as TTM
 
+# TODO: HEREDOC gesture post NEW_LINE
+
 
 def test(func):
     def wrapper(self, i):
@@ -20,8 +22,14 @@ def end_escape(lt):
     return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
 
 
+class Heredocs():
+    def __init__(self, arg):
+        self.arg = arg
+
+
 class TagsTokens():
     def __init__(self, tokens=None, tags=None):
+        self.heredocs = []  # list of Heredocs
         self.tokens = tokens if tokens else []
         self.tags = tags if tags else []
         if isinstance(self.tokens, str):
@@ -41,6 +49,8 @@ class TagsTokens():
             self.tokens, self.tags = self[1:]
         if len(self.tags) > 0 and self.tags[-1] == 'SPACES':
             self.tokens, self.tags = self[:-1]
+        if len(self.tags) == 1 and self.tags[0] == 'SPACES':
+            self.tokens, self.tags = [], []
 
     def update_length(self):
         self.length = len(self.tokens)
@@ -142,8 +152,13 @@ class TagsTokens():
             i += 1
         return i
 
+    def find_prev_ind_token(self, i):
+        if self.tags[i] == 'SPACES' and i - 1 >= 0:
+            i -= 1
+        return i
+
     def find_prev_token(self, i, get_token=True):
-        if self.tags[i] == 'SPACES':
+        if self.tags[i] == 'SPACES' and i - 1 >= 0:
             i -= 1
         return self.tokens[i] if get_token else self.tags[i]
 
