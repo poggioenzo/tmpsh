@@ -49,6 +49,8 @@ class TagsTokens():
             self.tokens, self.tags = self[1:]
         if len(self.tags) > 0 and self.tags[-1] == 'SPACES':
             self.tokens, self.tags = self[:-1]
+        if len(self.tags) == 1 and self.tags[0] == 'SPACES':
+            self.tokens, self.tags = [], []
 
     def update_length(self):
         self.length = len(self.tokens)
