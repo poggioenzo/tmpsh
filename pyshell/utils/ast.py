@@ -113,7 +113,8 @@ class ACB():  # AbstractCommandBranch
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 if lentags > 0 and \
-                        self.tagstokens.find_prev_token(lentags - 1).isdigit():
+                        self.tagstokens.find_prev_token(
+                            lentags - 1).isdigit() and tag != 'HEREDOC':
                     source = self.tagstokens.find_prev_token(lentags - 1)
                 self.redirectionfd.append(
                     RedirectionFD(self.tagstokens.copytt(previous),
@@ -123,6 +124,8 @@ class ACB():  # AbstractCommandBranch
                 if source:
                     del self.tagstokens[self.tagstokens.find_prev_ind_token(
                         lentags - 1)]
+                    if lentags - 1 == 0:
+                        break
                     source = None
             elif tag != 'SPACES':
                 previous = lentags
