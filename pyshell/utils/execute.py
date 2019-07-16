@@ -4,13 +4,16 @@ from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
 import utils.environ as environ
 import utils.builtins as builtins
+import utils.job_control as control
+import utils.tmpsh_signal as tmpsh_signal
 import utils.file as file
+import utils.tmpsh_signal
 import fcntl
 import sys
 import os
 import time
 import signal
-
+import termios
 
 #DEBUG = open("/dev/pts/7", "w")
 def dprint(string, *args, **kwargs):
@@ -60,25 +63,39 @@ def replace_fd(expected_fd, old_fd):
     os.dup2(expected_fd, old_fd)
     os.close(expected_fd)
 
-class ManagerFD:
-    def __init__(self):
-        self.stdin = None
-        self.stdout = None
-        self.saved_input_pipe = None
-        self.redirection_list = None
+def replace_std_fd(stdin=None, stdout=None):
+    """
+    Replace two given fd to be current stdout and/or stderr.
+    """
+    if stdin:
+        replace_fd(stdin, sys.stdin.fileno())
+    if stdout:
+        replace_fd(stdout, sys.stdout.fileno())
 
-    def manage_pipe_fd(self, ast, index):
-        self.stdout = None
-        if index > 0 and ast.list_branch[index - 1].tag_end == "PIPE":
-            self.stdin = self.saved_input_pipe
-        else:
-            self.stdin = None
-        self.saved_input_pipe = None
-    pass
+def close_fds(fd_list):
+    """
+    Close all fds in the given list. The list must end with -1.
+    """
+    index = 0
+    while fd_list[index] != -1:
+        if fd_list[index] is not None:
+            os.close(fd_list[index])
+        index += 1
+
+def push_shell_foreground():
+    """
+    Try to retrieve the foreground for the shell if
+    """
+    if os.tcgetpgrp(sys.stdin.fileno()) == os.getpgrp():
+        os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
+        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, gv.TCSETTINGS)
+
+
 
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
+        ast.get_command()
         self.run_ast(ast)
 
     def run_ast(self, ast):
@@ -90,47 +107,81 @@ class Executor:
         """
         index = 0
         nbr_branch = len(ast.list_branch)
-        pid = os.getpid()
-        fds = ManagerFD()
-        pipe_lst = []
-        while index < nbr_branch and pid > 0:
+        job_list = []
+        while index < nbr_branch:
             branch = ast.list_branch[index]
+            job_list.append(branch)
             self.replace_variable(branch)
-            fds.manage_pipe_fd(ast, index)
             if self.check_andor(branch) == False:
                 index = self.find_newstart(nbr_branch, index, ast)
+                job_list.clear()
                 continue
             self.perform_subast_replacement(branch)
+            branch.pgid = self.check_pgid(job_list)
+            res = self.check_background(ast.list_branch, index)
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
-                fds.saved_input_pipe, fds.stdout = setup_pipe_fd()
-            if self.perfom_command_as_subast(branch, fds, pipe_lst) == False:
-                self.exec_command(branch, fds, pipe_lst)
-            self.check_wait_pipe(ast.list_branch, index, pipe_lst)
+                ast.list_branch[index + 1].stdin, branch.stdout = setup_pipe_fd()
+            if self.perform_command_as_subast(job_list) == False:
+                self.exec_command(job_list)
+            if branch.tag_end == "BACKGROUND_JOBS":
+                gv.LAST_STATUS = 0
+                gv.JOBS.add_job(job_list)
+            elif branch.tag_end != "PIPE":
+                if control.analyse_job_status(job_list) == control.WaitState.RUNNING:
+                    gv.JOBS.add_job(job_list)
+                if branch.background == False:
+                    os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
+                    termios.tcsetattr(0, termios.TCSANOW, gv.TCSETTINGS) #termios.TCSADRAIN
+                gv.LAST_STATUS = branch.status
+            if branch.tag_end != "PIPE":
+                job_list.clear()
             index += 1
-        #Exit background process
-        if pid == 0:
-            exit(0)
         gv.JOBS.wait_zombie()
     
     ##################################################################
     ##                  Utils for self.run_ast                      ##
     ##################################################################
 
-    def check_wait_pipe(self, list_branch, index, pipe_lst):
+    def check_background(self, list_branch, index):
         """
-        Check according to the index position in the list_branch if
-        some pipe have to be waited.
+        Check if the branch have to be run in background or
+        in foreground.
+        If it's pipe, check the last element of the pipeline to
+        see the behavior to apply.
         """
-        if index < 1:
-            return 
-        if not (list_branch[index - 1].tag_end == "PIPE" and \
-                list_branch[index].tag_end != "PIPE"):
-            return
-        for pid in pipe_lst:
-            os.waitpid(pid, 0)
-        pipe_lst.clear()
+        branch = list_branch[index]
+        if branch.background == True:
+            return True
+        elif branch.tag_end == "BACKGROUND_JOBS":
+            branch.background = True
+            return True
+        elif os.tcgetpgrp(sys.stdin.fileno()) not in [os.getpgrp(), branch.pgid]:
+            branch.background = True
+            return True
+        elif branch.tag_end == "PIPE":
+            list_branch[index + 1].pgid = branch.pgid
+            branch.background = self.check_background(list_branch, index + 1)
+            return branch.background
+        return False
 
+    def check_pgid(self, job_list):
+        """
+        Verify if the current branch have to use the pipeline
+        pgid.
+        """
+        nbr_job = len(job_list)
+        if nbr_job == 1:
+            return 0
+        index = 0
+        while index < nbr_job:
+            job = job_list[index]
+            if job.pgid != 0:
+                return job.pgid
+            if job.pid != None:
+                return os.getpgid(job.pid)
+            index += 1
+        return 0
 
     def find_newstart(self, max_len, index, ast):
         """
@@ -169,7 +220,7 @@ class Executor:
             tag = branch.tagstokens.tags[index]
             token = branch.tagstokens.tokens[index]
             if tag == "STMT" and token[0] == "$":
-                variable = environ.retrieve_variable(token)
+                variable = environ.retrieve_variable(token[1:])
                 branch.tagstokens.tokens[index] = variable
             elif tag == "SUBAST":
                 if branch.subast[index_subast].type == "DQUOTES":
@@ -181,28 +232,21 @@ class Executor:
     ##          Functions to run a branch's subast list             ##
     ##################################################################
 
-    def run_subshell(self, ast, fds, wait=False):
+    def run_subshell(self, ast, stdin, stdout, pgid=0, background=False):
         """
         From a given ast, run the command in a subshell.
         Redirect stdin and/or stdout if given.
         Wait the subshell and catch his return value if expected.
         """
         #NEED TO WAIT ALL KIND OF SUBSHELL
-        pid = os.fork()
+        pid = self.fork_prepare(pgid, background)
         if pid == 0:
-            if fds.stdin:
-                replace_fd(fds.stdin, sys.stdin.fileno())
-            if fds.stdout:
-                replace_fd(fds.stdout, sys.stdout.fileno())
+            gv.JOBS.clear()
+            replace_std_fd(stdin, stdout)
             self.run_ast(ast)
             exit(gv.LAST_STATUS)
         else:
-            if fds.stdin:
-                os.close(fds.stdin)
-            if fds.stdout:
-                os.close(fds.stdout)
-            if wait:
-                self.analyse_status(pid)
+            close_fds([stdin, stdout, -1])
             return pid
 
     def prepare_cmd_subst(self, branch):
@@ -216,13 +260,13 @@ class Executor:
             subast = branch.subast[index]
             if subast.type.startswith("CMDSUBST"):
                 pipe_fd = setup_pipe_fd()
-                fds = ManagerFD()
+                subst_pipe = [None, None]
                 if subast.type == "CMDSUBST2":
-                    fds.stdin = pipe_fd[0]
+                    subst_pipe[0] = pipe_fd[0]
                 elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
-                    fds.stdout = pipe_fd[1]
+                    subst_pipe[1] = pipe_fd[1]
                 #NEED TO WAIT SUBSHELL
-                subast.pid = self.run_subshell(subast, fds)
+                subast.pid = self.run_subshell(subast, *subst_pipe)
                 subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
             elif subast.type == "DQUOTES":
                 self.prepare_cmd_subst(subast.list_branch[0])
@@ -300,7 +344,7 @@ class Executor:
                 content = "/dev/fd/" + str(subast.link_fd)
             elif subast.type == "BRACEPARAM":
                 var = subast.list_branch[0].tagstokens.tokens[0]
-                content = gv.LOCAL_VAR.get(var, "")
+                content = environ.retrieve_variable(var)
             elif subast.type == "DQUOTES":
                 self.perform_subast_replacement(subast.list_branch[0])
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
@@ -310,26 +354,6 @@ class Executor:
             index += 1
         self.replace_ast_tag(branch)
 
-    ##################################################################
-    ##     Functions to wait and analyse child + some job control   ##
-    ##################################################################
-
-    def analyse_status(self, pid):
-        """
-        Whenever a child die, behave properly to store information,
-        manage background process.
-        """
-        ### ADD 128 + n when the program is kill by a signal
-        pid, return_status = os.waitpid(pid, os.WUNTRACED)
-
-        #Restore shell as the foreground process group
-        if os.isatty(sys.stdin.fileno()):
-            os.tcsetpgrp(0, os.getpgrp())
-        status = os.WEXITSTATUS(return_status)
-        gv.LAST_STATUS = status
-        if os.WIFSTOPPED(return_status):
-            #Set job in background
-            pass
 
     ##################################################################
     ##      Command runner with execve or from ast + utils          ##
@@ -360,7 +384,7 @@ class Executor:
         tagstok.update_length()
         return assignation_list
 
-    def environ_configuration(self, variables, only_env=False):
+    def variables_config(self, variables, only_env=False):
         """
         Facility to set the variables list [(key, mode, value), (...)] according
         to his key=value. The mode specify if it is
@@ -377,7 +401,7 @@ class Executor:
             environ.update_var(key, value, mode, only_env)
             index += 1
 
-    def perfom_command_as_subast(self, branch, fds, pipe_lst):
+    def perform_command_as_subast(self, job_list):
         """
         If the command is composed of a SUBSH or a CURSH,
         create a layer for this kind of command and run them.
@@ -385,60 +409,55 @@ class Executor:
         prevent change during execution.
         """
         index = 0
-        nbr_subast = len(branch.subast)
+        nbr_subast = len(job_list[-1].subast)
         while index < nbr_subast:
-            subast = branch.subast[index]
+            subast = job_list[-1].subast[index]
             if subast.type in ["SUBSH", "CURSH"]:
-                saved_std_fd = self.save_std_fd()
-                wait = False if branch.tag_end == "PIPE" else True
-                if subast.type == "CURSH" and wait == True:
-                    if fds.stdin:
-                        replace_fd(fds.stdin, sys.stdin.fileno())
+                if subast.type == "CURSH" and job_list[-1].tag_end not in ["PIPE", "BACKGROUND_JOBS"]:
+                    saved_std_fd = self.save_std_fd()
+                    replace_std_fd(job_list[-1].stdin, branch.stdout)
                     self.run_ast(subast)
+                    job_list[-1].pid = None
+                    self.restore_std_fd(saved_std_fd)
                 else:
-                    pid = self.run_subshell(subast, fds, wait)
-                    if branch.tag_end == "PIPE":
-                        pipe_lst.append(pid)
-                self.restore_std_fd(saved_std_fd)
+                    pid = self.run_subshell(subast, job_list[-1].stdin, job_list[-1].stdout, \
+                        job_list[-1].pgid, job_list[-1].background)
+                    job_list[-1].pid = pid
                 return True
             index += 1
         return False
 
-    def child_execution(self, argv, fds, variables, background=False):
-        if argv[0] in ["jobs", "fg"]:
-            return self.run_builtin(argv, variables)
+    def fork_prepare(self, pgid=0, background=True):
+        """
+        Fork a new process, and prepare the process to be in foreground
+        or in background.
+        """
         pid = os.fork()
+        os.setpgid(pid, pgid)
+        if background == False:
+            os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
+        return pid
+
+    def child_execution(self, branch, argv, variables):
+        if argv[0] in ["jobs", "fg", "cd"]:
+            branch.status = self.run_builtin(argv, variables)
+            return None
+        pid = self.fork_prepare(branch.pgid, branch.background)
         if pid == 0:
-            os.setpgid(0, 0)
-            if background == False and os.isatty(sys.stdin.fileno()):
-                os.tcsetpgrp(0, os.getpgrp())
-            signal_setter = lambda signum:signal.signal(signum, signal.SIG_DFL)
-            reset_signal = [signal.SIGINT, signal.SIGQUIT, signal.SIGTSTP, signal.SIGTTIN, \
-                        signal.SIGTTOU, signal.SIGCHLD]
-            list(map(signal_setter, reset_signal))
-            if fds.stdin:
-                replace_fd(fds.stdin, sys.stdin.fileno())
-            if fds.stdout:
-                replace_fd(fds.stdout, sys.stdout.fileno())
-            self.environ_configuration(variables, only_env=True)
+            #restore all signals for the child
+            tmpsh_signal.reset_signals()
+            replace_std_fd(branch.stdin, branch.stdout)
+            self.variables_config(variables, only_env=True)
             executable = get_execname(argv[0])
             if executable == None:
                 print("Command not found : {}".format(argv[0]))
                 exit(127)
             os.execve(executable, argv, gv.ENVIRON)
         else:
-            os.setpgid(pid, 0)
-            if background == False and os.isatty(sys.stdin.fileno()):
-                os.tcsetpgrp(0, pid)
-            if fds.stdin:
-                os.close(fds.stdin)
-            if fds.stdout:
-                os.close(fds.stdout)
+            close_fds([branch.stdin, branch.stdout, -1])
             return pid
 
-
-
-    def exec_command(self, branch, fds, pipe_lst):
+    def exec_command(self, job_list):
         """
         Use to run a simple command, the branch element which is not
         a SUBSH or a CURSH.
@@ -446,32 +465,21 @@ class Executor:
         builtin, fork otherwise if it's needed.
         Manage command filedescriptors/pipes.
         """
-        variables = self.retrieve_assignation(branch)
-        cmd_args = self.extract_cmd(branch)
+        variables = self.retrieve_assignation(job_list[-1])
+        cmd_args = self.extract_cmd(job_list[-1])
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
-            os.close(fds.stdin) if fds.stdin else None
-            os.close(fds.stdout) if fds.stdout else None
-            if len(variables) == 1:
-                self.environ_configuration(variables)
+            close_fds([job_list[-1].stdin, job_list[-1].stdout, -1])
+            if len(variables) >= 1:
+                self.variables_config(variables)
+                job_list[-1].status = 0
             return
-        pid = self.child_execution(cmd_args, fds, variables, \
-                background=branch.tag_end == "BACKGROUND_JOBS")
-        if pid == None:
-            return
-        if branch.tag_end == "PIPE":
-            pipe_lst.append(pid)
-        elif branch.tag_end == "BACKGROUND_JOBS":
-            gv.LAST_STATUS = 0
-            gv.JOBS.add_job(pid, branch, pipe_lst)
-        else:
-            self.analyse_status(pid)
+        job_list[-1].pid = self.child_execution(job_list[-1], cmd_args, variables)
 
     def run_builtin(self, cmd_args, variables):
         cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
                 dict(os.environ))
-        gv.LAST_STATUS = exec(cmd)
-        return None
+        return exec(cmd)
 
     def join_stmt(self, branch):
         """If a STMT is following an other STMT, concat them in a single token."""

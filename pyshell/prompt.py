@@ -4,10 +4,12 @@ from cmd import Cmd
 from utils.tagstokens import TagsTokens
 from utils.ast import AST
 from utils.execute import Executor
-from utils.global_var import ENVIRON
+from utils.global_var import ENVIRON, TCSETTINGS
+import utils.tmpsh_signal as tmpsh_signal
 import os, sys
 import string
 import signal
+import termios
 
 class Prompt(Cmd):
     intro = "tmpsh - Total Mastering Professional Shell"
@@ -29,15 +31,17 @@ class Prompt(Cmd):
             print('Close all this command tokens: {}'.format(
                 str(TAGSTOKENS.token_error)))
             self.prompt = "error prompt > "
+    def do_EOF(self, line):
+        print("XEOF {}: {}".format(line, os.getpid()))
+        print("pgid {} pid {} tpgid {}".format(os.getpgid(0), os.getpid(), os.tcgetpgrp(0)))
+        content = sys.stdin.read()
+        print("get : |{}|".format(content))
+        exit(1)
 
-def init_shell():
-    signal.signal(signal.SIGTSTP, signal.SIG_IGN)
-    signal.signal(signal.SIGTTIN, signal.SIG_IGN)
-    signal.signal(signal.SIGTTOU, signal.SIG_IGN)
 
 def main(argc, argv, environ):
-    init_shell()
-    ENVIRON = environ.copy()
+    tmpsh_signal.init_signals()
+
     Prompt().cmdloop()
 
 

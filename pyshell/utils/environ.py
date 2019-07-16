@@ -39,12 +39,11 @@ def retrieve_variable(variable):
     Return from the string in form $VARIABLE
     the content of the variable.
     """
-    if len(variable) == 1:
-        return
-    search_value = variable[1:]
-    if search_value == "?":
+    if variable == "?":
         return str(gv.LAST_STATUS)
-    value = getenv(search_value)
+    elif variable == "$":
+        return str(os.getpid())
+    value = getenv(variable)
     if value == None:
-        value = getvar(search_value)
+        value = getvar(variable)
     return value if value != None else ""

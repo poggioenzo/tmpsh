@@ -1,5 +1,7 @@
 from utils.shellgrammar import ShellGrammar
-from utils.background_jobs import BackgroundJobs
+from utils.job_control import BackgroundJobs
+import termios
+import sys
 import os
 
 GRAMMAR = ShellGrammar()
@@ -10,8 +12,9 @@ ALIAS = {'all': 'ls -l', 'gall': 'all -G -1', 'ball': '$(gall)',
          'loop2': 'loop3',
          'loop3': 'loop1'}
 
-ENVIRON = os.environ
+ENVIRON = os.environ.copy()
 LOCAL_VAR = {}
 LAST_STATUS = 0
 
 JOBS = BackgroundJobs()
+TCSETTINGS = termios.tcgetattr(sys.stdin.fileno())
