@@ -108,18 +108,28 @@ class ACB():  # AbstractCommandBranch
         lentags = self.tagstokens.length - 1
         previous = 0
         tag = ''
+        source = None
         while lentags >= 0:
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
+                if lentags > 0 and \
+                        self.tagstokens.find_prev_token(lentags - 1).isdigit():
+                    source = self.tagstokens.find_prev_token(lentags - 1)
                 self.redirectionfd.append(
-                    RedirectionFD(self.tagstokens.copytt(previous), tag))
+                    RedirectionFD(self.tagstokens.copytt(previous),
+                                  tag, source))
                 del self.tagstokens[previous]
                 del self.tagstokens[lentags]
+                if source:
+                    del self.tagstokens[self.tagstokens.find_prev_ind_token(
+                        lentags - 1)]
+                    source = None
             elif tag != 'SPACES':
                 previous = lentags
             lentags -= 1
         self.tagstokens.strip()
         self.tagstokens.update_length()
+        print(self.tagstokens)
         self.redirectionfd = list(reversed(self.redirectionfd))
 
     def __str__(self):
