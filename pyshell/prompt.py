@@ -4,12 +4,13 @@ from cmd import Cmd
 from utils.tagstokens import TagsTokens
 from utils.ast import AST
 from utils.execute import Executor
-from utils.global_var import ENVIRON, TCSETTINGS
+import utils.global_var as gv
 import utils.tmpsh_signal as tmpsh_signal
 import os, sys
 import string
 import signal
 import termios
+import ctypes
 
 class Prompt(Cmd):
     intro = "tmpsh - Total Mastering Professional Shell"
@@ -31,18 +32,28 @@ class Prompt(Cmd):
             print('Close all this command tokens: {}'.format(
                 str(TAGSTOKENS.token_error)))
             self.prompt = "error prompt > "
+
     def do_EOF(self, line):
-        print("XEOF {}: {}".format(line, os.getpid()))
-        print("pgid {} pid {} tpgid {}".format(os.getpgid(0), os.getpid(), os.tcgetpgrp(0)))
-        content = sys.stdin.read()
-        print("get : |{}|".format(content))
         exit(1)
 
+def load_extension():
+    file_list = ["utils/sigmask_modif.c"]
+    file_str = " ".join(file_list)
+    library = "utils/sigmask.so"
+    os.system("gcc -shared {} -o {}".format(file_str, library))
+    return ctypes.cdll.LoadLibrary(library)
 
 def main(argc, argv, environ):
+    gv.CEXTENSION = load_extension()
     tmpsh_signal.init_signals()
-
-    Prompt().cmdloop()
+    prompt = Prompt()
+    while True:
+        try:
+            prompt.cmdloop()
+        except KeyboardInterrupt:
+            print("")
+            prompt.intro = ""
+            pass
 
 
 

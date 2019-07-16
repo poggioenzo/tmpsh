@@ -45,13 +45,18 @@ def analyse_job_status(job_list, mode=os.WUNTRACED):
 class BackgroundJobs:
     def __init__(self):
         self.list_jobs = []
+        self.allow_background = True
 
     def add_job(self, new_job):
         """Add a new process in the background process group"""
         self.list_jobs.append(new_job.copy())
+        print("[{}] {}".format(len(self.list_jobs), new_job[-1].pid))
         self.fix_pgid(self.list_jobs[-1])
 
     def fix_pgid(self, job):
+        """
+        Set up the pgid attribute in each branch on the job.
+        """
         index = 0
         nbr_job = len(job)
         pgid_ref = 0
@@ -87,6 +92,10 @@ class BackgroundJobs:
         return self.list_jobs[index].pid
 
     def is_running(self, index):
+        """
+        Check if any process in the job is still running or if it's 
+        already finish.
+        """
         job = self.list_jobs[index]
         return analyse_job_status(job, mode=os.WNOHANG)
 
@@ -112,6 +121,7 @@ class BackgroundJobs:
         os.kill(-foreground_pgid, signal.SIGCONT)
         if analyse_job_status(job) == WaitState.FINISH:
             self.remove(index)
+            print("[{}] + {} continued", index, job[-1].pid)
         else:
             print("[{}] + Suspended.".format(index))
         termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, tcsettings)

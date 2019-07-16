@@ -90,8 +90,6 @@ def push_shell_foreground():
         os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
         termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, gv.TCSETTINGS)
 
-
-
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
@@ -132,7 +130,7 @@ class Executor:
                     gv.JOBS.add_job(job_list)
                 if branch.background == False:
                     os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
-                    termios.tcsetattr(0, termios.TCSANOW, gv.TCSETTINGS) #termios.TCSADRAIN
+                    termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
                 gv.LAST_STATUS = branch.status
             if branch.tag_end != "PIPE":
                 job_list.clear()
@@ -241,7 +239,9 @@ class Executor:
         #NEED TO WAIT ALL KIND OF SUBSHELL
         pid = self.fork_prepare(pgid, background)
         if pid == 0:
+            tmpsh_signal.reset_signals()
             gv.JOBS.clear()
+            gv.JOBS.allow_background = False
             replace_std_fd(stdin, stdout)
             self.run_ast(ast)
             exit(gv.LAST_STATUS)
@@ -266,7 +266,9 @@ class Executor:
                 elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
                     subst_pipe[1] = pipe_fd[1]
                 #NEED TO WAIT SUBSHELL
-                subast.pid = self.run_subshell(subast, *subst_pipe)
+                gv.CEXTENSION.change_sigmask(signal.SIGTSTP, signal.SIG_BLOCK)
+                subast.pid = self.run_subshell(subast, *subst_pipe, pgid=os.getpgrp())
+                gv.CEXTENSION.change_sigmask(signal.SIGTSTP, signal.SIG_UNBLOCK)
                 subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
             elif subast.type == "DQUOTES":
                 self.prepare_cmd_subst(subast.list_branch[0])
@@ -354,7 +356,6 @@ class Executor:
             index += 1
         self.replace_ast_tag(branch)
 
-
     ##################################################################
     ##      Command runner with execve or from ast + utils          ##
     ##################################################################
@@ -433,9 +434,10 @@ class Executor:
         or in background.
         """
         pid = os.fork()
-        os.setpgid(pid, pgid)
-        if background == False:
-            os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
+        if gv.JOBS.allow_background == True:
+            os.setpgid(pid, pgid)
+            if background == False:
+                os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
         return pid
 
     def child_execution(self, branch, argv, variables):

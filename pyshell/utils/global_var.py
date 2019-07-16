@@ -18,3 +18,4 @@ LAST_STATUS = 0
 
 JOBS = BackgroundJobs()
 TCSETTINGS = termios.tcgetattr(sys.stdin.fileno())
+CEXTENSION = None
