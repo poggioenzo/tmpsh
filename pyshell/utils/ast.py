@@ -205,6 +205,13 @@ class RedirectionFD():
         self.tagstokens = tagstokens
         self.type = redirection_type
         self.source = source if source else 1
+        self.redirect_devnull()
+
+    def redirect_devnull(self):
+        if self.type in ('READ_FROM_FD', 'TRUNC_TO_FD') and \
+                self.tagstokens.length == 1 and \
+                self.tagstokens.tokens[0] == '-':
+            self.tagstokens.tokens[0] = '/dev/null'
 
     def __str__(self):
         return '{}: {} source:{}'.format(self.type,
