@@ -2,7 +2,16 @@
 
 STMT:
 	QUOTES
+	SPECIAL_VARIABLE
+
+SPECIAL_VARIABLE:
 	$$
+	$#
+	$*
+	$@
+	$?
+	$!
+
 
 CMD:
 	TERMINATOR
