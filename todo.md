@@ -9,3 +9,4 @@ wishlist:
 		
 Lexing:  
 - $$ fait 2 statement.
+- `echo 2>&1-- content` le STMT du fd est `1--` 
