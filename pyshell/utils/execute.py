@@ -120,8 +120,8 @@ class Executor:
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
                 ast.list_branch[index + 1].stdin, branch.stdout = setup_pipe_fd()
-            if self.perform_command_as_subast(job_list) == False:
-                self.exec_command(job_list)
+            if self.perform_command_as_subast(branch) == False:
+                self.exec_command(branch)
             if branch.tag_end == "BACKGROUND_JOBS":
                 gv.LAST_STATUS = 0
                 gv.JOBS.add_job(job_list)
@@ -402,7 +402,7 @@ class Executor:
             environ.update_var(key, value, mode, only_env)
             index += 1
 
-    def perform_command_as_subast(self, job_list):
+    def perform_command_as_subast(self, branch):
         """
         If the command is composed of a SUBSH or a CURSH,
         create a layer for this kind of command and run them.
@@ -410,20 +410,20 @@ class Executor:
         prevent change during execution.
         """
         index = 0
-        nbr_subast = len(job_list[-1].subast)
+        nbr_subast = len(branch.subast)
         while index < nbr_subast:
-            subast = job_list[-1].subast[index]
+            subast = branch.subast[index]
             if subast.type in ["SUBSH", "CURSH"]:
-                if subast.type == "CURSH" and job_list[-1].tag_end not in ["PIPE", "BACKGROUND_JOBS"]:
+                if subast.type == "CURSH" and branch.tag_end not in ["PIPE", "BACKGROUND_JOBS"]:
                     saved_std_fd = self.save_std_fd()
-                    replace_std_fd(job_list[-1].stdin, branch.stdout)
+                    replace_std_fd(branch.stdin, branch.stdout)
                     self.run_ast(subast)
-                    job_list[-1].pid = None
+                    branch.pid = None
                     self.restore_std_fd(saved_std_fd)
                 else:
-                    pid = self.run_subshell(subast, job_list[-1].stdin, job_list[-1].stdout, \
-                        job_list[-1].pgid, job_list[-1].background)
-                    job_list[-1].pid = pid
+                    pid = self.run_subshell(subast, branch.stdin, branch.stdout, \
+                        branch.pgid, branch.background)
+                    branch.pid = pid
                 return True
             index += 1
         return False
@@ -440,6 +440,46 @@ class Executor:
                 os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
         return pid
 
+    
+    def open_redirection_file(self, redirection):
+        fd = None
+        if redirection.type in ["TRUNC", "APPEND", "READ_FROM"]:
+            mode = 0
+            if os.path.exists(redirection.dest) == False:
+                mode |= os.O_CREAT
+            if redirection.type == "TRUNC":
+                mode |= os.O_WRONLY
+            elif redirection.type == "APPEND":
+                mode |= os.O_WRONLY | os.O_APPEND
+            elif redirection.type == "READ_FROM":
+                mode |= os.O_RDONLY
+            try:
+                fd = os.open(redirection.dest, mode)
+                redirection.dest = fd
+            except PermissionError:
+                print("tmpsh: permission denied: {}".format(redirection.dest), file=sys.stderr)
+                redirection.error = True
+        else:
+            redirection.dest = int(redirection.dest) if redirection.dest.isdigit() else None
+
+
+
+
+    def setup_redirection(self, branch):
+        fd_list = branch.redirectionfd
+        index = 0
+        nbr_redirection = len(fd_list)
+        while index < nbr_redirection:
+            redirection = fd_list[index]
+            self.open_redirection_file(redirection)
+            if redirection.error == False:
+                if redirection.dest is not None:
+                    os.dup2(redirection.dest, redirection.source)
+                if redirection.close:
+                    os.close(redirection.source)
+            index += 1
+        pass
+
     def child_execution(self, branch, argv, variables):
         if argv[0] in ["jobs", "fg", "cd"]:
             branch.status = self.run_builtin(argv, variables)
@@ -449,6 +489,7 @@ class Executor:
             #restore all signals for the child
             tmpsh_signal.reset_signals()
             replace_std_fd(branch.stdin, branch.stdout)
+            self.setup_redirection(branch)
             self.variables_config(variables, only_env=True)
             executable = get_execname(argv[0])
             if executable == None:
@@ -459,7 +500,7 @@ class Executor:
             close_fds([branch.stdin, branch.stdout, -1])
             return pid
 
-    def exec_command(self, job_list):
+    def exec_command(self, branch):
         """
         Use to run a simple command, the branch element which is not
         a SUBSH or a CURSH.
@@ -467,16 +508,16 @@ class Executor:
         builtin, fork otherwise if it's needed.
         Manage command filedescriptors/pipes.
         """
-        variables = self.retrieve_assignation(job_list[-1])
-        cmd_args = self.extract_cmd(job_list[-1])
+        variables = self.retrieve_assignation(branch)
+        cmd_args = self.extract_cmd(branch)
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
-            close_fds([job_list[-1].stdin, job_list[-1].stdout, -1])
+            close_fds([branch.stdin, branch.stdout, -1])
             if len(variables) >= 1:
                 self.variables_config(variables)
-                job_list[-1].status = 0
+                branch.status = 0
             return
-        job_list[-1].pid = self.child_execution(job_list[-1], cmd_args, variables)
+        branch.pid = self.child_execution(branch, cmd_args, variables)
 
     def run_builtin(self, cmd_args, variables):
         cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
