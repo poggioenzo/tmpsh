@@ -79,6 +79,7 @@ class ACB():  # AbstractCommandBranch
         self.stdin = None
         self.stdout = None
         self.background = False
+        self.status = None
         self.pid = None
         self.pgid = 0
         self.complete = False

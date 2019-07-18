@@ -15,7 +15,10 @@ import time
 import signal
 import termios
 
-#DEBUG = open("/dev/pts/7", "w")
+#To do:
+# - Add SGICHLD handler with sigaction for process substitution (CMDSUBST[23])
+
+DEBUG = open("/dev/ttys003", "w")
 def dprint(string, *args, **kwargs):
     print(string, *args, file=DEBUG, **kwargs)
 
@@ -53,6 +56,7 @@ def setup_pipe_fd():
     os.set_inheritable(pipe_fd[1], True)
     os.close(old_pipe[0])
     os.close(old_pipe[1])
+    dprint("{} - OPEN : {}".format(os.getpid(), pipe_fd))
     return pipe_fd
 
 def replace_fd(expected_fd, old_fd):
@@ -76,6 +80,7 @@ def close_fds(fd_list):
     """
     Close all fds in the given list. The list must end with -1.
     """
+    dprint("{} - Gonna close {}".format(os.getpid(), fd_list))
     index = 0
     while fd_list[index] != -1:
         if fd_list[index] is not None:
@@ -122,6 +127,7 @@ class Executor:
                 ast.list_branch[index + 1].stdin, branch.stdout = setup_pipe_fd()
             if self.perform_command_as_subast(branch) == False:
                 self.exec_command(branch)
+            self.close_subast_pipe(branch)
             if branch.tag_end == "BACKGROUND_JOBS":
                 gv.LAST_STATUS = 0
                 gv.JOBS.add_job(job_list)
@@ -131,7 +137,8 @@ class Executor:
                 if branch.background == False:
                     os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
                     termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
-                gv.LAST_STATUS = branch.status
+                if branch.status is not None:
+                    gv.LAST_STATUS = branch.status
             if branch.tag_end != "PIPE":
                 job_list.clear()
             index += 1
@@ -140,6 +147,20 @@ class Executor:
     ##################################################################
     ##                  Utils for self.run_ast                      ##
     ##################################################################
+
+    def close_subast_pipe(self, branch):
+        index = 0
+        nbr_subast = len(branch.subast)
+        while index < nbr_subast:
+            subast = branch.subast[index]
+            if subast.type.startswith("CMDSUBST"):
+                dprint("Close {}".format(subast.link_fd))
+                os.close(subast.link_fd)
+            elif subast.type == "DQUOTES":
+                self.close_subast_pipe(subast.list_branch[0])
+            index += 1
+
+
 
     def check_background(self, list_branch, index):
         """
@@ -230,7 +251,7 @@ class Executor:
     ##          Functions to run a branch's subast list             ##
     ##################################################################
 
-    def run_subshell(self, ast, stdin, stdout, pgid=0, background=False):
+    def run_subshell(self, ast, stdin, stdout, pgid=0, background=False, to_close=None):
         """
         From a given ast, run the command in a subshell.
         Redirect stdin and/or stdout if given.
@@ -243,6 +264,8 @@ class Executor:
             gv.JOBS.clear()
             gv.JOBS.allow_background = False
             replace_std_fd(stdin, stdout)
+            if to_close is not None:
+                os.close(to_close)
             self.run_ast(ast)
             exit(gv.LAST_STATUS)
         else:
@@ -263,11 +286,13 @@ class Executor:
                 subst_pipe = [None, None]
                 if subast.type == "CMDSUBST2":
                     subst_pipe[0] = pipe_fd[0]
+                    to_close = pipe_fd[1]
                 elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
                     subst_pipe[1] = pipe_fd[1]
-                #NEED TO WAIT SUBSHELL
+                    to_close = pipe_fd[0]
                 gv.CEXTENSION.change_sigmask(signal.SIGTSTP, signal.SIG_BLOCK)
-                subast.pid = self.run_subshell(subast, *subst_pipe, pgid=os.getpgrp())
+                subast.pid = self.run_subshell(subast, *subst_pipe, pgid=os.getpgrp(), to_close=to_close)
+                dprint("pipe substitution : ", subst_pipe)
                 gv.CEXTENSION.change_sigmask(signal.SIGTSTP, signal.SIG_UNBLOCK)
                 subast.link_fd = pipe_fd[1] if subast.type == "CMDSUBST2" else pipe_fd[0]
             elif subast.type == "DQUOTES":
@@ -406,8 +431,8 @@ class Executor:
         """
         If the command is composed of a SUBSH or a CURSH,
         create a layer for this kind of command and run them.
-        Save and restore the initial stdin/stdout/stderr to
-        prevent change during execution.
+        If it's not run in a subshell, save and restore the initial 
+        stdin/stdout/stderr to prevent change during execution.
         """
         index = 0
         nbr_subast = len(branch.subast)
@@ -444,26 +469,23 @@ class Executor:
     def open_redirection_file(self, redirection):
         fd = None
         if redirection.type in ["TRUNC", "APPEND", "READ_FROM"]:
-            mode = 0
+            flags = 0
             if os.path.exists(redirection.dest) == False:
-                mode |= os.O_CREAT
+                flags |= os.O_CREAT
             if redirection.type == "TRUNC":
-                mode |= os.O_WRONLY
+                flags |= os.O_WRONLY
             elif redirection.type == "APPEND":
-                mode |= os.O_WRONLY | os.O_APPEND
+                flags |= os.O_WRONLY | os.O_APPEND
             elif redirection.type == "READ_FROM":
-                mode |= os.O_RDONLY
+                flags |= os.O_RDONLY
             try:
-                fd = os.open(redirection.dest, mode)
+                fd = os.open(redirection.dest, flags, 0o666)
                 redirection.dest = fd
             except PermissionError:
                 print("tmpsh: permission denied: {}".format(redirection.dest), file=sys.stderr)
                 redirection.error = True
         else:
             redirection.dest = int(redirection.dest) if redirection.dest.isdigit() else None
-
-
-
 
     def setup_redirection(self, branch):
         fd_list = branch.redirectionfd
@@ -481,7 +503,7 @@ class Executor:
         pass
 
     def child_execution(self, branch, argv, variables):
-        if argv[0] in ["jobs", "fg", "cd"]:
+        if argv[0] in ["jobs", "fg", "cd", "umask"]:
             branch.status = self.run_builtin(argv, variables)
             return None
         pid = self.fork_prepare(branch.pgid, branch.background)

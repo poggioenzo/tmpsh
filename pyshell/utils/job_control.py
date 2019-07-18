@@ -26,7 +26,11 @@ def analyse_job_status(job_list, mode=os.WUNTRACED):
         if job.complete or job.pid is None:
             index -= 1
             continue
+        debug = open("/dev/ttys003", "w")
+        print("start", file=debug)
         pid, return_status = os.waitpid(job.pid, mode)
+        print("end", file=debug)
+        debug.close()
         #Leave the loop if no pid is get, os.WNOHANG activate
         if pid == 0:
             return WaitState.RUNNING
