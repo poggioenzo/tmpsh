@@ -19,3 +19,7 @@ LAST_STATUS = 0
 JOBS = BackgroundJobs()
 TCSETTINGS = termios.tcgetattr(sys.stdin.fileno())
 CEXTENSION = None
+
+DEBUG = open("/dev/ttys003", "w")
+def dprint(string, *args, **kwargs):
+    print(string, *args, file=DEBUG, **kwargs, flush=True)

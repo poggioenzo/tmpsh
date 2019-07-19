@@ -124,7 +124,7 @@ class ACB():  # AbstractCommandBranch
                 i = self.tagstokens.skip_openning_tags(i) - 1
                 self.subast.append(AST(self.tagstokens.copytt(begin, i)))
                 self.tagstokens[begin - 1:i + 1] = [
-                    ['SUBAST'], ['subast {}'.format(len(self.subast) - 1)]]
+                    ['SUBAST'], ['{}'.format(len(self.subast) - 1)]]
                 i = begin
             i += 1
 
