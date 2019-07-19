@@ -18,7 +18,7 @@ import termios
 from utils.global_var import dprint
 
 #To do:
-# - Add SGICHLD handler with sigaction for process substitution (CMDSUBST[23])
+# - Upgrade analyse_status
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
@@ -127,19 +127,7 @@ class Executor:
             if self.perform_command_as_subast(branch) == False:
                 self.exec_command(branch)
             self.close_subast_pipe(branch)
-            if branch.tag_end == "BACKGROUND_JOBS":
-                gv.LAST_STATUS = 0
-                gv.JOBS.add_job(job_list)
-            elif branch.tag_end != "PIPE":
-                if control.analyse_job_status(job_list) == control.WaitState.RUNNING:
-                    gv.JOBS.add_job(job_list)
-                if branch.background == False:
-                    os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
-                    termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
-                if branch.status is not None:
-                    gv.LAST_STATUS = branch.status
-            if branch.tag_end != "PIPE":
-                job_list.clear()
+            self.analyse_branch_result(branch, job_list)
             index += 1
         gv.JOBS.wait_zombie()
     
@@ -161,7 +149,7 @@ class Executor:
         elif branch.tag_end != "PIPE":
             if control.analyse_job_status(job_list) == control.WaitState.RUNNING:
                 gv.JOBS.add_job(job_list)
-            if branch.background == False:
+            if branch.background == False and gv.JOBS.allow_background == True:
                 os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
                 termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
             if branch.status is not None:
