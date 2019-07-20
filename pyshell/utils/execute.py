@@ -29,15 +29,24 @@ def timer(function):
         return res
     return time_wrapper
 
+def check_rights(cmd):
+    if os.access(cmd, os.F_OK) == False:
+        print(f"tmpsh: No such file or directory : {cmd}", file=sys.stderr)
+        return None
+    if os.access(cmd, os.X_OK) == False:
+        print(f"zsh: permission denied: {cmd}", file=sys.stderr)
+        return None
+    return cmd
+
 def get_execname(cmd):
     cmd = cmd.strip() # ! Get space in STMT with PIPE
     if "/" in cmd:
-        return cmd
+        return check_rights(cmd)
     exec_folders = os.environ["PATH"]
     for folder in exec_folders.split(":"):
         execname = os.path.join(folder, cmd)
         if os.path.isfile(execname):
-            return execname
+            return check_rights(execname)
     return None
 
 def setup_pipe_fd():
@@ -258,6 +267,10 @@ class Executor:
 
     def run_cmdsubst(self, subast):
         """
+        Fork and prepare a subshell for CMDSUBT replacement.
+        Prepare the right subshell configuration, blocking job control.
+        Replace stdin/stdout apropriately.
+        Link to the subast his pid and filedescriptor.
         """
         pipe_fd = setup_pipe_fd()
         pid = self.fork_prepare(os.getpgrp(), background=False)
@@ -265,6 +278,7 @@ class Executor:
             #Remove parent background jobs
             gv.JOBS.clear()
             gv.JOBS.allow_background = False
+            gv.CEXTENSION.change_sigmask(signal.SIGTSTP, signal.SIG_BLOCK)
             #Select fd to use as stdin/stdout depending of the subst type
             stdin = stdout = None
             if subast.type == "CMDSUBST2":
@@ -374,7 +388,7 @@ class Executor:
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
             elif subast.type == "CMDSUBST1":
                 content = file.read_fd(subast.link_fd)
-                os.waitpid(subast.pid, 0)
+                os.waitpid(subast.pid, os.WUNTRACED)
                 if len(content) > 0 and content[-1] == '\n': #SHOULD NOT BE DONE, need one more tokenisation
                     content = content[:-1]
             elif subast.type in ["CMDSUBST2", "CMDSUBST3"]:
@@ -544,7 +558,6 @@ class Executor:
             self.variables_config(variables, only_env=True)
             executable = get_execname(argv[0])
             if executable == None:
-                print("Command not found : {}".format(argv[0]))
                 exit(127)
             os.execve(executable, argv, gv.ENVIRON)
         else:
