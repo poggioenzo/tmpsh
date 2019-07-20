@@ -1,5 +1,5 @@
 from utils.shellgrammar import ShellGrammar
-from utils.job_control import BackgroundJobs
+from utils.execution.job_control import BackgroundJobs
 import termios
 import sys
 import os

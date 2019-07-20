@@ -15,6 +15,7 @@ class AST():  # AbstractSyntaxTree
         self.link_fd = None
         self.pid = None
         self.command = None
+        self.complete = False
 
     @property
     def type(self):

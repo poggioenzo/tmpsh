@@ -2,12 +2,13 @@
 
 from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
-import utils.environ as environ
+import utils.execution.environ as environ
 import utils.builtins as builtins
-import utils.job_control as control
-import utils.tmpsh_signal as tmpsh_signal
-import utils.file as file
-import utils.tmpsh_signal
+import utils.execution.job_control as control
+import utils.execution.tmpsh_signal as tmpsh_signal
+import utils.execution.fd_management as fd
+import utils.execution.redirection as redirection
+import utils.execution.file as file
 import fcntl
 import sys
 import os
@@ -28,71 +29,6 @@ def timer(function):
         dprint("total time for {} = {}".format(function.__name__, end - start))
         return res
     return time_wrapper
-
-def check_rights(cmd):
-    if os.access(cmd, os.F_OK) == False:
-        print(f"tmpsh: No such file or directory : {cmd}", file=sys.stderr)
-        return None
-    if os.access(cmd, os.X_OK) == False:
-        print(f"zsh: permission denied: {cmd}", file=sys.stderr)
-        return None
-    return cmd
-
-def get_execname(cmd):
-    cmd = cmd.strip() # ! Get space in STMT with PIPE
-    if "/" in cmd:
-        return check_rights(cmd)
-    exec_folders = os.environ["PATH"]
-    for folder in exec_folders.split(":"):
-        execname = os.path.join(folder, cmd)
-        if os.path.isfile(execname):
-            return check_rights(execname)
-    return None
-
-def setup_pipe_fd():
-    """
-    Create pipe fds, and configure them to be inheritable
-    and start only from RANGE_START.
-    """
-    RANGE_START = 63
-    #Change fd value to get fd in range of [63:infinite[
-    pipe_fd = list(os.pipe())
-    old_pipe = pipe_fd.copy()
-    pipe_fd[0] = fcntl.fcntl(pipe_fd[0], fcntl.F_DUPFD, RANGE_START)
-    pipe_fd[1] = fcntl.fcntl(pipe_fd[1], fcntl.F_DUPFD, RANGE_START)
-    os.set_inheritable(pipe_fd[0], True)
-    os.set_inheritable(pipe_fd[1], True)
-    os.close(old_pipe[0])
-    os.close(old_pipe[1])
-    return pipe_fd
-
-def replace_fd(expected_fd, old_fd):
-    """
-    Replace an fd by the expected fd.
-    Close the extra fd.
-    """
-    os.dup2(expected_fd, old_fd)
-    os.close(expected_fd)
-
-def replace_std_fd(stdin=None, stdout=None):
-    """
-    Replace two given fd to be current stdout and/or stderr.
-    """
-    if stdin:
-        replace_fd(stdin, sys.stdin.fileno())
-    if stdout:
-        replace_fd(stdout, sys.stdout.fileno())
-
-def close_fds(fd_list):
-    """
-    Close all fds in the given list. The list must end with -1.
-    """
-    index = 0
-    while fd_list[index] != -1:
-        if fd_list[index] is not None:
-            os.close(fd_list[index])
-        index += 1
-        
 
 def push_shell_foreground():
     """
@@ -132,7 +68,7 @@ class Executor:
             res = self.check_background(ast.list_branch, index)
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
-                ast.list_branch[index + 1].stdin, branch.stdout = setup_pipe_fd()
+                ast.list_branch[index + 1].stdin, branch.stdout = fd.setup_pipe_fd()
             if self.perform_command_as_subast(branch) == False:
                 self.exec_command(branch)
             self.close_subast_pipe(branch)
@@ -272,7 +208,7 @@ class Executor:
         Replace stdin/stdout apropriately.
         Link to the subast his pid and filedescriptor.
         """
-        pipe_fd = setup_pipe_fd()
+        pipe_fd = fd.setup_pipe_fd()
         pid = self.fork_prepare(os.getpgrp(), background=False)
         if pid == 0:
             #Remove parent background jobs
@@ -285,7 +221,7 @@ class Executor:
                 stdin = pipe_fd.pop(0)
             elif subast.type in ["CMDSUBST1", "CMDSUBST3"]:
                 stdout = pipe_fd.pop(1)
-            replace_std_fd(stdin, stdout)
+            fd.replace_std_fd(stdin, stdout)
             os.close(pipe_fd[0])
             self.run_ast(subast)
             exit(gv.LAST_STATUS)
@@ -309,28 +245,6 @@ class Executor:
             elif subast.type == "DQUOTES":
                 self.prepare_cmd_subst(subast.list_branch[0])
             index += 1
-
-    def save_std_fd(self):
-        """
-        Save actual stdin/stdout/stderr by duplicating their fd, 
-        to be able to retore them further.
-        """
-        #Save standard fds stdin/stdout/stderr
-        #CLOEXEC is set to avoid children to get those fds
-        saved_stdin = fcntl.fcntl(0, fcntl.F_DUPFD_CLOEXEC, 100)
-        saved_stdout = fcntl.fcntl(1, fcntl.F_DUPFD_CLOEXEC, 100)
-        saved_stderr = fcntl.fcntl(2, fcntl.F_DUPFD_CLOEXEC, 100)
-        return [saved_stdin, saved_stdout, saved_stderr]
-
-    def restore_std_fd(self, std_fds):
-        """
-        From saved stdin/stdout/stderr of self.saved_std_fd, restore the
-        each fds.
-        """
-        replace_fd(std_fds[0], sys.stdin.fileno())
-        replace_fd(std_fds[1], sys.stdout.fileno())
-        replace_fd(std_fds[2], sys.stderr.fileno())
-
 
     def replace_subast(self, branch, change_index, content):
         """
@@ -460,15 +374,15 @@ class Executor:
         #NEED TO WAIT ALL KIND OF SUBSHELL
         pid = self.fork_prepare(branch.pgid, branch.background)
         if pid == 0:
-            self.setup_redirection(branch)
+            redirection.setup_redirection(branch)
             tmpsh_signal.reset_signals()
             gv.JOBS.clear()
             gv.JOBS.allow_background = False
-            replace_std_fd(branch.stdin, branch.stdout)
+            fd.replace_std_fd(branch.stdin, branch.stdout)
             self.run_ast(subast)
             exit(gv.LAST_STATUS)
         else:
-            close_fds([branch.stdin, branch.stdout, -1])
+            fd.close_fds([branch.stdin, branch.stdout, -1])
             return pid
 
     def perform_command_as_subast(self, branch):
@@ -484,11 +398,11 @@ class Executor:
             subast = branch.subast[index]
             if subast.type in ["SUBSH", "CURSH"]:
                 if subast.type == "CURSH" and branch.tag_end not in ["PIPE", "BACKGROUND_JOBS"]:
-                    saved_std_fd = self.save_std_fd()
-                    replace_std_fd(branch.stdin, branch.stdout)
+                    saved_std_fd = fd.save_std_fd()
+                    fd.replace_std_fd(branch.stdin, branch.stdout)
                     self.run_ast(subast)
                     branch.pid = None
-                    self.restore_std_fd(saved_std_fd)
+                    fd.restore_std_fd(saved_std_fd)
                 else:
                     pid = self.run_subshell(branch, subast)
                     branch.pid = pid
@@ -509,41 +423,6 @@ class Executor:
         return pid
 
     
-    def open_redirection_file(self, redirection):
-        fd = None
-        if redirection.type in ["TRUNC", "APPEND", "READ_FROM"]:
-            flags = 0
-            if os.path.exists(redirection.dest) == False:
-                flags |= os.O_CREAT
-            if redirection.type == "TRUNC":
-                flags |= os.O_WRONLY
-            elif redirection.type == "APPEND":
-                flags |= os.O_WRONLY | os.O_APPEND
-            elif redirection.type == "READ_FROM":
-                flags |= os.O_RDONLY
-            try:
-                fd = os.open(redirection.dest, flags, 0o666)
-                redirection.dest = fd
-            except PermissionError:
-                print("tmpsh: permission denied: {}".format(redirection.dest), file=sys.stderr)
-                redirection.error = True
-        else:
-            redirection.dest = int(redirection.dest) if redirection.dest.isdigit() else None
-
-    def setup_redirection(self, branch):
-        fd_list = branch.redirectionfd
-        index = 0
-        nbr_redirection = len(fd_list)
-        while index < nbr_redirection:
-            redirection = fd_list[index]
-            self.open_redirection_file(redirection)
-            if redirection.error == False:
-                if redirection.dest is not None:
-                    os.dup2(redirection.dest, redirection.source)
-                if redirection.close:
-                    os.close(redirection.source)
-            index += 1
-        pass
 
     def child_execution(self, branch, argv, variables):
         if argv[0] in ["jobs", "fg", "cd", "umask"]:
@@ -553,15 +432,15 @@ class Executor:
         if pid == 0:
             #restore all signals for the child
             tmpsh_signal.reset_signals()
-            replace_std_fd(branch.stdin, branch.stdout)
-            self.setup_redirection(branch)
+            fd.replace_std_fd(branch.stdin, branch.stdout)
+            redirection.setup_redirection(branch)
             self.variables_config(variables, only_env=True)
-            executable = get_execname(argv[0])
+            executable = file.get_execname(argv[0])
             if executable == None:
                 exit(127)
             os.execve(executable, argv, gv.ENVIRON)
         else:
-            close_fds([branch.stdin, branch.stdout, -1])
+            fd.close_fds([branch.stdin, branch.stdout, -1])
             return pid
 
     def exec_command(self, branch):
@@ -576,7 +455,7 @@ class Executor:
         cmd_args = self.extract_cmd(branch)
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
-            close_fds([branch.stdin, branch.stdout, -1])
+            fd.close_fds([branch.stdin, branch.stdout, -1])
             if len(variables) >= 1:
                 self.variables_config(variables)
                 branch.status = 0

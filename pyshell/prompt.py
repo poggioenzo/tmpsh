@@ -5,7 +5,7 @@ from utils.tagstokens import TagsTokens
 from utils.ast import AST
 from utils.execute import Executor
 import utils.global_var as gv
-import utils.tmpsh_signal as tmpsh_signal
+import utils.execution.tmpsh_signal as tmpsh_signal
 import os, sys
 import string
 import signal
@@ -37,9 +37,9 @@ class Prompt(Cmd):
         exit(1)
 
 def load_extension():
-    file_list = ["utils/sigmask_modif.c"]
+    file_list = ["utils/execution/sigmask_modif.c"]
     file_str = " ".join(file_list)
-    library = "utils/sigmask.so"
+    library = "utils/execution/sigmask.so"
     os.system("gcc -shared {} -o {}".format(file_str, library))
     return ctypes.cdll.LoadLibrary(library)
 
@@ -54,8 +54,6 @@ def main(argc, argv, environ):
             print("")
             prompt.intro = ""
             pass
-
-
 
 if __name__ == "__main__":
     main(len(sys.argv), sys.argv, os.environ)
