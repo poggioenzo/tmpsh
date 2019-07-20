@@ -14,7 +14,8 @@ class Grammar(object):
         self.get_reverse_grammar()  # self.reverse
 
     def get_grammar_from_path(self):
-        text = fl.get_text(self.path)
+        with open(self.path, 'r') as file:
+            text = file.read()
         lines = text.split('\n')
         length = len(lines)
         i = 0
