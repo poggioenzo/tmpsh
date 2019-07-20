@@ -21,6 +21,9 @@ from utils.global_var import dprint
 
 #To do:
 # - Check where I'm loosing time with multiple CMDSUBST
+# - Manage better background/pgid setting, unable to run command like
+#  "echo ok | cat | echo lol | cat | echo nop | cat" because of self.check_pgid.
+
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
