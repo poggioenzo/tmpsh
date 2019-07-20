@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
 import utils.execution.variables as variables_mod
 import utils.execution.job_control as control
@@ -10,7 +9,6 @@ import utils.execution.redirection as redirection
 import utils.execution.file as file
 import utils.execution.forker as forker
 from utils.execution.exec_command import exec_command
-import fcntl
 import sys
 import os
 import time
@@ -21,9 +19,6 @@ from utils.global_var import dprint
 
 #To do:
 # - Check where I'm loosing time with multiple CMDSUBST
-# - Manage better background/pgid setting, unable to sometime run command like
-#  "echo ok | cat | echo lol | cat | echo nop | cat" because of self.check_pgid.
-
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
@@ -94,12 +89,18 @@ class Executor:
             if branch.background == False and gv.JOBS.allow_background == True:
                 os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
                 termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
+            #In which case status can be None ???
             if branch.status is not None:
                 gv.LAST_STATUS = branch.status
         if branch.tag_end != "PIPE":
             job_list.clear()
 
     def try_set_job_pgid(self, job_list):
+        """
+        From a given list, try to set up his pgid for each
+        job whenever a pid is available.
+        Avoid to search pgid if already set.
+        """
         if job_list[0].pgid != 0:
             return
         index = 0
