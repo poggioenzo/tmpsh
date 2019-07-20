@@ -67,7 +67,7 @@ def restore_std_fd(std_fds):
     From saved stdin/stdout/stderr of self.saved_std_fd, restore the
     each fds.
     """
-    fd.replace_fd(std_fds[0], sys.stdin.fileno())
-    fd.replace_fd(std_fds[1], sys.stdout.fileno())
-    fd.replace_fd(std_fds[2], sys.stderr.fileno())
+    replace_fd(std_fds[0], sys.stdin.fileno())
+    replace_fd(std_fds[1], sys.stdout.fileno())
+    replace_fd(std_fds[2], sys.stderr.fileno())
 

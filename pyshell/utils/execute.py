@@ -8,6 +8,7 @@ import utils.execution.fd_management as fd
 import utils.execution.redirection as redirection
 import utils.execution.file as file
 import utils.execution.forker as forker
+import utils.execution.foreground as fg
 from utils.execution.exec_command import exec_command
 import sys
 import os
@@ -88,8 +89,8 @@ class Executor:
             if control.analyse_job_status(job_list) == control.WaitState.RUNNING:
                 gv.JOBS.add_job(job_list)
             if branch.background == False and gv.JOBS.allow_background == True:
-                os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
-                termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
+                fg.set_foreground(os.getpgrp())
+                fg.restore_tcattr()
             gv.LAST_STATUS = branch.status
         if branch.tag_end != "PIPE":
             job_list.clear()
@@ -332,6 +333,7 @@ class Executor:
                 if subast.type == "CURSH" and branch.tag_end not in ["PIPE", "BACKGROUND_JOBS"]:
                     saved_std_fd = fd.save_std_fd()
                     fd.replace_std_fd(branch.stdin, branch.stdout)
+                    redirection.setup_redirection(branch)
                     self.run_ast(subast)
                     branch.pid = None
                     fd.restore_std_fd(saved_std_fd)

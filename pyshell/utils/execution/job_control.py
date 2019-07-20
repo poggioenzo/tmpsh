@@ -7,7 +7,7 @@ import signal
 import termios
 import sys
 
-
+import utils.execution.foreground as fg
 
 def dprint(string, *args, **kwargs):
     #Small debug function to print with DEBUG filestream
@@ -134,16 +134,16 @@ class BackgroundJobs:
             return
         job = self.list_jobs[index]
         foreground_pgid = job[-1].pgid
-        os.tcsetpgrp(sys.stdin.fileno(), foreground_pgid)
+        fg.set_foreground(foreground_pgid)
         tcsettings = termios.tcgetattr(0)
         os.kill(-foreground_pgid, signal.SIGCONT)
         if analyse_job_status(job) == WaitState.FINISH:
             self.remove(index)
-            print("[{}] + {} continued", index, job[-1].pid)
+            print("[{}] + {} continued".format(index, job[-1].pid))
         else:
             print("[{}] + Suspended.".format(index))
-        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, tcsettings)
-        os.tcsetpgrp(0, os.getpgrp())
+        fg.set_foreground(os.getpgrp())
+        fg.restore_tcattr()
 
     def wait_zombie(self):
         """

@@ -1,6 +1,7 @@
 import utils.global_var as gv
 import os
 import sys
+from utils.execution.foreground import set_foreground
 
 def fork_prepare(pgid=0, background=True):
     """
@@ -11,5 +12,5 @@ def fork_prepare(pgid=0, background=True):
     if gv.JOBS.allow_background == True:
         os.setpgid(pid, pgid)
         if background == False:
-            os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
+            set_foreground(os.getpgid(pid))
     return pid
