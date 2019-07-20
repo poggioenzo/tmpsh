@@ -133,9 +133,8 @@ class BackgroundJobs:
             self.remove(index)
             return
         job = self.list_jobs[index]
-        foreground_pgid = job[-1].pgid
+        foreground_pgid = job[0].pgid
         fg.set_foreground(foreground_pgid)
-        tcsettings = termios.tcgetattr(0)
         os.kill(-foreground_pgid, signal.SIGCONT)
         if analyse_job_status(job) == WaitState.FINISH:
             self.remove(index)

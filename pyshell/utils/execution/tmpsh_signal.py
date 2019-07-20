@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import utils.execution.foreground as fg
 import signal
 import os
 import sys
@@ -8,7 +9,7 @@ def interrupt_handler(signum, *args):
     #Wait all foreground process whenever a SIGQUIT is handled
     #by the shell. Called when the shell is also in foreground
     #with other child processes.
-    foreground_pgid = os.tcgetpgrp(sys.stdin.fileno())
+    foreground_pgid = fg.get_tpgid()
     pid = -1
     while True and pid != 0:
         try:
