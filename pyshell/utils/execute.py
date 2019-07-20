@@ -2,7 +2,7 @@
 
 from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
-import utils.execution.environ as environ
+import utils.execution.variables as variables_mod
 import utils.builtins as builtins
 import utils.execution.job_control as control
 import utils.execution.tmpsh_signal as tmpsh_signal
@@ -19,7 +19,7 @@ import termios
 from utils.global_var import dprint
 
 #To do:
-# - Upgrade analyse_status
+# - Make temporary environnement for builtins
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
@@ -29,6 +29,19 @@ def timer(function):
         dprint("total time for {} = {}".format(function.__name__, end - start))
         return res
     return time_wrapper
+
+def fork_prepare(self, pgid=0, background=True):
+    """
+    Fork a new process, and prepare the process to be in foreground
+    or in background.
+    """
+    pid = os.fork()
+    if gv.JOBS.allow_background == True:
+        os.setpgid(pid, pgid)
+        if background == False:
+            os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
+    return pid
+
 
 class Executor:
     """From an AST, run each command"""
@@ -50,7 +63,7 @@ class Executor:
         while index < nbr_branch:
             branch = ast.list_branch[index]
             job_list.append(branch)
-            self.replace_variable(branch)
+            variables_mod.replace_variable(branch)
             if self.check_andor(branch) == False:
                 index = self.find_newstart(nbr_branch, index, ast)
                 job_list.clear()
@@ -95,6 +108,11 @@ class Executor:
             job_list.clear()
 
     def close_subast_pipe(self, branch):
+        """
+        Go through each subast of the the branch, and for each CMDSUBST,
+        close the AST.link_fd attribute, who his the fd to read/write
+        with the CMDSUBST.
+        """
         index = 0
         nbr_subast = len(branch.subast)
         while index < nbr_subast:
@@ -130,6 +148,8 @@ class Executor:
         """
         Verify if the current branch have to use the pipeline
         pgid.
+        Try to find the first available pgid in the job list,
+        or find it using the first available pid in the pipeline.
         """
         nbr_job = len(job_list)
         if nbr_job == 1:
@@ -169,25 +189,6 @@ class Executor:
             return True
         return False
 
-    def replace_variable(self, branch):
-        """
-        Replace each variable within a single branch.
-        Make a recursive calling if there is any dquotes element inside
-        the branch.
-        """
-        index = 0
-        index_subast = 0
-        while index < branch.tagstokens.length:
-            tag = branch.tagstokens.tags[index]
-            token = branch.tagstokens.tokens[index]
-            if tag == "STMT" and token[0] == "$":
-                variable = environ.retrieve_variable(token[1:])
-                branch.tagstokens.tokens[index] = variable
-            elif tag == "SUBAST":
-                if branch.subast[index_subast].type == "DQUOTES":
-                    self.replace_variable(branch.subast[index_subast].list_branch[0])
-                index_subast += 1
-            index += 1
 
     ##################################################################
     ##          Functions to run a branch's subast list             ##
@@ -201,7 +202,7 @@ class Executor:
         Link to the subast his pid and filedescriptor.
         """
         pipe_fd = fd.setup_pipe_fd()
-        pid = self.fork_prepare(os.getpgrp(), background=False)
+        pid = fork_prepare(os.getpgrp(), background=False)
         if pid == 0:
             #Remove parent background jobs
             gv.JOBS.clear()
@@ -301,7 +302,7 @@ class Executor:
                 content = "/dev/fd/" + str(subast.link_fd)
             elif subast.type == "BRACEPARAM":
                 var = subast.list_branch[0].tagstokens.tokens[0]
-                content = environ.retrieve_variable(var)
+                content = variables_mod.retrieve_variable(var)
             elif subast.type == "DQUOTES":
                 self.perform_subast_replacement(subast.list_branch[0])
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
@@ -315,48 +316,6 @@ class Executor:
     ##      Command runner with execve or from ast + utils          ##
     ##################################################################
     
-    def retrieve_assignation(self, branch):
-        """
-        Find the list of assignation containing in the tagstokens.
-        Return a list of tuples as [(key, mode, value), (...)]
-        """
-        assignation_list = []
-        last_stmt = None
-        index = 0
-        tagstok = branch.tagstokens
-        index_to_del = 0
-        while True and index < tagstok.length:
-            if last_stmt == None and tagstok.tags[index] == "STMT":
-                last_stmt = tagstok.tokens[index]
-            elif tagstok.tags[index] in ["CONCATENATION", "ASSIGNATION_EQUAL"]:
-                index_to_del = index + 2 if tagstok.tags[index + 1] == "SPACE" else index + 1
-                assignation_list.append((last_stmt, tagstok.tags[index], tagstok.tokens[index_to_del]))
-                index = index_to_del
-                last_stmt = None
-            index += 1
-        if len(assignation_list) > 0:
-            del tagstok.tags[:index_to_del + 1]
-            del tagstok.tokens[:index_to_del + 1]
-        tagstok.update_length()
-        return assignation_list
-
-    def variables_config(self, variables, only_env=False):
-        """
-        Facility to set the variables list [(key, mode, value), (...)] according
-        to his key=value. The mode specify if it is
-        a CONCATENATION or an ASSIGNATION_EQUAL.
-        Set up the variable only to the environnement if specified.
-        """
-        nbr_var = len(variables)
-        index = 0
-        while index < nbr_var:
-            variable_data = variables[index]
-            mode = variable_data[1]
-            key = variable_data[0]
-            value = variable_data[2]
-            environ.update_var(key, value, mode, only_env)
-            index += 1
-
     def run_subshell(self, branch, subast):
         """
         From a given ast, run the command in a subshell.
@@ -364,7 +323,7 @@ class Executor:
         Wait the subshell and catch his return value if expected.
         """
         #NEED TO WAIT ALL KIND OF SUBSHELL
-        pid = self.fork_prepare(branch.pgid, branch.background)
+        pid = fork_prepare(branch.pgid, branch.background)
         if pid == 0:
             redirection.setup_redirection(branch)
             tmpsh_signal.reset_signals()
@@ -402,31 +361,22 @@ class Executor:
             index += 1
         return False
 
-    def fork_prepare(self, pgid=0, background=True):
-        """
-        Fork a new process, and prepare the process to be in foreground
-        or in background.
-        """
-        pid = os.fork()
-        if gv.JOBS.allow_background == True:
-            os.setpgid(pid, pgid)
-            if background == False:
-                os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
-        return pid
-
-    
-
     def child_execution(self, branch, argv, variables):
+        """
+        Run a builtin, or fork + execve a given executable.
+        Setup redirection and change stdin/stdout as needed by any kind of pipe.
+        Setup list of variables as environnement variables.
+        """
         if argv[0] in ["jobs", "fg", "cd", "umask"]:
             branch.status = self.run_builtin(argv, variables)
             return None
-        pid = self.fork_prepare(branch.pgid, branch.background)
+        pid = fork_prepare(branch.pgid, branch.background)
         if pid == 0:
             #restore all signals for the child
             tmpsh_signal.reset_signals()
             fd.replace_std_fd(branch.stdin, branch.stdout)
             redirection.setup_redirection(branch)
-            self.variables_config(variables, only_env=True)
+            variables_mod.variables_config(variables, only_env=True)
             executable = file.get_execname(argv[0])
             if executable == None:
                 exit(127)
@@ -443,21 +393,27 @@ class Executor:
         builtin, fork otherwise if it's needed.
         Manage command filedescriptors/pipes.
         """
-        variables = self.retrieve_assignation(branch)
+        variables = variables_mod.retrieve_assignation(branch)
         cmd_args = self.extract_cmd(branch)
         #Check if the command is only an assignation
         if len(cmd_args) == 0:
             fd.close_fds([branch.stdin, branch.stdout, -1])
             if len(variables) >= 1:
-                self.variables_config(variables)
+                variables_mod.variables_config(variables)
                 branch.status = 0
             return
         branch.pid = self.child_execution(branch, cmd_args, variables)
 
     def run_builtin(self, cmd_args, variables):
+        """
+        """
+        save_environ = gv.ENVIRON.copy()
+        variables_mod.variables_config(variables, only_env=True)
         cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
                 dict(os.environ))
-        return exec(cmd)
+        status = exec(cmd)
+        gv.ENVIRON = save_environ
+        return status
 
     def join_stmt(self, branch):
         """If a STMT is following an other STMT, concat them in a single token."""
