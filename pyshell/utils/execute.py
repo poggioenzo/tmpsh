@@ -30,14 +30,6 @@ def timer(function):
         return res
     return time_wrapper
 
-def push_shell_foreground():
-    """
-    Try to retrieve the foreground for the shell if
-    """
-    if os.tcgetpgrp(sys.stdin.fileno()) == os.getpgrp():
-        os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
-        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, gv.TCSETTINGS)
-
 class Executor:
     """From an AST, run each command"""
     def __init__(self, ast):
