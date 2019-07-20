@@ -35,13 +35,19 @@ def extract_cmd(branch):
 
 def run_builtin(cmd_args, variables):
     """
+    Run builtin commands from the builtin module.
+    Format the python command to execute and execute it.
+    Save, modify and restore the global environnement if needed.
     """
-    save_environ = gv.ENVIRON.copy()
-    variables_mod.variables_config(variables, only_env=True)
+    save_environ = len(variables) > 0
+    if save_environ:
+        save_environ = gv.ENVIRON.copy()
+        variables_mod.variables_config(variables, only_env=True)
     cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
             dict(os.environ))
     status = exec(cmd)
-    gv.ENVIRON = save_environ
+    if save_environ:
+        gv.ENVIRON = save_environ
     return status
 
 def child_execution(branch, argv, variables):
