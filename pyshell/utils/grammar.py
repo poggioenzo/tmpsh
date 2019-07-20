@@ -2,8 +2,6 @@
 
 
 from pprint import pprint
-import utils.file as fl
-
 
 class Grammar(object):
     def __init__(self, path):
