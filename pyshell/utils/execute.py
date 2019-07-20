@@ -84,12 +84,11 @@ class Executor:
         background otherwise.
         Retrieve the foreground for the shell if possible.
         """
+        self.try_set_job_pgid(job_list)
         if branch.tag_end == "BACKGROUND_JOBS":
             gv.LAST_STATUS = 0
             gv.JOBS.add_job(job_list)
-        elif branch.tag_end == "PIPE":
-            self.try_set_job_pgid(job_list)
-        else:
+        elif branch.tag_end != "PIPE":
             if control.analyse_job_status(job_list) == control.WaitState.RUNNING:
                 gv.JOBS.add_job(job_list)
             if branch.background == False and gv.JOBS.allow_background == True:
