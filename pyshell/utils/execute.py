@@ -20,7 +20,7 @@ import termios
 from utils.global_var import dprint
 
 #To do:
-# - Make temporary environnement for builtins
+# - Check where I'm loosing time with multiple CMDSUBST
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
