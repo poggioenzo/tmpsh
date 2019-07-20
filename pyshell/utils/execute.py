@@ -200,7 +200,7 @@ class Executor:
         Link to the subast his pid and filedescriptor.
         """
         pipe_fd = fd.setup_pipe_fd()
-        pid = foker.fork_prepare(os.getpgrp(), background=False)
+        pid = forker.fork_prepare(os.getpgrp(), background=False)
         if pid == 0:
             #Remove parent background jobs
             gv.JOBS.clear()
@@ -250,6 +250,7 @@ class Executor:
             token = branch.tagstokens.tokens[index]
             if tag == "SUBAST" and int(token) == change_index:
                 branch.tagstokens.tokens[index] = content
+                branch.tagstokens.tags[index] = "STMT"
                 return None
             index += 1
         #If this point is reached, try to replace subast for filedescriptor
@@ -261,22 +262,6 @@ class Executor:
             token = redirection.tagstokens.tokens[0]
             if tag == "SUBAST" and int(token) == change_index:
                 redirection.dest = content
-            index += 1
-
-    def replace_ast_tag(self, branch):
-        """
-        For each subast, replace in the current branch the subast tag by
-        the STMT tag, to have only STMT to create command.
-        """
-        index = 0
-        pos_subast = 0
-        while index < branch.tagstokens.length:
-            tag = branch.tagstokens.tags[index]
-            if tag == "SUBAST":
-                if branch.subast[pos_subast].type in \
-                        ["DQUOTES", "QUOTE", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3", "BRACEPARAM"]:
-                    branch.tagstokens.tags[index] = "STMT"
-                pos_subast += 1
             index += 1
 
     def perform_subast_replacement(self, branch):
@@ -308,7 +293,6 @@ class Executor:
                     "DQUOTES"]:
                 self.replace_subast(branch, index, content)
             index += 1
-        self.replace_ast_tag(branch)
 
     ##################################################################
     ##      Command runner with execve or from ast + utils          ##
