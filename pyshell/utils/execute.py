@@ -60,7 +60,7 @@ class Executor:
                 job_list.clear()
                 continue
             self.perform_subast_replacement(branch)
-            branch.pgid = self.check_pgid(job_list)
+            branch.pgid = job_list[0].pgid
             res = self.check_background(ast.list_branch, index)
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
@@ -87,7 +87,9 @@ class Executor:
         if branch.tag_end == "BACKGROUND_JOBS":
             gv.LAST_STATUS = 0
             gv.JOBS.add_job(job_list)
-        elif branch.tag_end != "PIPE":
+        elif branch.tag_end == "PIPE":
+            self.try_set_job_pgid(job_list)
+        else:
             if control.analyse_job_status(job_list) == control.WaitState.RUNNING:
                 gv.JOBS.add_job(job_list)
             if branch.background == False and gv.JOBS.allow_background == True:
@@ -97,6 +99,31 @@ class Executor:
                 gv.LAST_STATUS = branch.status
         if branch.tag_end != "PIPE":
             job_list.clear()
+
+    def try_set_job_pgid(self, job_list):
+        if job_list[0].pgid != 0:
+            return
+        index = 0
+        nbr_job = len(job_list)
+        pgid = 0
+        #Try to find the first available pid and get his pgid.
+        while index < nbr_job and pgid == 0:
+            job = job_list[index]
+            if job.pid is not None:
+                pgid = os.getpgid(job.pid)
+            index += 1
+
+        #If no pgid available (only jobs with builtin),
+        #keep pgid set to 0 by doing nothing
+        if pgid == 0:
+            return
+        #Set up the pgid to the entire list otherwise
+        index = 0
+        while index < nbr_job:
+            job = job_list[index]
+            job.pgid = pgid
+            index += 1
+
 
     def close_subast_pipe(self, branch):
         """
@@ -134,26 +161,6 @@ class Executor:
             branch.background = self.check_background(list_branch, index + 1)
             return branch.background
         return False
-
-    def check_pgid(self, job_list):
-        """
-        Verify if the current branch have to use the pipeline
-        pgid.
-        Try to find the first available pgid in the job list,
-        or find it using the first available pid in the pipeline.
-        """
-        nbr_job = len(job_list)
-        if nbr_job == 1:
-            return 0
-        index = 0
-        while index < nbr_job:
-            job = job_list[index]
-            if job.pgid != 0:
-                return job.pgid
-            if job.pid != None:
-                return os.getpgid(job.pid)
-            index += 1
-        return 0
 
     def find_newstart(self, max_len, index, ast):
         """

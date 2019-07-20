@@ -14,6 +14,6 @@ def cd(argv, environ):
         os.chdir(new_dir)
         return 0
     except:
-        err_msg = f"cd: No such file or directory: {new_dir}"
+        err_msg = "cd: No such file or directory: {}".format(new_dir)
         print(err_msg, file=sys.stderr)
         return 1
