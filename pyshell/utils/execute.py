@@ -3,12 +3,13 @@
 from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
 import utils.execution.variables as variables_mod
-import utils.builtins as builtins
 import utils.execution.job_control as control
 import utils.execution.tmpsh_signal as tmpsh_signal
 import utils.execution.fd_management as fd
 import utils.execution.redirection as redirection
 import utils.execution.file as file
+import utils.execution.forker as forker
+from utils.execution.exec_command import exec_command
 import fcntl
 import sys
 import os
@@ -29,19 +30,6 @@ def timer(function):
         dprint("total time for {} = {}".format(function.__name__, end - start))
         return res
     return time_wrapper
-
-def fork_prepare(self, pgid=0, background=True):
-    """
-    Fork a new process, and prepare the process to be in foreground
-    or in background.
-    """
-    pid = os.fork()
-    if gv.JOBS.allow_background == True:
-        os.setpgid(pid, pgid)
-        if background == False:
-            os.tcsetpgrp(sys.stdin.fileno(), os.getpgid(pid))
-    return pid
-
 
 class Executor:
     """From an AST, run each command"""
@@ -75,7 +63,7 @@ class Executor:
             if branch.tag_end == "PIPE":
                 ast.list_branch[index + 1].stdin, branch.stdout = fd.setup_pipe_fd()
             if self.perform_command_as_subast(branch) == False:
-                self.exec_command(branch)
+                exec_command(branch)
             self.close_subast_pipe(branch)
             self.analyse_branch_result(branch, job_list)
             index += 1
@@ -202,7 +190,7 @@ class Executor:
         Link to the subast his pid and filedescriptor.
         """
         pipe_fd = fd.setup_pipe_fd()
-        pid = fork_prepare(os.getpgrp(), background=False)
+        pid = foker.fork_prepare(os.getpgrp(), background=False)
         if pid == 0:
             #Remove parent background jobs
             gv.JOBS.clear()
@@ -323,7 +311,7 @@ class Executor:
         Wait the subshell and catch his return value if expected.
         """
         #NEED TO WAIT ALL KIND OF SUBSHELL
-        pid = fork_prepare(branch.pgid, branch.background)
+        pid = forker.fork_prepare(branch.pgid, branch.background)
         if pid == 0:
             redirection.setup_redirection(branch)
             tmpsh_signal.reset_signals()
@@ -360,81 +348,3 @@ class Executor:
                 return True
             index += 1
         return False
-
-    def child_execution(self, branch, argv, variables):
-        """
-        Run a builtin, or fork + execve a given executable.
-        Setup redirection and change stdin/stdout as needed by any kind of pipe.
-        Setup list of variables as environnement variables.
-        """
-        if argv[0] in ["jobs", "fg", "cd", "umask"]:
-            branch.status = self.run_builtin(argv, variables)
-            return None
-        pid = fork_prepare(branch.pgid, branch.background)
-        if pid == 0:
-            #restore all signals for the child
-            tmpsh_signal.reset_signals()
-            fd.replace_std_fd(branch.stdin, branch.stdout)
-            redirection.setup_redirection(branch)
-            variables_mod.variables_config(variables, only_env=True)
-            executable = file.get_execname(argv[0])
-            if executable == None:
-                exit(127)
-            os.execve(executable, argv, gv.ENVIRON)
-        else:
-            fd.close_fds([branch.stdin, branch.stdout, -1])
-            return pid
-
-    def exec_command(self, branch):
-        """
-        Use to run a simple command, the branch element which is not
-        a SUBSH or a CURSH.
-        Prepare command variables, run within the shell if the command is a
-        builtin, fork otherwise if it's needed.
-        Manage command filedescriptors/pipes.
-        """
-        variables = variables_mod.retrieve_assignation(branch)
-        cmd_args = self.extract_cmd(branch)
-        #Check if the command is only an assignation
-        if len(cmd_args) == 0:
-            fd.close_fds([branch.stdin, branch.stdout, -1])
-            if len(variables) >= 1:
-                variables_mod.variables_config(variables)
-                branch.status = 0
-            return
-        branch.pid = self.child_execution(branch, cmd_args, variables)
-
-    def run_builtin(self, cmd_args, variables):
-        """
-        """
-        save_environ = gv.ENVIRON.copy()
-        variables_mod.variables_config(variables, only_env=True)
-        cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
-                dict(os.environ))
-        status = exec(cmd)
-        gv.ENVIRON = save_environ
-        return status
-
-    def join_stmt(self, branch):
-        """If a STMT is following an other STMT, concat them in a single token."""
-        index = 0
-        tagstok = branch.tagstokens
-        while index < tagstok.length:
-            if tagstok.tags[index] == "STMT":
-                #Join with the previous STMT if needed
-                if index > 0 and tagstok.tags[index - 1] == "STMT":
-                    new_stmt = tagstok.tokens[index - 1] + tagstok.tokens[index]
-                    tagstok.tokens[index - 1:index + 1] = [new_stmt]
-                    del tagstok.tags[index]
-                    tagstok.update_length()
-                    index -= 1
-            index += 1
-
-    def extract_cmd(self, branch):
-        """Get only token used to run a command, format argv + environ"""
-        self.join_stmt(branch)
-        command = []
-        for index in range(branch.tagstokens.length):
-            if branch.tagstokens.tags[index] in gv.GRAMMAR.grammar["STMT"]:
-                command.append(branch.tagstokens.tokens[index])
-        return command
