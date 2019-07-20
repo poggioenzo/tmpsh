@@ -90,9 +90,7 @@ class Executor:
             if branch.background == False and gv.JOBS.allow_background == True:
                 os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
                 termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
-            #In which case status can be None ???
-            if branch.status is not None:
-                gv.LAST_STATUS = branch.status
+            gv.LAST_STATUS = branch.status
         if branch.tag_end != "PIPE":
             job_list.clear()
 
