@@ -19,6 +19,7 @@ from utils.global_var import dprint
 
 #To do:
 # - Check where I'm loosing time with multiple CMDSUBST
+# - Check escapement (check Enzo who wanted to change tag for variables)
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
