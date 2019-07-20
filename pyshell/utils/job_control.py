@@ -7,6 +7,13 @@ import signal
 import termios
 import sys
 
+
+
+DEBUG = open("/dev/ttys003", "w")
+def dprint(string, *args, **kwargs):
+    #Small debug function to print with DEBUG filestream
+    print(string, *args, file=DEBUG, **kwargs, flush=True)
+
 class WaitState(enum.Enum):
     FINISH = 0
     RUNNING = 1
@@ -14,6 +21,44 @@ class WaitState(enum.Enum):
 ##################################################################
 ##     Functions to wait and analyse child + some job control   ##
 ##################################################################
+
+def waitpid_layer(pid, mode):
+    """
+    Use to wait a single pid and analyse his state
+    with different waitpid macros.
+    """
+    pid, return_status = os.waitpid(pid, mode)
+    if pid == 0:
+        return (0, WaitState.RUNNING)
+    if os.WIFSTOPPED(return_status):
+        status = os.WSTOPSIG(return_status) + 128
+        return (status, WaitState.RUNNING)
+    elif os.WIFSIGNALED(return_status):
+        status = os.WTERMSIG(return_status) + 128
+        return (status, WaitState.FINISH)
+    elif os.WIFEXITED(return_status):
+        status = os.WEXITSTATUS(return_status)
+        return (status, WaitState.FINISH)
+
+def wait_subast(job_branch, mode):
+    """
+    Wait each subast of the current branch if
+    they are CMDSUBST
+    """
+    nbr_subast = len(job_branch.subast)
+    index = 0
+    while index < nbr_subast:
+        subast = job_branch.subast[index]
+        if subast.type in ["CMDSUBST2", "CMDSUBST3"] and subast.complete == False:
+            status, state = waitpid_layer(subast.pid, mode)
+            if state == WaitState.RUNNING:
+                return WaitState.RUNNING
+            elif state == WaitState.FINISH:
+                subast.complete = True
+        index += 1
+    return WaitState.FINISH
+
+
 
 def analyse_job_status(job_list, mode=os.WUNTRACED):
     """
@@ -26,19 +71,14 @@ def analyse_job_status(job_list, mode=os.WUNTRACED):
         if job.complete or job.pid is None:
             index -= 1
             continue
-        pid, return_status = os.waitpid(job.pid, mode)
-        #Leave the loop if no pid is get, os.WNOHANG activate
-        if pid == 0:
+        wait_subast(job, mode)
+        status, state = waitpid_layer(job.pid, mode)
+        if status == 0 and state == WaitState.RUNNING:
+            return state
+        job.status = status
+        if state == WaitState.RUNNING:
             return WaitState.RUNNING
-        if os.WIFSIGNALED(return_status):
-            job.status = os.WTERMSIG(return_status) + 128
-            job.complete = True
-        if os.WIFEXITED(return_status):
-            job.complete = True
-            job.status = os.WEXITSTATUS(return_status)
-        if os.WIFSTOPPED(return_status):
-            job.status = os.WSTOPSIG(return_status) + 128
-            return WaitState.RUNNING
+        job.complete = True
         index -= 1
     return WaitState.FINISH
 
