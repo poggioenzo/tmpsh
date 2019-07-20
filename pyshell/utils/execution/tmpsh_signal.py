@@ -12,6 +12,8 @@ def interrupt_handler(signum, *args):
     foreground_pgid = fg.get_tpgid()
     pid = -1
     while True and pid != 0:
+        #Need to check if there is any process in foreground in
+        #a better way than try/catch
         try:
             pid, status = os.waitpid(-foreground_pgid, os.WNOHANG)
         except ChildProcessError:
