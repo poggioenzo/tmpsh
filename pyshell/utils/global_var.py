@@ -20,6 +20,12 @@ JOBS = BackgroundJobs()
 TCSETTINGS = termios.tcgetattr(sys.stdin.fileno())
 CEXTENSION = None
 
-DEBUG = open("/dev/ttys003", "w")
+try:
+    debug_file = "/dev/ttys003"
+    DEBUG = open(debug_file, "w")
+except PermissionError:
+    print("No able to open debug file {}".format(debug_file))
+
 def dprint(string, *args, **kwargs):
+    #Small debug function to print with DEBUG filestream
     print(string, *args, file=DEBUG, **kwargs, flush=True)
