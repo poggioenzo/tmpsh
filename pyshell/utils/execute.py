@@ -40,7 +40,6 @@ class Executor:
         ast.get_command()
         self.run_ast(ast)
 
-
     def run_ast(self, ast):
         """
         Main function to run an entire AST instance in a 
