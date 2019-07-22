@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from utils.tagstokens import TagsTokens as Token
 import utils.global_var as gv
 import utils.execution.variables as variables_mod
 import utils.execution.job_control as control
@@ -9,8 +8,8 @@ import utils.execution.fd_management as fd
 import utils.execution.redirection as redirection
 import utils.execution.file as file
 import utils.execution.forker as forker
+import utils.execution.foreground as fg
 from utils.execution.exec_command import exec_command
-import fcntl
 import sys
 import os
 import time
@@ -21,9 +20,8 @@ from utils.global_var import dprint
 
 #To do:
 # - Check where I'm loosing time with multiple CMDSUBST
-# - Manage better background/pgid setting, unable to sometime run command like
-#  "echo ok | cat | echo lol | cat | echo nop | cat" because of self.check_pgid.
-
+# - Check escapement (check Enzo who wanted to change tag for variables)
+# - Unable to run "echo ok > $(echo x) > $(echo y)"
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
@@ -59,7 +57,7 @@ class Executor:
                 job_list.clear()
                 continue
             self.perform_subast_replacement(branch)
-            branch.pgid = self.check_pgid(job_list)
+            branch.pgid = job_list[0].pgid
             res = self.check_background(ast.list_branch, index)
             #Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
@@ -83,6 +81,7 @@ class Executor:
         background otherwise.
         Retrieve the foreground for the shell if possible.
         """
+        self.try_set_job_pgid(job_list)
         if branch.tag_end == "BACKGROUND_JOBS":
             gv.LAST_STATUS = 0
             gv.JOBS.add_job(job_list)
@@ -90,12 +89,41 @@ class Executor:
             if control.analyse_job_status(job_list) == control.WaitState.RUNNING:
                 gv.JOBS.add_job(job_list)
             if branch.background == False and gv.JOBS.allow_background == True:
-                os.tcsetpgrp(sys.stdin.fileno(), os.getpgrp())
-                termios.tcsetattr(0, termios.TCSADRAIN, gv.TCSETTINGS)
-            if branch.status is not None:
-                gv.LAST_STATUS = branch.status
+                fg.set_foreground(os.getpgrp())
+                fg.restore_tcattr()
+            gv.LAST_STATUS = branch.status
         if branch.tag_end != "PIPE":
             job_list.clear()
+
+    def try_set_job_pgid(self, job_list):
+        """
+        From a given list, try to set up his pgid for each
+        job whenever a pid is available.
+        Avoid to search pgid if already set.
+        """
+        if job_list[0].pgid != 0:
+            return
+        index = 0
+        nbr_job = len(job_list)
+        pgid = 0
+        #Try to find the first available pid and get his pgid.
+        while index < nbr_job and pgid == 0:
+            job = job_list[index]
+            if job.pid is not None:
+                pgid = os.getpgid(job.pid)
+            index += 1
+
+        #If no pgid available (only jobs with builtin),
+        #keep pgid set to 0 by doing nothing
+        if pgid == 0:
+            return
+        #Set up the pgid to the entire list otherwise
+        index = 0
+        while index < nbr_job:
+            job = job_list[index]
+            job.pgid = pgid
+            index += 1
+
 
     def close_subast_pipe(self, branch):
         """
@@ -133,26 +161,6 @@ class Executor:
             branch.background = self.check_background(list_branch, index + 1)
             return branch.background
         return False
-
-    def check_pgid(self, job_list):
-        """
-        Verify if the current branch have to use the pipeline
-        pgid.
-        Try to find the first available pgid in the job list,
-        or find it using the first available pid in the pipeline.
-        """
-        nbr_job = len(job_list)
-        if nbr_job == 1:
-            return 0
-        index = 0
-        while index < nbr_job:
-            job = job_list[index]
-            if job.pgid != 0:
-                return job.pgid
-            if job.pid != None:
-                return os.getpgid(job.pid)
-            index += 1
-        return 0
 
     def find_newstart(self, max_len, index, ast):
         """
@@ -192,7 +200,7 @@ class Executor:
         Link to the subast his pid and filedescriptor.
         """
         pipe_fd = fd.setup_pipe_fd()
-        pid = foker.fork_prepare(os.getpgrp(), background=False)
+        pid = forker.fork_prepare(os.getpgrp(), background=False)
         if pid == 0:
             #Remove parent background jobs
             gv.JOBS.clear()
@@ -242,6 +250,7 @@ class Executor:
             token = branch.tagstokens.tokens[index]
             if tag == "SUBAST" and int(token) == change_index:
                 branch.tagstokens.tokens[index] = content
+                branch.tagstokens.tags[index] = "STMT"
                 return None
             index += 1
         #If this point is reached, try to replace subast for filedescriptor
@@ -253,22 +262,6 @@ class Executor:
             token = redirection.tagstokens.tokens[0]
             if tag == "SUBAST" and int(token) == change_index:
                 redirection.dest = content
-            index += 1
-
-    def replace_ast_tag(self, branch):
-        """
-        For each subast, replace in the current branch the subast tag by
-        the STMT tag, to have only STMT to create command.
-        """
-        index = 0
-        pos_subast = 0
-        while index < branch.tagstokens.length:
-            tag = branch.tagstokens.tags[index]
-            if tag == "SUBAST":
-                if branch.subast[pos_subast].type in \
-                        ["DQUOTES", "QUOTE", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3", "BRACEPARAM"]:
-                    branch.tagstokens.tags[index] = "STMT"
-                pos_subast += 1
             index += 1
 
     def perform_subast_replacement(self, branch):
@@ -300,7 +293,6 @@ class Executor:
                     "DQUOTES"]:
                 self.replace_subast(branch, index, content)
             index += 1
-        self.replace_ast_tag(branch)
 
     ##################################################################
     ##      Command runner with execve or from ast + utils          ##
@@ -341,6 +333,7 @@ class Executor:
                 if subast.type == "CURSH" and branch.tag_end not in ["PIPE", "BACKGROUND_JOBS"]:
                     saved_std_fd = fd.save_std_fd()
                     fd.replace_std_fd(branch.stdin, branch.stdout)
+                    redirection.setup_redirection(branch)
                     self.run_ast(subast)
                     branch.pid = None
                     fd.restore_std_fd(saved_std_fd)

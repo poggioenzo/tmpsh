@@ -1,5 +1,4 @@
 from utils.shellgrammar import ShellGrammar
-from utils.execution.job_control import BackgroundJobs
 import termios
 import sys
 import os
@@ -16,7 +15,7 @@ ENVIRON = os.environ.copy()
 LOCAL_VAR = {}
 LAST_STATUS = 0
 
-JOBS = BackgroundJobs()
+JOBS = None
 TCSETTINGS = termios.tcgetattr(sys.stdin.fileno())
 CEXTENSION = None
 

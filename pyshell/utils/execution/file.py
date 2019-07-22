@@ -23,10 +23,11 @@ def check_rights(cmd):
     Check permission + file existence.
     """
     if os.access(cmd, os.F_OK) == False:
-        print(f"tmpsh: No such file or directory : {cmd}", file=sys.stderr)
+        #print(f"tmpsh: No such file or directory : {cmd}", file=sys.stderr)
+        print("tmpsh: No such file or directory : {}".format(cmd), file=sys.stderr)
         return None
     if os.access(cmd, os.X_OK) == False:
-        print(f"zsh: permission denied: {cmd}", file=sys.stderr)
+        print("zsh: permission denied: {}".format(cmd), file=sys.stderr)
         return None
     return cmd
 
@@ -45,5 +46,5 @@ def get_execname(cmd):
         execname = os.path.join(folder, cmd)
         if os.path.isfile(execname):
             return check_rights(execname)
-    print(f"tmpsh: command not found: {cmd}", file=sys.stderr)
+    print("tmpsh: command not found: {}".format(cmd), file=sys.stderr)
     return None

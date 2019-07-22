@@ -7,9 +7,8 @@ import signal
 import termios
 import sys
 
+import utils.execution.foreground as fg
 
-
-DEBUG = open("/dev/ttys003", "w")
 def dprint(string, *args, **kwargs):
     #Small debug function to print with DEBUG filestream
     print(string, *args, file=DEBUG, **kwargs, flush=True)
@@ -91,27 +90,6 @@ class BackgroundJobs:
         """Add a new process in the background process group"""
         self.list_jobs.append(new_job.copy())
         print("[{}] {}".format(len(self.list_jobs), new_job[-1].pid))
-        self.fix_pgid(self.list_jobs[-1])
-
-    def fix_pgid(self, job):
-        """
-        Set up the pgid attribute in each branch on the job.
-        """
-        index = 0
-        nbr_job = len(job)
-        pgid_ref = 0
-        while index < nbr_job and pgid_ref == 0:
-            if job[index].pgid != 0:
-                pgid_ref = job[index].pgid
-            if job[index].pid != None:
-                pgid_ref = os.getpgid(job[index].pid)
-            index += 1
-        if pgid_ref == 0:
-            return
-        index = 0
-        while index < nbr_job:
-            job[index].pgid = pgid_ref
-            index += 1
 
     def __iter__(self):
         self._index = 0
@@ -155,17 +133,16 @@ class BackgroundJobs:
             self.remove(index)
             return
         job = self.list_jobs[index]
-        foreground_pgid = job[-1].pgid
-        os.tcsetpgrp(sys.stdin.fileno(), foreground_pgid)
-        tcsettings = termios.tcgetattr(0)
+        foreground_pgid = job[0].pgid
+        fg.set_foreground(foreground_pgid)
         os.kill(-foreground_pgid, signal.SIGCONT)
         if analyse_job_status(job) == WaitState.FINISH:
             self.remove(index)
-            print("[{}] + {} continued", index, job[-1].pid)
+            print("[{}] + {} continued".format(index, job[-1].pid))
         else:
             print("[{}] + Suspended.".format(index))
-        termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, tcsettings)
-        os.tcsetpgrp(0, os.getpgrp())
+        fg.set_foreground(os.getpgrp())
+        fg.restore_tcattr()
 
     def wait_zombie(self):
         """

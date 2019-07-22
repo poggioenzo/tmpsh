@@ -6,6 +6,7 @@ from utils.ast import AST
 from utils.execute import Executor
 import utils.global_var as gv
 import utils.execution.tmpsh_signal as tmpsh_signal
+from utils.execution.job_control import BackgroundJobs
 import os, sys
 import string
 import signal
@@ -44,6 +45,7 @@ def load_extension():
     return ctypes.cdll.LoadLibrary(library)
 
 def main(argc, argv, environ):
+    gv.JOBS = BackgroundJobs()
     gv.CEXTENSION = load_extension()
     tmpsh_signal.init_signals()
     prompt = Prompt()
