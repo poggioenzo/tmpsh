@@ -28,7 +28,7 @@ def timer(function):
         start = time.clock()
         res = function(*args, **kwargs)
         end = time.clock()
-        dprint("total time for {} = {}".format(function.__name__, end - start))
+        dprint("{} - total time for {} = {}".format(os.getpid(), function.__name__, end - start))
         return res
     return time_wrapper
 
@@ -124,7 +124,6 @@ class Executor:
             job.pgid = pgid
             index += 1
 
-
     def close_subast_pipe(self, branch):
         """
         Go through each subast of the the branch, and for each CMDSUBST,
@@ -162,18 +161,6 @@ class Executor:
             return branch.background
         return False
 
-    def find_newstart(self, max_len, index, ast):
-        """
-        Whenever a command combination is over with CMDAND or CMDOR,
-        skip the set until the next terminator
-        """
-        while index < max_len:
-            branch = ast.list_branch[index]
-            if branch.tag_end in ["END_COMMAND", "BACKGROUND_JOBS"]:
-                return index + 1
-            index += 1
-        return index
-
     def check_andor(self, branch):
         """
         Check if the command have to be run according to last status.
@@ -186,6 +173,18 @@ class Executor:
         elif branch.begin_andor == "CMDOR" and gv.LAST_STATUS != 0:
             return True
         return False
+
+    def find_newstart(self, max_len, index, ast):
+        """
+        Whenever a command combination is over with CMDAND or CMDOR,
+        skip the set until the next terminator
+        """
+        while index < max_len:
+            branch = ast.list_branch[index]
+            if branch.tag_end in ["END_COMMAND", "BACKGROUND_JOBS"]:
+                return index + 1
+            index += 1
+        return index
 
 
     ##################################################################
@@ -200,6 +199,8 @@ class Executor:
         Link to the subast his pid and filedescriptor.
         """
         pipe_fd = fd.setup_pipe_fd()
+        #Main of my time is wasted with this fork... No idea how can I make it faster,
+        #if having C code is enough ? C fork is from 2 to 4 time faster than Python fork
         pid = forker.fork_prepare(os.getpgrp(), background=False)
         if pid == 0:
             #Remove parent background jobs
