@@ -280,8 +280,7 @@ class Executor:
             elif subast.type == "CMDSUBST1":
                 content = file.read_fd(subast.link_fd)
                 os.waitpid(subast.pid, os.WUNTRACED)
-                if len(content) > 0 and content[-1] == '\n': #SHOULD NOT BE DONE, need one more tokenisation
-                    content = content[:-1]
+                content = content.rstrip("\n")
             elif subast.type in ["CMDSUBST2", "CMDSUBST3"]:
                 content = "/dev/fd/" + str(subast.link_fd)
             elif subast.type == "BRACEPARAM":
