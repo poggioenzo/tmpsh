@@ -90,44 +90,6 @@ class TagsTokens():
         self.clear_stack()
         return self
 
-    def double_quote_gesture(self):
-        i = 0
-        stk = ['']  # stk for stack
-        exit_tag = ['']
-        while i < self.length:
-            tag = self.tags[i]
-            if exit_tag[-1] == tag:
-                if stk[-1:][0] == 'DQUOTES':
-                    self.tags[i] = 'STMT'
-                else:
-                    exit_tag.pop(-1)
-                    stk.pop(-1)
-            elif tag == 'DQUOTES':
-                if stk[-1:][0] != 'DQUOTES':
-                    stk.append(tag)
-                else:
-                    stk.pop(-1)
-                    self.tags[i] = 'END_DQUOTES'
-            elif self.tags[i] != 'STMT' and stk[-1:][0] == 'DQUOTES':
-                if tag in gv.GRAMMAR.dquotes_opening_tags:
-                    stk.append(tag)
-                    exit_tag.append(gv.GRAMMAR.dquotes_opening_tags[tag])
-                else:
-                    self.tags[i] = 'STMT'
-            i += 1
-
-    def quote_gesture(self):
-        i = 0
-        inquote = False
-        while i < self.length:
-            if self.tags[i] == 'QUOTE':
-                if inquote:
-                    self.tags[i] = 'END_QUOTE'
-                inquote = not inquote
-            elif self.tags[i] != 'STMT' and inquote:
-                self.tags[i] = 'STMT'
-            i += 1
-
     def hardcode_error_redirection(self):
         if self.stack != [] and self.stack[-1] == 'REDIRECTION':
             self.valid = False
