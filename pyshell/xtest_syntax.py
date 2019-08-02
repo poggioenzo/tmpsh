@@ -129,7 +129,7 @@ class TestSyntaxError(unittest.TestCase):
         tagstokens = TagsTokens().init_with_input(terminput).check_syntax()
         print(tagstokens)
         self.assertFalse(tagstokens.valid)
-        self.assertEqual(tagstokens.token_error, '&&')
+        self.assertEqual(tagstokens.token_error, 'bad substitution')
 
     def test_syntax_error_004(self):
         terminput = ' \' \' ||  &&'
@@ -170,8 +170,8 @@ class TestSyntaxError(unittest.TestCase):
         terminput = ' ${} '
         tagstokens = TagsTokens().init_with_input(terminput).check_syntax()
         print(tagstokens)
-        self.assertFalse(not tagstokens.valid)
-        self.assertEqual(tagstokens.token_error, '')  # '}')
+        self.assertFalse(tagstokens.valid)
+        self.assertEqual(tagstokens.token_error, '}')
 
     def test_syntax_error_010(self):
         terminput = ' $() '
@@ -299,7 +299,16 @@ class TestSyntaxError2(unittest.TestCase):
         tokens = [' ', '$(', ' ', '(', 'lol', ')', ' ', 'lol']
         tagstokens = TagsTokens(tokens).get_tags().check_syntax()
         self.assertFalse(tagstokens.valid)
-        self.assertEqual(tagstokens.token_error, 'bad syntax')
+        self.assertEqual(tagstokens.token_error, 'lol')
+
+    def test_syntax_error_008(self):
+        terminput = '$(${"}"(\') $( ${ (\' \''
+        tagstokens = TagsTokens().init_with_input(terminput).check_syntax()
+        print(tagstokens)
+        self.assertFalse(tagstokens.valid)
+        self.assertFalse(tagstokens.incomplete)
+        self.assertEqual(tagstokens.token_error, 'bad substitution')
+        self.assertEqual(tagstokens.stack, [])
 
 
 class TestSyntaxIncomplete(unittest.TestCase):
@@ -323,33 +332,22 @@ class TestSyntaxIncomplete(unittest.TestCase):
         self.assertEqual(tagstokens.stack, ['CMDSUBST1', 'BRACEPARAM'])
 
     def test_syntax_incomplete_003(self):
-        terminput = '$(${"}"'
+        terminput = '$(${cmd}"'
         tagstokens = TagsTokens().init_with_input(terminput).check_syntax()
         print(tagstokens)
         self.assertTrue(tagstokens.valid)
         self.assertTrue(tagstokens.incomplete)
         self.assertEqual(tagstokens.token_error, '')
-        self.assertEqual(tagstokens.stack, ['CMDSUBST1', 'BRACEPARAM'])
+        self.assertEqual(tagstokens.stack, ['CMDSUBST1', 'DQUOTES'])
 
     def test_syntax_incomplete_004(self):
-        terminput = '$(${"}"(\') $( ${ ('
+        terminput = '${cmd} ${'
         tagstokens = TagsTokens().init_with_input(terminput).check_syntax()
         print(tagstokens)
         self.assertTrue(tagstokens.valid)
         self.assertTrue(tagstokens.incomplete)
         self.assertEqual(tagstokens.token_error, '')
-        self.assertEqual(tagstokens.stack, [
-                         'CMDSUBST1', 'BRACEPARAM', 'SUBSH', 'QUOTE'])
-
-    def test_syntax_incomplete_005(self):
-        terminput = '$(${"}"(\') $( ${ (\' \''
-        tagstokens = TagsTokens().init_with_input(terminput).check_syntax()
-        print(tagstokens)
-        self.assertTrue(tagstokens.valid)
-        self.assertTrue(tagstokens.incomplete)
-        self.assertEqual(tagstokens.token_error, '')
-        self.assertEqual(tagstokens.stack, [
-                         'CMDSUBST1', 'BRACEPARAM', 'SUBSH', 'QUOTE'])
+        self.assertEqual(tagstokens.stack, ['BRACEPARAM'])
 
     def test_syntax_incomplete_006(self):
         terminput = 'ls && '
