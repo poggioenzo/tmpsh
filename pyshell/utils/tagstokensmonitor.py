@@ -3,7 +3,6 @@
 import utils.global_var as gv
 
 # TODO: alias gesture
-# TODO: {} can't be only by terminator
 # TODO: escape $PATH\\
 
 
@@ -71,12 +70,13 @@ class TagsTokensMonitor():
         pass
 
     def is_braceparam(self):
-        self.next_tag_token()
+        not_end = self.next_tag_token()
         stmt_tag = self.tag
-        self.next_tag_token()
+        not_end = not_end and self.next_tag_token()
         if stmt_tag != 'STMT' or self.tag != 'END_BRACE':
-            self.tt.valid = False
-            self.tt.token_error = 'bad substitution'
+            if not_end:
+                self.tt.valid = False
+                self.tt.token_error = 'bad substitution'
 
     def is_dquote(self):
         indquote = True
@@ -94,7 +94,6 @@ class TagsTokensMonitor():
     def is_quote(self):
         inquote = True
         while inquote and self.next_tag_token():
-            print(self.tag)
             if self.tag == 'QUOTE':
                 self.tt.tags[self.i] = 'END_QUOTE'
                 inquote = False
@@ -174,7 +173,7 @@ class TagsTokensMonitor():
         #         elif self.prev_tokens_ok(i - 1) and tok in gv.ALIAS and\
         #                 tok not in passed_alias:
         #             passed_alias.append(tok)
-        #             tk.tokenize(gv.ALIAS[tok], local)
+        #             tk.tokenize(gv.{q } $( \';ALIAS[tok], local)
         #             self.tokens[i:i + 1] = local
         #             self.get_tags()
         #             local = []
