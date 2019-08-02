@@ -55,13 +55,13 @@ class TagsTokens():
     def update_length(self):
         self.length = len(self.tokens)
 
-    def init_with_input(self, term_inputs, i=0, quote_gesture=True):
+    def init_with_input(self, term_inputs):
         tk.tokenize(term_inputs.strip(), self.tokens)
         self.update_length()
-        self.get_tags(i, quote_gesture)
+        self.get_tags()
         return self
 
-    def get_tags(self, i=0, quote_gesture=True):
+    def get_tags(self, i=0):
         self.tags = self.tags[:i]
         tok = ''
         while i < self.length:
