@@ -75,13 +75,11 @@ class TagsTokens():
             i += 1
         self.strip()
         self.update_length()
-        if quote_gesture:
-            self.double_quote_gesture()  # to do in TTM(self) in check_syntax
-            self.quote_gesture()  # to do in TTM(self)in check_syntax
         return self
 
     def check_syntax(self):
-        # TTM(self)  # en production
+        TTM(self)  # en production
+        print(self.valid)
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
