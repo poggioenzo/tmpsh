@@ -83,14 +83,8 @@ class TagsTokens():
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
-        self.hardcode_error_redirection()  # to do in TTM(self)
         self.clear_stack()
         return self
-
-    def hardcode_error_redirection(self):
-        if self.stack != [] and self.stack[-1] == 'REDIRECTION':
-            self.incomplete = True
-            self.token_error = self.find_prev_token(len(self.tokens) - 1)
 
     def clear_stack(self):
         self.stack = [elt for elt in self.stack if elt != 'CMD']
