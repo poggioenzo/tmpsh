@@ -149,3 +149,6 @@ class TagsTokens():
         del self.tags[key]
         del self.tokens[key]
         self.update_length()
+
+    def __add__(self, other):
+        return TagsTokens(self.tokens + other.tokens, self.tags + other.tags)
