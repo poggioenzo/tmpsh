@@ -103,7 +103,6 @@ class TagsTokensMonitor():
 
     def is_abs_terminator(self):
         self.reset()
-        self.next_tag_token()
 
     def in_sub_process(self):
         self.reset()
