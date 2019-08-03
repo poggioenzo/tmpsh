@@ -23,8 +23,8 @@ def end_escape(lt):
 
 
 class Heredocs():
-    def __init__(self, arg):
-        self.arg = arg
+    def __init__(self, end_seq_word):
+        self.end_word = end_seq_word
 
 
 class TagsTokens():
@@ -79,7 +79,6 @@ class TagsTokens():
 
     def check_syntax(self):
         TTM(self)  # en production
-        print(self.valid)
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
@@ -90,8 +89,7 @@ class TagsTokens():
 
     def hardcode_error_redirection(self):
         if self.stack != [] and self.stack[-1] == 'REDIRECTION':
-            self.valid = False
-            self.incomplete = False
+            self.incomplete = True
             self.token_error = self.find_prev_token(len(self.tokens) - 1)
 
     def clear_stack(self):
