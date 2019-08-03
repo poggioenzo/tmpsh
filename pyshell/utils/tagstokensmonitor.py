@@ -61,13 +61,14 @@ class TagsTokensMonitor():
             elif self.opened[-1] == self.tag:
                 self.opened.pop(-1)
 
-            if skip or (self.begin_cmd and self.tag == 'SPACES'):
-                pass
-            else:
-                self.begin_cmd = False
-
     def check_aliases(self):
-        pass
+        print(self.begin_cmd, self.token)
+        alias = ''
+
+        if self.begin_cmd and self.token in gv.ALIAS:
+            alias = gv.ALIAS[self.token]
+
+        self.begin_cmd = False
 
     def is_braceparam(self):
         not_end = self.next_tag_token()
@@ -141,7 +142,7 @@ class TagsTokensMonitor():
         if self.tag == 'SPACES':
             not_end = self.next_tag_token()
         if not_end:
-            self.op_selector(True)
+            self.op_selector()
             self.begin_cmd = True
         else:
             self.tt.valid = False
