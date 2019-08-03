@@ -39,7 +39,7 @@ class TagsTokensMonitor():
         while self.tt.valid and self.next_tag_token():
             self.op_selector()
 
-    def op_selector(self, skip=False):
+    def op_selector(self):
         # print(self.tag, self.begin_cmd)
         if self.tt.valid:
             if self.tag == 'STMT':
