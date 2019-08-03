@@ -56,7 +56,7 @@ class TagsTokens():
         self.length = len(self.tokens)
 
     def init_with_input(self, term_inputs):
-        tk.tokenize(term_inputs.strip(), self.tokens)
+        tk.tokenize(term_inputs, self.tokens)
         self.update_length()
         self.get_tags()
         return self
