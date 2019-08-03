@@ -148,34 +148,3 @@ class TagsTokensMonitor():
             self.tt.valid = False
             self.tt.token_error = self.token
         self.begin_cmd = True
-
-        # def prev_tokens_ok(self, i):
-        #     if i == -1 or (i == 0 and self.tags[0] == 'SPACES'):
-        #         return True
-        #     ret = self.find_prev_token(i, False)\
-        #         in gv.GRAMMAR.grammar['ABS_TERMINATOR']
-        #     ret |= self.find_prev_token(i, False)\
-        #         in gv.GRAMMAR.opening_tags
-        #     return ret
-
-        # def alias_gesture(self):
-        #     i = 0
-        #     tok = ''
-        #     local = []
-        #     passed_alias = []
-        #
-        #     while i < self.length:
-        #         tok = self.tokens[i]
-        #         print(passed_alias)
-        #         if self.tags[i] in gv.GRAMMAR.grammar['ABS_TERMINATOR']\
-        #                 or self.tags[i] in gv.GRAMMAR.opening_tags:
-        #             passed_alias = []
-        #         elif self.prev_tokens_ok(i - 1) and tok in gv.ALIAS and\
-        #                 tok not in passed_alias:
-        #             passed_alias.append(tok)
-        #             tk.tokenize(gv.{q } $( \';ALIAS[tok], local)
-        #             self.tokens[i:i + 1] = local
-        #             self.get_tags()
-        #             local = []
-        #             i -= 1
-        #         i += 1
