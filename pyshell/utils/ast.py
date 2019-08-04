@@ -66,7 +66,6 @@ class AST():  # AbstractSyntaxTree
 
 
 class ACB():  # AbstractCommandBranch
-    # TODO: trim each branch
     def __init__(self, tt, begin_andor, tag_end):
         self.tagstokens = tt
         self.begin_andor = begin_andor
