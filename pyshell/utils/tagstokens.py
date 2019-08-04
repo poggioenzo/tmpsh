@@ -73,7 +73,7 @@ class TagsTokens():
             else:
                 self.tags.append('STMT')
             i += 1
-        self.strip()
+        self.strip()  # to remove and change test
         self.update_length()
         return self
 
@@ -118,6 +118,13 @@ class TagsTokens():
         if self.tags[i] == 'SPACES' and i + 1 < self.length:
             i += 1
         return self.tokens[i] if get_token else self.tags[i]
+
+    def replace_alias(self, alias_inputs, i):
+        tt_alias = TagsTokens().init_with_input(alias_inputs).check_syntax()
+        self.tokens = self.tokens[:i] + tt_alias.tokens + self.tokens[i + 1:]
+        self.tags = self.tags[:i] + tt_alias.tags + self.tags[i + 1:]
+        self.valid = tt_alias.valid
+        self.update_length()
 
     def __str__(self):
         str0 = '\n'.join(

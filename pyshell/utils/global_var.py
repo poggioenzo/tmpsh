@@ -4,13 +4,14 @@ import os
 
 GRAMMAR = ShellGrammar()
 ALIAS = {'all': 'ls -l', 'gall': 'all -G -1', 'ball': '$(gall)',
-         'another': 'ls ',
+         'another': 'ls\t',
          'recursion1': 'recursion2',
          'recursion2': 'recursion3',
          'loop1': 'loop2',
          'loop2': 'loop3',
          'loop3': 'loop1'}
 
+PASSED_ALIAS = []
 ENVIRON = os.environ
 LOCAL_VAR = {}
 LAST_STATUS = 0

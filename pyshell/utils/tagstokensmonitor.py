@@ -2,7 +2,6 @@
 
 import utils.global_var as gv
 
-# TODO: alias gesture
 # TODO: escape $PATH\\
 
 
@@ -17,7 +16,6 @@ class TagsTokensMonitor():
         self.begin_cmd = True
         self.after_red = False
         self.opened = ['']
-        self.passed_alias = []
         self.check()
 
     def get_tagstokens(self):
@@ -25,7 +23,7 @@ class TagsTokensMonitor():
 
     def reset(self):
         self.begin_cmd = True
-        self.passed_alias = []
+        gv.PASSED_ALIAS = []
 
     def next_tag_token(self):
         self.i += 1
@@ -40,7 +38,6 @@ class TagsTokensMonitor():
             self.op_selector()
 
     def op_selector(self):
-        # print(self.tag, self.begin_cmd)
         if self.tt.valid:
             if self.tag == 'STMT':
                 self.check_aliases()
@@ -62,13 +59,15 @@ class TagsTokensMonitor():
                 self.opened.pop(-1)
 
     def check_aliases(self):
-        print(self.begin_cmd, self.token)
-        alias = ''
-
-        if self.begin_cmd and self.token in gv.ALIAS:
-            alias = gv.ALIAS[self.token]
-
-        self.begin_cmd = False
+        result_alias = ''
+        if self.begin_cmd and (self.token in gv.ALIAS and
+                               self.token not in gv.PASSED_ALIAS):
+            result_alias = gv.ALIAS[self.token]
+            self.begin_cmd = result_alias[-1:].isspace()
+            gv.PASSED_ALIAS.append(self.token)
+            self.tt.replace_alias(result_alias, self.i)
+            if self.begin_cmd:
+                self.reset()
 
     def is_braceparam(self):
         not_end = self.next_tag_token()
