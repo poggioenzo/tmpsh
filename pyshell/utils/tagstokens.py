@@ -24,7 +24,8 @@ def end_escape(lt):
 
 class Heredocs():
     def __init__(self, end_seq_word):
-        self.end_word = end_seq_word
+        self.end_seq_word = end_seq_word
+        self.closed = False
 
 
 class TagsTokens():
