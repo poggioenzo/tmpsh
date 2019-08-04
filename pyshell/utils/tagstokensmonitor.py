@@ -125,7 +125,8 @@ class TagsTokensMonitor():
             if self.tag == 'SPACES':
                 ret = self.next_tag_token()
             if ret and not (self.tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']
-                            or self.tag in gv.GRAMMAR.grammar['REDIRECTION']):
+                            or self.tag in gv.GRAMMAR.grammar['REDIRECTION']
+                            or self.tag in ['END_BRACE', 'END_BRACKET']):
                 self.tt.valid = False
                 self.tt.token_error = self.token
             else:
