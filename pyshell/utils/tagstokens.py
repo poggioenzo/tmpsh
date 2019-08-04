@@ -158,4 +158,5 @@ class TagsTokens():
         self.update_length()
 
     def __add__(self, other):
-        return TagsTokens(self.tokens + other.tokens, self.tags + other.tags)
+        return TagsTokens(self.tokens + other.tokens,
+                          self.tags + other.tags).check_syntax()
