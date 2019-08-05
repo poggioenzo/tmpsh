@@ -26,6 +26,12 @@ class Heredocs():
     def __init__(self, end_seq_word):
         self.end_seq_word = end_seq_word
         self.closed = False
+        self.tokens = []
+        self.tags = []
+
+    def init_tags_tokens(self, tags, tokens):
+        self.tokens = tokens
+        self.tags = tags
 
 
 class TagsTokens():
@@ -62,6 +68,30 @@ class TagsTokens():
         self.get_tags()
         return self
 
+    def split_cmd_from_heredocs(self):
+        i = 0
+        tag = ''
+        tgtk_heredocs = None
+        while i < self.length:
+            tag = self.tags[i]
+            if tag in gv.GRAMMAR.opening_tags:
+                i += self.skip_openning_tags(i)
+            elif tag == 'NEW_LINE':
+                break
+            i += 1
+        if i < self.length:
+            tgtk_heredocs = self.copytt(i, self.length)
+            del self[i: self.length]
+        else:
+            TagsTokens()
+        return tgtk_heredocs
+
+    def split_heredocs(self, heredocs):
+        pass
+
+    def heredocs_gesture(self):
+        tgtk_heredocs = self.split_cmd_from_heredocs()
+
     def get_tags(self, i=0):
         self.tags = self.tags[:i]
         tok = ''
@@ -76,6 +106,7 @@ class TagsTokens():
             i += 1
         self.strip()  # to remove and change test
         self.update_length()
+        self.heredocs_gesture()
         return self
 
     def check_syntax(self):
