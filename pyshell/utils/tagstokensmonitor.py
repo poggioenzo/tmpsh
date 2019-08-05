@@ -113,8 +113,6 @@ class TagsTokensMonitor():
             if self.tag == exit_tag:
                 self.opened.pop(-1)
                 in_command = False
-            else:
-                self.op_selector()
 
     def in_command_sh(self):
         end = 0
@@ -129,8 +127,6 @@ class TagsTokensMonitor():
                             or self.tag in ['END_BRACE', 'END_BRACKET']):
                 self.tt.valid = False
                 self.tt.token_error = self.token
-            else:
-                self.op_selector()
         else:
             end = self.tt.skip_openning_tags(self.i) - 1
             self.tt.tags[self.i] = 'STMT'
