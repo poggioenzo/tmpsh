@@ -94,7 +94,6 @@ class ACB():  # AbstractCommandBranch
             sub_ast.type = type_command
 
     def check_subast(self):
-        # TODO: ./main_ast.py 'echo "$PATH""lol""mdr"'
         i = 0
         begin = 0
         tag = ''
@@ -107,7 +106,7 @@ class ACB():  # AbstractCommandBranch
                 self.subast.append(AST(self.tagstokens.copytt(begin, i)))
                 self.tagstokens[begin - 1:i + 1] = [
                     ['SUBAST'], ['subast {}'.format(len(self.subast) - 1)]]
-                i = begin
+                i = begin - 1
             i += 1
 
     def check_redirection(self):
