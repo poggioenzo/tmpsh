@@ -89,7 +89,21 @@ class TagsTokens():
         return tgtk_heredocs
 
     def split_heredocs(self, tgtk_heredocs):
-        pass
+        i = 0
+        tag = ''
+        key = ''
+        is_heredocs = False
+        while i < self.length:
+            tag = self.tags[i]
+            if is_heredocs:
+                key = self.tokens[i]
+                if tag in gv.GRAMMAR.opening_tags:
+                    key = ''.join(
+                        self.tokens[i:self.skip_openning_tags(i) + 1])
+                    print(key)
+                self.heredocs.append(Heredocs(tag))
+            is_heredocs = tag == 'HEREDOC'
+            i += 1
 
     def heredocs_gesture(self):
         tgtk_heredocs = self.split_cmd_from_heredocs()
@@ -168,6 +182,8 @@ class TagsTokens():
         str0 += '\nStack: {}'.format(self.stack)
         str0 += '\nValid: {} | Incomplete: {} | Token_error: "{}"'.format(
             self.valid, self.incomplete, self.token_error)
+        if self.heredocs:
+            str0 += '\n'.join([str(elt) for elt in self.heredocs])
         return str0
 
     def copytt(self, begin, end=None):
