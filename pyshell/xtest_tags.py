@@ -63,14 +63,17 @@ class TestTags(unittest.TestCase):
                   ' ', '>', ' ', 'file.txt', ')', ')', ' ',
                   '&&', ' \t\t', '$VAR_TEST', '|', ' ',
                   'cat', ' ', '<<', ' ', 'HERE', '\n',
-                  'testHERE', '\n', 'HERE']
+                  'testHERE', '\n', 'HERE']  # this line is magical disappear
+        # by heredocs gesture
         tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(
             ['CMDSUBST2', 'CMDSUBST3', 'STMT', 'SPACES', 'STMT',
              'SPACES', 'TRUNC', 'SPACES', 'STMT', 'END_BRACKET',
              'END_BRACKET', 'SPACES', 'CMDAND', 'SPACES', 'STMT',
              'PIPE', 'SPACES', 'STMT', 'SPACES', 'HEREDOC', 'SPACES',
-             'STMT', 'NEW_LINE', 'STMT', 'NEW_LINE', 'STMT'], tags)
+             'STMT', 'NEW_LINE',
+             # 'STMT', 'NEW_LINE', 'STMT'
+             ], tags)
 
     def test_tags_009(self):
         term_inputs = ' \\ a  '
