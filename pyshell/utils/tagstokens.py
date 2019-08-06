@@ -71,26 +71,30 @@ class TagsTokens():
     def split_cmd_from_heredocs(self):
         i = 0
         tag = ''
+        and_or_previous = False
         tgtk_heredocs = None
         while i < self.length:
             tag = self.tags[i]
             if tag in gv.GRAMMAR.opening_tags:
                 i += self.skip_openning_tags(i)
-            elif tag == 'NEW_LINE':
+            elif tag == 'NEW_LINE' and not and_or_previous:
                 break
+            and_or_previous = tag in ['CMDOR', 'CMDAND']
             i += 1
         if i < self.length:
-            tgtk_heredocs = self.copytt(i, self.length)
-            del self[i: self.length]
+            tgtk_heredocs = self.copytt(i + 1, self.length)
+            del self[i + 1: self.length]
         else:
-            TagsTokens()
+            tgtk_heredocs = TagsTokens()
         return tgtk_heredocs
 
-    def split_heredocs(self, heredocs):
+    def split_heredocs(self, tgtk_heredocs):
         pass
 
     def heredocs_gesture(self):
         tgtk_heredocs = self.split_cmd_from_heredocs()
+        print('tgtk_heredocs')
+        print(tgtk_heredocs)
 
     def get_tags(self, i=0):
         self.tags = self.tags[:i]
@@ -183,8 +187,12 @@ class TagsTokens():
         self.update_length()
 
     def __delitem__(self, key):
-        if not (0 <= key < self.length):
-            raise Exception("IndexError: list index out of range")
+        if key is int:
+            if not (0 <= key < self.length):
+                raise Exception("IndexError: list index out of range")
+        if key is slice:
+            if not (0 <= key.start and key.stop < self.length):
+                raise Exception("SliceError: ")
         del self.tags[key]
         del self.tokens[key]
         self.update_length()
