@@ -147,7 +147,7 @@ class TagsTokens():
         self.stack = [elt for elt in self.stack if elt != 'CMD']
 
     @test
-    def skip_openning_tags(self, i):
+    def skip_openning_tags(self, i, until=''):
         stack = [gv.GRAMMAR.opening_tags[self.tags[i]]]
         i += 1
         while i < self.length:
