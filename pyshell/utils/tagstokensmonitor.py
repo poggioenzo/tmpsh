@@ -98,7 +98,16 @@ class TagsTokensMonitor():
                 self.tt.token_error = 'bad substitution'
 
     def is_heredocs(self):
-        pass
+        not_end = self.next_tag_token()
+        if self.tag == 'SPACES':
+            not_end = self.next_tag_token()
+        if not_end:
+            pass
+
+        else:
+            self.tt.valid = False
+            self.tt.token_error = self.token
+        self.begin_cmd = True
 
     def is_dquote(self):
         indquote = True
