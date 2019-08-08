@@ -18,29 +18,34 @@ import termios
 
 from utils.global_var import dprint
 
-#To do:
+# To do:
 # - Check where I'm loosing time with multiple CMDSUBST
 # - Check escapement (check Enzo who wanted to change tag for variables)
 # - Unable to run "echo ok > $(echo x) > $(echo y)"
+# - echo ok || echo ok && echo lol ;ls
+
 
 def timer(function):
     def time_wrapper(*args, **kwargs):
         start = time.clock()
         res = function(*args, **kwargs)
         end = time.clock()
-        dprint("{} - total time for {} = {}".format(os.getpid(), function.__name__, end - start))
+        dprint("{} - total time for {} = {}".format(os.getpid(),
+                                                    function.__name__, end - start))
         return res
     return time_wrapper
 
+
 class Executor:
     """From an AST, run each command"""
+
     def __init__(self, ast):
         ast.get_command()
         self.run_ast(ast)
 
     def run_ast(self, ast):
         """
-        Main function to run an entire AST instance in a 
+        Main function to run an entire AST instance in a
         recursive way.
         Go through each branch and run them one by one (or more),
         running each time the contained command.
@@ -59,16 +64,17 @@ class Executor:
             self.perform_subast_replacement(branch)
             branch.pgid = job_list[0].pgid
             res = self.check_background(ast.list_branch, index)
-            #Prepare piping, store stdin pipe for the next command
+            # Prepare piping, store stdin pipe for the next command
             if branch.tag_end == "PIPE":
-                ast.list_branch[index + 1].stdin, branch.stdout = fd.setup_pipe_fd()
+                ast.list_branch[index +
+                                1].stdin, branch.stdout = fd.setup_pipe_fd()
             if self.perform_command_as_subast(branch) == False:
                 exec_command(branch)
             self.close_subast_pipe(branch)
             self.analyse_branch_result(branch, job_list)
             index += 1
         gv.JOBS.wait_zombie()
-    
+
     ##################################################################
     ##                  Utils for self.run_ast                      ##
     ##################################################################
@@ -106,18 +112,18 @@ class Executor:
         index = 0
         nbr_job = len(job_list)
         pgid = 0
-        #Try to find the first available pid and get his pgid.
+        # Try to find the first available pid and get his pgid.
         while index < nbr_job and pgid == 0:
             job = job_list[index]
             if job.pid is not None:
                 pgid = os.getpgid(job.pid)
             index += 1
 
-        #If no pgid available (only jobs with builtin),
-        #keep pgid set to 0 by doing nothing
+        # If no pgid available (only jobs with builtin),
+        # keep pgid set to 0 by doing nothing
         if pgid == 0:
             return
-        #Set up the pgid to the entire list otherwise
+        # Set up the pgid to the entire list otherwise
         index = 0
         while index < nbr_job:
             job = job_list[index]
@@ -186,7 +192,6 @@ class Executor:
             index += 1
         return index
 
-
     ##################################################################
     ##          Functions to run a branch's subast list             ##
     ##################################################################
@@ -199,15 +204,15 @@ class Executor:
         Link to the subast his pid and filedescriptor.
         """
         pipe_fd = fd.setup_pipe_fd()
-        #Main of my time is wasted with this fork... No idea how can I make it faster,
-        #if having C code is enough ? C fork is from 2 to 4 time faster than Python fork
+        # Main of my time is wasted with this fork... No idea how can I make it faster,
+        # if having C code is enough ? C fork is from 2 to 4 time faster than Python fork
         pid = forker.fork_prepare(os.getpgrp(), background=False)
         if pid == 0:
-            #Remove parent background jobs
+            # Remove parent background jobs
             gv.JOBS.clear()
             gv.JOBS.allow_background = False
             gv.CEXTENSION.change_sigmask(signal.SIGTSTP, signal.SIG_BLOCK)
-            #Select fd to use as stdin/stdout depending of the subst type
+            # Select fd to use as stdin/stdout depending of the subst type
             stdin = stdout = None
             if subast.type == "CMDSUBST2":
                 stdin = pipe_fd.pop(0)
@@ -220,7 +225,7 @@ class Executor:
         else:
             subast.pid = pid
             subast.link_fd = pipe_fd.pop(1) if subast.type == "CMDSUBST2" \
-                    else pipe_fd.pop(0)
+                else pipe_fd.pop(0)
             os.close(pipe_fd[0])
 
     def prepare_cmd_subst(self, branch):
@@ -254,7 +259,7 @@ class Executor:
                 branch.tagstokens.tags[index] = "STMT"
                 return None
             index += 1
-        #If this point is reached, try to replace subast for filedescriptor
+        # If this point is reached, try to replace subast for filedescriptor
         nbr_redirection = len(branch.redirectionfd)
         index = 0
         while index < nbr_redirection:
@@ -289,22 +294,22 @@ class Executor:
             elif subast.type == "DQUOTES":
                 self.perform_subast_replacement(subast.list_branch[0])
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
-            if subast.type in ["BRACEPARAM", "CMDSUBST1","CMDSUBST2","CMDSUBST3","QUOTE", 
-                    "DQUOTES"]:
+            if subast.type in ["BRACEPARAM", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3", "QUOTE",
+                               "DQUOTES"]:
                 self.replace_subast(branch, index, content)
             index += 1
 
     ##################################################################
     ##      Command runner with execve or from ast + utils          ##
     ##################################################################
-    
+
     def run_subshell(self, branch, subast):
         """
         From a given ast, run the command in a subshell.
         Redirect stdin and/or stdout if given.
         Wait the subshell and catch his return value if expected.
         """
-        #NEED TO WAIT ALL KIND OF SUBSHELL
+        # NEED TO WAIT ALL KIND OF SUBSHELL
         pid = forker.fork_prepare(branch.pgid, branch.background)
         if pid == 0:
             redirection.setup_redirection(branch)
@@ -322,7 +327,7 @@ class Executor:
         """
         If the command is composed of a SUBSH or a CURSH,
         create a layer for this kind of command and run them.
-        If it's not run in a subshell, save and restore the initial 
+        If it's not run in a subshell, save and restore the initial
         stdin/stdout/stderr to prevent change during execution.
         """
         index = 0
