@@ -5,6 +5,23 @@ import utils.global_var as gv
 # TODO: escape $PATH\\
 
 
+class Heredocs():
+    def __init__(self, end_seq_word):
+        self.end_seq_word = end_seq_word
+        self.closed = False
+        self.tokens = []
+        self.tags = []
+
+    def init_tags_tokens(self, tags, tokens):
+        self.tokens = tokens
+        self.tags = tags
+
+    def __str__(self):
+        str0 = f'HEREDOC: {self.end_seq_word} | closed: {self.closed}\n'
+        str0 += 'DOC:\n{}\n'.format(''.join(self.tokens))
+        return str0
+
+
 class TagsTokensMonitor():
     """docstring for TagsTokensMonitor."""
 
@@ -14,7 +31,7 @@ class TagsTokensMonitor():
         self.tag = ''
         self.token = ''
         self.begin_cmd = True
-        self.after_red = False
+        self.heredocs_keys = []
         self.opened = ['']
         self.check()
 
@@ -53,6 +70,8 @@ class TagsTokensMonitor():
                 self.in_command_sh()
             elif self.tag in gv.GRAMMAR.opening_tags:
                 self.in_sub_process()
+            elif self.tag == 'HEREDOC':
+                self.is_heredocs()
             elif self.tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 self.in_redirection()
             elif self.opened[-1] == self.tag:
@@ -77,6 +96,9 @@ class TagsTokensMonitor():
             if not_end:
                 self.tt.valid = False
                 self.tt.token_error = 'bad substitution'
+
+    def is_heredocs(self):
+        pass
 
     def is_dquote(self):
         indquote = True

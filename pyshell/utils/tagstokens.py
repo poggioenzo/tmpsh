@@ -73,49 +73,49 @@ class TagsTokens():
         self.get_tags()
         return self
 
-    def split_cmd_from_heredocs(self):
-        i = 0
-        tag = ''
-        and_or_previous = False
-        tgtk_heredocs = None
-        while i < self.length:
-            tag = self.tags[i]
-            if tag in gv.GRAMMAR.opening_tags:
-                i += self.skip_openning_tags(i)
-            elif tag == 'NEW_LINE' and not and_or_previous:
-                print('LOL')
-                break
-            and_or_previous = tag in ['CMDOR', 'CMDAND']
-            i += 1
-        if i < self.length:
-            tgtk_heredocs = self.copytt(i + 1, self.length)
-            del self[i + 1: self.length]
-        else:
-            tgtk_heredocs = TagsTokens()
-        return tgtk_heredocs
-
-    def split_heredocs(self, tgtk_heredocs):
-        pass
-
-    def heredocs_gesture(self):
-        tgtk_heredocs = self.split_cmd_from_heredocs()
-        print(tgtk_heredocs)
-        i = 0
-        tag = ''
-        key = ''
-        is_heredocs = False
-        while i < self.length:
-            tag = self.tags[i]
-            if is_heredocs and tag != 'SPACES':
-                key = self.tokens[i]
-                if tag in gv.GRAMMAR.opening_tags:
-                    key = ''.join(
-                        self.tokens[i:self.skip_openning_tags(i)])
-                print('key', key)
-                self.heredocs.append(Heredocs(key))
-            is_heredocs = tag == 'HEREDOC' or (is_heredocs and tag == 'SPACES')
-            i += 1
-        self.split_heredocs(tgtk_heredocs)
+    # def split_cmd_from_heredocs(self):
+    #     i = 0
+    #     tag = ''
+    #     and_or_previous = False
+    #     tgtk_heredocs = None
+    #     while i < self.length:
+    #         tag = self.tags[i]
+    #         if tag in gv.GRAMMAR.opening_tags:
+    #             i += self.skip_openning_tags(i)
+    #         elif tag == 'NEW_LINE' and not and_or_previous:
+    #             print('LOL')
+    #             break
+    #         and_or_previous = tag in ['CMDOR', 'CMDAND']
+    #         i += 1
+    #     if i < self.length:
+    #         tgtk_heredocs = self.copytt(i + 1, self.length)
+    #         del self[i + 1: self.length]
+    #     else:
+    #         tgtk_heredocs = TagsTokens()
+    #     return tgtk_heredocs
+    #
+    # def split_heredocs(self, tgtk_heredocs):
+    #     pass
+    #
+    # def heredocs_gesture(self):
+    #     tgtk_heredocs = self.split_cmd_from_heredocs()
+    #     print(tgtk_heredocs)
+    #     i = 0
+    #     tag = ''
+    #     key = ''
+    #     is_heredocs = False
+    #     while i < self.length:
+    #         tag = self.tags[i]
+    #         if is_heredocs and tag != 'SPACES':
+    #             key = self.tokens[i]
+    #             if tag in gv.GRAMMAR.opening_tags:
+    #                 key = ''.join(
+    #                     self.tokens[i:self.skip_openning_tags(i)])
+    #             print('key', key)
+    #             self.heredocs.append(Heredocs(key))
+    #         is_heredocs = tag == 'HEREDOC' or (is_heredocs and tag == 'SPACES')
+    #         i += 1
+    #     self.split_heredocs(tgtk_heredocs)
 
     def get_tags(self, i=0):
         self.tags = self.tags[:i]
@@ -131,7 +131,7 @@ class TagsTokens():
             i += 1
         self.strip()  # to remove and change test
         self.update_length()
-        self.heredocs_gesture()
+        # self.heredocs_gesture()
         return self
 
     def check_syntax(self):
