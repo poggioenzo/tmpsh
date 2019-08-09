@@ -12,3 +12,4 @@ wishlist:
 -Checker les builtins.  
 echo/cd/setenv/unsetenv/env/exit/type/export/set/unset . 
 jobs/fg/bg
+-  variable env for builtins
