@@ -62,6 +62,7 @@ def tokenize(command, tokens):
                 current += gv.GRAMMAR.escape + command[i]
             else:
                 current += gv.GRAMMAR.escape
+            add_token(current, tokens)
             i += 1
         elif command[i] in gv.GRAMMAR.spaces:
             current = add_token(current, tokens)
