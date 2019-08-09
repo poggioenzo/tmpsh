@@ -16,9 +16,12 @@ class Heredocs():
         self.tokens = []
         self.tags = []
 
-    def init_tags_tokens(self, tags, tokens):
-        self.tokens = tokens
-        self.tags = tags
+    def add_tags_tokens(self, tag, token):
+        self.tokens.extend(token)
+        self.tags.extend(tag)
+
+    def close(self):
+        self.closed = True
 
     def __str__(self):
         str0 = f'HEREDOC: {self.end_seq_word} | closed: {self.closed}\n'
