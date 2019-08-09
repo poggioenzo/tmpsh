@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import os
+import time
+import signal
 import utils.global_var as gv
 import utils.execution.variables as variables_mod
 import utils.execution.job_control as control
@@ -10,11 +13,7 @@ import utils.execution.file as file
 import utils.execution.forker as forker
 import utils.execution.foreground as fg
 from utils.execution.exec_command import exec_command
-import sys
-import os
-import time
-import signal
-import termios
+
 
 from utils.global_var import dprint
 
@@ -31,13 +30,14 @@ def timer(function):
         res = function(*args, **kwargs)
         end = time.clock()
         dprint("{} - total time for {} = {}".format(os.getpid(),
-                                                    function.__name__, end - start))
+                                                    function.__name__,
+                                                    end - start))
         return res
     return time_wrapper
 
 
 class Executor:
-    """From an AST, run each command"""
+    """From an AST, run each command."""
 
     def __init__(self, ast):
         ast.get_command()
