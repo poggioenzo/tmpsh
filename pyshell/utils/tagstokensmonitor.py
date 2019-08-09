@@ -120,7 +120,7 @@ class TagsTokensMonitor():
             elif self.tag in gv.GRAMMAR.dquotes_opening_tags:
                 self.op_selector()
             else:
-                self.tt.tags[self.i] = 'STMT'
+                self.tt.tags[self.i] = 'STMT' if self.tt.tags[self.i] != 'VAR' else 'VAR'
 
     def is_quote(self):
         inquote = True
