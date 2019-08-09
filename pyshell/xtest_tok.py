@@ -29,7 +29,7 @@ class TestTokenisation(unittest.TestCase):
         self.assertListEqual(tokens, soluce)
 
     def test_tok_004(self):
-        soluce = ['ls', ' ', '-l', ' ', '\\\n/',
+        soluce = ['ls', ' ', '-l', ' ', '\\\n', '/',
                   ' ', ';', '\n']
         command = ''.join(soluce)
         tokens = []
@@ -37,14 +37,14 @@ class TestTokenisation(unittest.TestCase):
         self.assertListEqual(tokens, soluce)
 
     def test_tok_005(self):
-        soluce = ['ls', ' ', '-l', ' ', '\\ /', ';', '\n']
+        soluce = ['ls', ' ', '-l', ' ', '\\ ', '/', ';', '\n']
         command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
         self.assertListEqual(tokens, soluce)
 
     def test_tok_006(self):
-        soluce = ['echo', ' ', '\\$PATH', ' ', '||', ' ', 'echo',
+        soluce = ['echo', ' ', '\\$', 'PATH', ' ', '||', ' ', 'echo',
                   ' ', '$path', '\n']
         command = ''.join(soluce)
         tokens = []
@@ -127,10 +127,10 @@ class TestTokenisation(unittest.TestCase):
         self.assertListEqual(tokens, soluce)
 
     def test_tok_015(self):
-        soluce = ['echo', ' ', '\\f\\i\\l\\e', '\n', 'VAR',
+        soluce = ['echo', ' ', '\\f', '\\i', '\\l', '\\e', '\n', 'VAR',
                   ' ', '=', ' ', '0', '\n', 'VAR', '=',
                   '1', '\n', 'VAR', ' ', '+=', '1', '\n',
-                  'echo', ' ', '"', '\\$VAR', ' ', '\\=',
+                  'echo', ' ', '"', '\\$', 'VAR', ' ', '\\=',
                   ' ', '$VAR', '"', '\n']
         command = ''.join(soluce)
         tokens = []
@@ -138,7 +138,7 @@ class TestTokenisation(unittest.TestCase):
         self.assertListEqual(tokens, soluce)
 
     def test_tok_016(self):
-        soluce = ['echo', ' ', '\\f\\i\\l\\e', '\n']
+        soluce = ['echo', ' ', '\\f', '\\i', '\\l', '\\e', '\n']
         command = ''.join(soluce)
         tokens = []
         tk.tokenize(command, tokens)
@@ -201,8 +201,8 @@ class TestTokenisation2(unittest.TestCase):
         command = '                 \\\necho \\\\test             '
         tokens = []
         tk.tokenize(command, tokens)
-        self.assertListEqual(tokens, ['                 ', '\\\necho',
-                                      ' ', '\\\\test', '             '])
+        self.assertListEqual(tokens, ['                 ', '\\\n', 'echo',
+                                      ' ', '\\\\', 'test', '             '])
 
     def test_tok_005(self):
         command = ' $({ () lol'
