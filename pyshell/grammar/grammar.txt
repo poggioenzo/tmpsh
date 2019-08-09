@@ -2,9 +2,9 @@
 
 STMT:
 	QUOTES
-	SPECIAL_VARIABLE
+	VAR
 
-SPECIAL_VARIABLE:
+VAR:
 	$$
 	$#
 	$*
