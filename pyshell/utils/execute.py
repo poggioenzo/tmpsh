@@ -21,7 +21,7 @@ from utils.global_var import dprint
 # - Check where I'm loosing time with multiple CMDSUBST
 # - Check escapement (check Enzo who wanted to change tag for variables)
 # - Unable to run "echo ok > $(echo x) > $(echo y)"
-# - echo ok || echo ok && echo lol ;ls
+# - Does RedirectionFD.close attribute is used well
 
 
 def timer(function):

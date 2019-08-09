@@ -99,6 +99,12 @@ enum	malloc_fail
 	MALLOC_SUCCESS = 1
 };
 
+typedef enum
+{
+	false = 0,
+	true = 1,
+}	t_bool;
+
 # define TRUE		1
 # define FALSE		0
 
@@ -127,6 +133,107 @@ struct s_hist
 	t_hist	*next;
 	t_hist	*prev;
 };
+
+/*
+** Grammar structs
+*/
+
+typedef struct s_pylst	t_pylst;
+typedef struct s_ht_table	t_ht_table;
+typedef signed int			pid_t;
+
+// Both structure t_grammar and t_shellgrammar can be joined togethercan be
+// joined together
+typedef struct
+{
+	char *path;
+	t_ht_table	*grammar;
+	t_ht_table	*reverse;
+}		t_grammar;
+
+typedef struct
+{
+	t_pylst		*spaces;
+	char		escape;
+	t_ht_table	*opening_tags;
+	t_ht_table	*dquotes_opening_tags;
+	int			maxlen_leaf_op;
+}		t_shellgrammar;
+
+/*
+** Structs for the AbstractSyntaxTree
+*/
+
+typedef struct
+{
+	t_pylst		*heredocs;
+	t_pylst		*tokens;
+	t_pylst		*tags;
+	t_pylst		*stack;
+	char		*token_error;
+	t_bool		valid;
+	t_bool		incomplete;
+	int			length;
+}			t_tagstokens;
+
+typedef struct
+{
+	t_pylst		*list_branch;
+	char		*type;
+	int			link_fd;
+	pid_t		pid;
+	char		*command;
+	t_bool		complete;
+}			t_ast;
+
+typedef struct
+{
+	t_tagstokens	tagstokens;
+	char			*begin_andor;
+	char			*tag_end;
+	t_pylst			*subast;
+	t_pylst			*subcmd_type;
+	t_pylst			*redirectionfd;
+	char			*command;
+	int				stdin;
+	int				stdout;
+	t_bool			background;
+	int				status;
+	pid_t			pid;
+	pid_t			pgid;
+	t_bool			complete;
+}			t_acb;
+
+typedef struct
+{
+	t_tagstokens	tagstokens;
+	char			*type;
+	int				source;
+	char			*dest;
+	t_bool			close;
+	t_bool			error;
+}		t_redirection_fd;
+
+typedef struct
+{
+	t_tagstokens	tt;
+	int				i;
+	char			*tag;
+	char			*token;
+	t_bool			begin_cmd;
+	t_pylst			*heredocs_keys;
+	t_pylst			*opened;
+}	t_tags_tokens_monitor;
+
+/*
+** Background jobs
+*/
+
+typedef struct
+{
+	t_pylst		*list_jobs;
+	t_bool		allow_background;
+}	t_background_job;
 
 /*
 ** Debug functions
