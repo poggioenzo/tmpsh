@@ -70,8 +70,8 @@ class TagsTokensMonitor():
                 self.in_command_sh()
             elif self.tag in gv.GRAMMAR.opening_tags:
                 self.in_sub_process()
-            # elif self.tag == 'HEREDOC':
-            #     self.is_heredocs()
+            elif self.tag == 'HEREDOC':
+                self.is_heredocs()
             elif self.tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 self.in_redirection()
             elif self.opened[-1] == self.tag:
@@ -97,17 +97,24 @@ class TagsTokensMonitor():
                 self.tt.valid = False
                 self.tt.token_error = 'bad substitution'
 
-    # def is_heredocs(self):
-    #     not_end = self.next_tag_token()
-    #     if self.tag == 'SPACES':
-    #         not_end = self.next_tag_token()
-    #     if not_end:
-    #         pass
-    #
-    #     else:
-    #         self.tt.valid = False
-    #         self.tt.token_error = self.token
-    #     self.begin_cmd = True
+    def is_heredocs(self):
+        not_end = self.next_tag_token()
+        key = ''
+        j = 0
+        if self.tag == 'SPACES':
+            not_end = self.next_tag_token()
+        if not_end:
+            if self.tag in gv.GRAMMAR.opening_tags:
+                j = self.tt.skip_openning_tags(self.i, 'NEW_LINE')
+                key = ''.join(self.tt.tokens[self.i:j])
+                self.i = j - 1
+            else:
+                key = self.token
+            self.heredocs_keys.append(key)
+        else:
+            self.tt.valid = False
+            self.tt.token_error = self.token
+        self.begin_cmd = True
 
     def is_dquote(self):
         indquote = True
