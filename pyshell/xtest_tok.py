@@ -240,6 +240,12 @@ class TestTokenisation2(unittest.TestCase):
         self.assertListEqual(tokens, ['echo', ' ', '"', 'yolo',
                                       '"', '&&', 'ls'])
 
+    def test_tok_010(self):
+        command = '$$ $? $- $!'
+        tokens = []
+        tk.tokenize(command, tokens)
+        self.assertListEqual(tokens, ['$$', ' ', '$?', ' ', '$-', ' ', '$!'])
+
 
 if __name__ == '__main__':
     unittest.main()
