@@ -26,7 +26,7 @@ def check_rights(cmd):
         #print(f"tmpsh: No such file or directory : {cmd}", file=sys.stderr)
         print("tmpsh: No such file or directory : {}".format(cmd), file=sys.stderr)
         return None
-    if os.access(cmd, os.X_OK) == False:
+    if os.access(cmd, os.X_OK) is False or os.access(cmd, os.R_OK) is False:
         print("zsh: permission denied: {}".format(cmd), file=sys.stderr)
         return None
     return cmd
