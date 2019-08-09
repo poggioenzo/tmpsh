@@ -9,7 +9,7 @@ from utils.tagstokensmonitor import TagsTokensMonitor as TTM
 
 
 def test(func):
-    def wrapper(self, i):
+    def wrapper(self, i, until):
         if self.tags[i] not in gv.GRAMMAR.opening_tags:
             raise Exception("No {} in opening_tags.".format(self.tags[i]))
         return func(self, i)
@@ -73,11 +73,13 @@ class TagsTokens():
         return self
 
     def check_syntax(self):
+        print(self)
         TTM(self)
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
+        self.incomplete |= not all([elt.closed for elt in self.heredocs])
         self.clear_stack()
         return self
 
@@ -90,7 +92,7 @@ class TagsTokens():
         i += 1
         while i < self.length:
             tag = self.tags[i]
-            if stack == []:
+            if stack == [] or tag == until:
                 break
             elif tag in gv.GRAMMAR.opening_tags:
                 stack.append(gv.GRAMMAR.opening_tags[tag])

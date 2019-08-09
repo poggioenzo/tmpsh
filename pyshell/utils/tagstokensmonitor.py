@@ -76,6 +76,8 @@ class TagsTokensMonitor():
                 self.is_dquote()
             elif self.tag == 'QUOTE':
                 self.is_quote()
+            elif self.tag == 'NEW_LINE':
+                self.is_newline()
             elif self.tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
                 self.is_abs_terminator()
             elif self.tag in ['CURSH', 'SUBSH']:
@@ -88,6 +90,29 @@ class TagsTokensMonitor():
                 self.in_redirection()
             elif self.opened[-1] == self.tag:
                 self.opened.pop(-1)
+
+    def is_newline(self):
+        gold_key = ''
+        key = ''
+        heredoc = None
+        not_end = 1
+        self.is_abs_terminator()
+        while self.heredocs_keys != [] and not_end:
+            gold_key = self.heredocs_keys[0]
+            heredoc = Heredocs(gold_key)
+            self.tt.heredocs.append(heredoc)
+            not_end = self.next_tag_token(True)
+            while not_end:
+                if key == gold_key:
+                    heredoc.close()
+                    break
+                if not strncmp(key, gold_key, len(key)):
+                    heredoc.add_tags_tokens(self.tag, self.token)
+                    key = key if self.tag != 'NEW_LINE' else ''
+                key = key + self.token
+                not_end = self.next_tag_token(True)
+            self.heredocs_keys.pop(0)
+            key = ''
 
     def check_aliases(self):
         result_alias = ''
