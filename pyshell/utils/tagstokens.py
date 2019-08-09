@@ -217,7 +217,7 @@ class TagsTokens():
                 raise Exception("IndexError: list index out of range")
         if key is slice:
             if not (0 <= key.start and key.stop < self.length):
-                raise Exception("SliceError: ")
+                raise Exception("SliceError: slice out of range")
         del self.tags[key]
         del self.tokens[key]
         self.update_length()
