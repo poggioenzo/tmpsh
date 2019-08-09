@@ -1,42 +1,68 @@
 #!/usr/bin/env python3
 
+"""
+Module for class AbstractSyntaxTree (AST) and AbstractCommandBranch (ACB).
+
+These classes are done to represente the syntax shell in a tree.
+"""
+
 import utils.global_var as gv
 
 
 def split_shift(string):
+    """Split on \n add \t at the beginnin of each lines join on \n."""
     return '\n'.join(['\t{}'.format(x) for x in string.split('\n')])[:-1]
 
 
-class AST():  # AbstractSyntaxTree
+class AST():
+    """
+    Class to create AST (AbstractSyntaxTree) object.
+
+    Param:
+        tagstokens: TagsTokens object.
+    Attributes:
+        list_branch: list containing AbstractCommandBranch objects.
+        type: a string which indicate the type of AbstractSyntaxTree.
+        link_fd: ???
+    """
+
     def __init__(self, tagstokens):
+        """Constructor for AST object."""
         self.list_branch = []
         self.type = 'ROOT'
-        self.split_branch(tagstokens)
         self.link_fd = None
         self.pid = None
         self.command = None
         self.complete = False
+        self.split_branch(tagstokens)
 
     @property
     def type(self):
+        """Getter for attribute type."""
         return self._type
 
     @type.setter
     def type(self, ast_type):
+        """Setter for attribute type."""
         self._type = ast_type
 
-    def split_branch(self, tt):
+    def split_branch(self, tagstokens):
+        """
+        Fill list_branch of ACB separate using tagstokens (TagsTokens).
+
+        Each command branch is separate on ABS_TERMINATOR (; || && & ...).
+        """
         i = 0
         begin = 0
         and_or_begin = ''
         tag = ''
-        while i < tt.length:
-            tag = tt.tags[i]
+        while i < tagstokens.length:
+            tag = tagstokens.tags[i]
             if tag in gv.GRAMMAR.opening_tags:
-                i = tt.skip_openning_tags(i) - 1
+                i = tagstokens.skip_openning_tags(i) - 1
             elif tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
                 self.list_branch.append(
-                    ACB(tt.copytt(begin, i), and_or_begin, tag))
+                    ACB(tagstokens.copytt(begin, i), and_or_begin, tag))
                 begin = i + 1
                 and_or_begin = ''
             if tag in ['CMDAND', 'CMDOR']:
@@ -44,9 +70,10 @@ class AST():  # AbstractSyntaxTree
             i += 1
         if begin != i:
             self.list_branch.append(
-                ACB(tt.copytt(begin, i), and_or_begin, tag))
+                ACB(tagstokens.copytt(begin, i), and_or_begin, tag))
 
     def __str__(self):
+        """Print the type of AST then each branchs of the AST shifted."""
         return '{:_^12}:\n'.format(self.type) + split_shift('\n'.join(
             [str(branch) for branch in self.list_branch]))
 
@@ -66,9 +93,24 @@ class AST():  # AbstractSyntaxTree
         pass
 
 
-class ACB():  # AbstractCommandBranch
-    def __init__(self, tt, begin_andor, tag_end):
-        self.tagstokens = tt
+class ACB():
+    """
+    Class to create ACB (AbstractCommandBranch) object.
+
+    Param:
+        tagstokens: TagsTokens object.
+        begin_andor: string which contain the CMDAND, CMDOR or nothing.
+        tag_end: string which contain the last tag of the command in the AST.
+    Attributes:
+        All params are attributes.
+        subast:
+        subcmd_type:
+
+    """
+
+    def __init__(self, tagstokens, begin_andor, tag_end):
+        """Constructor for ACB object."""
+        self.tagstokens = tagstokens
         self.begin_andor = begin_andor
         self.tag_end = tag_end if tag_end in \
             gv.GRAMMAR.grammar['ABS_TERMINATOR'] else ''

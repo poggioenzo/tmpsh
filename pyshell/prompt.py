@@ -23,7 +23,6 @@ class Prompt(Cmd):
         self.content += line
         TAGSTOKENS = TagsTokens().init_with_input(line).check_syntax()
         if TAGSTOKENS.valid and not TAGSTOKENS.incomplete:
-
             TREE = AST(TAGSTOKENS)
             run = Executor(TREE)
             self.content = ""
