@@ -19,7 +19,9 @@ LOCAL_VAR = {}
 LAST_STATUS = 0
 
 JOBS = None
-TCSETTINGS = termios.tcgetattr(sys.stdin.fileno())
+TCSETTINGS = None
+with open("/dev/tty") as term:
+    TCSETTINGS = termios.tcgetattr(term.fileno())
 CEXTENSION = None
 
 try:
