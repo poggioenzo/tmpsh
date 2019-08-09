@@ -53,7 +53,7 @@ class Executor:
             job_list.append(branch)
             variables_mod.replace_variable(branch)
             if self.check_andor(branch) == False:
-                index = self.find_newstart(nbr_branch, index, ast)
+                index += 1
                 job_list.clear()
                 continue
             self.perform_subast_replacement(branch)
@@ -173,19 +173,6 @@ class Executor:
         elif branch.begin_andor == "CMDOR" and gv.LAST_STATUS != 0:
             return True
         return False
-
-    def find_newstart(self, max_len, index, ast):
-        """
-        Whenever a command combination is over with CMDAND or CMDOR,
-        skip the set until the next terminator
-        """
-        while index < max_len:
-            branch = ast.list_branch[index]
-            if branch.tag_end in ["END_COMMAND", "BACKGROUND_JOBS"]:
-                return index + 1
-            index += 1
-        return index
-
 
     ##################################################################
     ##          Functions to run a branch's subast list             ##
