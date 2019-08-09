@@ -47,7 +47,7 @@ class TestTags(unittest.TestCase):
                   '${', 'var2', '}', '_']
         tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(['STMT', 'SPACES', 'BRACEPARAM', 'STMT', 'END_BRACE',
-                          'STMT', 'STMT', 'BRACEPARAM', 'STMT', 'END_BRACE',
+                          'STMT', 'VAR', 'BRACEPARAM', 'STMT', 'END_BRACE',
                           'STMT'], tags)
 
     def test_tags_007(self):
@@ -69,10 +69,10 @@ class TestTags(unittest.TestCase):
         self.assertEqual(
             ['CMDSUBST2', 'CMDSUBST3', 'STMT', 'SPACES', 'STMT',
              'SPACES', 'TRUNC', 'SPACES', 'STMT', 'END_BRACKET',
-             'END_BRACKET', 'SPACES', 'CMDAND', 'SPACES', 'STMT',
+             'END_BRACKET', 'SPACES', 'CMDAND', 'SPACES', 'VAR',
              'PIPE', 'SPACES', 'STMT', 'SPACES', 'HEREDOC', 'SPACES',
              'STMT', 'NEW_LINE',
-             # 'STMT', 'NEW_LINE', 'STMT'
+             'STMT', 'NEW_LINE', 'STMT'
              ], tags)
 
     def test_tags_009(self):
