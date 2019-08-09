@@ -20,9 +20,10 @@ class Prompt(Cmd):
     def default(self, line):
         line = [char for char in line if char in string.printable]
         line = "".join(line)
-        self.content += line
-        TAGSTOKENS = TagsTokens().init_with_input(line).check_syntax()
+        self.content += line + "\n"
+        TAGSTOKENS = TagsTokens().init_with_input(self.content).check_syntax()
         if TAGSTOKENS.valid and not TAGSTOKENS.incomplete:
+            print(f"Treated : '{self.content}'")
             TREE = AST(TAGSTOKENS)
             run = Executor(TREE)
             self.content = ""
@@ -32,6 +33,7 @@ class Prompt(Cmd):
             print('Close all this command tokens: {}'.format(
                 str(TAGSTOKENS.token_error)))
             self.prompt = "error prompt > "
+            self.content = ""
 
     def do_EOF(self, line):
         exit(1)

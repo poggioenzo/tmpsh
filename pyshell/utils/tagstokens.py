@@ -211,6 +211,7 @@ class TagsTokens():
         self.tags[index], self.tokens[index] = value
         self.update_length()
 
+    #'echo <<' will fail on the prompt
     def __delitem__(self, key):
         if key is int:
             if not (0 <= key < self.length):
