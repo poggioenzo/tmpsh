@@ -126,6 +126,8 @@ class TagsTokens():
                 self.tags.append(gv.GRAMMAR.reverse[tok])
             elif sc.containonlyspaces(tok):
                 self.tags.append('SPACES')
+            elif tok[0] == '$' and len(tok) > 1:
+                self.tags.append('VAR')
             else:
                 self.tags.append('STMT')
             i += 1
