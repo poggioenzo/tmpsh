@@ -229,6 +229,12 @@ typedef struct
 ** Background jobs
 */
 
+enum	waitstate
+{
+	finish = 0,
+	running = 1,
+};
+
 typedef struct
 {
 	t_pylst		*list_jobs;
