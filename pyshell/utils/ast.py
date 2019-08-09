@@ -67,7 +67,6 @@ class AST():  # AbstractSyntaxTree
 
 
 class ACB():  # AbstractCommandBranch
-    # TODO: trim each branch
     def __init__(self, tt, begin_andor, tag_end):
         self.tagstokens = tt
         self.begin_andor = begin_andor
@@ -84,7 +83,6 @@ class ACB():  # AbstractCommandBranch
         self.pid = None
         self.pgid = 0
         self.complete = False
-        self.cursh_subsh_gesture()
         self.check_subast()
         self.set_subast_type()
         self.check_redirection()
@@ -96,22 +94,6 @@ class ACB():  # AbstractCommandBranch
     def set_subast_type(self):
         for type_command, sub_ast in zip(self.subcmd_type, self.subast):
             sub_ast.type = type_command
-
-    def cursh_subsh_gesture(self):
-        # should be done in TTM
-        i = 0
-        end = 0
-        tag = ''
-        isfirst = True
-        while i < self.tagstokens.length:
-            tag = self.tagstokens.tags[i]
-            if not isfirst and tag in ['CURSH', 'SUBSH']:
-                end = self.tagstokens.skip_openning_tags(i) - 1
-                self.tagstokens.tags[i] = 'STMT'
-                self.tagstokens.tags[end] = 'STMT'
-                i = end
-            isfirst = isfirst and tag == 'SPACES'
-            i += 1
 
     def check_subast(self):
         i = 0
@@ -126,7 +108,7 @@ class ACB():  # AbstractCommandBranch
                 self.subast.append(AST(self.tagstokens.copytt(begin, i)))
                 self.tagstokens[begin - 1:i + 1] = [
                     ['SUBAST'], ['{}'.format(len(self.subast) - 1)]]
-                i = begin
+                i = begin - 1
             i += 1
 
     def check_redirection(self):

@@ -18,13 +18,13 @@ class Grammar(object):
         length = len(lines)
         i = 0
         grammar = {}
-        while (i < length):
+        while i < length:
             if len(lines[i]) > 0 and lines[i][0] not in '\n#\t':
                 keyword = lines[i].split(':')[0].strip()
                 i += 1
                 if keyword not in grammar:
                     grammar[keyword] = []
-                while (1):
+                while 1:
                     if len(lines[i]) > 0 and lines[i][0] == '\t':
                         grammar[keyword].append(lines[i].strip())
                     else:

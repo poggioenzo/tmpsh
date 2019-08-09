@@ -5,6 +5,7 @@ import os
 
 GRAMMAR = ShellGrammar()
 ALIAS = {'all': 'ls -l', 'gall': 'all -G -1', 'ball': '$(gall)',
+         'another': 'ls\t',
          'recursion1': 'recursion2',
          'recursion2': 'recursion3',
          'loop1': 'loop2',
@@ -12,6 +13,8 @@ ALIAS = {'all': 'ls -l', 'gall': 'all -G -1', 'ball': '$(gall)',
          'loop3': 'loop1'}
 
 ENVIRON = os.environ.copy()
+PASSED_ALIAS = []
+
 LOCAL_VAR = {}
 LAST_STATUS = 0
 

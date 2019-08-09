@@ -23,8 +23,20 @@ def end_escape(lt):
 
 
 class Heredocs():
-    def __init__(self, arg):
-        self.arg = arg
+    def __init__(self, end_seq_word):
+        self.end_seq_word = end_seq_word
+        self.closed = False
+        self.tokens = []
+        self.tags = []
+
+    def init_tags_tokens(self, tags, tokens):
+        self.tokens = tokens
+        self.tags = tags
+
+    def __str__(self):
+        str0 = f'HEREDOC: {self.end_seq_word} | closed: {self.closed}\n'
+        str0 += 'DOC:\n{}\n'.format(''.join(self.tokens))
+        return str0
 
 
 class TagsTokens():
@@ -55,13 +67,57 @@ class TagsTokens():
     def update_length(self):
         self.length = len(self.tokens)
 
-    def init_with_input(self, term_inputs, i=0, quote_gesture=True):
-        tk.tokenize(term_inputs.strip(), self.tokens)
+    def init_with_input(self, term_inputs):
+        tk.tokenize(term_inputs, self.tokens)
         self.update_length()
-        self.get_tags(i, quote_gesture)
+        self.get_tags()
         return self
 
-    def get_tags(self, i=0, quote_gesture=True):
+    # def split_cmd_from_heredocs(self):
+    #     i = 0
+    #     tag = ''
+    #     and_or_previous = False
+    #     tgtk_heredocs = None
+    #     while i < self.length:
+    #         tag = self.tags[i]
+    #         if tag in gv.GRAMMAR.opening_tags:
+    #             i += self.skip_openning_tags(i)
+    #         elif tag == 'NEW_LINE' and not and_or_previous:
+    #             print('LOL')
+    #             break
+    #         and_or_previous = tag in ['CMDOR', 'CMDAND']
+    #         i += 1
+    #     if i < self.length:
+    #         tgtk_heredocs = self.copytt(i + 1, self.length)
+    #         del self[i + 1: self.length]
+    #     else:
+    #         tgtk_heredocs = TagsTokens()
+    #     return tgtk_heredocs
+    #
+    # def split_heredocs(self, tgtk_heredocs):
+    #     pass
+    #
+    # def heredocs_gesture(self):
+    #     tgtk_heredocs = self.split_cmd_from_heredocs()
+    #     print(tgtk_heredocs)
+    #     i = 0
+    #     tag = ''
+    #     key = ''
+    #     is_heredocs = False
+    #     while i < self.length:
+    #         tag = self.tags[i]
+    #         if is_heredocs and tag != 'SPACES':
+    #             key = self.tokens[i]
+    #             if tag in gv.GRAMMAR.opening_tags:
+    #                 key = ''.join(
+    #                     self.tokens[i:self.skip_openning_tags(i)])
+    #             print('key', key)
+    #             self.heredocs.append(Heredocs(key))
+    #         is_heredocs = tag == 'HEREDOC' or (is_heredocs and tag == 'SPACES')
+    #         i += 1
+    #     self.split_heredocs(tgtk_heredocs)
+
+    def get_tags(self, i=0):
         self.tags = self.tags[:i]
         tok = ''
         while i < self.length:
@@ -73,72 +129,25 @@ class TagsTokens():
             else:
                 self.tags.append('STMT')
             i += 1
-        self.strip()
+        self.strip()  # to remove and change test
         self.update_length()
-        if quote_gesture:
-            self.double_quote_gesture()  # to do in TTM(self) in check_syntax
-            self.quote_gesture()  # to do in TTM(self)in check_syntax
+        # self.heredocs_gesture()
         return self
 
     def check_syntax(self):
-        # TTM(self)  # en production
+        TTM(self)
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
-        self.hardcode_error_redirection()  # to do in TTM(self)
         self.clear_stack()
         return self
-
-    def double_quote_gesture(self):
-        i = 0
-        stk = ['']  # stk for stack
-        exit_tag = ['']
-        while i < self.length:
-            tag = self.tags[i]
-            if exit_tag[-1] == tag:
-                if stk[-1:][0] == 'DQUOTES':
-                    self.tags[i] = 'STMT'
-                else:
-                    exit_tag.pop(-1)
-                    stk.pop(-1)
-            elif tag == 'DQUOTES':
-                if stk[-1:][0] != 'DQUOTES':
-                    stk.append(tag)
-                else:
-                    stk.pop(-1)
-                    self.tags[i] = 'END_DQUOTES'
-            elif self.tags[i] != 'STMT' and stk[-1:][0] == 'DQUOTES':
-                if tag in gv.GRAMMAR.dquotes_opening_tags:
-                    stk.append(tag)
-                    exit_tag.append(gv.GRAMMAR.dquotes_opening_tags[tag])
-                else:
-                    self.tags[i] = 'STMT'
-            i += 1
-
-    def quote_gesture(self):
-        i = 0
-        inquote = False
-        while i < self.length:
-            if self.tags[i] == 'QUOTE':
-                if inquote:
-                    self.tags[i] = 'END_QUOTE'
-                inquote = not inquote
-            elif self.tags[i] != 'STMT' and inquote:
-                self.tags[i] = 'STMT'
-            i += 1
-
-    def hardcode_error_redirection(self):
-        if self.stack != [] and self.stack[-1] == 'REDIRECTION':
-            self.valid = False
-            self.incomplete = False
-            self.token_error = self.find_prev_token(len(self.tokens) - 1)
 
     def clear_stack(self):
         self.stack = [elt for elt in self.stack if elt != 'CMD']
 
     @test
-    def skip_openning_tags(self, i):
+    def skip_openning_tags(self, i, until=''):
         stack = [gv.GRAMMAR.opening_tags[self.tags[i]]]
         i += 1
         while i < self.length:
@@ -167,12 +176,21 @@ class TagsTokens():
             i += 1
         return self.tokens[i] if get_token else self.tags[i]
 
+    def replace_alias(self, alias_inputs, i):
+        tt_alias = TagsTokens().init_with_input(alias_inputs).check_syntax()
+        self.tokens = self.tokens[:i] + tt_alias.tokens + self.tokens[i + 1:]
+        self.tags = self.tags[:i] + tt_alias.tags + self.tags[i + 1:]
+        self.valid = tt_alias.valid
+        self.update_length()
+
     def __str__(self):
         str0 = '\n'.join(
             str(pd.DataFrame([self.tags, self.tokens])).split('\n')[1:3])
         str0 += '\nStack: {}'.format(self.stack)
         str0 += '\nValid: {} | Incomplete: {} | Token_error: "{}"'.format(
             self.valid, self.incomplete, self.token_error)
+        if self.heredocs != []:
+            str0 += '\n' + '\n'.join([str(elt) for elt in self.heredocs])
         return str0
 
     def copytt(self, begin, end=None):
@@ -192,8 +210,16 @@ class TagsTokens():
         self.update_length()
 
     def __delitem__(self, key):
-        if not (0 <= key < self.length):
-            raise Exception("IndexError: list index out of range")
+        if key is int:
+            if not (0 <= key < self.length):
+                raise Exception("IndexError: list index out of range")
+        if key is slice:
+            if not (0 <= key.start and key.stop < self.length):
+                raise Exception("SliceError: ")
         del self.tags[key]
         del self.tokens[key]
         self.update_length()
+
+    def __add__(self, other):
+        return TagsTokens(self.tokens + other.tokens,
+                          self.tags + other.tags).check_syntax()

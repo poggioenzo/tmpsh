@@ -8,27 +8,27 @@ class TestTags(unittest.TestCase):
 
     def test_tags_001(self):
         tokens = ['ls', ' ', '-l', '\n']
-        tags = TagsTokens(tokens).get_tags().tags
+        tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(['STMT', 'SPACES', 'STMT', 'NEW_LINE'], tags)
 
     def test_tags_002(self):
         tokens = ['echo', ' ', '"', 'qwert', '"', '"',
                   'yuiop', '"']
-        tags = TagsTokens(tokens).get_tags().tags
+        tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(
             ['STMT', 'SPACES', 'DQUOTES', 'STMT', 'END_DQUOTES', 'DQUOTES',
              'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_003(self):
         tokens = ['VAR', ' ', '+=', ' ', '0', '\n']
-        tags = TagsTokens(tokens).get_tags().tags
+        tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(['STMT', 'SPACES', 'CONCATENATION',
                           'SPACES', 'STMT', 'NEW_LINE'], tags)
 
     def test_tags_004(self):
         tokens = ['ls', ' ', '-l', ' ', '\\\n/',
                   ' ', ';', '\n']
-        tags = TagsTokens(tokens).get_tags().tags
+        tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(['STMT', 'SPACES', 'STMT', 'SPACES',
                           'STMT', 'SPACES', 'END_COMMAND', 'NEW_LINE'], tags)
 
@@ -36,7 +36,7 @@ class TestTags(unittest.TestCase):
         tokens = ['echo', ' ', '1', '&&', '\n',
                   '<(', 'LOL', ')', '||', '\n',
                   'LOL', '\n']
-        tags = TagsTokens(tokens).get_tags().tags
+        tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(
             ['STMT', 'SPACES', 'STMT', 'CMDAND', 'NEW_LINE',
              'CMDSUBST3', 'STMT', 'END_BRACKET', 'CMDOR', 'NEW_LINE', 'STMT',
@@ -45,7 +45,7 @@ class TestTags(unittest.TestCase):
     def test_tags_006(self):
         tokens = ['echo', ' ', '${', 'var', '}', '_', '$var',
                   '${', 'var2', '}', '_']
-        tags = TagsTokens(tokens).get_tags().tags
+        tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(['STMT', 'SPACES', 'BRACEPARAM', 'STMT', 'END_BRACE',
                           'STMT', 'STMT', 'BRACEPARAM', 'STMT', 'END_BRACE',
                           'STMT'], tags)
@@ -53,7 +53,7 @@ class TestTags(unittest.TestCase):
     def test_tags_007(self):
         tokens = ['echo', ' ', 'text', '>>',
                   'file', ' ', '>>', ' ', 'file2', '\n']
-        tags = TagsTokens(tokens).get_tags().tags
+        tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(['STMT', 'SPACES', 'STMT', 'APPEND',
                           'STMT', 'SPACES', 'APPEND', 'SPACES', 'STMT',
                           'NEW_LINE'], tags)
@@ -63,18 +63,21 @@ class TestTags(unittest.TestCase):
                   ' ', '>', ' ', 'file.txt', ')', ')', ' ',
                   '&&', ' \t\t', '$VAR_TEST', '|', ' ',
                   'cat', ' ', '<<', ' ', 'HERE', '\n',
-                  'testHERE', '\n', 'HERE']
-        tags = TagsTokens(tokens).get_tags().tags
+                  'testHERE', '\n', 'HERE']  # this line is magical disappear
+        # by heredocs gesture
+        tags = TagsTokens(tokens).get_tags().check_syntax().tags
         self.assertEqual(
             ['CMDSUBST2', 'CMDSUBST3', 'STMT', 'SPACES', 'STMT',
              'SPACES', 'TRUNC', 'SPACES', 'STMT', 'END_BRACKET',
              'END_BRACKET', 'SPACES', 'CMDAND', 'SPACES', 'STMT',
              'PIPE', 'SPACES', 'STMT', 'SPACES', 'HEREDOC', 'SPACES',
-             'STMT', 'NEW_LINE', 'STMT', 'NEW_LINE', 'STMT'], tags)
+             'STMT', 'NEW_LINE',
+             # 'STMT', 'NEW_LINE', 'STMT'
+             ], tags)
 
     def test_tags_009(self):
         term_inputs = ' \\ a  '
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['STMT'], tags)
 
 
@@ -82,62 +85,62 @@ class TestTagsDoubleQuotes(unittest.TestCase):
 
     def test_tags_double_quotes_double_quotes_000(self):
         term_inputs = '"{CMD}"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'STMT', 'STMT',
                           'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_001(self):
         term_inputs = '"(CMD)"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'STMT', 'STMT',
                           'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_002(self):
         term_inputs = '">(CMD)"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'STMT', 'STMT',
                           'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_003(self):
         term_inputs = '"<(CMD)"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'STMT', 'STMT',
                           'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_004(self):
         term_inputs = '"$(CMD)"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'CMDSUBST1', 'STMT',
                           'END_BRACKET', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_005(self):
         term_inputs = '"${CMD}"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'BRACEPARAM', 'STMT',
                           'END_BRACE', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_006(self):
         term_inputs = '""CMD""'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'END_DQUOTES', 'STMT',
                           'DQUOTES', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_007(self):
         term_inputs = '"\'$(CMD;CMD|CMD)\'"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'STMT', 'CMDSUBST1', 'STMT',
                           'END_COMMAND', 'STMT', 'PIPE', 'STMT',
                           'END_BRACKET', 'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_008(self):
         term_inputs = '"\'CMD\'"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'STMT', 'STMT',
                           'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_009(self):
         term_inputs = '"$(" \'$( CMD )\' ")"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(
             ['DQUOTES', 'CMDSUBST1', 'DQUOTES', 'STMT', 'STMT', 'CMDSUBST1',
              'SPACES', 'STMT', 'SPACES', 'END_BRACKET', 'STMT', 'STMT',
@@ -145,26 +148,26 @@ class TestTagsDoubleQuotes(unittest.TestCase):
 
     def test_tags_double_quotes_010(self):
         term_inputs = '"$("CMD")"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'CMDSUBST1', 'DQUOTES',
                           'STMT', 'END_DQUOTES', 'END_BRACKET',
                           'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_011(self):
         term_inputs = '" CMD  CMD "'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'STMT', 'STMT', 'STMT',
                           'STMT', 'STMT', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_012(self):
         term_inputs = '"$(")")"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'CMDSUBST1', 'DQUOTES', 'STMT',
                           'END_DQUOTES', 'END_BRACKET', 'END_DQUOTES'], tags)
 
     def test_tags_double_quotes_013(self):
         term_inputs = '"$("$(")"'
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['DQUOTES', 'CMDSUBST1', 'DQUOTES', 'CMDSUBST1',
                           'DQUOTES', 'STMT', 'END_DQUOTES'], tags)
 
@@ -173,79 +176,79 @@ class TestTagsQuotes(unittest.TestCase):
 
     def test_tags_quotes_000(self):
         term_inputs = "'{cmd}'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_001(self):
         term_inputs = "'${cmd}'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_002(self):
         term_inputs = "'$(CMD)'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_003(self):
         term_inputs = "'(CMD)'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_004(self):
         term_inputs = "'>(CMD)'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_005(self):
         term_inputs = "'<(CMD)'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_006(self):
         term_inputs = "'\"CMD\"'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_007(self):
         term_inputs = "''CMD''"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'END_QUOTE', 'STMT',
                           'QUOTE', 'END_QUOTE'], tags)
 
     def test_tags_quotes_008(self):
         term_inputs = "''$(CMD)''"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'END_QUOTE', 'CMDSUBST1', 'STMT',
                           'END_BRACKET', 'QUOTE', 'END_QUOTE'], tags)
 
     def test_tags_quotes_009(self):
         term_inputs = "''${CMD}''"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'END_QUOTE', 'BRACEPARAM', 'STMT',
                           'END_BRACE', 'QUOTE', 'END_QUOTE'], tags)
 
     def test_tags_quotes_010(self):
         term_inputs = "'\"$(CMD)\"'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_011(self):
         term_inputs = "'\"${CMD}\"'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT', 'STMT', 'STMT',
                           'STMT', 'END_QUOTE'], tags)
 
     def test_tags_quotes_012(self):
         term_inputs = "'\" ${ CMD CMD }\"'"
-        tags = TagsTokens().init_with_input(term_inputs).tags
+        tags = TagsTokens().init_with_input(term_inputs).check_syntax().tags
         self.assertEqual(['QUOTE', 'STMT', 'STMT', 'STMT', 'STMT', 'STMT',
                           'STMT', 'STMT', 'STMT', 'STMT', 'STMT',
                           'END_QUOTE'], tags)

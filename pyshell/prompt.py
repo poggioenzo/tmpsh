@@ -21,7 +21,7 @@ class Prompt(Cmd):
         line = [char for char in line if char in string.printable]
         line = "".join(line)
         self.content += line
-        TAGSTOKENS = TagsTokens().init_with_input(line)#.check_syntax()
+        TAGSTOKENS = TagsTokens().init_with_input(line).check_syntax()
         if TAGSTOKENS.valid and not TAGSTOKENS.incomplete:
 
             TREE = AST(TAGSTOKENS)
