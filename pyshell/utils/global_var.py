@@ -28,6 +28,7 @@ try:
 except PermissionError:
     print("No able to open debug file {}".format(debug_file))
 
+
 def dprint(string, *args, **kwargs):
-    #Small debug function to print with DEBUG filestream
+    # Small debug function to print with DEBUG filestream
     print(string, *args, file=DEBUG, **kwargs, flush=True)
