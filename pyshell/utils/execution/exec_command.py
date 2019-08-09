@@ -29,7 +29,7 @@ def extract_cmd(branch):
     join_stmt(branch)
     command = []
     for index in range(branch.tagstokens.length):
-        if branch.tagstokens.tags[index] in gv.GRAMMAR.grammar["STMT"]:
+        if branch.tagstokens.tags[index] == "STMT":
             command.append(branch.tagstokens.tokens[index])
     return command
 

@@ -6,10 +6,11 @@ wishlist:
 	- assertListEqual_pylist(pylist t)
 		- comparaison char * à char *
 
-
-- Gestion des droits executables.
-
 -Checker les builtins.  
 echo/cd/setenv/unsetenv/env/exit/type/export/set/unset . 
 jobs/fg/bg
 -  variable env for builtins
+		
+Lexing:  
+- $$ fait 2 statement.
+- `echo 2>&1-- content` le STMT du fd est `1--` 
