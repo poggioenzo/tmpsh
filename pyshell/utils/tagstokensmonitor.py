@@ -5,6 +5,10 @@ import utils.global_var as gv
 # TODO: escape $PATH\\
 
 
+def strncmp(s1, s2, n):
+    return s1 == s2[:n]
+
+
 class Heredocs():
     def __init__(self, end_seq_word):
         self.end_seq_word = end_seq_word
