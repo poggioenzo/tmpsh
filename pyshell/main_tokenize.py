@@ -9,5 +9,5 @@ if __name__ == '__main__':
     else:
         ENTRY = " ".join(sys.argv[1:])
     TOKENS = []
-    tk.tokenize(TOKENS, ENTRY)
+    tk.tokenize(ENTRY, TOKENS)
     print(TOKENS)
