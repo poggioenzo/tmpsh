@@ -49,12 +49,17 @@ class TagsTokensMonitor():
         self.begin_cmd = True
         gv.PASSED_ALIAS = []
 
-    def next_tag_token(self):
+    def next_tag_token(self, clear=False):
         self.i += 1
         ret = self.i < self.tt.length
         if ret:
             self.tag = self.tt.tags[self.i]
             self.token = self.tt.tokens[self.i]
+            if clear:
+                del self.tt.tags[self.i]
+                del self.tt.tokens[self.i]
+                self.tt.update_length()
+                self.i -= 1
         return ret
 
     def check(self):
