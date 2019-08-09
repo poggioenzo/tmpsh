@@ -28,7 +28,8 @@ try:
     debug_file = "/dev/ttys003"
     DEBUG = open(debug_file, "w")
 except PermissionError:
-    print("No able to open debug file {}".format(debug_file))
+    pass
+    # print("No able to open debug file {}".format(debug_file))
 
 
 def dprint(string, *args, **kwargs):
