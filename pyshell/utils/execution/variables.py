@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import utils.global_var as gv
+import os
 
 def getenv(variable):
     """os.getenv equivalent for our local environnement"""
@@ -101,9 +102,10 @@ def replace_variable(branch):
     while index < branch.tagstokens.length:
         tag = branch.tagstokens.tags[index]
         token = branch.tagstokens.tokens[index]
-        if tag == "STMT" and token[0] == "$":
+        if tag == "VAR":
             variable = retrieve_variable(token[1:])
             branch.tagstokens.tokens[index] = variable
+            branch.tagstokens.tags[index] = "STMT"
         elif tag == "SUBAST":
             if branch.subast[index_subast].type == "DQUOTES":
                 replace_variable(branch.subast[index_subast].list_branch[0])
