@@ -3,6 +3,8 @@
 lexer/utils/__pycache__/*
 .DS_Store
 __pycache__/
+.pytest_cache
+
 
 tmpsh
 .*.swp

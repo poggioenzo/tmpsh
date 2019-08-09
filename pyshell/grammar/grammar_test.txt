@@ -1,0 +1,17 @@
+
+A:
+	B
+	A A
+
+B:
+	C C C
+
+C:
+	D D
+	D D C
+
+D:
+	E
+
+FORBIDDEN:
+	E E E

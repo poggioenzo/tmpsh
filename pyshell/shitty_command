@@ -1,0 +1,3 @@
+{echo ok && echo still ok && mv || echo end } & echo mdr && echo test
+{echo ok } & echo good
+echo ok | cat | echo bob | tee
