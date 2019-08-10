@@ -74,6 +74,21 @@ void get_grammar_from_path(void)
 	}
 }
 
+static void	get_reverse_grammar(void)
+{
+	t_pylst	*key_values;
+	char	*key;
+
+	while (ht_iter(g_grammar->grammar, &key, (void **)&key_values))
+	{
+		while (key_values)
+		{
+			insert_value(g_grammar->reverse, key_values->value, key, _chare);
+			key_values = key_values->next;
+		}
+	}
+}
+
 void	grammar_init(char *path)
 {
 	if (!(g_grammar = MALLOC(sizeof(t_grammar))))
@@ -82,6 +97,5 @@ void	grammar_init(char *path)
 	ht_new_table(&g_grammar->grammar, 63, 40);
 	ht_new_table(&g_grammar->reverse, 63, 40);
 	get_grammar_from_path();
-	//get_reverse_grammar();
-
+	get_reverse_grammar();
 }

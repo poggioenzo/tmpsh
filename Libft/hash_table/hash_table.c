@@ -117,6 +117,7 @@ static t_ht_alveol *alveol_iterator(t_ht_table *table)
 		if (curr_alveol)
 			return (curr_alveol);
 	}
+	index = -1;
 	return (NULL);
 }
 
