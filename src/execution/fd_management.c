@@ -1,5 +1,7 @@
 #include <unistd.h>
 #include <fcntl.h>
+#include "tmpsh.h"
+#include "fd_management.h"
 
 /*
 ** replace_fd:
@@ -68,7 +70,7 @@ int		setup_pipe_fd(int pipes_fd[2])
 ** Close each fd in an int array. Array must finish by -1
 */
 
-void	close_fds(int *fd_list)
+void	close_fds(const int *fd_list)
 {
 	// !! PROBABLY None FD IN THE LIST. check what is coming in.
 	while (*fd_list != -1)
@@ -84,7 +86,7 @@ void	close_fds(int *fd_list)
 ** to be replace freely. In restore mode, reset old stdin/out/err.
 */
 
-void	save_std_fd(int mode)
+void	save_std_fd(enum e_save_fd mode)
 {
 	static int	std_fds[3];
 

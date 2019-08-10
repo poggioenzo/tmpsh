@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include "libft.h"
+#include "tmpsh.h"
 //Include for environnement variables (ft_getenv)
 
 static void	print_error(char *msg, char *to_add)
@@ -28,15 +29,13 @@ static void	print_error(char *msg, char *to_add)
 // Should it be static function ?
 char	*check_rights(char *executable)
 {
-	char	*err_msg;
-
 	if (access(executable, F_OK) == -1)
 	{
 		print_error("tmpsh: No such file or directory : ", executable);
 		FREE(executable);
 		return (NULL);
 	}
-	if (access(executable, X_OK) == -1 || access(executable, R_OK) == -1)
+	if (access(executable, X_OK) == -1 || access(executable, R_OK) == -1)
 	{
 		print_error("tmpsh: permission denied: ", executable);
 		FREE(executable);
@@ -68,7 +67,7 @@ static char	*find_exec(char *cmd)
 
 	if (!(path_env = ft_getenv("PATH")))
 		return (NULL);
-	if (!(exec_folders = ft_strplit(path_env, ":")))
+	if (!(exec_folders = ft_strsplit(path_env, ":")))
 		exit(-1);
 	nbr_folder = ft_arraylen(exec_folders);
 	index = 0;
@@ -76,7 +75,7 @@ static char	*find_exec(char *cmd)
 	while (index < nbr_folder && !tmp_file)
 	{
 		tmp_file = exec_folders[index];
-		if (!(tmp_file = ft_filejoin(tmp_file, cmd, false, false);))
+		if (!(tmp_file = ft_filejoin(&tmp_file, &cmd, false, false)))
 			exit(-1);
 		if (access(tmp_file, F_OK) != -1)
 			return (tmp_file);
@@ -113,8 +112,8 @@ char	*get_execname(char *cmd)
 			exit(-1);
 		return (check_rights(cmd));
 	}
-	if (!(exec_file = find_exec(cmd)))
-		print_error("tmpsh: command not found: ", cmd);
-	else
+	if ((exec_file = find_exec(cmd)))
 		return (check_rights(exec_file));
+	print_error("tmpsh: command not found: ", cmd);
+	return (NULL);
 }

@@ -74,7 +74,7 @@ static void		create_alveol(const char *key, void *value, \
 ** insert_in_alveol:
 **
 ** Allocate a new t_ht_alveol with the pair key/value, push it at the end
-** of the chained list.
+** of the chained list. Update an alveol if the key alreay exist.
 */
 
 static void	insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
@@ -88,7 +88,15 @@ static void	insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
 	{
 		tmp_alveol = *alveol;
 		while (tmp_alveol->next)
+		{
+			if (ft_strequ(key, tmp_alveol->key))
+			{
+				tmp_alveol->value = value;
+				tmp_alveol->ctype = ctype;
+				return ;
+			}
 			tmp_alveol = tmp_alveol->next;
+		}
 		create_alveol(key, value, &tmp_alveol->next, ctype);
 	}
 }

@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <fcntl.h>
+#include "tmpsh.h"
 
 /*
 ** set_foreground:
@@ -28,7 +29,7 @@ void	restore_tcattr(void)
 	int		term_fd;
 
 	term_fd = open("/dev/tty", O_RDONLY);
-	tcsetattr(term_fd, TCSADRAIN, g_tcsettings);
+	tcsetattr(term_fd, TCSADRAIN, &g_tcsettings);
 	close(term_fd);
 }
 

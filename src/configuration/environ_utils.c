@@ -2,6 +2,8 @@
 #include "tmpsh.h"
 #include "libft.h"
 
+char		**g_environ;
+
 static char		*get_path_default(void)
 {
 	char	*paths_content;

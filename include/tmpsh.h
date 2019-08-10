@@ -14,6 +14,8 @@
 #ifndef TMPSH_H
 # define TMPSH_H
 
+# include "globals.h"
+
 # ifndef UNUSED_VAR
 #  define UNUSED_VAR
 #  define UNUSED(variable)	(void) variable
@@ -23,8 +25,6 @@
 # ifndef NULL
 #  define NULL (void *) 0
 # endif
-
-char	**g_environ;
 
 enum	e_newline {leave_check = 2, invalid_syntax, not_nested};
 
@@ -138,9 +138,6 @@ struct s_hist
 ** Grammar structs
 */
 
-typedef struct s_pylst	t_pylst;
-typedef struct s_ht_table	t_ht_table;
-typedef signed int			pid_t;
 
 // Both structure t_grammar and t_shellgrammar can be joined togethercan be
 // joined together

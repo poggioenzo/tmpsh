@@ -1,5 +1,3 @@
-# This auto-generated file please don't edit it.
-
 MAIN_FILE = src/shell_main.c
 
 SOURCES_DIR = src/
@@ -109,6 +107,14 @@ BUILTINS_SRCS := cd.c \
 
 BUILTINS_SRCS := $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
 
+EXECUTION_DIR = execution/
+
+EXECUTION_SRCS := fd_management.c \
+                  rights_file.c \
+                  foreground.c \
+
+EXECUTION_SRCS := $(addprefix $(EXECUTION_DIR), $(EXECUTION_SRCS))
+
 FILE_DIR = file/
 
 FILE_SRCS := replace_home.c \
@@ -126,3 +132,4 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(CONFIGURATION_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(FILE_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(BUILTINS_SRCS)) \
+		   $(addprefix $(SOURCES_DIR), $(EXECUTION_SRCS)) \
