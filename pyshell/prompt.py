@@ -41,7 +41,7 @@ def load_extension():
     file_list = ["utils/execution/sigmask_modif.c"]
     file_str = " ".join(file_list)
     library = "utils/execution/sigmask.so"
-    os.system("gcc -shared {} -o {}".format(file_str, library))
+    os.system("gcc -shared -fPIC {} -o {}".format(file_str, library))
     return ctypes.cdll.LoadLibrary(library)
 
 def main(argc, argv, environ):

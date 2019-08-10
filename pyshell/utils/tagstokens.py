@@ -34,7 +34,7 @@ class Heredocs():
         self.tags = tags
 
     def __str__(self):
-        str0 = f'HEREDOC: {self.end_seq_word} | closed: {self.closed}\n'
+        str0 = 'HEREDOC: {} | closed: {}\n'.format(self.end_seq_word, self.closed)
         str0 += 'DOC:\n{}\n'.format(''.join(self.tokens))
         return str0
 
