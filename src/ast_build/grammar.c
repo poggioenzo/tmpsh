@@ -70,9 +70,9 @@ void get_grammar_from_path(void)
 		if (ft_strlen(lines[i]) > 0 && !ft_incharset(lines[i][0], "\t\n#"))
 		{
 			parse_keyword_values(lines, &i);
-			i--;
 		}
-		i++;
+		else
+			i++;
 	}
 }
 
