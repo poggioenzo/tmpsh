@@ -59,7 +59,7 @@ def retrieve_assignation(branch):
     index = 0
     tagstok = branch.tagstokens
     index_to_del = 0
-    while True and index < tagstok.length:
+    while index < tagstok.length:
         if last_stmt == None and tagstok.tags[index] == "STMT":
             last_stmt = tagstok.tokens[index]
         elif tagstok.tags[index] in ["CONCATENATION", "ASSIGNATION_EQUAL"]:
