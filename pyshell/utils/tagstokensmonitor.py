@@ -1,32 +1,13 @@
 #!/usr/bin/env python3
 
 import utils.global_var as gv
+from utils.heredocs import Heredocs
 
 # TODO: escape $PATH\\
 
 
 def strncmp(s1, s2, n):
     return s1 == s2[:n]
-
-
-class Heredocs():
-    def __init__(self, end_seq_word):
-        self.end_seq_word = end_seq_word
-        self.closed = False
-        self.tokens = []
-        self.tags = []
-
-    def add_tags_tokens(self, tag, token):
-        self.tokens.extend(token)
-        self.tags.extend(tag)
-
-    def close(self):
-        self.closed = True
-
-    def __str__(self):
-        str0 = f'HEREDOC: {self.end_seq_word} | closed: {self.closed}\n'
-        str0 += 'DOC:\n{}\n'.format(''.join(self.tokens))
-        return str0
 
 
 class TagsTokensMonitor():
@@ -63,7 +44,7 @@ class TagsTokensMonitor():
         return ret
 
     def check(self):
-        while self.tt.valid and self.next_tag_token():
+        while self.next_tag_token():
             self.op_selector()
 
     def op_selector(self):
@@ -92,24 +73,24 @@ class TagsTokensMonitor():
                 self.opened.pop(-1)
 
     def is_newline(self):
-        gold_key = ''
+        tuple_key_len = ()
         key = ''
         heredoc = None
-        not_end = 1
+        not_end = True
         self.is_abs_terminator()
         while self.heredocs_keys != [] and not_end:
-            gold_key = self.heredocs_keys[0]
-            heredoc = Heredocs(gold_key)
-            self.tt.heredocs.append(heredoc)
-            not_end = self.next_tag_token(True)
+            tuple_key_len = self.heredocs_keys[0]
+            heredoc = Heredocs(tuple_key_len[0], tuple_key_len[1])
+            gv.HEREDOCS.append(heredoc)
+            not_end = self.next_tag_token()
             while not_end:
-                if key == gold_key:
+                if key == tuple_key_len[0]:
                     heredoc.close()
                     break
-                if not strncmp(key, gold_key, len(key)):
-                    heredoc.add_tags_tokens(self.tag, self.token)
-                    key = key if self.tag != 'NEW_LINE' else ''
+                heredoc.add_tags_tokens(self.tag, self.token)
                 key = key + self.token
+                if self.tag == 'NEW_LINE':
+                    key = ''
                 not_end = self.next_tag_token(True)
             self.heredocs_keys.pop(0)
             key = ''
@@ -136,17 +117,19 @@ class TagsTokensMonitor():
 
     def is_heredocs(self):
         not_end = self.next_tag_token()
-        key = ''
+        key = ()
         j = 0
+        list_tok = []
         if self.tag == 'SPACES':
             not_end = self.next_tag_token()
         if not_end:
             if self.tag in gv.GRAMMAR.opening_tags:
                 j = self.tt.skip_openning_tags(self.i, 'NEW_LINE')
-                key = ''.join(self.tt.tokens[self.i:j])
+                list_tok = self.tt.tokens[self.i:j]
+                key = (''.join(list_tok), len(list_tok))
                 self.i = j - 1
             else:
-                key = self.token
+                key = (self.token, 1)
             self.heredocs_keys.append(key)
         else:
             self.tt.valid = False

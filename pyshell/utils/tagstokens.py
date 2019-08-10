@@ -8,21 +8,12 @@ import utils.shiftreduce as sr
 from utils.tagstokensmonitor import TagsTokensMonitor as TTM
 
 
-def test(func):
-    def wrapper(self, i, until):
-        if self.tags[i] not in gv.GRAMMAR.opening_tags:
-            raise Exception("No {} in opening_tags.".format(self.tags[i]))
-        return func(self, i)
-    return wrapper
-
-
 def end_escape(lt):
     return len(lt) > 0 and gv.GRAMMAR.escape == lt[-1]
 
 
 class TagsTokens():
     def __init__(self, tokens=None, tags=None):
-        self.heredocs = []  # list of Heredocs
         self.tokens = tokens if tokens else []
         self.tags = tags if tags else []
         if isinstance(self.tokens, str):
@@ -72,21 +63,35 @@ class TagsTokens():
         self.update_length()
         return self
 
+    # def heredoc_tags(self):
+    #     i = 0
+    #     tag = ''
+    #     print(self.length)
+    #     while i < self.length:
+    #         tag = self.tags[i]
+    #         print(tag, i)
+    #         if tag not in ['STMT', 'VAR']:
+    #             if tag == 'CMDSUBST1':
+    #                 print(i)
+    #                 i = self.skip_openning_tags(i)
+    #                 print(i)
+    #             else:
+    #                 self.tags[i] = 'STMT'
+    #         i += 1
+
     def check_syntax(self):
-        print(self)
         TTM(self)
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
-        self.incomplete |= not all([elt.closed for elt in self.heredocs])
+        self.incomplete |= not all([elt.closed for elt in gv.HEREDOCS])
         self.clear_stack()
         return self
 
     def clear_stack(self):
         self.stack = [elt for elt in self.stack if elt != 'CMD']
 
-    @test
     def skip_openning_tags(self, i, until=''):
         stack = [gv.GRAMMAR.opening_tags[self.tags[i]]]
         i += 1
@@ -123,21 +128,27 @@ class TagsTokens():
         self.valid = tt_alias.valid
         self.update_length()
 
-    def __str__(self):
-        str0 = '\n'.join(
-            str(pd.DataFrame([self.tags, self.tokens])).split('\n')[1:3])
-        str0 += '\nStack: {}'.format(self.stack)
-        str0 += '\nValid: {} | Incomplete: {} | Token_error: "{}"'.format(
-            self.valid, self.incomplete, self.token_error)
-        if self.heredocs != []:
-            str0 += '\n' + '\n'.join([str(elt) for elt in self.heredocs])
-        return str0
+    def append(self, tag, token):
+        self.tags.append(tag)
+        self.tokens.append(token)
+        self.update_length()
 
     def copytt(self, begin, end=None):
         if end is None:
             end = begin + 1
         tokens, tags = self[begin:end]
         return TagsTokens(tokens, tags)
+
+    def __str__(self):
+        str0 = '\n'.join(
+            str(pd.DataFrame([self.tags, self.tokens])).split('\n')[1:3])
+        str0 += '\nStack: {}'.format(self.stack)
+        str0 += '\nValid: {} | Incomplete: {} | Token_error: "{}"'.format(
+            self.valid, self.incomplete, self.token_error)
+        if gv.HEREDOCS != [] and gv.DONTPRINT:
+            gv.DONTPRINT = False
+            str0 += '\n' + '\n'.join([str(elt) for elt in gv.HEREDOCS])
+        return str0
 
     def __getitem__(self, index):
         return (self.tokens[index], self.tags[index])
