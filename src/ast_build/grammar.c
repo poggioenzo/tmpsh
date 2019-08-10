@@ -21,9 +21,7 @@ static int		is_value_line(char **lines, int index)
 	char	*analyse_str;
 
 	analyse_str = lines[index];
-	if (!analyse_str)
-		return (0);
-	if (ft_strlen(analyse_str) > 0)
+	if (analyse_str && ft_strlen(analyse_str) > 0)
 	{
 		if (ft_incharset(analyse_str[0], "\t") || ft_start_with(analyse_str, "    "))
 			return (1);
@@ -75,17 +73,6 @@ void get_grammar_from_path(void)
 			i--;
 		}
 		i++;
-	}
-	t_pylst *lst;
-	char	*key;
-	while (ht_iter(g_grammar->grammar, &key, (void **)&lst))
-	{
-		ft_printf("%s\n", key);
-		while (lst)
-		{
-			ft_printf("    %s\n", lst->value);
-			lst = lst->next;
-		}
 	}
 }
 
