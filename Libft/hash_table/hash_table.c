@@ -101,23 +101,20 @@ void			delete_value(t_ht_table *table, char *key)
 
 static t_ht_alveol *alveol_iterator(t_ht_table *table)
 {
-	static int index = -1;
-	static t_ht_alveol *curr_alveol = NULL;
-
-	while (index < table->size)
+	while (table->iter_index < table->size)
 	{
-		if (curr_alveol)
+		if (table->iter_alveol)
 		{
-			curr_alveol = curr_alveol->next;
-			if (curr_alveol)
-				return (curr_alveol);
+			table->iter_alveol = table->iter_alveol->next;
+			if (table->iter_alveol)
+				return (table->iter_alveol);
 		}
-		index++;
-		curr_alveol = table->items[index];
-		if (curr_alveol)
-			return (curr_alveol);
+		table->iter_index++;
+		table->iter_alveol = table->items[table->iter_index];
+		if (table->iter_alveol)
+			return (table->iter_alveol);
 	}
-	index = -1;
+	table->iter_index = -1;
 	return (NULL);
 }
 

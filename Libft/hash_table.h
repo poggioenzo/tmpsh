@@ -29,6 +29,8 @@ typedef struct		s_ht_table
 	int			size;
 	int			count;
 	int			seed;
+	int			iter_index;
+	t_ht_alveol	*iter_alveol;
 	t_ht_alveol	**items;
 }					t_ht_table;
 

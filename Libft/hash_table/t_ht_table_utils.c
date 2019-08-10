@@ -68,5 +68,7 @@ void				ht_new_table(t_ht_table **hash_table, int seed, int size)
 		exit(-1);
 	(*hash_table)->size = size;
 	(*hash_table)->seed = seed;
+	(*hash_table)->iter_index = -1;
+	(*hash_table)->iter_alveol = NULL;
 	(*hash_table)->items = alloc_item_table((*hash_table)->size);
 }
