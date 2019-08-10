@@ -71,7 +71,7 @@ def retrieve_assignation(branch):
     if len(assignation_list) > 0:
         del tagstok.tags[:index_to_del + 1]
         del tagstok.tokens[:index_to_del + 1]
-    tagstok.update_length()
+        tagstok.update_length()
     return assignation_list
 
 def variables_config(variables, only_env=False):
