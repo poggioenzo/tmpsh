@@ -18,6 +18,12 @@ PASSED_ALIAS = []
 LOCAL_VAR = {}
 LAST_STATUS = 0
 
+
+DONTPRINT = True
+
+HEREDOCS = []
+
+
 JOBS = None
 
 with open("/dev/tty") as term:
