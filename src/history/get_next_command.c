@@ -99,7 +99,7 @@ char	*get_next_command(char *filename)
 
 	if (!history_content && stored == FALSE)
 	{
-		history_content = readfile(filename, O_RDONLY, 0);
+		history_content = readfile(filename);
 		curr_pos = history_content;
 		stored = TRUE;
 	}

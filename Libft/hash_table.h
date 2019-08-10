@@ -37,10 +37,12 @@ void				ht_new_table(t_ht_table **hash_table, int seed, int size);
 
 void				delete_value(t_ht_table *table, char *key);
 void				*search_value(t_ht_table *table, char *key);
+void				**search_value_addr(t_ht_table *table, char *key);
 void				insert_value(t_ht_table *table, char *key, void *value, \
 								int ctype);
 int					free_alveol(t_ht_alveol **alveol, int status);
 int					free_alveol_list(t_ht_alveol **alveol, int status);
 int					hash_function(const char *string, int seed, int size);
 
+int				ht_iter(t_ht_table *table, char **key, void **value);
 #endif

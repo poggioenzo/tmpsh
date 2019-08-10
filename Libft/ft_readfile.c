@@ -24,7 +24,7 @@ static int			file_size(char *filename)
 	return (inode.st_size);
 }
 
-char	*readfile(char *filename, int mode, int rights)
+char	*readfile(char *filename)
 {
 	int		len;
 	char	*content;
@@ -32,7 +32,7 @@ char	*readfile(char *filename, int mode, int rights)
 	int		ret;
 
 	len = file_size(filename);
-	fd = open(filename, mode, rights);
+	fd = open(filename, O_RDONLY);
 	if (fd == -1 || len == -1)
 		return (NULL);
 	if (!(content = MALLOC(sizeof(char) * (len + 1))))

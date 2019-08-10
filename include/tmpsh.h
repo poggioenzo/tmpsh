@@ -14,7 +14,6 @@
 #ifndef TMPSH_H
 # define TMPSH_H
 
-# include "globals.h"
 
 # ifndef UNUSED_VAR
 #  define UNUSED_VAR
@@ -25,6 +24,14 @@
 # ifndef NULL
 #  define NULL (void *) 0
 # endif
+
+/*
+** Useful structs prototype from libft
+*/
+typedef struct s_pylst	t_pylst;
+typedef struct s_ht_table	t_ht_table;
+typedef signed int			pid_t;
+
 
 enum	e_newline {leave_check = 2, invalid_syntax, not_nested};
 
@@ -146,7 +153,7 @@ typedef struct
 	char *path;
 	t_ht_table	*grammar;
 	t_ht_table	*reverse;
-}		t_grammar;
+}		t_grammar2;
 
 typedef struct
 {
@@ -156,6 +163,18 @@ typedef struct
 	t_ht_table	*dquotes_opening_tags;
 	int			maxlen_leaf_op;
 }		t_shellgrammar;
+
+typedef struct
+{
+	char *path;
+	t_ht_table	*grammar;
+	t_ht_table	*reverse;
+	t_pylst		*spaces;
+	char		escape;
+	t_ht_table	*opening_tags;
+	t_ht_table	*dquotes_opening_tags;
+	int			maxlen_leaf_op;
+}		t_grammar;
 
 /*
 ** Structs for the AbstractSyntaxTree
@@ -248,5 +267,6 @@ void	show_history(t_hist *history);
 
 
 #include "debug.h"
+# include "globals.h"
 
 #endif

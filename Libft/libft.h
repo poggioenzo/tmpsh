@@ -260,7 +260,7 @@ struct			s_fd
 };
 
 int				get_next_line(int fd, char **line);
-char			*readfile(char *filename, int mode, int rights);
+char			*readfile(char *filename);
 char			*fd_readfile(int fd);
 int				ft_readdir(char *directory, char ***strings);
 int				ft_rmdir(char *filename, int recursiv);

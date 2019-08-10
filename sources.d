@@ -124,6 +124,12 @@ FILE_SRCS := replace_home.c \
 
 FILE_SRCS := $(addprefix $(FILE_DIR), $(FILE_SRCS))
 
+AST_DIR = ast_build/
+
+AST_SRCS := grammar.c \
+
+AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS))
+
 SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(CHAR_UTILS)) \
 		   $(addprefix $(SOURCES_DIR), $(HISTORY_SRCS)) \
@@ -133,3 +139,4 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(FILE_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(BUILTINS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(EXECUTION_SRCS)) \
+		   $(addprefix $(SOURCES_DIR), $(AST_SRCS)) \

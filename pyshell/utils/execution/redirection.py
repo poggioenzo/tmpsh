@@ -1,5 +1,7 @@
 import os
 
+#To do: - Avoir running command if fd is wrong
+
 def open_redirection_file(redirection):
     fd = None
     if redirection.type in ["TRUNC", "APPEND", "READ_FROM"]:

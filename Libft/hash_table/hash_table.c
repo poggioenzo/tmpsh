@@ -41,6 +41,17 @@ static int		extract_alveol(t_ht_alveol **alveol, char *key)
 	return (free_alveol(&tmp_alveol, 1));
 }
 
+static t_ht_alveol *retrieve_alveol(t_ht_alveol *alveol, char *key)
+{
+	while (alveol)
+	{
+		if (ft_strequ(key, alveol->key))
+			return (alveol);
+		alveol = alveol->next;
+	}
+	return (NULL);
+}
+
 /*
 ** User functions.
 */
@@ -60,14 +71,18 @@ void		*search_value(t_ht_table *table, char *key)
 	t_ht_alveol		*alveol;
 
 	hash = hash_function(key, table->seed, table->size);
-	alveol = table->items[hash];
-	while (alveol)
-	{
-		if (ft_strequ(key, alveol->key))
-			return (alveol->value);
-		alveol = alveol->next;
-	}
-	return (NULL);
+	alveol = retrieve_alveol(table->items[hash], key);
+	return (alveol ? alveol->value : NULL);
+}
+
+void		**search_value_addr(t_ht_table *table, char *key)
+{
+	int				hash;
+	t_ht_alveol		*alveol;
+
+	hash = hash_function(key, table->seed, table->size);
+	alveol = retrieve_alveol(table->items[hash], key);
+	return (alveol ? &alveol->value : NULL);
 }
 
 /*
@@ -82,4 +97,37 @@ void			delete_value(t_ht_table *table, char *key)
 
 	hash = hash_function(key, table->seed, table->size);
 	extract_alveol(&table->items[hash], key);
+}
+
+static t_ht_alveol *alveol_iterator(t_ht_table *table)
+{
+	static int index = -1;
+	static t_ht_alveol *curr_alveol = NULL;
+
+	while (index < table->size)
+	{
+		if (curr_alveol)
+		{
+			curr_alveol = curr_alveol->next;
+			if (curr_alveol)
+				return (curr_alveol);
+		}
+		index++;
+		curr_alveol = table->items[index];
+		if (curr_alveol)
+			return (curr_alveol);
+	}
+	return (NULL);
+}
+
+int				ht_iter(t_ht_table *table, char **key, void **value)
+{
+	t_ht_alveol		*next_alveol;
+
+	next_alveol = alveol_iterator(table);
+	if (!next_alveol)
+		return (0);
+	*key = next_alveol->key;
+	*value = next_alveol->value;
+	return (1);
 }

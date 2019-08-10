@@ -8,7 +8,7 @@ static char		*get_path_default(void)
 {
 	char	*paths_content;
 
-	if (!(paths_content = readfile("/etc/paths", 0, 0)))
+	if (!(paths_content = readfile("/etc/paths")))
 		exit(-1);
 	ft_strreplace(paths_content, '\n', ':');
 	paths_content[ft_strlen(paths_content) - 1] = '\0';
