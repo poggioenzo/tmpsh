@@ -63,7 +63,7 @@ def retrieve_assignation(branch):
         if last_stmt == None and tagstok.tags[index] == "STMT":
             last_stmt = tagstok.tokens[index]
         elif tagstok.tags[index] in ["CONCATENATION", "ASSIGNATION_EQUAL"]:
-            index_to_del = index + 2 if tagstok.tags[index + 1] == "SPACE" else index + 1
+            index_to_del = index + 1
             assignation_list.append((last_stmt, tagstok.tags[index], tagstok.tokens[index_to_del]))
             index = index_to_del
             last_stmt = None
