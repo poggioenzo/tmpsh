@@ -12,9 +12,14 @@
 int		main(int argc, char **argv, char **environ)
 {
 	int		status = 0;
+	char	*grammar_abs;
+	char	*grammar_file = "/pyshell/grammar/grammar.txt";
 
-
-	grammar_init("/home/simon/Documents/tmpsh/pyshell/grammar/grammar.txt");
+	grammar_abs = getcwd(NULL, 0);
+	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);
+	ft_printf("%s\n", grammar_abs);
+	grammar_init(grammar_abs);
+	FREE(grammar_abs);
 	//setup_variables_elements(environ);
 
 	/*
