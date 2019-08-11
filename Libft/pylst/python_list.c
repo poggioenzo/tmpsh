@@ -320,3 +320,38 @@ int		pylst_iter(t_pylst *pylst, void **value)
 	return (0);
 }
 
+/*
+** pylst_remove:
+**
+** @pylst: list where the element have to be removed.
+** @value: Value tu remove.
+**
+** Delete a single value in the current list.
+** Kind of intelligent behavior, will compare strings if the given
+** node is a _chare (! SHITTY IDEA !, create 2 function for strings deletion)
+*/
+
+void		pylst_remove(t_pylst **pylst, void *value)
+{
+	t_pylst		*prev;
+	t_pylst		*curr;
+
+	prev = NULL;
+	curr = *pylst;
+	while (curr)
+	{
+		if (curr->ctype == _chare && ft_strequ(value, curr->value))
+			break ;
+		else if (curr->value == value)
+			break ;
+		prev = curr;
+		curr = curr->next;
+	}
+	if (!curr)
+		return ;
+	if (!prev)
+		*pylst = (*pylst)->next;
+	else
+		prev->next = curr->next;
+	free_pylst_node(&curr, 0);
+}
