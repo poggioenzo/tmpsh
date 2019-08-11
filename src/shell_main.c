@@ -15,6 +15,7 @@ int		main(int argc, char **argv, char **environ)
 	char	*grammar_abs;
 	char	*grammar_file = "/pyshell/grammar/grammar.txt";
 
+	setup_freefct();
 	grammar_abs = getcwd(NULL, 0);
 	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);
 	ft_printf("%s\n", grammar_abs);

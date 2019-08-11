@@ -165,6 +165,71 @@ void	print_reverse_grammar(void)
 	ft_printf("}\n");
 }
 
+static void		get_escape(void)
+{
+	t_pylst		*escape_lst;
+
+	if ((escape_lst = search_value(g_grammar->grammar, "ESCAPE")))
+		g_grammar->spaces = escape_lst->value;
+}
+
+static void		add_symbol(char *symbol, char *symbol_name)
+{
+	t_pylst		**tmp_lst;
+
+	if (!search_value(g_grammar->grammar, symbol_name))
+	{
+		insert_value(g_grammar->grammar, symbol_name, NULL, _pylst);
+		tmp_lst = (t_pylst **)search_value_addr(g_grammar->grammar, symbol_name);
+		push_pylst(tmp_lst, symbol, 0, _chare);
+	}
+	if (!search_value(g_grammar->reverse, symbol))
+		insert_value(g_grammar->reverse, symbol, symbol_name, _chare);
+}
+
+int		containalphanum(char *str)
+{
+	while (*str)
+	{
+		if (ft_isalnum(*str++))
+			return (1);
+	}
+	return (0);
+}
+
+t_pylst		*get_list_op(int (*func)(char *))
+{
+	t_pylst		*list_op;
+	char		*key;
+	char		*value;
+
+	list_op = NULL;
+	while (ht_iter(g_grammar->reverse, &key, (void **)&value))
+	{
+		if (func(key))
+			push_pylst(&list_op, key, 0, _chare);
+	}
+	return (list_op);
+}
+
+void		get_leaf_op(void)
+{
+	g_grammar->leaf_op = get_list_op(containalphanum);
+}
+
+
+void	shell_grammar_init(void)
+{
+	push_pylst(&g_grammar->spaces, " ", 0, _chare);
+	push_pylst(&g_grammar->spaces, "\t", 0, _chare);
+	ht_new_table(&g_grammar->opening_tags, 63, 40);
+	ht_new_table(&g_grammar->dquotes_opening_tags, 63, 40);
+	get_escape();
+	add_symbol("\n", "NEW_LINE");
+	get_leaf_op();
+	//if (search_value(g_grammar->grammar, "ESCAPE"
+}
+
 /*
 ** grammar_init:
 **
@@ -184,7 +249,7 @@ void	grammar_init(char *path)
 	ht_new_table(&g_grammar->grammar, 63, 40);
 	ht_new_table(&g_grammar->reverse, 63, 40);
 	get_grammar_from_path();
-	print_grammar();
 	get_reverse_grammar();
-	print_reverse_grammar();
+	//print_grammar();
+	//print_reverse_grammar();
 }

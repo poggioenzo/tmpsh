@@ -174,6 +174,7 @@ typedef struct
 	t_ht_table	*opening_tags;
 	t_ht_table	*dquotes_opening_tags;
 	int			maxlen_leaf_op;
+	t_pylst		*leaf_op;
 }		t_grammar;
 
 /*
