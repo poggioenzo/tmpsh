@@ -33,6 +33,7 @@ struct		s_pylst
 	int			size;
 	int			ctype;
 	t_pylst		*next;
+	t_pylst		*iter_item;
 };
 
 void		setup_pyfreefct(void);
@@ -64,4 +65,5 @@ char	*join_pylst(t_pylst *pylst, char *substr);
 void	del_portion_pylst(t_pylst **pylst, int from, int to);
 void	del_after_pylst(t_pylst **pylst, int index);
 void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to);
+int		pylst_iter(t_pylst *pylst, void **value);
 #endif

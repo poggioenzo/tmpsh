@@ -36,6 +36,7 @@ static void		alloc_pylst_node(t_pylst **py_node, void *value, int size, \
 	(*py_node)->ctype = ctype;
 	(*py_node)->size = size;
 	(*py_node)->next = NULL;
+	(*py_node)->iter_item = NULL;
 }
 
 /*
@@ -288,3 +289,33 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 		new_pylst->next = save_head;
 	free_pylst(&del_slice, 0);
 }
+
+/*
+** pylst_iter:
+**
+** @pylst: chained list head selected to iterate.
+** @value: void * pointer to get value one by one in the list.
+**
+** Used in a while loop to iterate over each element of a pylst.
+** Make a for loop inspired from python.
+**
+** return : - 1 if a next element if found.
+**			- 0 if pylst is NULL, or if the entire list is parsed.
+*/
+
+int		pylst_iter(t_pylst *pylst, void **value)
+{
+	if (!pylst)
+		return (0);
+	if (!pylst->iter_item)
+		pylst->iter_item = pylst;
+	else
+		pylst->iter_item = pylst->iter_item->next;
+	if (pylst->iter_item)
+	{
+		*value = pylst->iter_item->value;
+		return (1);
+	}
+	return (0);
+}
+
