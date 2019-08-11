@@ -44,6 +44,7 @@ class Grammar(object):
         if symbol_name not in self.grammar:
             self.grammar[symbol_name] = []
         self.grammar[symbol_name].append(symbol)
+        #Is the condition usefull ??
         if symbol not in self.reverse:
             self.reverse[symbol] = {}
         self.reverse[symbol] = symbol_name
