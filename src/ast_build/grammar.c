@@ -3,6 +3,16 @@
 
 t_grammar	*g_grammar = NULL;
 
+/*
+** get_keyword:
+**
+** @line: Line where a keyword have to be extract.
+**
+** In a given line, split the line to get only the keyword value, stripped.
+**
+** return : - Allocated keyword string.
+*/
+
 char		*get_keyword(char *line)
 {
 	char	**split_key;
@@ -16,18 +26,35 @@ char		*get_keyword(char *line)
 	return (keyword);
 }
 
-static int		is_value_line(char **lines, int index)
-{
-	char	*analyse_str;
+/*
+** is_value_line:
+**
+** @line: Line to check if it contain a keyword value,
+**		  start with a tabulation or 4 spaces.
+**
+** return : - 1 if the line contain a value.
+**			- 0 if the line do not contain a value.
+*/
 
-	analyse_str = lines[index];
-	if (analyse_str && ft_strlen(analyse_str) > 0)
+static int		is_value_line(char *line)
+{
+	if (line && ft_strlen(line) > 0)
 	{
-		if (ft_incharset(analyse_str[0], "\t") || ft_start_with(analyse_str, "    "))
+		if (ft_incharset(line[0], "\t") || ft_start_with(line, "    "))
 			return (1);
 	}
 	return (0);
 }
+
+/*
+** parse_keyword_values:
+**
+** @lines: All grammar file lines.
+** @i: current index in the lines array.
+**
+** Whenever a keyword is found, store in a list each available
+** value.
+*/
 
 static void		parse_keyword_values(char **lines, int *i)
 {
@@ -43,7 +70,7 @@ static void		parse_keyword_values(char **lines, int *i)
 		insert_value(g_grammar->grammar, keyword, NULL, _pylst);
 		keyword_list = (t_pylst **)search_value_addr(g_grammar->grammar, keyword);
 	}
-	while (is_value_line(lines, *i))
+	while (is_value_line(lines[*i]))
 	{
 		if (!(value = ft_strtrim(lines[*i])))
 			exit(-1);
@@ -51,6 +78,20 @@ static void		parse_keyword_values(char **lines, int *i)
 		*i += 1;
 	}
 }
+
+/*
+** get_grammar_from_path:
+**
+** Read the grammar text file, parse his content and store it
+** into the g_grammar->grammar hash table.
+**
+** Formated like : 
+**		{
+**			"keyword1" : ["val1", "val2", ...], 
+**			"keyword2" : [...], 
+**			...
+**		}
+*/
 
 void get_grammar_from_path(void)
 {
@@ -73,6 +114,20 @@ void get_grammar_from_path(void)
 			i++;
 	}
 }
+
+/*
+** get_reverse_grammar:
+**
+** Parse the g_grammar->grammar hash table, and create a new dictionnary,
+** with pylst values as keys, and g_grammar->grammar table's keys as values.
+**
+** Formated like :
+** {
+**		"value1" : "old_key1",
+**		"value2" : "old_key2",
+**		...
+** }
+*/
 
 static void	get_reverse_grammar(void)
 {
@@ -110,6 +165,15 @@ void	print_reverse_grammar(void)
 	ft_printf("}\n");
 }
 
+/*
+** grammar_init:
+**
+** @path: absolute path of the text file containing the grammar.
+**
+** Initialisation of the g_grammar globale variable, equivalent
+** to an __init__ function.
+** Setup each attribute of the variable, differents dictionnaries, lists etc.
+*/
 
 void	grammar_init(char *path)
 {

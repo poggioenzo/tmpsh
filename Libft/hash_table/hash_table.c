@@ -75,6 +75,18 @@ void		*search_value(t_ht_table *table, char *key)
 	return (alveol ? alveol->value : NULL);
 }
 
+/*
+** search_value_addr:
+**
+** @table: hash table selected to perform research.
+** @key: desired key.
+**
+** Equivalent to search value, but return the value address.
+**
+** return : - NULL if no avaible item.
+**			- address of the item value.
+*/
+
 void		**search_value_addr(t_ht_table *table, char *key)
 {
 	int				hash;
@@ -99,6 +111,19 @@ void			delete_value(t_ht_table *table, char *key)
 	extract_alveol(&table->items[hash], key);
 }
 
+/*
+** alveol_iterator:
+**
+** @table: table selected for iteration.
+**
+** Utils to parse each alveol of an hash table one by one.
+** Go through each item in their index order, and parse each time
+** the entire chained list of alveol.
+**
+** return : - next alveol to use on success.
+**			- NULL if the iteration is over.
+*/
+
 static t_ht_alveol *alveol_iterator(t_ht_table *table)
 {
 	while (table->iter_index < table->size || table->iter_alveol)
@@ -113,6 +138,20 @@ static t_ht_alveol *alveol_iterator(t_ht_table *table)
 	table->iter_index = 0;
 	return (NULL);
 }
+
+/*
+** ht_iter:
+**
+** @table: table selected for iteration.
+** @key: char * pointer to get the next key.
+** @value: char * pointer to get next value.
+**
+** Allow the iteration of an hash table. Wrapper of alveol_iterator.
+** ! No change on the hash table should be done during the iteration !
+**
+** return : - 1 if an next element is found.
+**			- 0 if the iteration is over.
+*/
 
 int				ht_iter(t_ht_table *table, char **key, void **value)
 {
