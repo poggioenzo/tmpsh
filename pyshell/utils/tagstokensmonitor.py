@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import utils.global_var as gv
-from utils.heredocs import Heredocs
-
-# TODO: escape $PATH\\
 
 
 def strncmp(s1, s2, n):
@@ -73,6 +70,8 @@ class TagsTokensMonitor():
                 self.opened.pop(-1)
 
     def is_newline(self):
+        import utils.heredocs as hd
+
         def get_key(key, tag, tok, minus):
             if minus:
                 if key == '' and tag == 'SPACES':
@@ -87,7 +86,7 @@ class TagsTokensMonitor():
         self.is_abs_terminator()
         while self.heredocs_keys != [] and not_end:
             tuple_key_len = self.heredocs_keys[0]
-            heredoc = Heredocs(
+            heredoc = hd.Heredocs(
                 tuple_key_len[0], tuple_key_len[1], tuple_key_len[2])
             minus = tuple_key_len[2]
             gv.HEREDOCS.append(heredoc)

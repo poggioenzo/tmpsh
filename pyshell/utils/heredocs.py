@@ -2,7 +2,7 @@
 
 import utils.global_var as gv
 
-import utils.tagstokens as tt
+# import utils.tagstokens as tt
 # Should be this next import statement but create circular import error.
 # from utils.tagstokens import TagsTokens
 
@@ -17,6 +17,7 @@ def replace_first_tab(tok):
 
 class Heredocs():
     def __init__(self, key, len_key, minus):
+        import utils.tagstokens as tt
         self.key = key
         self.len_key = len_key
         self.minus = minus

@@ -5,7 +5,6 @@ import utils.global_var as gv
 import utils.tokenizer as tk
 import utils.strcontain as sc
 import utils.shiftreduce as sr
-from utils.tagstokensmonitor import TagsTokensMonitor as TTM
 
 
 def end_escape(lt):
@@ -64,7 +63,8 @@ class TagsTokens():
         return self
 
     def check_syntax(self, heredoc=False):
-        TTM(self)
+        import utils.tagstokensmonitor as ttm
+        ttm.TagsTokensMonitor(self)
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
