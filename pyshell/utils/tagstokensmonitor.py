@@ -65,7 +65,7 @@ class TagsTokensMonitor():
                 self.in_command_sh()
             elif self.tag in gv.GRAMMAR.opening_tags:
                 self.in_sub_process()
-            elif self.tag == 'HEREDOC':
+            elif self.tag == 'HEREDOC' or self.tag == 'HEREDOCMINUS':
                 self.is_heredocs()
             elif self.tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 self.in_redirection()
@@ -73,14 +73,23 @@ class TagsTokensMonitor():
                 self.opened.pop(-1)
 
     def is_newline(self):
+        def get_key(key, tag, tok, minus):
+            if minus:
+                if key == '' and tag == 'SPACES':
+                    return ''
+            return key + tok
+
         tuple_key_len = ()
         key = ''
         heredoc = None
         not_end = True
+        minus = False
         self.is_abs_terminator()
         while self.heredocs_keys != [] and not_end:
             tuple_key_len = self.heredocs_keys[0]
-            heredoc = Heredocs(tuple_key_len[0], tuple_key_len[1])
+            heredoc = Heredocs(
+                tuple_key_len[0], tuple_key_len[1], tuple_key_len[2])
+            minus = tuple_key_len[2]
             gv.HEREDOCS.append(heredoc)
             not_end = self.next_tag_token(True)
             while not_end:
@@ -88,7 +97,7 @@ class TagsTokensMonitor():
                     heredoc.close()
                     break
                 heredoc.add_tags_tokens(self.tag, self.token)
-                key = key + self.token
+                key = get_key(key, self.tag, self.token, minus)
                 if self.tag == 'NEW_LINE':
                     key = ''
                 not_end = self.next_tag_token(True)
@@ -116,6 +125,7 @@ class TagsTokensMonitor():
                 self.tt.token_error = 'bad substitution'
 
     def is_heredocs(self):
+        minus = self.tag == 'HEREDOCMINUS'
         not_end = self.next_tag_token()
         key = ()
         j = 0
@@ -126,10 +136,10 @@ class TagsTokensMonitor():
             if self.tag in gv.GRAMMAR.opening_tags:
                 j = self.tt.skip_openning_tags(self.i, 'NEW_LINE')
                 list_tok = self.tt.tokens[self.i:j]
-                key = (''.join(list_tok), len(list_tok))
+                key = (''.join(list_tok), len(list_tok), minus)
                 self.i = j - 1
             else:
-                key = (self.token, 1)
+                key = (self.token, 1, minus)
             self.heredocs_keys.append(key)
         else:
             self.tt.valid = False

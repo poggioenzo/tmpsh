@@ -63,29 +63,14 @@ class TagsTokens():
         self.update_length()
         return self
 
-    # def heredoc_tags(self):
-    #     i = 0
-    #     tag = ''
-    #     print(self.length)
-    #     while i < self.length:
-    #         tag = self.tags[i]
-    #         print(tag, i)
-    #         if tag not in ['STMT', 'VAR']:
-    #             if tag == 'CMDSUBST1':
-    #                 print(i)
-    #                 i = self.skip_openning_tags(i)
-    #                 print(i)
-    #             else:
-    #                 self.tags[i] = 'STMT'
-    #         i += 1
-
-    def check_syntax(self):
+    def check_syntax(self, heredoc=False):
         TTM(self)
         if self.valid:
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
-        self.incomplete |= not all([elt.closed for elt in gv.HEREDOCS])
+        if not heredoc:
+            self.incomplete |= not all([elt.closed for elt in gv.HEREDOCS])
         self.clear_stack()
         return self
 
@@ -143,8 +128,8 @@ class TagsTokens():
         str0 = '\n'.join(
             str(pd.DataFrame([self.tags, self.tokens])).split('\n')[1:3])
         str0 += '\nStack: {}'.format(self.stack)
-        str0 += '\nValid: {} | Incomplete: {} | Token_error: "{}"'.format(
-            self.valid, self.incomplete, self.token_error)
+        str0 += '\nValid: {} | Incomplete: {} | Token_error: "{}" | Length: {}'.format(
+            self.valid, self.incomplete, self.token_error, self.length)
         if gv.HEREDOCS != [] and gv.DONTPRINT:
             gv.DONTPRINT = False
             str0 += '\n' + '\n'.join([str(elt) for elt in gv.HEREDOCS])
