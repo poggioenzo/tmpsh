@@ -85,10 +85,10 @@ static void		parse_keyword_values(char **lines, int *i)
 ** Read the grammar text file, parse his content and store it
 ** into the g_grammar->grammar hash table.
 **
-** Formated like : 
+** Formated like :
 **		{
-**			"keyword1" : ["val1", "val2", ...], 
-**			"keyword2" : [...], 
+**			"keyword1" : ["val1", "val2", ...],
+**			"keyword2" : [...],
 **			...
 **		}
 */
@@ -183,8 +183,7 @@ static void		add_symbol(char *symbol, char *symbol_name)
 		tmp_lst = (t_pylst **)search_value_addr(g_grammar->grammar, symbol_name);
 		push_pylst(tmp_lst, symbol, 0, _chare);
 	}
-	if (!search_value(g_grammar->reverse, symbol))
-		insert_value(g_grammar->reverse, symbol, symbol_name, _chare);
+	insert_value(g_grammar->reverse, symbol, symbol_name, _chare);
 }
 
 int		containalphanum(char *str)
@@ -242,14 +241,13 @@ void	shell_grammar_init(void)
 
 void	grammar_init(char *path)
 {
-	ft_printf("%s\n", getcwd(NULL, 0));
-	if (!(g_grammar = MALLOC(sizeof(t_grammar))))
+	if (!(g_grammar = (t_grammar *)MALLOC(sizeof(t_grammar))))
 		exit(-1);
 	g_grammar->path = path;
 	ht_new_table(&g_grammar->grammar, 63, 40);
 	ht_new_table(&g_grammar->reverse, 63, 40);
 	get_grammar_from_path();
 	get_reverse_grammar();
-	//print_grammar();
-	//print_reverse_grammar();
+	print_grammar();
+	print_reverse_grammar();
 }
