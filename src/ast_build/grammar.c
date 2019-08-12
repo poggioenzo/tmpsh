@@ -140,37 +140,13 @@ static void	get_reverse_grammar(void)
 			insert_value(g_grammar->reverse, value, key, _chare);
 }
 
-void	print_grammar(void)
-{
-	t_pylst	*values;
-	char	*key;
-	char	*value_str;
-
-	while (ht_iter(g_grammar->grammar, &key, (void **)&values))
-	{
-		ft_printf("%s:\n", key);
-		while (pylst_iter(values, (void **)&value_str))
-			ft_printf("    %s\n", value_str);
-	}
-}
-
-void	print_reverse_grammar(void)
-{
-	char	*key;
-	char	*value;
-
-	ft_printf("{\n");
-	while (ht_iter(g_grammar->reverse, &key, (void **)&value))
-		ft_printf("    '%s':'%s'\n", key, value);
-	ft_printf("}\n");
-}
 
 static void		get_escape(void)
 {
 	t_pylst		*escape_lst;
 
 	if ((escape_lst = search_value(g_grammar->grammar, "ESCAPE")))
-		g_grammar->spaces = escape_lst->value;
+		g_grammar->escape = escape_lst->value;
 }
 
 static void		add_symbol(char *symbol, char *symbol_name)
@@ -298,6 +274,8 @@ static void	get_opening_tags(void)
 	}
 }
 
+void	print_spaces(void);
+
 void	shell_grammar_init(void)
 {
 	void	*tmp;
@@ -347,6 +325,128 @@ void	print_str(void *str)
 	else
 		ft_printf("%c\n", ((char *) str)[0]);
 }
+void	print_reverse_grammar(void)
+{
+	char	*key;
+	char	*value;
+
+	ft_printf("g_grammar->reverse:\n");
+	ft_printf("{\n");
+	while (ht_iter(g_grammar->reverse, &key, (void **)&value))
+		ft_printf("    '%s':'%s'\n", key, value);
+	ft_printf("}\n");
+}
+
+void	print_grammar(void)
+{
+	t_pylst		*value_lst;
+	char		*key;
+	char		*value;
+
+	ft_printf("g_grammar->grammar:\n");
+	ft_printf("{\n");
+	while (ht_iter(g_grammar->grammar, &key, (void **)&value_lst))
+	{
+		ft_printf("    \"%s\" : [", key);
+		while (pylst_iter(value_lst, (void **)&value))
+			ft_printf("'%s', ", value);
+		ft_printf("],\n");
+	}
+	ft_printf("}\n");
+}
+
+void	ft_puthidestr(char *str)
+{
+	while (*str)
+	{
+		if (*str == '\t')
+			ft_putstr("\\t");
+		else if (*str == '\n')
+			ft_putstr("\\n");
+		else if (*str == '\r')
+			ft_putstr("\\r");
+		else if (*str == '\v')
+			ft_putstr("\\v");
+		else if (*str == '\f')
+			ft_putstr("\\f");
+		else
+			ft_putchar(*str);
+		str++;
+	}
+}
+
+void	print_spaces(void)
+{
+	char	*value;
+
+	ft_printf("spaces:\n");
+	ft_printf("[");
+	while (pylst_iter(g_grammar->spaces, (void **)&value))
+	{
+		ft_printf("'");
+		ft_puthidestr(value);
+		ft_printf("', ");
+	}
+	ft_printf("]\n");
+}
+
+void	print_dquotes_opening_tags(void)
+{
+	char	*value;
+	char	*key;
+
+	ft_printf("dquotes_opening_tags:\n");
+	ft_printf("{");
+	while (ht_iter(g_grammar->dquotes_opening_tags, &key, &value))
+		ft_printf("\"%s\" : \"%s\", ", key, value);
+	ft_printf("}\n");
+}
+
+void	print_opening_tags(void)
+{
+	char	*value;
+	char	*key;
+
+	ft_printf("opening_tags:\n");
+	ft_printf("{\n");
+	while (ht_iter(g_grammar->opening_tags, &key, &value))
+		ft_printf("    \"%s\" : \"%s\",\n", key, value);
+	ft_printf("}\n");
+}
+
+void	print_escape(void)
+{
+	ft_printf("escape:\n");
+	ft_printf("%s\n", g_grammar->escape);
+}
+
+void	print_leaf_op(void)
+{
+	char *operator;
+
+	ft_printf("leaf_op:\n");
+	ft_printf("[");
+	while (pylst_iter(g_grammar->leaf_op, &operator))
+	{
+		ft_printf("'");
+		ft_puthidestr(operator);
+		ft_printf("',\n");
+	}
+	ft_printf("]\n");
+}
+
+void	show_grammar_global(void)
+{
+	print_grammar();
+	print_reverse_grammar();
+	print_spaces();
+	print_escape();
+	ft_printf("path:\n'%s'\n", g_grammar->path);
+	ft_printf("maxlen_leaf_op:\n%d\n", g_grammar->maxlen_leaf_op);
+	print_opening_tags();
+	print_dquotes_opening_tags();
+	print_leaf_op();
+}
 
 /*
 ** grammar_init:
@@ -368,7 +468,8 @@ void	grammar_init(char *path)
 	get_grammar_from_path();
 	get_reverse_grammar();
 	shell_grammar_init();
-	print_grammar();
-	print_lst2(g_grammar->leaf_op); 
+	show_grammar_global();
+	//print_grammar();
+	//print_lst2(g_grammar->leaf_op); 
 	//print_reverse_grammar();
 }

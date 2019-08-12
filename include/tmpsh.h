@@ -170,7 +170,7 @@ typedef struct
 	t_ht_table	*grammar;
 	t_ht_table	*reverse;
 	t_pylst		*spaces;
-	char		escape;
+	char		*escape;
 	t_ht_table	*opening_tags;
 	t_ht_table	*dquotes_opening_tags;
 	int			maxlen_leaf_op;
