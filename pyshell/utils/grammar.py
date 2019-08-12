@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
+import pprint
+# from pprint import pprint
 
-from pprint import pprint
 
 class Grammar(object):
     def __init__(self, path):
@@ -49,9 +50,7 @@ class Grammar(object):
         self.reverse[symbol] = symbol_name
 
     def __str__(self):
-        attrs = vars(self)
-        nv = sorted([item for item in attrs.items()])
-        for n, v in nv:
-            print(n + ':')
-            pprint(v)
-        return '.'
+        return '\n\n'.join(
+            [f'\033[91m{name}\033[0m\n{pprint.pformat(value)}'
+             for name, value
+             in sorted(vars(self).items())])
