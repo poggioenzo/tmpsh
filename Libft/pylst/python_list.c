@@ -144,16 +144,56 @@ t_pylst		*slice_pylst(t_pylst *pylst, int from, int to)
 }
 
 /*
-** duplicate_pylst:
+** pylst_deepcpy:
 **
 ** Return a deep copy of the given t_pylst.
+** Allocate new fresh node, and copy all possible
+** value within a node.
 */
 
-t_pylst		*duplicate_pylst(t_pylst *pylst)
+t_pylst		*pylst_deepcpy(t_pylst *pylst)
 {
 	return (slice_pylst(pylst, 0, len_pylst(pylst)));
 }
 
+/*
+** pylst_shacpy:
+**
+** @pylst : t_pylst to copy.
+**
+** Return a shallow copy of the pylst.
+** Juste allocate node of pylst.
+**
+** return : - Shallow copy of the list.
+*/
+
+t_pylst		*pylst_shacpy(t_pylst *pylst)
+{
+	t_pylst		*shallow_cpy;
+
+	shallow_cpy = NULL;
+	while (pylst)
+	{
+		push_pylst(&shallow_cpy, pylst->value, 0, pylst->ctype);
+		pylst = pylst->next;
+	}
+	return (shallow_cpy);
+}
+
+void	pylst_extend(t_pylst **start, t_pylst *end, int deep_cpy)
+{
+	t_pylst		*end_cpy;
+
+	if (!*start && !end)
+		return ;
+	end_cpy = deep_cpy ? pylst_deepcpy(end) : pylst_shacpy(end);
+	while (*start && (*start)->next)
+		start = &(*start)->next;
+	if (!*start)
+		*start = end_cpy;
+	else
+		(*start)->next = end_cpy;
+}
 
 /*
 ** join_pylst:
@@ -327,8 +367,6 @@ int		pylst_iter(t_pylst *pylst, void **value)
 ** @value: Value tu remove.
 **
 ** Delete a single value in the current list.
-** Kind of intelligent behavior, will compare strings if the given
-** node is a _chare (! SHITTY IDEA !, create 2 function for strings deletion)
 */
 
 void		pylst_remove(t_pylst **pylst, void *value)
@@ -338,12 +376,38 @@ void		pylst_remove(t_pylst **pylst, void *value)
 
 	prev = NULL;
 	curr = *pylst;
-	while (curr)
+	while (curr && curr->value != value)
 	{
-		if (curr->ctype == _chare && ft_strequ(value, curr->value))
-			break ;
-		else if (curr->value == value)
-			break ;
+		prev = curr;
+		curr = curr->next;
+	}
+	if (!curr)
+		return ;
+	if (!prev)
+		*pylst = (*pylst)->next;
+	else
+		prev->next = curr->next;
+	free_pylst_node(&curr, 0);
+}
+
+/*
+** pylst_strremove:
+**
+** @pylst: list where the element have to be removed.
+** @value: Value tu remove.
+**
+** Like pylst_remove, but use a char * as value.
+*/
+
+void	pylst_strremove(t_pylst	**pylst, char *value)
+{
+	t_pylst		*prev;
+	t_pylst		*curr;
+
+	prev = NULL;
+	curr = *pylst;
+	while (curr && !ft_strequ(value, curr->value))
+	{
 		prev = curr;
 		curr = curr->next;
 	}

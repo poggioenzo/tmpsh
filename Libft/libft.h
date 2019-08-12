@@ -43,10 +43,9 @@
 
 enum			e_ctype
 {
-	_char = 0,
+	_ptr = 0,
 	_chare,
 	_charee,
-	_int,
 	_inte,
 	_pylst,
 	_hash_table,

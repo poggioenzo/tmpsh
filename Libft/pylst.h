@@ -58,13 +58,18 @@ void			free_hash_table_type(void *table_ptr);
 ** Manipulation lists
 */
 
+t_pylst		*pylst_shacpy(t_pylst *pylst);
+t_pylst		*pylst_deepcpy(t_pylst *pylst);
+
 int			len_pylst(t_pylst *pylst);
 t_pylst		*index_pylst(t_pylst *pylst, int index);
 t_pylst		*slice_pylst(t_pylst *pylst, int from, int to);
 char	*join_pylst(t_pylst *pylst, char *substr);
+void	pylst_extend(t_pylst **start, t_pylst *end, int deep_cpy);
 void	del_portion_pylst(t_pylst **pylst, int from, int to);
 void	del_after_pylst(t_pylst **pylst, int index);
 void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to);
 int		pylst_iter(t_pylst *pylst, void **value);
 void		pylst_remove(t_pylst **pylst, void *value);
+void	pylst_strremove(t_pylst	**pylst, char *value);
 #endif

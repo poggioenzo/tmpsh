@@ -206,7 +206,7 @@ t_pylst		*get_list_op(int (*func)(char *))
 	list_op = NULL;
 	while (ht_iter(g_grammar->reverse, &key, (void **)&value))
 	{
-		if (func(key))
+		if (!func(key))
 			push_pylst(&list_op, key, 0, _chare);
 	}
 	return (list_op);
@@ -217,9 +217,92 @@ void		get_leaf_op(void)
 	g_grammar->leaf_op = get_list_op(containalphanum);
 }
 
+int		get_maxlen(t_pylst *iterator)
+{
+	int		max_len;
+	int		new_len;
+	char	*value;
+
+	max_len = 0;
+	while (pylst_iter(iterator, (void **)&value))
+	{
+		new_len = ft_strlen(value);
+		if (new_len > max_len)
+			max_len = new_len;
+	}
+	return (max_len);
+}
+
+void		store_tags(t_pylst *opening_tags)
+{
+	char	*tag;
+	char	**tag_split;
+	char	*tag_op;
+	char	*tag_end;
+
+	while (pylst_iter(opening_tags, (void **)&tag))
+	{
+		tag_split = ft_strsplit(tag, " ");
+		tag_op = ft_strdup(tag_split[0]);
+		tag_end = ft_strdup(tag_split[ft_arraylen(tag_split) - 1]);
+		if (!tag_op || !tag_end)
+			exit(-1);
+		insert_value(g_grammar->opening_tags, tag_op, tag_end, _chare);
+		free_str_array(&tag_split, 0);
+	}
+}
+
+static void	get_dquotes_opening_tags(void)
+{
+	void	*tmp_search;
+
+	if ((tmp_search = search_value(g_grammar->opening_tags, "BRACEPARAM")))
+		insert_value(g_grammar->dquotes_opening_tags, "BRACEPARAM", \
+				tmp_search, _ptr);
+	if ((tmp_search = search_value(g_grammar->opening_tags, "CMDSUBST1")))
+		insert_value(g_grammar->dquotes_opening_tags, "CMDSUBST1", tmp_search, _ptr);
+
+}
+
+static void	get_abstract_terminator(void)
+{
+	void	*tmp_search;
+	t_pylst	*abs_term_lst;
+
+	abs_term_lst = NULL;
+	if ((tmp_search = search_value(g_grammar->grammar, "TERMINATOR")))
+	{
+		push_pylst(&abs_term_lst, "BACKGROUND_JOBS", 0, _chare);
+		push_pylst(&abs_term_lst, "CMDAND", 0, _chare);
+		push_pylst(&abs_term_lst, "CMDOR", 0, _chare);
+		push_pylst(&abs_term_lst, "PIPE", 0, _chare);
+		pylst_extend(&abs_term_lst, (t_pylst *)tmp_search, false);
+		insert_value(g_grammar->grammar, "ABS_TERMINATOR", abs_term_lst, _pylst);
+	}
+}
+
+static void	get_opening_tags(void)
+{
+	t_pylst		*opening_tags;
+	t_pylst		*tmp_search;
+
+	if ((tmp_search = search_value(g_grammar->grammar, "SUB_PROCESS")))
+	{
+		opening_tags = pylst_shacpy(tmp_search);
+		if ((tmp_search = search_value(g_grammar->grammar, "QUOTES")))
+			pylst_extend(&opening_tags, tmp_search, false);
+		if ((tmp_search = search_value(g_grammar->grammar, "COMMAND_SH")))
+			pylst_extend(&opening_tags, tmp_search, false);
+		store_tags(opening_tags);
+		if (search_value(g_grammar->grammar, "QUOTES"))
+			get_dquotes_opening_tags();
+	}
+}
 
 void	shell_grammar_init(void)
 {
+	void	*tmp;
+
 	push_pylst(&g_grammar->spaces, " ", 0, _chare);
 	push_pylst(&g_grammar->spaces, "\t", 0, _chare);
 	ht_new_table(&g_grammar->opening_tags, 63, 40);
@@ -227,7 +310,43 @@ void	shell_grammar_init(void)
 	get_escape();
 	add_symbol("\n", "NEW_LINE");
 	get_leaf_op();
-	//if (search_value(g_grammar->grammar, "ESCAPE"
+	if ((tmp = search_value(g_grammar->grammar, "ESCAPE")))
+		pylst_strremove(&g_grammar->leaf_op, ((t_pylst *)tmp)->value);
+	g_grammar->maxlen_leaf_op = get_maxlen(g_grammar->leaf_op);
+	get_opening_tags();
+	get_abstract_terminator();
+}
+
+void		print_lst(t_pylst *lst, void (*printer)(void *))
+{
+	void	*value;
+
+	while (pylst_iter(lst, &value))
+		printer(value);
+}
+
+void		print_lst2(t_pylst *lst)
+{
+	void	*value;
+
+	while (pylst_iter(lst, &value))
+		ft_printf("%s\n", (char *)value);;
+}
+
+int		printable_str(char *str)
+{
+	while (*str)
+		if (!ft_isprint(*str++))
+			return (0);
+	return (1);
+}
+
+void	print_str(void *str)
+{
+	if (printable_str(str))
+		ft_printf("%s\n", (char *)str);
+	else
+		ft_printf("%c\n", ((char *) str)[0]);
 }
 
 /*
@@ -243,13 +362,15 @@ void	shell_grammar_init(void)
 void	grammar_init(char *path)
 {
 	ft_printf("%s\n", getcwd(NULL, 0));
-	if (!(g_grammar = MALLOC(sizeof(t_grammar))))
+	if (!(g_grammar = (t_grammar *)ft_memalloc(sizeof(t_grammar))))
 		exit(-1);
 	g_grammar->path = path;
 	ht_new_table(&g_grammar->grammar, 63, 40);
 	ht_new_table(&g_grammar->reverse, 63, 40);
 	get_grammar_from_path();
 	get_reverse_grammar();
-	//print_grammar();
+	shell_grammar_init();
+	print_grammar();
+	print_lst2(g_grammar->leaf_op); 
 	//print_reverse_grammar();
 }
