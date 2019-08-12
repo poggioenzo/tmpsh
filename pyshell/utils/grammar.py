@@ -51,6 +51,6 @@ class Grammar(object):
 
     def __str__(self):
         return '\n\n'.join(
-            [f'\033[91m{name}\033[0m\n{pprint.pformat(value)}'
+            ['\033[91m{}\033[0m\n{}'.format(name, pprint.pformat(value))
              for name, value
              in sorted(vars(self).items())])
