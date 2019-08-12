@@ -82,7 +82,7 @@ class TagsTokensMonitor():
             tuple_key_len = self.heredocs_keys[0]
             heredoc = Heredocs(tuple_key_len[0], tuple_key_len[1])
             gv.HEREDOCS.append(heredoc)
-            not_end = self.next_tag_token()
+            not_end = self.next_tag_token(True)
             while not_end:
                 if key == tuple_key_len[0]:
                     heredoc.close()
