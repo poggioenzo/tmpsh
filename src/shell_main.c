@@ -18,7 +18,6 @@ int		main(int argc, char **argv, char **environ)
 	setup_freefct();
 	grammar_abs = getcwd(NULL, 0);
 	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);
-	ft_printf("%s\n", grammar_abs);
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
 	//setup_variables_elements(environ);

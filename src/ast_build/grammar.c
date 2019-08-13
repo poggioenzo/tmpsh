@@ -3,6 +3,27 @@
 
 t_grammar	*g_grammar = NULL;
 
+void	show_tab(t_ht_table *table)
+{
+	char *key;
+	t_ht_alveol *alveol;
+	int index = 0;
+
+	while (index < table->size)
+	{
+		ft_printf("%d:", index);
+		alveol = table->items[index];
+		while (alveol)
+		{
+			ft_printf("'%s':'%s', ", alveol->key, alveol->value);
+			alveol = alveol->next;
+		}
+		ft_printf("\n");
+		index++;
+	}
+
+}
+
 /*
 ** get_keyword:
 **
@@ -140,7 +161,11 @@ static void	get_reverse_grammar(void)
 			insert_value(g_grammar->reverse, value, key, _chare);
 }
 
-
+/*
+** get_escape:
+**
+** Store the g_grammar->escape attribute using the available grammar.
+*/
 static void		get_escape(void)
 {
 	t_pylst		*escape_lst;
@@ -148,6 +173,16 @@ static void		get_escape(void)
 	if ((escape_lst = search_value(g_grammar->grammar, "ESCAPE")))
 		g_grammar->escape = escape_lst->value;
 }
+
+/*
+** add_symbol:
+**
+** @symbol: representation of a new symbol.
+** @symbol_name: name of the new symbol.
+**
+** Add a new pair of key/element into our g_grammar->grammar
+** and or our reverse->background.
+*/
 
 static void		add_symbol(char *symbol, char *symbol_name)
 {
@@ -172,7 +207,14 @@ int		containalphanum(char *str)
 	return (0);
 }
 
-t_pylst		*get_list_op(int (*func)(char *))
+/*
+** get_leaf_op:
+**
+** Get each shell operand of the grammar, store them
+** in g_grammar->leaf_op.
+*/
+
+void		get_leaf_op(void)
 {
 	t_pylst		*list_op;
 	char		*key;
@@ -181,16 +223,21 @@ t_pylst		*get_list_op(int (*func)(char *))
 	list_op = NULL;
 	while (ht_iter(g_grammar->reverse, &key, (void **)&value))
 	{
-		if (!func(key))
+		if (!containalphanum(key))
 			push_pylst(&list_op, key, 0, _chare);
 	}
-	return (list_op);
+	g_grammar->leaf_op = list_op;
 }
 
-void		get_leaf_op(void)
-{
-	g_grammar->leaf_op = get_list_op(containalphanum);
-}
+/*
+** get_maxlen:
+**
+** @iterator: list selected to search the max.
+**
+** Retrieve the max string's length inside a pyslt.
+**
+** return : Return max length.
+*/
 
 int		get_maxlen(t_pylst *iterator)
 {
@@ -227,6 +274,13 @@ void		store_tags(t_pylst *opening_tags)
 	}
 }
 
+/*
+** get_dquotes_opening_tags:
+**
+** Store in g_grammar->dquotes_opening_tags each available statement which
+** are an opening element inside double quotes, like BRACEPARAM, DQUOTES etc.
+*/
+
 static void	get_dquotes_opening_tags(void)
 {
 	void	*tmp_search;
@@ -238,6 +292,10 @@ static void	get_dquotes_opening_tags(void)
 		insert_value(g_grammar->dquotes_opening_tags, "CMDSUBST1", tmp_search, _ptr);
 
 }
+
+/*
+** get_abstract_terminator:
+*/
 
 static void	get_abstract_terminator(void)
 {
@@ -442,7 +500,6 @@ void	show_grammar_global(void)
 	print_spaces();
 	print_escape();
 	ft_printf("path:\n'%s'\n", g_grammar->path);
-	ft_printf("maxlen_leaf_op:\n%d\n", g_grammar->maxlen_leaf_op);
 	print_opening_tags();
 	print_dquotes_opening_tags();
 	print_leaf_op();
