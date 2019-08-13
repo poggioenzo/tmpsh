@@ -228,6 +228,7 @@ class RedirectionFD():
     def __init__(self, tagstokens, redirection_type, source=None):
         self.tagstokens = tagstokens
         self.type = redirection_type
+        self.heredoc_ast = None
         if source is None:
             source = 0 if self.type in ["READ_FROM_FD", "READ_FROM"] else 1
 
@@ -239,9 +240,19 @@ class RedirectionFD():
             last_stmt = tagstokens.tokens[-1]
             if last_stmt[-1] == '-':
                 self.close = True
-                #tagstokens.tokens[-1] = last_stmt[:-1]
+        if self.type in ["HEREDOC", "HEREDOCMINUS"]:
+            self.get_heredoc_ast()
+
+    def get_heredoc_ast(self):
+        if gv.HEREDOCS != []:
+            tagstokens = gv.HEREDOCS[0].tagstokens
+            del gv.HEREDOCS[0]
+            self.heredoc_ast = AST(tagstokens)
 
     def __str__(self):
-        return '{}: {} source:{}'.format(self.type,
+        str0 = '{}: {} source:{}'.format(self.type,
                                          ''.join(self.tagstokens.tokens),
                                          self.source)
+        if self.heredoc_ast:
+            str0 += '\n' + split_shift(str(self.heredoc_ast))
+        return str0

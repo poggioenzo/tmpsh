@@ -72,7 +72,8 @@ class TestTags(unittest.TestCase):
              'END_BRACKET', 'SPACES', 'CMDAND', 'SPACES', 'VAR',
              'PIPE', 'SPACES', 'STMT', 'SPACES', 'HEREDOC', 'SPACES',
              'STMT', 'NEW_LINE',
-             'STMT', 'NEW_LINE', 'STMT'
+             # 'STMT', 'NEW_LINE',
+             'STMT'
              ], tags)
 
     def test_tags_009(self):
