@@ -18,6 +18,12 @@ PASSED_ALIAS = []
 LOCAL_VAR = {}
 LAST_STATUS = 0
 
+
+DONTPRINT = True
+
+HEREDOCS = []
+
+
 JOBS = None
 
 with open("/dev/tty") as term:
@@ -28,7 +34,8 @@ try:
     debug_file = "/dev/ttys003"
     DEBUG = open(debug_file, "w")
 except PermissionError:
-    print("No able to open debug file {}".format(debug_file))
+    pass
+    # print("No able to open debug file {}".format(debug_file))
 
 
 def dprint(string, *args, **kwargs):

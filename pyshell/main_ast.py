@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from utils.tagstokens import TagsTokens as TT
+import utils.tagstokens as tt
 from utils.ast import AST
 
 if __name__ == '__main__':
@@ -10,7 +10,7 @@ if __name__ == '__main__':
         print(ENTRY)
     else:
         ENTRY = " ".join(sys.argv[1:])
-    TAGSTOKENS = TT().init_with_input(ENTRY).check_syntax()
+    TAGSTOKENS = tt.TagsTokens().init_with_input(ENTRY).check_syntax()
     if TAGSTOKENS.valid and not TAGSTOKENS.incomplete:
         TREE = AST(TAGSTOKENS)
         print(TREE)

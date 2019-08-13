@@ -1,25 +1,11 @@
 #!/usr/bin/env python3
 
 import utils.global_var as gv
+import utils.key as k
 
-# TODO: escape $PATH\\
 
-
-class Heredocs():
-    def __init__(self, end_seq_word):
-        self.end_seq_word = end_seq_word
-        self.closed = False
-        self.tokens = []
-        self.tags = []
-
-    def init_tags_tokens(self, tags, tokens):
-        self.tokens = tokens
-        self.tags = tags
-
-    def __str__(self):
-        str0 = f'HEREDOC: {self.end_seq_word} | closed: {self.closed}\n'
-        str0 += 'DOC:\n{}\n'.format(''.join(self.tokens))
-        return str0
+def strncmp(s1, s2, n):
+    return s1 == s2[:n]
 
 
 class TagsTokensMonitor():
@@ -42,16 +28,21 @@ class TagsTokensMonitor():
         self.begin_cmd = True
         gv.PASSED_ALIAS = []
 
-    def next_tag_token(self):
+    def next_tag_token(self, clear=False):
         self.i += 1
         ret = self.i < self.tt.length
         if ret:
             self.tag = self.tt.tags[self.i]
             self.token = self.tt.tokens[self.i]
+            if clear:
+                del self.tt.tags[self.i]
+                del self.tt.tokens[self.i]
+                self.tt.update_length()
+                self.i -= 1
         return ret
 
     def check(self):
-        while self.tt.valid and self.next_tag_token():
+        while self.next_tag_token():
             self.op_selector()
 
     def op_selector(self):
@@ -64,18 +55,50 @@ class TagsTokensMonitor():
                 self.is_dquote()
             elif self.tag == 'QUOTE':
                 self.is_quote()
+            elif self.tag == 'NEW_LINE':
+                self.is_newline()
             elif self.tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
                 self.is_abs_terminator()
             elif self.tag in ['CURSH', 'SUBSH']:
                 self.in_command_sh()
             elif self.tag in gv.GRAMMAR.opening_tags:
                 self.in_sub_process()
-            # elif self.tag == 'HEREDOC':
-            #     self.is_heredocs()
+            elif self.tag == 'HEREDOC' or self.tag == 'HEREDOCMINUS':
+                self.is_heredocs()
             elif self.tag in gv.GRAMMAR.grammar['REDIRECTION']:
                 self.in_redirection()
             elif self.opened[-1] == self.tag:
                 self.opened.pop(-1)
+
+    def is_newline(self):
+        # should be improved or factorize
+        import utils.heredocs as hd
+
+        tuple_key_len = []
+        key = ''
+        heredoc = None
+        not_end = True
+        minus = False
+        self.is_abs_terminator()
+        while self.heredocs_keys != [] and not_end:
+            tuple_key_len = self.heredocs_keys[0]
+            heredoc = hd.Heredocs(
+                tuple_key_len[0], tuple_key_len[1], tuple_key_len[2])
+            tuple_key_len[0] = k.modifify_gold_key(tuple_key_len[0])
+            minus = tuple_key_len[2]
+            gv.HEREDOCS.append(heredoc)
+            not_end = self.next_tag_token(True)
+            while not_end:
+                if key == tuple_key_len[0]:
+                    heredoc.close()
+                    break
+                heredoc.add_tags_tokens(self.tag, self.token)
+                key = k.get_key(key, self.tag, self.token, minus)
+                if self.tag == 'NEW_LINE':
+                    key = ''
+                not_end = self.next_tag_token(True)
+            self.heredocs_keys.pop(0)
+            key = ''
 
     def check_aliases(self):
         result_alias = ''
@@ -97,17 +120,27 @@ class TagsTokensMonitor():
                 self.tt.valid = False
                 self.tt.token_error = 'bad substitution'
 
-    # def is_heredocs(self):
-    #     not_end = self.next_tag_token()
-    #     if self.tag == 'SPACES':
-    #         not_end = self.next_tag_token()
-    #     if not_end:
-    #         pass
-    #
-    #     else:
-    #         self.tt.valid = False
-    #         self.tt.token_error = self.token
-    #     self.begin_cmd = True
+    def is_heredocs(self):
+        minus = self.tag == 'HEREDOCMINUS'
+        not_end = self.next_tag_token()
+        key = ()
+        j = 0
+        list_tok = []
+        if self.tag == 'SPACES':
+            not_end = self.next_tag_token()
+        if not_end:
+            if self.tag in gv.GRAMMAR.opening_tags:
+                j = self.tt.skip_openning_tags(self.i, 'NEW_LINE')
+                list_tok = self.tt.tokens[self.i:j]
+                key = [''.join(list_tok), len(list_tok), minus]
+                self.i = j - 1
+            else:
+                key = [self.token, 1, minus]
+            self.heredocs_keys.append(key)
+        else:
+            self.tt.valid = False
+            self.tt.token_error = self.token
+        self.begin_cmd = True
 
     def is_dquote(self):
         indquote = True
