@@ -8,7 +8,7 @@ COMMON_SRCS := char_concatenation.c \
 			   display.c \
 			   edition.c \
 			   t_cursor_utils.c \
-			   prompt_loop.c 
+			   prompt_loop.c
 
 COMMON_SRCS := $(addprefix $(SOURCES_DIR), $(COMMON_SRCS)) \
 			   $(MAIN_FILE)
@@ -63,7 +63,7 @@ CURSOR_MOVEMENT_SRCS := cursor_move.c \
 						line_move.c \
 						standard_move.c \
 						word_move.c
-						
+
 CURSOR_MOVEMENT_SRCS := $(addprefix cursor_movement/, $(CURSOR_MOVEMENT_SRCS))
 
 KEYPRESS_DIR = keypress_functions/
@@ -127,6 +127,7 @@ FILE_SRCS := $(addprefix $(FILE_DIR), $(FILE_SRCS))
 AST_DIR = ast_build/
 
 AST_SRCS := grammar.c \
+						tokenizer.c
 
 AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS))
 

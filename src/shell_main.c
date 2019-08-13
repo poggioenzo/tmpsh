@@ -5,6 +5,7 @@
 #include <fcntl.h>
 
 #include "grammar.h"
+#include "tokenizer.h"
 
 #include "libft.h"
 #include "builtins.h"
@@ -20,6 +21,7 @@ int		main(int argc, char **argv, char **environ)
 	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
+	qwerty();
 	//setup_variables_elements(environ);
 
 	/*
