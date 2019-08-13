@@ -38,8 +38,7 @@ char			**ft_strsplit(const char *str, const char *charset)
 	char	*delim;
 
 	nb_elem = ft_count(str, charset);
-	if (!(tab = (char **)MALLOC(sizeof(char *) * (nb_elem + 1))))
-		return (NULL);
+	tab = (char **)ft_memalloc(sizeof(char *) * (nb_elem + 1));
 	tab_index = 0;
 	while (nb_elem)
 	{

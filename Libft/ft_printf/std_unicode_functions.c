@@ -30,8 +30,7 @@ static void	*check_precision(wchar_t **wstr, t_prt_opt *options, int *octets)
 	if (options->precision >= 0 && *octets > options->precision)
 	{
 		tmp_wstr = *wstr;
-		if (!(new_format = MALLOC(sizeof(wchar_t) * (options->precision + 1))))
-			return (ft_wstrdel(wstr));
+		new_format = ft_memalloc(sizeof(wchar_t) * (options->precision + 1));
 		new_len = determine_bytes(*tmp_wstr);
 		index = 0;
 		while (new_len <= options->precision)
@@ -68,9 +67,7 @@ wchar_t		*get_big_c(va_list args, t_prt_opt *options, int *octets)
 	UNUSED(options);
 	value = va_arg(args, wchar_t);
 	*octets += determine_bytes(value);
-	string = (wchar_t *)MALLOC(sizeof(wchar_t) * 2);
-	if (!string)
-		return (NULL);
+	string = (wchar_t *)ft_memalloc(sizeof(wchar_t) * 2);
 	string[0] = value;
 	string[1] = 0;
 	return (string);

@@ -53,13 +53,13 @@ void tokenize(char *command, t_pylst *tokens)
 
   i = 0;
   length_cmd = ft_strlen(command);
-  current = ft_memalloc(length_cmd)
+  current = ft_strnew(length_cmd);
   while (i< length_cmd)
   {
     if (ops_begin_with(command[i], g_grammar->leaf_op))
     {
       current = add_token(current,tokens);
-      i += span(, tokens, )
+      i += span(, tokens, );
 
     }
   }

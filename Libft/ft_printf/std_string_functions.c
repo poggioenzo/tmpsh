@@ -45,8 +45,7 @@ char	*get_c(va_list args, t_prt_opt *format_options, int *octets)
 
 	UNUSED(format_options);
 	value = va_arg(args, int);
-	if (!(formatted_str = (char *)MALLOC(sizeof(char) * 2)))
-		return (NULL);
+	formatted_str = (char *)ft_memalloc(sizeof(char) * 2);
 	formatted_str[0] = (char)value;
 	formatted_str[1] = '\0';
 	*octets = 1;

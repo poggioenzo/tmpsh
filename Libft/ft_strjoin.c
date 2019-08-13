@@ -21,8 +21,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	first_str_len = ft_strlen(s1);
 	entire_len = first_str_len + ft_strlen(s2);
-	if (!(joined_str = (char *)MALLOC(sizeof(char) * entire_len + 1)))
-		return (NULL);
+	joined_str = (char *)ft_memalloc(sizeof(char) * entire_len + 1);
 	ft_strncpy(joined_str, s1, first_str_len);
 	ft_strcpy(joined_str + first_str_len, s2);
 	return (joined_str);

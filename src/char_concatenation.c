@@ -59,8 +59,7 @@ char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 	int		cursor_displayed;
 
 	line_len = get_repr_len(char_lst, cursor, line);
-	if (!(line_repr = (char *)MALLOC(sizeof(char) * (line_len+ 5))))
-		exit(-1);
+	line_repr = (char *)ft_memalloc(sizeof(char) * (line_len+ 5));
 	index = 0;
 	cursor_displayed = FALSE;
 	while (char_lst)
@@ -97,16 +96,14 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 	t_win	window;
 	char	*newline_tmp;
 
-	if (!(shell_str = ft_strnew(0)))
-		exit(-1);
+	shell_str = ft_strnew(0);
 	*total_lines = 0;
 	screen_size(&window);
 	while (prompt_lines)
 	{
 		new_line = format_char_lst(prompt_lines->chars, cursor, \
 						prompt_lines->position);
-		if (!(shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1)))
-			exit(-1);
+		shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1);
 		line_len = char_lst_len(prompt_lines->chars);
 		if (cursor->row == prompt_lines->position && cursor->column == line_len)
 			line_len++;
@@ -115,10 +112,7 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 		prompt_lines = prompt_lines->next;
 		newline_tmp = "\n";
 		if (prompt_lines)
-		{
-			if (!(shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0)))
-				exit(-1);
-		}
+			shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0);
 	}
 	return (shell_str);
 }
@@ -135,8 +129,7 @@ static void	concat_escaped_line(t_line **shell_repr, char **current_line)
 
 	*shell_repr = (*shell_repr)->next;
 	history_formatter(shell_repr, &new_line);
-	if (!(*current_line = ft_fstrjoin(current_line, &new_line, 1, 1)))
-		exit(-1);
+	*current_line = ft_fstrjoin(current_line, &new_line, 1, 1);
 }
 
 /*
@@ -155,8 +148,7 @@ static void		history_formatter(t_line **shell_repr, char **format)
 
 	char_lst = get_unlocked_char((*shell_repr)->chars);
 	line_len = char_lst_len(char_lst);
-	if (!(*format = (char *)MALLOC(sizeof(char) * line_len + 1)))
-		exit(-1);
+	*format = (char *)ft_memalloc(sizeof(char) * line_len + 1);
 	index = 0;
 	escape = FALSE;
 	while (char_lst && (char_lst->letter != '\\' || char_lst->next || escape))
@@ -187,13 +179,11 @@ char			*render_shell_content(t_line *prompt_lines)
 	char	*new_line;
 	char	*newline_tmp;
 
-	if (!(shell_str = ft_strnew(0)))
-		exit(-1);
+	shell_str = ft_strnew(0);
 	while (prompt_lines)
 	{
 		history_formatter(&prompt_lines, &new_line);
-		if (!(shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1)))
-			exit(-1);
+		shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1);
 		prompt_lines = prompt_lines->next;
 		newline_tmp = "\n";
 		if (prompt_lines)

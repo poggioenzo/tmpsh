@@ -49,8 +49,7 @@ int			free_t_line_lst(t_line **line_lst, int status)
 
 void		create_t_line(t_line **new_line, int position)
 {
-	if (!(*new_line = (t_line *)MALLOC(sizeof(t_line))))
-		exit(-1);
+	*new_line = (t_line *)ft_memalloc(sizeof(t_line));
 	(*new_line)->chars = NULL;
 	(*new_line)->next = NULL;
 	(*new_line)->position = position;
@@ -65,7 +64,7 @@ void		create_t_line(t_line **new_line, int position)
 void			push_end_line(t_line **line_lst)
 {
 	t_line	*tmp_line;
-	
+
 	if (!*line_lst)
 		create_t_line(line_lst, 0);
 	else

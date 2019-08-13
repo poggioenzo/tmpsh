@@ -9,8 +9,7 @@
 
 void	create_char(t_char	**char_node, char letter, int position, int lock)
 {
-	if (!(*char_node = (t_char *)MALLOC(sizeof(t_char))))
-		exit(-1);
+	*char_node = (t_char *)ft_memalloc(sizeof(t_char));
 	(*char_node)->letter = letter;
 	(*char_node)->position = position;
 	(*char_node)->next = NULL;

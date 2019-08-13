@@ -89,8 +89,7 @@ int		set_nbfield(t_prt_opt *option, char **formated_str, int *octets)
 
 	if (*octets < (int)option->field)
 	{
-		if (!(new_str = (char *)MALLOC(sizeof(char) * (option->field + 1))))
-			return (ft_strdel_out(formated_str, 0));
+		new_str = (char *)ft_memalloc(sizeof(char) * (option->field + 1));
 		if (option->flag->negativ)
 			left_adjust(new_str, *formated_str, *octets, option);
 		else

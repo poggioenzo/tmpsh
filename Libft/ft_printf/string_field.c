@@ -38,11 +38,7 @@ int				set_strfield(t_prt_opt *options, char **format_str, int *octets)
 	diff = options->field - *octets;
 	if (diff <= 0)
 		return (1);
-	if (!(filled_str = (char *)MALLOC(sizeof(char) * (options->field + 1))))
-	{
-		ft_strdel(format_str);
-		return (0);
-	}
+	filled_str = (char *)ft_memalloc(sizeof(char) * (options->field + 1));
 	if (options->flag->negativ)
 		adjust_left(filled_str, *format_str, diff, octets);
 	else

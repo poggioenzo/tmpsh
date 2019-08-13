@@ -21,8 +21,7 @@ char			*ft_itoa(int nbr)
 
 	len = ft_nbrlen(nbr);
 	negativ = nbr < 0;
-	if (!(str = (char *)MALLOC(sizeof(char) * (len + 1))))
-		return (NULL);
+	str = (char *)ft_memalloc(sizeof(char) * (len + 1));
 	str[len] = '\0';
 	while (len)
 	{
@@ -41,8 +40,7 @@ char			*ft_utoa(unsigned int nbr)
 	int		len;
 
 	len = ft_unbrlen(nbr);
-	if (!(return_str = (char *)MALLOC(sizeof(char) * (len + 1))))
-		return (NULL);
+	return_str = (char *)ft_memalloc(sizeof(char) * (len + 1));
 	return_str[len--] = '\0';
 	while (len >= 0)
 	{

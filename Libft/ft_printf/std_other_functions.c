@@ -37,11 +37,9 @@ char		*get_p(va_list args, t_prt_opt *options, int *octets)
 	if (!(format_str = base_routine(options, format_str, fill_char)))
 		return (NULL);
 	if (options->flag->positiv && (fill_char = "+"))
-		if (!(format_str = ft_fstrjoin(&fill_char, &format_str, 0, 1)))
-			return (NULL);
+		format_str = ft_fstrjoin(&fill_char, &format_str, 0, 1);
 	if (options->flag->space && (fill_char = " "))
-		if (!(format_str = ft_fstrjoin(&fill_char, &format_str, 0, 1)))
-			return (NULL);
+		format_str = ft_fstrjoin(&fill_char, &format_str, 0, 1);
 	*octets += ft_strlen(format_str);
 	return (format_str);
 }
@@ -76,8 +74,7 @@ char		*get_percent(va_list args, t_prt_opt *format_options, int *octets)
 
 	UNUSED(args);
 	UNUSED(format_options);
-	if (!(formated_str = (char *)MALLOC(sizeof(char) * 2)))
-		return (NULL);
+	formated_str = (char *)ft_memalloc(sizeof(char) * 2);
 	formated_str[0] = '%';
 	formated_str[1] = '\0';
 	*octets = 1;

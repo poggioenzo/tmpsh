@@ -10,8 +10,7 @@
 static void		create_t_hist(t_hist **hist_node, t_hist *prev, char *content,
 		int is_tmp)
 {
-	if (!(*hist_node = (t_hist *)MALLOC(sizeof(t_hist))))
-		exit(-1);
+	*hist_node = (t_hist *)ft_memalloc(sizeof(t_hist));
 	(*hist_node)->line = content;
 	(*hist_node)->next = NULL;
 	(*hist_node)->prev = prev;

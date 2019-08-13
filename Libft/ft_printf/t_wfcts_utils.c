@@ -40,8 +40,7 @@ static t_wfcts	*create_node(char *key, t_unicode_fct format_function)
 {
 	t_wfcts *node;
 
-	if (!(node = (t_wfcts *)MALLOC(sizeof(t_wfcts))))
-		return (NULL);
+	node = (t_wfcts *)ft_memalloc(sizeof(t_wfcts));
 	node->next = NULL;
 	node->key = key;
 	node->string_maker = format_function;

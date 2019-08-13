@@ -22,8 +22,7 @@ char		*ft_lltoa(long long int nbr)
 
 	len = ft_nbrlen(nbr);
 	negativ = nbr < 0 ? 1 : 0;
-	if (!(nbr_string = (char *)MALLOC(sizeof(char) * (len + 1))))
-		return (NULL);
+	nbr_string = (char *)ft_memalloc(sizeof(char) * (len + 1));
 	nbr_string[len--] = '\0';
 	while (len >= 0)
 	{
@@ -41,8 +40,7 @@ char		*ft_llutoa(unsigned long long int nbr)
 	char	*nbr_string;
 
 	len = ft_unbrlen(nbr);
-	if (!(nbr_string = (char *)MALLOC(sizeof(char) * (len + 1))))
-		return (NULL);
+	nbr_string = (char *)ft_memalloc(sizeof(char) * (len + 1));
 	nbr_string[len--] = '\0';
 	while (len >= 0)
 	{

@@ -23,12 +23,10 @@
 static void		alloc_pylst_node(t_pylst **py_node, void *value, int size, \
 		int ctype)
 {
-	if (!(*py_node = (t_pylst *)MALLOC(sizeof(t_pylst))))
-		exit(-1);
+	*py_node = (t_pylst *)ft_memalloc(sizeof(t_pylst));
 	if (size > 0)
 	{
-		if (!((*py_node)->value = MALLOC(size)))
-			exit(-1);
+		(*py_node)->value = ft_memalloc(size);
 		ft_memcpy((*py_node)->value, value, size);
 	}
 	else

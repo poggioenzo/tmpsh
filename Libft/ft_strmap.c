@@ -18,8 +18,7 @@ char	*ft_strmap(char const *str, char (*fct)(char))
 	char	*map_str;
 	int		index;
 
-	if (!(map_str = (char *)MALLOC(sizeof(char) * (ft_strlen(str) + 1))))
-		return (NULL);
+	map_str = (char *)ft_memalloc(sizeof(char) * (ft_strlen(str) + 1));
 	index = 0;
 	while (*str)
 		map_str[index++] = fct(*str++);

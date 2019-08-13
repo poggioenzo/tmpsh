@@ -56,7 +56,7 @@ int			set_full_specifier(t_prt_opt *options)
 	if (options->full_specifier)
 		FREE(options->full_specifier);
 	len = ft_strlen(options->modifier) + 1;
-	options->full_specifier = (char *)MALLOC(sizeof(char) * (len + 1));
+	options->full_specifier = (char *)ft_memalloc(sizeof(char) * (len + 1));
 	if (!(options->full_specifier))
 		return (0);
 	ft_strcpy(options->full_specifier, options->modifier);

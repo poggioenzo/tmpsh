@@ -17,8 +17,7 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 {
 	char	*substring;
 
-	if (!(substring = (char *)MALLOC(sizeof(char) * (len + 1))))
-		return (NULL);
+	substring = (char *)ft_memalloc(sizeof(char) * (len + 1));
 	ft_strncpy(substring, s + start, len);
 	substring[len] = '\0';
 	return (substring);

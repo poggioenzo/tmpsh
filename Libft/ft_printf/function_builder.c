@@ -134,8 +134,7 @@ t_fct_manager	*setup_functions(void)
 {
 	t_fct_manager	*manager;
 
-	if (!(manager = (t_fct_manager *)MALLOC(sizeof(t_fct_manager))))
-		return (NULL);
+	manager = (t_fct_manager *)ft_memalloc(sizeof(t_fct_manager));
 	manager->std_fcts = setup_standard();
 	manager->uni_fcts = setup_unicode();
 	if (!manager->uni_fcts || !manager->std_fcts)

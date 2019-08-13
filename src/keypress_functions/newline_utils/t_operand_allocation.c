@@ -9,8 +9,7 @@
 
 void	create_operand(t_operand **operand, int type, char open_char)
 {
-	if (!(*operand = (t_operand *)MALLOC(sizeof(t_operand))))
-			exit(-1);
+	*operand = (t_operand *)ft_memalloc(sizeof(t_operand));
 	(*operand)->open_char = open_char;
 	(*operand)->type = type;
 	(*operand)->next = NULL;

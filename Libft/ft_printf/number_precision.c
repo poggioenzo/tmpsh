@@ -36,11 +36,7 @@ int		set_number_precision(char **formated_str, int precision)
 	filled_str = NULL;
 	if (precision > len)
 	{
-		if (!(filled_str = (char *)MALLOC(sizeof(char) * (precision + 1))))
-		{
-			ft_strdel(formated_str);
-			return (-1);
-		}
+		filled_str = (char *)ft_memalloc(sizeof(char) * (precision + 1));
 		diff = precision - len;
 		ft_memset(filled_str, '0', diff);
 		ft_strcpy(filled_str + diff, *formated_str);

@@ -19,8 +19,7 @@ wchar_t		*ft_wstrdup(wchar_t *wstr)
 	int		len;
 
 	len = ft_wstrlen(wstr);
-	if (!(duplicate = (wchar_t *)MALLOC(sizeof(wchar_t) * (len + 1))))
-		return (NULL);
+	duplicate = (wchar_t *)ft_memalloc(sizeof(wchar_t) * (len + 1));
 	ft_wstrcpy(duplicate, wstr);
 	return (duplicate);
 }

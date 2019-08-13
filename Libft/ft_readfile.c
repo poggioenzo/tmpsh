@@ -35,8 +35,7 @@ char	*readfile(char *filename)
 	fd = open(filename, O_RDONLY);
 	if (fd == -1 || len == -1)
 		return (NULL);
-	if (!(content = MALLOC(sizeof(char) * (len + 1))))
-		return (NULL);
+	content = ft_memalloc(sizeof(char) * (len + 1));
 	ret = read(fd, content, len);
 	content[ret] = '\0';
 	close(fd);
@@ -56,15 +55,9 @@ char	*fd_readfile(int fd)
 	{
 		buffer[readed] = '\0';
 		if (content)
-		{
-			if (!(content = ft_fstrjoin(&content, &buffer_pointer + 0, 1, 0)))
-				return (NULL);
-		}
+			content = ft_fstrjoin(&content, &buffer_pointer + 0, 1, 0);
 		else
-		{
-			if (!(content = ft_strdup(buffer)))
-				return (NULL);
-		}
+			content = ft_strdup(buffer);
 	}
 	return (content);
 }

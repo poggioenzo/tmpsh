@@ -30,8 +30,7 @@ static t_fd		*get_fd_elem(t_fd **lst, int fd)
 			return (tmp);
 		tmp = tmp->next;
 	}
-	if (!(fd_node = (t_fd *)MALLOC(sizeof(t_fd))))
-		return (NULL);
+	fd_node = (t_fd *)ft_memalloc(sizeof(t_fd));
 	fd_node->fd = fd;
 	fd_node->next = *lst;
 	fd_node->last_read = 0;

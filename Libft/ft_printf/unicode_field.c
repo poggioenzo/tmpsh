@@ -65,12 +65,7 @@ int				set_unicode_field(t_prt_opt *option, wchar_t **wstr, \
 	if (diff > 0)
 	{
 		old_len = ft_wstrlen(*wstr);
-		new_wstr = (wchar_t *)MALLOC(sizeof(wchar_t) * (old_len + diff + 1));
-		if (!new_wstr)
-		{
-			ft_wstrdel(wstr);
-			return (-1);
-		}
+		new_wstr = (wchar_t *)ft_memalloc(sizeof(wchar_t) * (old_len + diff + 1));
 		if (option->flag->negativ)
 			adjust_left(new_wstr, *wstr, diff, old_len);
 		else

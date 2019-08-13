@@ -42,13 +42,8 @@ t_prt_opt	*alloc_option(void)
 {
 	t_prt_opt *option;
 
-	if (!(option = (t_prt_opt *)MALLOC(sizeof(t_prt_opt))))
-		return (NULL);
-	if (!(option->flag = (t_flags *)MALLOC(sizeof(t_flags))))
-	{
-		free_prt_opt(&option, 0);
-		return (NULL);
-	}
+	option = (t_prt_opt *)ft_memalloc(sizeof(t_prt_opt));
+	option->flag = (t_flags *)ft_memalloc(sizeof(t_flags));
 	option->full_specifier = NULL;
 	return (option);
 }

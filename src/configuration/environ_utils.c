@@ -19,7 +19,7 @@ static char		*get_path_default(void)
 /*
 ** format_env_variable:
 **
-** From a given variable name and his value, format the string in the 
+** From a given variable name and his value, format the string in the
 ** environnement format, like variable=value.
 */
 
@@ -31,8 +31,7 @@ static char		*format_env_variable(char *variable, char *value)
 
 	len_var = ft_strlen(variable);
 	len_val = ft_strlen(value);
-	if (!(format_env = MALLOC(sizeof(char) * (len_var + len_val + 2))))
-		exit(-1);
+	format_env = ft_memalloc(sizeof(char) * (len_var + len_val + 2));
 	ft_strcpy(format_env, variable);
 	format_env[len_var] = '=';
 	ft_strcpy(format_env + len_var + 1, value);
@@ -49,8 +48,7 @@ void	duplicate_environ(char **environ)
 {
 	char	*bins_files;
 
-	if (!(g_environ = ft_duparray(environ)))
-		exit(-1);
+	g_environ = ft_duparray(environ);
 	if (ft_getenv("PATH") == NULL)
 	{
 		bins_files = get_path_default();

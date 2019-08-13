@@ -17,8 +17,7 @@ static char	**fill_operand_table(void)
 {
 	char	**operand_strings;
 
-	if (!(operand_strings = (char **)MALLOC(sizeof(char *) * NBRE_OPERAND + 100))) /// AVOID +100
-		exit(-1);
+	operand_strings = (char **)ft_memalloc(sizeof(char *) * NBRE_OPERAND + 100);
 	operand_strings[CMDSUBST] = CMDSUBST_STR;
 	operand_strings[BRACEPARAM] = BRACEPARAM_STR;
 	operand_strings[CURSH] = CURSH_STR;
@@ -47,7 +46,7 @@ static int		free_operand_table(char ***operand_strings, int status)
 /*
 ** fill_all_strings:
 **
-** Use the array allocated by fill_operand_table to prepare the locked part of 
+** Use the array allocated by fill_operand_table to prepare the locked part of
 ** the new added line. Add operand in their apparition order.
 */
 
@@ -58,8 +57,7 @@ static void	fill_all_strings(char ***operand_strings, t_operand *operand_list, \
 	char	*tmp_str;
 	char	*new_operand;
 
-	if (!(*joined_separator = ft_strnew(0)))
-		exit(-1);
+	*joined_separator = ft_strnew(0);
 	tmp_str = " ";
 	while (operand_list)
 	{
@@ -91,8 +89,7 @@ static void	format_operand_string(t_operand *operand_list, char **operand_str)
 	char	*joined_separator;
 
 	operand_strings = fill_operand_table();
-	if (!(*operand_str = (char *)MALLOC(sizeof(char) * 3)))
-		exit(-1);
+	*operand_str = (char *)ft_memalloc(sizeof(char) * 3);
 	ft_strcpy(*operand_str, "> ");
 	fill_all_strings(&operand_strings, operand_list, &joined_separator);
 	free_operand_table(&operand_strings, 0);

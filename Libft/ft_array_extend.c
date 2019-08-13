@@ -20,8 +20,7 @@ char		**ft_array_extend(char **array, char *string, int dup_str)
 	char	**dup_array;
 
 	len = ft_arraylen(array);
-	if (!(dup_array = (char **)MALLOC(sizeof(char *) * (len + 2))))
-		return (NULL);
+	dup_array = (char **)ft_memalloc(sizeof(char *) * (len + 2));
 	index = 0;
 	while (array[index])
 	{
@@ -29,13 +28,7 @@ char		**ft_array_extend(char **array, char *string, int dup_str)
 		index++;
 	}
 	if (dup_str)
-	{
-		if (!(string = ft_strdup(string)))
-		{
-			FREE(dup_array);
-			return (NULL);
-		}
-	}
+		string = ft_strdup(string);
 	dup_array[index] = string;
 	dup_array[index + 1] = NULL;
 	FREE(array);

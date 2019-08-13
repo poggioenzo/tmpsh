@@ -28,9 +28,7 @@ char		**ft_duparray(char **array)
 	char	**duplicate;
 	int		index;
 
-	if (!(duplicate = (char **)MALLOC(sizeof(char *) * \
-						(array_size(array) + 1))))
-		return (NULL);
+	duplicate = (char **)ft_memalloc(sizeof(char *) * (array_size(array) + 1));
 	index = 0;
 	while (*array)
 	{

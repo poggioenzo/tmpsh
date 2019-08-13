@@ -38,8 +38,7 @@ char			*ft_ltoabase(unsigned long long nbr, const char *base)
 		return (ft_strsub(base, 0, 1));
 	base_len = ft_strlen(base);
 	nbr_char = count_digit(nbr, base_len);
-	if (!(itoa_str = (char *)MALLOC(sizeof(char) * (nbr_char + 1))))
-		return (NULL);
+	itoa_str = (char *)ft_memalloc(sizeof(char) * (nbr_char + 1));
 	itoa_str[nbr_char--] = '\0';
 	while (nbr)
 	{

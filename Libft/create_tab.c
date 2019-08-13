@@ -24,8 +24,7 @@ char	**create_tab(int size)
 	int		i;
 	char	**tab;
 
-	if (!(tab = (char **)MALLOC(sizeof(char *) * (size + 1))))
-		return (NULL);
+	tab = (char **)ft_memalloc(sizeof(char *) * (size + 1));
 	i = 0;
 	while (i <= size)
 		tab[i++] = NULL;

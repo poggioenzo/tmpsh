@@ -24,8 +24,7 @@ static t_fcts	*node_create(char *key, t_build_fct format_fct)
 {
 	t_fcts *node;
 
-	if (!(node = (t_fcts *)MALLOC(sizeof(t_fcts))))
-		return (NULL);
+	node = (t_fcts *)ft_memalloc(sizeof(t_fcts));
 	node->key = key;
 	node->string_maker = format_fct;
 	node->next = NULL;

@@ -34,8 +34,7 @@ static int		is_link(char **filename)
 		if (!(directory = dirname(*filename)))
 			return (-1);
 		buff_ptr = buff;
-		if (!(*filename = ft_filejoin(&buff_ptr, &directory, 0, 1)))
-			return (-1);
+		*filename = ft_filejoin(&buff_ptr, &directory, 0, 1);
 	}
 	return (S_ISLNK(info.st_mode));
 }
@@ -61,11 +60,9 @@ static int		push_subfile(t_subfile **file_lst, struct dirent *inode)
 {
 	if (!*file_lst)
 	{
-		if (!(*file_lst = (t_subfile *)MALLOC(sizeof(t_subfile) * 500)))
-			return (-1);
+		*file_lst = (t_subfile *)ft_memalloc(sizeof(t_subfile) * 500);
 		(*file_lst)->next = NULL;
-		if (!((*file_lst)->filename = ft_strdup(inode->d_name)))
-			return (delete_subfile(file_lst, -1));
+		(*file_lst)->filename = ft_strdup(inode->d_name);
 	}
 	else
 	{
@@ -120,17 +117,12 @@ int				ft_readdir(char *directory, char ***files_strings)
 	lst_len = 0;
 	if (read_files(directory, &lst_len, &file_lst) == -1)
 		return (0);
-	if (!(*files_strings = (char **)MALLOC(sizeof(char *) * (lst_len + 1))))
-		return (delete_subfile(&file_lst, 0));
+	*files_strings = (char **)ft_memalloc(sizeof(char *) * (lst_len + 1));
 	lst_len = 0;
 	tmp_lst = file_lst;
 	while (file_lst)
 	{
-		if (!(files_strings[0][lst_len++] = ft_strdup(file_lst->filename)))
-		{
-			free_str_array(files_strings, -1);
-			return (delete_subfile(&tmp_lst, 0));
-		}
+		files_strings[0][lst_len++] = ft_strdup(file_lst->filename);
 		file_lst = file_lst->next;
 	}
 	files_strings[0][lst_len] = NULL;

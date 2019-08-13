@@ -13,8 +13,7 @@ void		alloc_capabilities_struct(t_caps **capabilities)
 {
 	if (tgetent(ft_getenv("TERM"), NULL) == -1)
 		exit(-1); // WHAT SHOULD I DO ?
-	if (!(*capabilities = (t_caps *)MALLOC(sizeof(t_caps))))
-		exit(-1);
+	*capabilities = (t_caps *)ft_memalloc(sizeof(t_caps));
 	(*capabilities)->clear = tgetstr("cl", NULL);
 	(*capabilities)->video = tgetstr("mr", NULL);
 	(*capabilities)->reset_video = tgetstr("me", NULL);
