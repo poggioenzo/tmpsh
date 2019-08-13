@@ -39,7 +39,6 @@ static void	get_dquotes_opening_tags(void)
 
 }
 
-
 void	get_opening_tags(void)
 {
 	t_pylst		*opening_tags;

@@ -15,6 +15,36 @@
 #include "hash_table.h"
 
 /*
+** show_tab:
+**
+** Debug function to print an hash table.
+** Format like:
+** 0: [key:value, key:value, ...]
+** 1: ...
+** ...
+*/
+
+void	show_tab(t_ht_table *table)
+{
+	t_ht_alveol *alveol;
+	int index = 0;
+
+	while (index < table->size)
+	{
+		ft_printf("%d:", index);
+		alveol = table->items[index];
+		while (alveol)
+		{
+			ft_printf("'%s':'%s', ", alveol->key, alveol->value);
+			alveol = alveol->next;
+		}
+		ft_printf("\n");
+		index++;
+	}
+
+}
+
+/*
 ** extract_alveol:
 **
 ** Delete a given alveol who match the key in the chained list.

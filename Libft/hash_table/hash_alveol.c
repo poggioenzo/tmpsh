@@ -87,7 +87,7 @@ static void	insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
 	else
 	{
 		tmp_alveol = *alveol;
-		while (tmp_alveol->next)
+		while (1)
 		{
 			if (ft_strequ(key, tmp_alveol->key))
 			{
@@ -95,7 +95,10 @@ static void	insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
 				tmp_alveol->ctype = ctype;
 				return ;
 			}
-			tmp_alveol = tmp_alveol->next;
+			if (tmp_alveol->next)
+				tmp_alveol = tmp_alveol->next;
+			else
+				break ;
 		}
 		create_alveol(key, value, &tmp_alveol->next, ctype);
 	}
