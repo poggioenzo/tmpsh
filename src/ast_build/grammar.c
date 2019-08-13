@@ -500,6 +500,7 @@ void	show_grammar_global(void)
 	print_spaces();
 	print_escape();
 	ft_printf("path:\n'%s'\n", g_grammar->path);
+	ft_printf("g_grammar->maxlen_leaf_op:\n%d\n", g_grammar->maxlen_leaf_op);
 	print_opening_tags();
 	print_dquotes_opening_tags();
 	print_leaf_op();
