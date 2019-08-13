@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import utils.global_var as gv
+import utils.key as k
 
 # import utils.tagstokens as tt
 # Should be this next import statement but create circular import error.
@@ -19,6 +20,7 @@ class Heredocs():
     def __init__(self, key, len_key, minus):
         import utils.tagstokens as tt
         self.key = key
+        self.quoted = k.quoted_gold_key(key)
         self.len_key = len_key
         self.minus = minus
         self.closed = False
@@ -27,7 +29,9 @@ class Heredocs():
         self.in_cmdsubst = False
 
     def add_tags_tokens(self, tag, token):
-        if not self.in_cmdsubst:
+        if self.quoted:
+            tag = 'STMT'
+        elif not self.in_cmdsubst:
             if tag in gv.GRAMMAR.dquotes_opening_tags:
                 self.in_cmdsubst = True
                 self.stack.append(gv.GRAMMAR.dquotes_opening_tags[tag])

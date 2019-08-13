@@ -22,7 +22,7 @@ EOF
 
     "dquote" $("$(dquote)"; (lol)) stmt
 EOF
-<<- $(  LOL  ) <<- EOF
+<<- $(  LOL  ) <<- 'EOF'
 
 
 \t\t

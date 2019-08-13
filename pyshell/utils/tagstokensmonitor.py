@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import utils.global_var as gv
+import utils.key as k
 
 
 def strncmp(s1, s2, n):
@@ -70,15 +71,10 @@ class TagsTokensMonitor():
                 self.opened.pop(-1)
 
     def is_newline(self):
+        # should be improved or factorize
         import utils.heredocs as hd
 
-        def get_key(key, tag, tok, minus):
-            if minus:
-                if key == '' and tag == 'SPACES':
-                    return ''
-            return key + tok
-
-        tuple_key_len = ()
+        tuple_key_len = []
         key = ''
         heredoc = None
         not_end = True
@@ -88,6 +84,7 @@ class TagsTokensMonitor():
             tuple_key_len = self.heredocs_keys[0]
             heredoc = hd.Heredocs(
                 tuple_key_len[0], tuple_key_len[1], tuple_key_len[2])
+            tuple_key_len[0] = k.modifify_gold_key(tuple_key_len[0])
             minus = tuple_key_len[2]
             gv.HEREDOCS.append(heredoc)
             not_end = self.next_tag_token(True)
@@ -96,7 +93,7 @@ class TagsTokensMonitor():
                     heredoc.close()
                     break
                 heredoc.add_tags_tokens(self.tag, self.token)
-                key = get_key(key, self.tag, self.token, minus)
+                key = k.get_key(key, self.tag, self.token, minus)
                 if self.tag == 'NEW_LINE':
                     key = ''
                 not_end = self.next_tag_token(True)
@@ -135,10 +132,10 @@ class TagsTokensMonitor():
             if self.tag in gv.GRAMMAR.opening_tags:
                 j = self.tt.skip_openning_tags(self.i, 'NEW_LINE')
                 list_tok = self.tt.tokens[self.i:j]
-                key = (''.join(list_tok), len(list_tok), minus)
+                key = [''.join(list_tok), len(list_tok), minus]
                 self.i = j - 1
             else:
-                key = (self.token, 1, minus)
+                key = [self.token, 1, minus]
             self.heredocs_keys.append(key)
         else:
             self.tt.valid = False
