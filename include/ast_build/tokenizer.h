@@ -1,3 +1,3 @@
 
 
-void qwerty(void);
+void tokenize(char *command, t_pylst *tokens);
