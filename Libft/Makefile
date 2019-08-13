@@ -116,6 +116,7 @@ SRCS = ft_atoi.c \
 	   ft_strset.c \
 	   ft_strdel_out.c \
 	   ft_strdup.c \
+		 ft_strndup.c \
 	   ft_strequ.c \
 	   ft_striter.c \
 	   ft_striteri.c \
@@ -204,4 +205,3 @@ proper:fclean
 ifeq ($(filter $(MAKECMDGOALS), clean fclean re proper),)
 include $(DEPS_MAKEFILE)
 endif
-

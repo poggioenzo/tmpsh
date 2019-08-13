@@ -129,6 +129,7 @@ int				ft_putnbr_fd(int nb, int fd);
 char			*ft_strcpy(char *dest, const char *src);
 char			*ft_strncpy(char *dest, const char *src, size_t n);
 char			*ft_strdup(const char *src);
+char			*strndup(const char *s1, size_t n);
 char			**ft_duparray(char **array);
 char			**ft_array_extend(char **array, char *string, int dup_str);
 int				ft_array_in(char **array, char *string);
