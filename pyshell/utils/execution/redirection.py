@@ -1,4 +1,5 @@
 import os
+import utils.execution.fd_management as fd
 
 def open_redirection_file(redirection):
     fd = None
@@ -21,16 +22,38 @@ def open_redirection_file(redirection):
     else:
         redirection.dest = int(redirection.dest) if redirection.dest.isdigit() else None
 
+def join_cmd(branch):
+    final_cmd = ""
+    index = 0
+    tagstoken = branch.tagstokens
+    while index < tagstoken.length:
+        if tagstoken.tags[index] in ["STMT", "SPACES"]:
+            final_cmd += tagstoken.tokens[index]
+        index += 1
+    return final_cmd + "\n"
+
+def prepare_heredoc(redirection):
+    here_pipe = fd.setup_pipe_fd()
+    redirection.source = 0
+    redirection.dest = here_pipe[0]
+    content = join_cmd(redirection.heredoc_ast.list_branch[0])
+    os.write(here_pipe[1], content.encode())
+    os.close(here_pipe[1])
+
 def setup_redirection(branch):
     fd_list = branch.redirectionfd
     index = 0
     nbr_redirection = len(fd_list)
     while index < nbr_redirection:
         redirection = fd_list[index]
-        open_redirection_file(redirection)
+        if redirection.type in ["HEREDOC", "TRIPLEHEREDOC", "HEREDOCMINUS"]:
+            prepare_heredoc(redirection)
+        else:
+            open_redirection_file(redirection)
         if redirection.error == False:
             if redirection.dest is not None:
                 os.dup2(redirection.dest, redirection.source)
+                os.close(redirection.dest)
             if redirection.close:
                 os.close(redirection.source)
         index += 1
