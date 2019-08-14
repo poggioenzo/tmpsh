@@ -92,6 +92,7 @@ static void	insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
 			if (ft_strequ(key, tmp_alveol->key))
 			{
 				tmp_alveol->value = value;
+				g_free_fct[tmp_alveol->ctype](&tmp_alveol->value);
 				tmp_alveol->ctype = ctype;
 				return ;
 			}
