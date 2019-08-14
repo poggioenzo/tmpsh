@@ -186,7 +186,7 @@ typedef struct
 
 typedef struct
 {
-	t_tagstokens	tagstokens;
+	t_tagstokens	*tagstokens;
 	char			*begin_andor;
 	char			*tag_end;
 	t_pylst			*subast;
@@ -246,7 +246,6 @@ typedef struct
 void		DEBUG_print_line(t_line *shell_lines, int fd);
 int		fd_debug;
 void	show_history(t_hist *history);
-
 
 #include "debug.h"
 # include "globals.h"
