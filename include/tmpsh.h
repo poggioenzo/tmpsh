@@ -102,7 +102,7 @@ char		g_last_char[5];
 
 enum	malloc_fail
 {
-	MALLOC_FAIL = -1, 
+	MALLOC_FAIL = -1,
 	MALLOC_ERROR = 0,
 	MALLOC_SUCCESS = 1
 };
