@@ -25,7 +25,6 @@ int		main(int argc, char **argv, char **environ)
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
 	tokenize("ls >> file;     $( ls && \\)) ", tokens);
-	print_pylst(tokens);
 	//setup_variables_elements(environ);
 
 	/*
