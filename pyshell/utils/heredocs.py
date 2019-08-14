@@ -76,7 +76,7 @@ class Heredocs():
             self.striplines()
         self.tagstokens.check_syntax(True)
         self.closed = True
-        self.tagstokens.incomplete = False
+        # self.tagstokens.incomplete = False
 
     def __str__(self):
         str0 = '\nHEREDOC: {} | closed: {} | Minus: {}\n'.format(
