@@ -70,7 +70,7 @@ class TagsTokens():
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
         if gv.HEREDOCS != []:
-            self.incomplete |= not any([elt.closed for elt in gv.HEREDOCS])
+            self.incomplete |= not all([elt.closed for elt in gv.HEREDOCS])
         self.clear_stack()
         return self
 
@@ -145,7 +145,7 @@ class TagsTokens():
         self.tags[index], self.tokens[index] = value
         self.update_length()
 
-    #'echo <<' will fail on the prompt
+    # 'echo <<' will fail on the prompt
     def __delitem__(self, key):
         if key is int:
             if not (0 <= key < self.length):
