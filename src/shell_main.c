@@ -24,7 +24,6 @@ int		main(int argc, char **argv, char **environ)
 	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
-	push_pylst(tokens, NULL, 0, _ptr);
 	tokenize("ls >> file;     $( ls && \\)) ", tokens);
 	print_pylst(tokens);
 	//setup_variables_elements(environ);
