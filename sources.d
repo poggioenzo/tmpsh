@@ -127,7 +127,7 @@ FILE_SRCS := $(addprefix $(FILE_DIR), $(FILE_SRCS))
 AST_DIR = ast_build/
 
 AST_SRCS := grammar.c \
-						tokenizer.c
+						tokenizer.c \
 
 AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS))
 
