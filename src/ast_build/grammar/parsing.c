@@ -36,10 +36,8 @@ static char		*get_keyword(const char *line)
 	char	**split_key;
 	char	*keyword;
 
-	if (!(split_key = ft_strsplit(line, ":")))
-		exit(-1);
-	if (!(keyword = ft_strtrim(split_key[0])))
-		exit(-1);
+	split_key = ft_strsplit(line, ":");
+	keyword = ft_strtrim(split_key[0]);
 	free_str_array(&split_key, 0);
 	return (keyword);
 }
@@ -70,8 +68,7 @@ static void		parse_keyword_values(const char **lines, int *i)
 	}
 	while (is_value_line(lines[*i]))
 	{
-		if (!(value = ft_strtrim(lines[*i])))
-			exit(-1);
+		value = ft_strtrim(lines[*i]);
 		push_pylst(keyword_list, value, NO_COPY_BUT_FREE, _chare);
 		*i += 1;
 	}
@@ -99,10 +96,8 @@ void get_grammar_from_path(void)
 	int		nbr_lines;
 	int		i;
 
-	if (!(content = readfile(g_grammar->path)))
-		exit(-1);
-	if(!(lines = ft_strsplit(content, "\n")))
-		exit(-1);
+	content = readfile(g_grammar->path);
+	lines = ft_strsplit(content, "\n");
 	nbr_lines = ft_arraylen(lines);
 	i = 0;
 	while (i < nbr_lines)
