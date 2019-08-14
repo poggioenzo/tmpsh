@@ -13,6 +13,11 @@
 
 #include "libft.h"
 
+static int		is_value_allocated(t_pylst *py_node)
+{
+	return (py_node->size > 0 || py_node-> size == NO_COPY_BUT_FREE);
+}
+
 /*
 ** free_pylst_node:
 **
@@ -25,7 +30,7 @@ int		free_pylst_node(t_pylst **py_node, int status)
 
 	if (!*py_node)
 		return (status);
-	if ((*py_node)->size > 0 || (*py_node)->size == NO_COPY_BUT_FREE)
+	if (is_value_allocated(*py_node))
 	{
 		free_fct = g_free_fct[(*py_node)->ctype];
 		free_fct(&(*py_node)->value);
@@ -56,4 +61,35 @@ int		free_pylst(t_pylst **pylst, int status)
 	}
 	*pylst = NULL;
 	return (status);
+}
+
+/*
+** pylst_clean_node:
+**
+** @node: single to clean the value.
+*/
+
+void	pylst_clean_node(t_pylst *node)
+{
+	if (is_value_allocated(node))
+		g_free_fct[node->ctype](&node->value);
+	node->value = NULL;
+	node->ctype = _ptr;
+	node->size = 0;
+}
+
+/*
+** pylst_clean:
+**
+** Clean each value of an entire pylst with the appropriate freeing
+** function
+*/
+
+void	pylst_clean(t_pylst *pylst)
+{
+	while (pylst)
+	{
+		pylst_clean_node(pylst);
+		pylst = pylst->next;
+	}
 }

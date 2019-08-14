@@ -12,6 +12,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdarg.h>
 
 /*
 ** alloc_pylst_node:
@@ -418,4 +419,38 @@ void	pylst_strremove(t_pylst	**pylst, char *value)
 	else
 		prev->next = curr->next;
 	free_pylst_node(&curr, 0);
+}
+
+/*
+** pylst_replace:
+**
+** Arguments, in order :
+** @pylst: choosen list.
+** @index: index to modify.
+** @value: value to change.
+** @size: size of the new value.
+** @ctype: C type of the new value.
+**
+** Facility to change an element of a specific index in a pylst.
+** Is an equivalent in python to 'my_lst[x] = y'.
+*/
+
+void	pylst_replace(t_pylst *pylst, int index, ...)
+{
+	va_list		args;
+	void		*value;
+	int			size;
+	enum e_ctype	ctype;
+
+
+	va_start(args, index);
+	value = va_arg(args, void *);
+	size = va_arg(args, int);
+	ctype = va_arg(args, enum e_ctype);
+	pylst = index_pylst(index);
+	pylst_clean_node(pylst);
+	pylst->value = value;
+	pylst->size = size;
+	pylst->ctype = ctype;
+	va_end(args);
 }
