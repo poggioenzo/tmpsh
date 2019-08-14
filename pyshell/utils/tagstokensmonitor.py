@@ -121,6 +121,18 @@ class TagsTokensMonitor():
                 self.tt.token_error = 'bad substitution'
 
     def is_heredocs(self):
+        def get_end_tag(tag):
+            if tag in gv.GRAMMAR.grammar['QUOTES']:
+                return tag
+            return 'NEW_LINE'
+
+        def transform_end_tag(tag):
+            if tag == 'QUOTE':
+                return 'END_QUOTE'
+            if tag == 'DQUOTES':
+                return 'END_DQUOTES'
+            return tag
+
         minus = self.tag == 'HEREDOCMINUS'
         not_end = self.next_tag_token()
         key = ()
@@ -130,10 +142,11 @@ class TagsTokensMonitor():
             not_end = self.next_tag_token()
         if not_end:
             if self.tag in gv.GRAMMAR.opening_tags:
-                j = self.tt.skip_openning_tags(self.i, 'NEW_LINE')
+                j = self.tt.skip_openning_tags(self.i, get_end_tag(self.tag))
                 list_tok = self.tt.tokens[self.i:j]
                 key = [''.join(list_tok), len(list_tok), minus]
                 self.i = j - 1
+                self.tt.tags[self.i] = transform_end_tag(self.tag)
             else:
                 key = [self.token, 1, minus]
             self.heredocs_keys.append(key)
