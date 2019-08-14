@@ -69,8 +69,8 @@ class TagsTokens():
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
-        if not heredoc:
-            self.incomplete |= not all([elt.closed for elt in gv.HEREDOCS])
+        if gv.HEREDOCS != []:
+            self.incomplete |= not any([elt.closed for elt in gv.HEREDOCS])
         self.clear_stack()
         return self
 
