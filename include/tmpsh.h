@@ -142,27 +142,8 @@ struct s_hist
 };
 
 /*
-** Grammar structs
+** Grammar struct
 */
-
-
-// Both structure t_grammar and t_shellgrammar can be joined togethercan be
-// joined together
-typedef struct
-{
-	char *path;
-	t_ht_table	*grammar;
-	t_ht_table	*reverse;
-}		t_grammar2;
-
-typedef struct
-{
-	t_pylst		*spaces;
-	char		escape;
-	t_ht_table	*opening_tags;
-	t_ht_table	*dquotes_opening_tags;
-	int			maxlen_leaf_op;
-}		t_shellgrammar;
 
 typedef struct
 {
