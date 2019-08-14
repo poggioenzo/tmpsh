@@ -70,11 +70,16 @@ class TagsTokens():
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
+<<<<<<< HEAD
         if gv.HEREDOCS != [] and self.not_heredoc:
             self.incomplete |= not all([elt.closed and
                                         not elt.tagstokens.incomplete
                                         for elt in gv.HEREDOCS])
             self.valid &= all([elt.tagstokens.valid for elt in gv.HEREDOCS])
+=======
+        if gv.HEREDOCS != []:
+            self.incomplete |= not all([elt.closed and not elt.tagstokens.incomplete for elt in gv.HEREDOCS])
+>>>>>>> 058535fa77e73137e12b27f89c0eb510b40cee00
         self.clear_stack()
         return self
 
