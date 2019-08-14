@@ -38,18 +38,18 @@ void	simple_int_pylst(void)
 
 	// Push a single element
 	int		value = 150;
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 
 	// Add one more element to have 2 node
 	int		value2 = -150;
-	push_pylst(&pylst, &value2, 0, _int);
+	push_pylst(&pylst, &value2, 0, _ptr);
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 	ASSERT_INTCMP(x_test, *(int *)pylst->next->value, value2);
 
 	// Test with 3 nodes
 	int		value3 = 0;
-	push_pylst(&pylst, &value3, 0, _int);
+	push_pylst(&pylst, &value3, 0, _ptr);
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 	ASSERT_INTCMP(x_test, *(int *)pylst->next->value, value2);
 	ASSERT_INTCMP(x_test, *(int *)pylst->next->next->value, value3);
@@ -63,7 +63,7 @@ void	multitype_pylst(void)
 	// Test if we can have multiple element in a list
 	int		value = 101;
 	char	*str = "a string";
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	push_pylst(&pylst, str, sizeof(char) * (ft_strlen(str) + 1), _chare);
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 	ASSERT_STRCMP(x_test, (char *)pylst->next->value, str);
@@ -87,15 +87,15 @@ void	len_pylst_test(void)
 	// Simplie test with few elements
 	int		value = -1500;
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 0);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 1);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 2);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 3);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 4);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 5);
 }
 

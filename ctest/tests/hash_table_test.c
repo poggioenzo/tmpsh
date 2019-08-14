@@ -90,7 +90,7 @@ void	hash_insert_single_alveol(void)
 	char *key3 = "warza"; char *value2 = "warza content ?";
 
 	insert_value(new_tab, key1, value1, _chare);
-	insert_value(new_tab, key2, &number1, _int);
+	insert_value(new_tab, key2, &number1, _ptr);
 	insert_value(new_tab, key3, value2, _chare);
 
 	ASSERT_STRCMP(x_test, search_value(new_tab, key1), value1);
@@ -118,9 +118,9 @@ void	hash_multitype_insert(void)
 	int seed_2 = 67; int size_2 = 20; char *key4 = "4";
 	ht_new_table(&tab_test, seed_2, size_2);
 
-	insert_value(new_tab, key1, &letter, _char);
+	insert_value(new_tab, key1, &letter, _ptr);
 	insert_value(new_tab, key2, str, _chare);
-	insert_value(new_tab, key3, &number, _int);
+	insert_value(new_tab, key3, &number, _ptr);
 	insert_value(new_tab, key4, tab_test, _hash_table);
 
 	ASSERT_INTCMP(x_test, *(char *)search_value(new_tab, key1), letter);
