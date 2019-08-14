@@ -21,10 +21,8 @@ void	update_var(char *variable, char *value, char *type, t_bool only_env)
 			saved_var = "";
 		value = ft_strequ(type, "CONCATENATION") ? \
 				ft_strjoin(saved_var, value): ft_strdup(value);
-		if (!value)
-			exit(-1);
 		ft_setenv(variable, value);
-		ft_strdel(value);
+		ft_strdel(&value);
 	}
 	else
 	{
@@ -33,8 +31,7 @@ void	update_var(char *variable, char *value, char *type, t_bool only_env)
 			value = ft_strjoin(saved_var ?: "", value);
 		else
 			value = ft_strdup(value);
-		insert_value(g_variables, variable, value, _chare);
-		ft_strdel(&saved_var);
+		insert_value(g_variables, variable, value, _ptr);
 	}
 }
 
@@ -55,7 +52,5 @@ char	*retrieve_variable(char *variable)
 			tmp_var = ft_getvar(variable);
 		variable_str = ft_strdup(tmp_var?: "");
 	}
-	if (!variable_str)
-		exit(-1);
 	return (variable_str);
 }

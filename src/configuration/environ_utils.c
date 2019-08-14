@@ -31,8 +31,7 @@ static char		*format_env_variable(char *variable, char *value)
 
 	len_var = ft_strlen(variable);
 	len_val = ft_strlen(value);
-	if (!(format_env = MALLOC(sizeof(char) * (len_var + len_val + 2))))
-		exit(-1);
+	format_env = MALLOC(sizeof(char) * (len_var + len_val + 2));
 	ft_strcpy(format_env, variable);
 	format_env[len_var] = '=';
 	ft_strcpy(format_env + len_var + 1, value);
@@ -118,7 +117,7 @@ void	ft_setenv(char *variable, char *value)
 		g_environ[index] = format_env;
 	}
 	else
-		g_environ = ft_array_extend(g_environ, format_env, FALSE);
+		g_environ = ft_array_extend(g_environ, format_env, false);
 }
 
 /*
@@ -133,5 +132,5 @@ void	ft_unsetenv(char *variable)
 
 	index = ft_getenv_index(variable);
 	if (index >= 0)
-		ft_array_remove(g_environ, g_environ[index], TRUE);
+		ft_array_remove(g_environ, g_environ[index], true);
 }

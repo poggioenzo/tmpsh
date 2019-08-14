@@ -1,4 +1,5 @@
 #include <signal.h>
+#include <sys/wait.h>
 #include "signal_handler.h"
 #include "libft.h"
 #include "display.h"
@@ -6,6 +7,7 @@
 #include "t_char_utils.h"
 #include "line_utils.h"
 #include "shell_setup.h"
+#include "foreground.h"
 
 
 /*
@@ -19,8 +21,12 @@ static void		shell_interupt(int status)
 {
 	t_line	*shell_repr;
 	t_cursor	*cursor;
+	pid_t		tpgid;
 
 	UNUSED(status);
+	tpgid = get_tpgid();
+	while (waitpid(-tpgid, NULL, WNOHANG) != -1)
+		;
 	manage_shell_repr(GET, &shell_repr, &cursor);
 	*cursor = (t_cursor){.row = -1, .column = -1};
 	display_shell(shell_repr, cursor, FALSE);
