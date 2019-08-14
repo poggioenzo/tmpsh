@@ -72,6 +72,7 @@ class Heredocs():
 
     def close(self):
         self.tagstokens = self.tagstokens.copytt(0, -self.len_key)
+        self.tagstokens.not_heredoc = False
         if self.minus:
             self.striplines()
         self.tagstokens.check_syntax(True)

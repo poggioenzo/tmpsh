@@ -20,6 +20,7 @@ class TagsTokens():
         if isinstance(self.tags, str):
             self.tags = [self.tags]
         self.stack = []
+        self.not_heredoc = True
         self.token_error = ''
         self.valid = True
         self.incomplete = False
@@ -69,8 +70,11 @@ class TagsTokens():
             self.stack = sr.tagstokens_shift_reduce(self, gv.GRAMMAR)
             if self.length > 0 and end_escape(self.tokens[-1]):
                 self.incomplete = True
-        if gv.HEREDOCS != []:
-            self.incomplete |= not all([elt.closed and not elt.tagstokens.incomplete for elt in gv.HEREDOCS])
+        if gv.HEREDOCS != [] and self.not_heredoc:
+            self.incomplete |= not all([elt.closed and
+                                        not elt.tagstokens.incomplete
+                                        for elt in gv.HEREDOCS])
+            self.valid &= all([elt.tagstokens.valid for elt in gv.HEREDOCS])
         self.clear_stack()
         return self
 
@@ -145,7 +149,6 @@ class TagsTokens():
         self.tags[index], self.tokens[index] = value
         self.update_length()
 
-    # 'echo <<' will fail on the prompt
     def __delitem__(self, key):
         if key is int:
             if not (0 <= key < self.length):
