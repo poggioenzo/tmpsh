@@ -11,10 +11,8 @@ static void		store_tags(t_pylst *opening_tags)
 	while (pylst_iter(opening_tags, (void **)&tag))
 	{
 		tag_split = ft_strsplit(tag, " ");
-		tag_op = ft_strdup(tag_split[0]);
+		tag_op = tag_split[0];
 		tag_end = ft_strdup(tag_split[ft_arraylen(tag_split) - 1]);
-		if (!tag_op || !tag_end)
-			exit(-1);
 		//Perform a check to see if the key is already available,
 		//will leak otherwise.
 		insert_value(g_grammar->opening_tags, tag_op, tag_end, _chare);
