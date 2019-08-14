@@ -221,14 +221,8 @@ class Executor:
         For each CMDSUBST[123] or DQUOTES, run in a subshell his ast representation.
         Do not wait any of those subprocess.
         """
-        index = 0
-        nbr_redirection = len(branch.redirectionfd)
-        while index < nbr_redirection:
-            redirection = branch.redirectionfd[index]
-            if redirection.type == "HEREDOC":
-                heredoc_branch = redirection.heredoc_ast.list_branch[0]
-                self.prepare_cmd_subst(heredoc_branch)
-            index += 1
+        redirection.heredoc_apply(branch.redirectionfd, \
+                self.prepare_cmd_subst)
         index = 0
         nbr_subast = len(branch.subast)
         while index < nbr_subast:
@@ -272,10 +266,8 @@ class Executor:
         or the cmdsubst /dev/fd file.
         """
         self.prepare_cmd_subst(branch)
-        for redirection in branch.redirectionfd:
-            if redirection.type == "HEREDOC":
-                redir_branch = redirection.heredoc_ast.list_branch[0]
-                self.perform_subast_replacement(redir_branch)
+        redirection.heredoc_apply(branch.redirectionfd, \
+                self.perform_subast_replacement)
         index = 0
         nbr_ast = len(branch.subast)
         while index < nbr_ast:

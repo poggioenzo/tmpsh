@@ -2,6 +2,7 @@
 
 import utils.global_var as gv
 import os
+import utils.execution.redirection as redir
 
 def getenv(variable):
     """os.getenv equivalent for our local environnement"""
@@ -97,10 +98,7 @@ def replace_variable(branch):
     Make a recursive calling if there is any dquotes element inside
     the branch.
     """
-    for redirection in branch.redirectionfd:
-        if redirection.type == "HEREDOC":
-            redirection_branch = redirection.heredoc_ast.list_branch[0]
-            replace_variable(redirection_branch)
+    redir.heredoc_apply(branch.redirectionfd, replace_variable)
     index = 0
     index_subast = 0
     while index < branch.tagstokens.length:
