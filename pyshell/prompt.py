@@ -7,16 +7,19 @@ from utils.execute import Executor
 import utils.global_var as gv
 import utils.execution.tmpsh_signal as tmpsh_signal
 from utils.execution.job_control import BackgroundJobs
-import os, sys
+import os
+import sys
 import string
 import signal
 import termios
 import ctypes
 
+
 class Prompt(Cmd):
     intro = "tmpsh - Total Mastering Professional Shell"
     prompt = "a prompt > "
     content = ""
+
     def default(self, line):
         line = [char for char in line if char in string.printable]
         line = "".join(line)
@@ -26,16 +29,21 @@ class Prompt(Cmd):
             TREE = AST(TAGSTOKENS)
             run = Executor(TREE)
             self.content = ""
+            self.prompt = "a prompt > "
         elif TAGSTOKENS.incomplete:
-            self.prompt = "{} > ".format(' '.join([tag.lower() for tag in TAGSTOKENS.stack]))
+            self.prompt = "{} > ".format(
+                ' '.join([tag.lower() for tag in TAGSTOKENS.stack]))
         else:
             print('Close all this command tokens: {}'.format(
                 str(TAGSTOKENS.token_error)))
             self.prompt = "error prompt > "
             self.content = ""
+        gv.HEREDOCS = []
+        gv.DONTPRINT = True
 
     def do_EOF(self, line):
         exit(1)
+
 
 def load_extension():
     file_list = ["utils/execution/sigmask_modif.c"]
@@ -43,6 +51,7 @@ def load_extension():
     library = "utils/execution/sigmask.so"
     os.system("gcc -shared -fPIC {} -o {}".format(file_str, library))
     return ctypes.cdll.LoadLibrary(library)
+
 
 def main(argc, argv, environ):
     gv.JOBS = BackgroundJobs()
@@ -56,6 +65,7 @@ def main(argc, argv, environ):
             print("")
             prompt.intro = ""
             pass
+
 
 if __name__ == "__main__":
     main(len(sys.argv), sys.argv, os.environ)

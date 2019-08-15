@@ -245,8 +245,8 @@ class RedirectionFD():
 
     def get_heredoc_ast(self):
         if gv.HEREDOCS != []:
-            tagstokens = gv.HEREDOCS[0].tagstokens
-            del gv.HEREDOCS[0]
+            tagstokens = gv.HEREDOCS[-1].tagstokens
+            del gv.HEREDOCS[-1]
             self.heredoc_ast = AST(tagstokens)
 
     def __str__(self):
