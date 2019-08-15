@@ -168,7 +168,7 @@ void	replace_variable(t_acb *branch)
 			tagstoken_variable_swap(branch->tagstokens, index);
 		else if (ft_strequ(tag, "SUBAST"))
 		{
-			subast = index_pylst(branch->subast);
+			subast = index_pylst(branch->subast, index_subast);
 			if (ft_strequ(subast->type, "DQUOTES"))
 				replace_variable(subast->list_branch);
 			index_subast++;

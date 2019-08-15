@@ -227,7 +227,7 @@ typedef struct
 ** Background jobs
 */
 
-enum	waitstate
+enum	e_waitstate
 {
 	finish = 0,
 	running = 1,
