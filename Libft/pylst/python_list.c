@@ -340,6 +340,7 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 ** Used in a while loop to iterate over each element of a pylst.
 ** Make a for loop inspired from python.
 ** ! No change on the pylst should be done during the iteration !
+** ! The list have to be iterate entirely (or reset iter_item) !
 **
 ** return : - 1 if a next element if found.
 **			- 0 if pylst is NULL, or if the entire list is parsed.
