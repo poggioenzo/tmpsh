@@ -38,7 +38,7 @@ def get_execname(cmd):
     Check if the given command can be run, display the appropriate
     error message otherwise.
     """
-    cmd = cmd.strip() # ! Get space in STMT with PIPE
+    cmd = cmd#.strip() # ! Get space in STMT with PIPE
     if "/" in cmd:
         return check_rights(cmd)
     exec_folders = os.environ["PATH"]

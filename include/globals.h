@@ -7,6 +7,7 @@ extern char	**g_environ;
 extern t_ht_table	*g_variables;
 
 extern t_ht_table	*g_builtins;
+extern t_background_job		*g_jobs;
 extern int	g_last_status;
 
 extern t_grammar	*g_grammar;
