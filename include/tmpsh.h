@@ -165,13 +165,13 @@ typedef struct
 
 typedef struct
 {
-	t_pylst		*heredocs;
 	t_pylst		*tokens;
 	t_pylst		*tags;
 	t_pylst		*stack;
 	char		*token_error;
 	t_bool		valid;
 	t_bool		incomplete;
+	t_bool		not_heredocs;
 	int			length;
 }			t_tagstokens;
 
