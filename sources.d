@@ -143,10 +143,19 @@ TOKENIZER_SRCS := tokenizer.c \
 
 TOKENIZER_SRCS := $(addprefix $(TOKENIZER_DIR), $(TOKENIZER_SRCS))
 
+TAGSTOKENS_DIR = tagstokens/
+
+TAGSTOKENS_SRCS := tagstokens.c \
+
+TAGSTOKENS_SRCS := $(addprefix $(TAGSTOKENS_DIR), $(TAGSTOKENS_SRCS))
+
+
+
 AST_DIR = ast_build/
 
 AST_SRCS := $(GRAMMAR_SRCS) \
 						$(TOKENIZER_SRCS) \
+						$(TAGSTOKENS_SRCS) \
 
 AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS)) \
 
