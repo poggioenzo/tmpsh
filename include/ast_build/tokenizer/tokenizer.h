@@ -1,5 +1,6 @@
-#ifndef TOKENIZEE_H
-# define TOKENIZEE_H
+#ifndef TOKENIZER_H
+# define TOKENIZER_H
 
 void tokenize(char *command, t_pylst **tokens);
+
 #endif

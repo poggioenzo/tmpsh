@@ -136,10 +136,17 @@ GRAMMAR_SRCS := grammar_init.c \
 
 GRAMMAR_SRCS := $(addprefix $(GRAMMAR_DIR), $(GRAMMAR_SRCS))
 
+TOKENIZER_DIR = tokenizer/
+
+TOKENIZER_SRCS := tokenizer.c \
+									tokenizer_utils.c \
+
+TOKENIZER_SRCS := $(addprefix $(TOKENIZER_DIR), $(TOKENIZER_SRCS))
+
 AST_DIR = ast_build/
 
 AST_SRCS := $(GRAMMAR_SRCS) \
-						tokenizer.c \
+						$(TOKENIZER_SRCS) \
 
 AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS)) \
 

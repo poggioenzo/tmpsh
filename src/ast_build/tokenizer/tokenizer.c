@@ -2,24 +2,7 @@
 #include "tmpsh.h"
 #include "libft.h"
 #include "globals.h"
-
-int ops_begin_with(char *pattern, t_pylst *leaf_op)
-{
-  int     i;
-  char    *leaf;
-  t_bool  ret;
-
-  ret = FALSE;
-  i = ft_strlen(pattern);
-  while (pylst_iter(leaf_op,(void **) &leaf))
-    if (!ft_strncmp(pattern, leaf, i))
-    {
-      ret = TRUE;
-      leaf_op->iter_item = NULL;
-      break ;
-    }
-  return (ret);
-}
+#include "tokenizer_utils.h"
 
 static void add_token(char *current, t_pylst **tokens)
 {
@@ -70,17 +53,6 @@ static char *escape_token(char *command, t_pylst **tokens, char *current)
   return (command);
 }
 
-t_bool charinstr(char c, char *str)
-{
-  while (*str)
-  {
-    if (c == *str)
-      return (TRUE);
-    str++;
-  }
-  return (FALSE);
-}
-
 static int span_space(char *command, t_pylst **tokens, char *current)
 {
   int i;
@@ -88,7 +60,7 @@ static int span_space(char *command, t_pylst **tokens, char *current)
 
   i = 1;
   add_token(current, tokens);
-  while(charinstr(command[i], " \t"))
+  while(ft_incharset(command[i], " \t"))
     i++;
   spaces = ft_strndup(command, i);
   push_pylst(tokens, spaces, sizeof(char) * (ft_strlen(spaces) + 1), _chare);
@@ -110,7 +82,7 @@ void tokenize(char *command, t_pylst **tokens)
       command += span(command, tokens, current);
     else if (*command == g_grammar->escape[0])
       command = escape_token(command, tokens, current);
-    else if (charinstr(*command, " \t"))
+    else if (ft_incharset(*command, " \t"))
       command += span_space(command, tokens, current);
     else
     {
