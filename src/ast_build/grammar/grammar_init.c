@@ -11,8 +11,7 @@ static void	shell_grammar_init(void)
 {
 	void	*tmp;
 
-	push_pylst(&g_grammar->spaces, " ", 0, _chare);
-	push_pylst(&g_grammar->spaces, "\t", 0, _chare);
+	g_grammar->spaces = " \t";
 	ht_new_table(&g_grammar->opening_tags, 63, 40);
 	ht_new_table(&g_grammar->dquotes_opening_tags, 63, 40);
 	get_escape();
@@ -45,5 +44,5 @@ void	grammar_init(char *path)
 	get_grammar_from_path();
 	get_reverse_grammar();
 	shell_grammar_init();
-	show_grammar_global();
+	// show_grammar_global();
 }
