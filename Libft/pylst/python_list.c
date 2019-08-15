@@ -450,7 +450,13 @@ void	pylst_replace(t_pylst *pylst, int index, ...)
 	ctype = va_arg(args, enum e_ctype);
 	pylst = index_pylst(index);
 	pylst_clean_node(pylst);
-	pylst->value = value;
+	if (size > 0)
+	{
+		pylst->value = ft_memalloc(size);
+		ft_memcpy((*py_node)->value, value, size);
+	}
+	else
+		(*py_node)->value = value;
 	pylst->size = size;
 	pylst->ctype = ctype;
 	va_end(args);
