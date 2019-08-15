@@ -207,7 +207,7 @@ typedef struct
 	t_tagstokens	tagstokens;
 	char			*type;
 	int				source;
-	char			*dest;
+	void			*dest;
 	t_bool			close;
 	t_bool			error;
 }		t_redirection_fd;
@@ -247,7 +247,7 @@ void		DEBUG_print_line(t_line *shell_lines, int fd);
 int		fd_debug;
 void	show_history(t_hist *history);
 
-#include "debug.h"
+# include "debug.h"
 # include "globals.h"
 
 #endif
