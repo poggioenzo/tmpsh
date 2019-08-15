@@ -75,4 +75,13 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to);
 int		pylst_iter(t_pylst *pylst, void **value);
 void		pylst_remove(t_pylst **pylst, void *value);
 void	pylst_strremove(t_pylst	**pylst, char *value);
+int in_pylst_chare(char *str, t_pylst *pylst);
+
+/*
+** Printing
+*/
+
+void	print_pylst_chare(t_pylst *pylst);
+
+
 #endif

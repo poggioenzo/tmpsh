@@ -296,8 +296,9 @@ void	del_after_pylst(t_pylst **pylst, int index)
 ** Don't do that :
 ** var = [1,2,3,4]
 ** var[0:0] = [9,7,8]
-** You're not in Python ! And it seem stupid. Use different index please beacause
-** it will have an UNDEFINED BEHAVIOR otherwise, like I don't know what.
+** You're not in Python ! And it seem stupid.
+** Use different index please because it will have an UNDEFINED BEHAVIOR
+** otherwise, like I don't know what.
 ** Or please implement this behavior by yourself, up to you.
 */
 
@@ -451,4 +452,60 @@ void	pylst_replace(t_pylst *pylst, int index, ...)
 	pylst->size = size;
 	pylst->ctype = ctype;
 	va_end(args);
+}
+
+/*
+** in_pylst_chare:
+**
+** Arguments, in order :
+** @str: searched string.
+** @pylst: choosen list.
+**
+** Return True if str is a value of pylst else return False.
+** ! If str is founded pylst->iter_item is set to NULL !
+*/
+
+int in_pylst_chare(char *str, t_pylst *pylst)
+{
+  char  *value;
+  int ret;
+
+  ret = 0;
+  while (pylst_iter(pylst, (void **)&value))
+  {
+    if (value && ft_strequ(str, value))
+    {
+      ret = 1;
+      pylst->iter_item = NULL;
+      break ;
+    }
+  }
+  return (ret);
+}
+
+/*
+** print_pylst_chare:
+**
+** Arguments, in order :
+** @pylst: choosen list.
+**
+** Print a python'style list of string.
+** ! Work only if pylst values are char * !
+*/
+
+void	print_pylst_chare(t_pylst *pylst)
+{
+  char  *value;
+  int first;
+
+  first = 1;
+  ft_printf("[");
+  while (pylst_iter(pylst, (void **)&value))
+  {
+    if (!first)
+      ft_printf(",", value);
+    ft_printf("'%s'", value);
+    first = 0;
+  }
+  ft_printf("]\n");
 }
