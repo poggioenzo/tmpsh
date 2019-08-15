@@ -1,8 +1,5 @@
-#include <stdio.h>
 #include "tmpsh.h"
 #include "libft.h"
-#include "globals.h"
-#include "tokenizer.h"
 
 int ops_begin_with(char *pattern, t_pylst *leaf_op)
 {
