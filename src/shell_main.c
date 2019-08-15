@@ -24,7 +24,8 @@ int		main(int argc, char **argv, char **environ)
 	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
-	tokenize("$$ text $# text $* text $@ text $? text $! text = text += text & text ; text ;; text | text && text || text >> text > text << text <<< text <<- text < text >& text <& text ${ text $( text { text ( text >( text <( $text ) \" \$\( ", tokens);
+	ft_printf("QWERTYUI\n");
+	tokenize("$$ text $# text $* text $@ ", &tokens);
 	//setup_variables_elements(environ);
 
 	/*
