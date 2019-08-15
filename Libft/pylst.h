@@ -53,6 +53,8 @@ void			free_inte(void *array_ptr);
 void			free_pylst_type(void *pylst_ptr);
 void			free_hash_table_type(void *table_ptr);
 
+void	pylst_clean_node(t_pylst *node);
+void	pylst_clean(t_pylst *pylst);
 
 /*
 ** Manipulation lists
@@ -63,6 +65,7 @@ t_pylst		*pylst_deepcpy(t_pylst *pylst);
 
 int			len_pylst(t_pylst *pylst);
 t_pylst		*index_pylst(t_pylst *pylst, int index);
+void	pylst_replace(t_pylst *pylst, int index, ...);
 t_pylst		*slice_pylst(t_pylst *pylst, int from, int to);
 char	*join_pylst(t_pylst *pylst, char *substr);
 void	pylst_extend(t_pylst **start, t_pylst *end, int deep_cpy);

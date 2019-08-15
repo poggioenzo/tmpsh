@@ -124,12 +124,24 @@ FILE_SRCS := replace_home.c \
 
 FILE_SRCS := $(addprefix $(FILE_DIR), $(FILE_SRCS))
 
+GRAMMAR_DIR = grammar/
+
+GRAMMAR_SRCS := grammar_init.c \
+                parsing.c \
+                grammar_utils.c \
+                store_attributes_1.c \
+                store_attributes_2.c \
+                grammar_print.c \
+                grammar_print_attributes.c \
+
+GRAMMAR_SRCS := $(addprefix $(GRAMMAR_DIR), $(GRAMMAR_SRCS))
+
 AST_DIR = ast_build/
 
-AST_SRCS := grammar.c \
+AST_SRCS := $(GRAMMAR_SRCS) \
 						tokenizer.c \
 
-AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS))
+AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS)) \
 
 SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(CHAR_UTILS)) \

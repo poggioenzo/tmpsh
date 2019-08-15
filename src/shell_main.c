@@ -4,8 +4,8 @@
 #include "prompt_loop.h"
 #include <fcntl.h>
 
-#include "grammar.h"
 #include "tokenizer.h"
+#include "grammar_init.h"
 
 #include "libft.h"
 #include "builtins.h"

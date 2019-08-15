@@ -143,27 +143,8 @@ struct s_hist
 };
 
 /*
-** Grammar structs
+** Grammar struct
 */
-
-
-// Both structure t_grammar and t_shellgrammar can be joined togethercan be
-// joined together
-typedef struct
-{
-	char *path;
-	t_ht_table	*grammar;
-	t_ht_table	*reverse;
-}		t_grammar2;
-
-typedef struct
-{
-	t_pylst		*spaces;
-	char		escape;
-	t_ht_table	*opening_tags;
-	t_ht_table	*dquotes_opening_tags;
-	int			maxlen_leaf_op;
-}		t_shellgrammar;
 
 typedef struct
 {
@@ -206,7 +187,7 @@ typedef struct
 
 typedef struct
 {
-	t_tagstokens	tagstokens;
+	t_tagstokens	*tagstokens;
 	char			*begin_andor;
 	char			*tag_end;
 	t_pylst			*subast;
@@ -266,7 +247,6 @@ typedef struct
 void		DEBUG_print_line(t_line *shell_lines, int fd);
 int		fd_debug;
 void	show_history(t_hist *history);
-
 
 #include "debug.h"
 # include "globals.h"
