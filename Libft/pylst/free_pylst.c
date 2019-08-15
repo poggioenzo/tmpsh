@@ -15,7 +15,7 @@
 
 static int		is_value_allocated(t_pylst *py_node)
 {
-	return (py_node->size > 0 || py_node-> size == NO_COPY_BUT_FREE);
+	return (py_node->size > 0 || py_node->size == NO_COPY_BUT_FREE);
 }
 
 /*

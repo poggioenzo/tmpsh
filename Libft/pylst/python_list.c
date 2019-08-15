@@ -445,7 +445,7 @@ void	pylst_replace(t_pylst *pylst, int index, ...)
 	value = va_arg(args, void *);
 	size = va_arg(args, int);
 	ctype = va_arg(args, enum e_ctype);
-	pylst = index_pylst(index);
+	pylst = index_pylst(pylst, index);
 	pylst_clean_node(pylst);
 	pylst->value = value;
 	pylst->size = size;
