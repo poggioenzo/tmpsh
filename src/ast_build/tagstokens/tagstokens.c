@@ -31,9 +31,3 @@ void init_tagstokens(t_tagstokens *self, t_pylst *tokens, t_pylst *tags)
   // strip_tagstokens(self);
   // update_length(self);
 }
-
-
-char *str_tagstokens(t_tagstokens *self)
-{
-  return ("LOL");
-}
