@@ -85,14 +85,23 @@ PROMPT_CONF :=  prompt.c \
 
 PROMPT_CONF := $(addprefix prompt/, $(PROMPT_CONF))
 
+VARIABLES_DIR = variables/
+
+VARIABLES_SRCS := environ_utils.c \
+                  environ_setup.c \
+                  local_variables.c \
+                  variables_management.c \
+
+VARIABLES_SRCS := $(addprefix $(VARIABLES_DIR), $(VARIABLES_SRCS))
+
+
 CONFIGURATION_DIR = configuration/
 
 CONFIGURATION_SRCS :=  screen_size.c \
 					   signal_handler.c \
 					   t_caps_utils.c \
 					   termios_setter.c \
-					   environ_utils.c \
-					   environ_setup.c \
+                       $(VARIABLES_SRCS) \
 					   $(PROMPT_CONF)
 
 CONFIGURATION_SRCS := $(addprefix $(CONFIGURATION_DIR), $(CONFIGURATION_SRCS))
@@ -113,6 +122,8 @@ EXECUTION_DIR = execution/
 EXECUTION_SRCS := fd_management.c \
                   rights_file.c \
                   foreground.c \
+                  assignation.c \
+                  variable_replacement.c \
 
 EXECUTION_SRCS := $(addprefix $(EXECUTION_DIR), $(EXECUTION_SRCS))
 

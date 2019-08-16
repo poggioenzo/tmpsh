@@ -3,10 +3,22 @@
 
 t_ht_table		*g_variables = NULL;
 
+/*
+** ft_getvar:
+**
+** Return the value of the given variable.
+*/
+
 char	*ft_getvar(char *var)
 {
 	return (search_value(g_variables, var));
 }
+
+/*
+** ft_setvar:
+**
+** Store the given variable value.
+*/
 
 void	ft_setvar(char *variable, char *value)
 {

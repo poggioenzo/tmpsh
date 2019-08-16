@@ -9,6 +9,8 @@
 #include "libft.h"
 #include "builtins.h"
 
+int		g_last_status;
+
 int		main(int argc, char **argv, char **environ)
 {
 	int		status = 0;

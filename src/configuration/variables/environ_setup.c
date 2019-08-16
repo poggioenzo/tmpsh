@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "tmpsh.h"
 #include "variables.h"
 
 char		**g_environ;
