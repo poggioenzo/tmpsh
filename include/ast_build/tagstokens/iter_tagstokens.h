@@ -14,7 +14,8 @@
 #ifndef ITER_TAGSTOKENS_H
 # define ITER_TAGSTOKENS_H
 
-t_bool	iter_tagstokens(t_tagstokens *self, char *token, char *tag);
-void	break_tagstokens(t_tagstokens *self);
+t_bool	iter_tagstokens(t_tagstokens *self, char **token, char **tag);
+int     break_out_tagstokens(t_tagstokens *self, int status);
+void    break_tagstokens(t_tagstokens *self);
 
 #endif
