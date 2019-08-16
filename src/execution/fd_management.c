@@ -43,7 +43,7 @@ void	replace_std_fd(int stdin, int stdout)
 **
 ** Perfom a pipe and push them in a bigger fd (starting from shell_range)
 ** to limit conflict with user program.
-** 
+**
 ** return : - 0 if pipe success
 **			- -1 if an error occur.
 */
@@ -62,19 +62,6 @@ int		setup_pipe_fd(int pipes_fd[2])
 	close(sys_pipes[0]);
 	close(sys_pipes[1]);
 	return (0);
-}
-
-/*
-** close_fds:
-**
-** Close each fd in an int array. Array must finish by -1
-*/
-
-void	close_fds(const int *fd_list)
-{
-	// !! PROBABLY None FD IN THE LIST. check what is coming in.
-	while (*fd_list != -1)
-		close(*fd_list++);
 }
 
 /*
