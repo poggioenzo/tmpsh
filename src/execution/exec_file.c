@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "tmpsh.h"
+#include "variables.h"
 
 /*
 ** check_rights:
@@ -9,11 +10,12 @@
 ** Check permission + file existence.
 */
 
-char	*check_rights(char *cmd)
+static char		*check_rights(char *cmd)
 {
 	if (access(cmd, F_OK) == -1)
 	{
-		ft_dprintf(STDERR_FILENO, "tmpsh: No such file or directory : %s\n", cmd);
+		ft_dprintf(STDERR_FILENO, \
+				"tmpsh: No such file or directory : %s\n", cmd);
 		ft_strdel(&cmd);
 		return (NULL);
 	}
@@ -26,7 +28,7 @@ char	*check_rights(char *cmd)
 	return (cmd);
 }
 
-/* 
+/*
 ** get_execname:
 **
 ** From a given STMT, verify if the given file correspond to a file,
@@ -35,31 +37,30 @@ char	*check_rights(char *cmd)
 ** error message otherwise.
 */
 
-char	*get_execname(char *command)
+char			*get_execname(char *command)
 {
-	char	*exec_folders;
-	char	**splitted_folders;
-	int		nbr_folders;
+	char	*path_env;
+	char	**folders;
 	int		index;
 	char	*execname;
 
 	if (ft_strchr(command, '/'))
 		return (check_rights(ft_strdup(command)));
-	exec_folders = ft_getenv("PATH");
-	if (exec_folders)
+	if ((path_env = ft_getenv("PATH")))
 	{
-		splitted_folders = ft_strsplit(exec_folders, ":");
+		folders = ft_strsplit(path_env, ":");
 		index = 0;
-		nbr_folders = ft_arraylen(splitted_folders);
-		while (index < nbr_folders)
+		while (folders[index])
 		{
-			execname = ft_filejoin(splitted_folders[index], cmd, false, false);
+			execname = ft_filejoin(folders + index++, &command, false, false);
 			if (access(execname, F_OK) != -1)
+			{
+				free_str_array(&folders, 0);
 				return (check_rights(execname));
+			}
 			ft_strdel(&execname);
-			index++;
 		}
-		free_str_array(&splitted_folders);
+		free_str_array(&folders, 0);
 	}
 	ft_dprintf(STDERR_FILENO, "tmpsh: command not found: %s\n", command);
 	return (NULL);
