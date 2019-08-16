@@ -17,7 +17,6 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index, \
 {
 	char	*variable;
 	char	*token;
-	t_pylst	*tmp_node;
 
 	token = (char *)index_pylst(tagstok->tokens, index)->value;
 	variable = retrieve_variable(token + 1);
