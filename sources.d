@@ -147,6 +147,7 @@ TAGSTOKENS_DIR = tagstokens/
 
 TAGSTOKENS_SRCS :=	tagstokens.c \
 										str_tagstokens.c\
+										iter_tagstokens.c\
 
 TAGSTOKENS_SRCS := $(addprefix $(TAGSTOKENS_DIR), $(TAGSTOKENS_SRCS))
 
