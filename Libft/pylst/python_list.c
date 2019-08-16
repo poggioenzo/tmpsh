@@ -126,7 +126,7 @@ t_pylst		*index_pylst(t_pylst *pylst, int index)
 
 void			*get_value_pylst(t_pylst *pylst, int index)
 {
-	return ((pylst, index)->value);
+	return (index_pylst(pylst, index)->value);
 }
 
 /*
