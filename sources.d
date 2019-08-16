@@ -125,6 +125,7 @@ EXECUTION_SRCS := fd_management.c \
                   assignation.c \
                   variable_replacement.c \
                   exec_file.c \
+                  forker.c \
 
 EXECUTION_SRCS := $(addprefix $(EXECUTION_DIR), $(EXECUTION_SRCS))
 
