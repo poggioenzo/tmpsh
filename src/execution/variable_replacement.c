@@ -1,6 +1,7 @@
 #include "tmpsh.h"
 #include "libft.h"
 #include "variables.h"
+#include "heredoc_apply.h"
 
 /*
 ** tagstoken_variable_swap:

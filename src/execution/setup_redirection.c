@@ -1,0 +1,106 @@
+#include "tmpsh.h"
+#include "libft.h"
+#include "redirection_opener.h"
+#include "fd_management.h"
+
+static int		is_heredoc(char *type)
+{
+	return (ft_strequ(type, "HEREDOC") || ft_strequ(type, "TRIPLEHEREDOC") || \
+			ft_strequ(type, "HEREDOCMINUS"));
+}
+
+/*
+** join_cmd:
+**
+** @list_branch: each branch of the heredoc ast.
+**
+** From the given list_branch of the heredoc ast, join each token
+** to retrieve a single string containing the content to use.
+**
+** return: - a string containing the heredoc content
+*/
+
+static char		*join_cmd(t_pylst *list_branch)
+{
+	char			*final_cmd;
+	t_acb			*branch;
+	int				index;
+	t_tagstokens	*tagstok;
+	char			*tag;
+
+	final_cmd = ft_strnew(0);
+	while (iter_pylst(list_branch, (void **)&branch))
+	{
+		index = 0;
+		tagstok = branch->tagstokens;
+		while (index < tagstok->length)
+		{
+			tag = index_pylst(tagstok->tags, index)->value;
+			if (ft_strequ(tag, "STMT") || ft_strequ(tag, "SPACES"))
+				final_cmd = ft_fstrjoin(&final_cmd, &tag, true, false);
+			index++;
+		}
+		tag = "\n";
+		final_cmd = ft_fstrjoin(&final_cmd, &tag, true, false);
+	}
+	return (final_cmd);
+}
+
+/*
+** prepare_heredoc:
+**
+** @redirections: Heredoc element to setup.
+**
+** Prepare the source and dest of the redirection. Openning
+** a pipe a giving him the entire content of the heredoc.
+*/
+
+static void		prepare_heredoc(t_redirection_fd *redirection)
+{
+	int		here_pipe[2];
+	int		input;
+	char	*content;
+
+	setup_pipe_fd(here_pipe);
+	redirection->source = 0;
+	input = here_pipe[0];
+	redirection->dest = &input;
+	content = join_cmd(redirection->heredoc_ast->list_branch);
+	write(here_pipe[1], content, ft_strlen(content));
+	close(here_pipe[1]);
+}
+
+/*
+** setup_redirection:
+**
+** @branch: Single branch to prepare redirection.
+**
+** Go through each redirection of a given branch, and set them up.
+** Prepare the destination before applying dup2.
+*/
+
+void			setup_redirection(t_acb *branch)
+{
+	t_pylst				*fd_list;
+	int					index;
+	int					nbr_redirection;
+	t_redirection_fd	*redirection;
+
+	fd_list = branch->redirectionfd;
+	index = 0;
+	nbr_redirection = len_pylst(fd_list);
+	while (iter_pylst(fd_list, (void **)&redirection))
+	{
+		if (is_heredoc(redirection->type))
+			prepare_heredoc(redirection);
+		else
+			open_redirection_file(redirection);
+		if (redirection->error == false)
+		{
+			if (redirection->dest)
+				replace_fd(*(int *)redirection->dest, redirection->source);
+			if (redirection->close)
+				close(redirection->source);
+		}
+	}
+}

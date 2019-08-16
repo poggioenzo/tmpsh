@@ -208,6 +208,7 @@ typedef struct
 	char			*type;
 	int				source;
 	void			*dest;
+	t_ast			*heredoc_ast;
 	t_bool			close;
 	t_bool			error;
 }		t_redirection_fd;

@@ -127,6 +127,9 @@ EXECUTION_SRCS := fd_management.c \
                   exec_file.c \
                   forker.c \
                   sigmask_modif.c \
+                  heredoc_apply.c \
+                  redirection_opener.c \
+                  setup_redirection.c \
 
 EXECUTION_SRCS := $(addprefix $(EXECUTION_DIR), $(EXECUTION_SRCS))
 
