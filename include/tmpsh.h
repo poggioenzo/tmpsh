@@ -173,6 +173,7 @@ typedef struct
 	t_bool		incomplete;
 	t_bool		not_heredocs;
 	int			length;
+	int			iter;
 }			t_tagstokens;
 
 typedef struct
