@@ -25,9 +25,9 @@ void init_tagstokens(t_tagstokens *self, t_pylst *tokens, t_pylst *tags)
   self->tags = tags;
   self->stack = NULL; // t_pylst *
   self->token_error = NULL; // char *
-  self.valid = TRUE;
-  self.incomplete = FALSE;
-  self.length = 0;
+  self->valid = TRUE;
+  self->incomplete = FALSE;
+  self->length = 0;
   // strip_tagstokens(self);
   // update_length(self);
 }
