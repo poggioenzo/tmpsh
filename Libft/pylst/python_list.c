@@ -332,7 +332,7 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 }
 
 /*
-** pylst_iter:
+** iter_pylst:
 **
 ** @pylst: chained list head selected to iterate.
 ** @value: void * pointer to get value one by one in the list.
@@ -346,7 +346,7 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 **			- 0 if pylst is NULL, or if the entire list is parsed.
 */
 
-int		pylst_iter(t_pylst *pylst, void **value)
+int		iter_pylst(t_pylst *pylst, void **value)
 {
 	if (!pylst)
 		return (0);
@@ -363,7 +363,7 @@ int		pylst_iter(t_pylst *pylst, void **value)
 }
 
 /*
-** pylst_remove:
+** remove_pylst:
 **
 ** @pylst: list where the element have to be removed.
 ** @value: Value tu remove.
@@ -371,7 +371,7 @@ int		pylst_iter(t_pylst *pylst, void **value)
 ** Delete a single value in the current list.
 */
 
-void		pylst_remove(t_pylst **pylst, void *value)
+void		remove_pylst(t_pylst **pylst, void *value)
 {
 	t_pylst		*prev;
 	t_pylst		*curr;
@@ -393,15 +393,15 @@ void		pylst_remove(t_pylst **pylst, void *value)
 }
 
 /*
-** pylst_strremove:
+** strremove_pylst:
 **
 ** @pylst: list where the element have to be removed.
 ** @value: Value tu remove.
 **
-** Like pylst_remove, but use a char * as value.
+** Like remove_pylst, but use a char * as value.
 */
 
-void	pylst_strremove(t_pylst	**pylst, char *value)
+void	strremove_pylst(t_pylst **pylst, char *value)
 {
 	t_pylst		*prev;
 	t_pylst		*curr;
@@ -423,7 +423,7 @@ void	pylst_strremove(t_pylst	**pylst, char *value)
 }
 
 /*
-** pylst_replace:
+** update_pylst:
 **
 ** Arguments, in order :
 ** @pylst: choosen list.
@@ -436,7 +436,7 @@ void	pylst_strremove(t_pylst	**pylst, char *value)
 ** Is an equivalent in python to 'my_lst[x] = y'.
 */
 
-void	pylst_replace(t_pylst *pylst, int index, ...)
+void	update_pylst(t_pylst *pylst, int index, ...)
 {
 	va_list		args;
 	void		*value;
@@ -448,15 +448,15 @@ void	pylst_replace(t_pylst *pylst, int index, ...)
 	value = va_arg(args, void *);
 	size = va_arg(args, int);
 	ctype = va_arg(args, enum e_ctype);
-	pylst = index_pylst(index);
+	pylst = index_pylst(pylst, index);
 	pylst_clean_node(pylst);
 	if (size > 0)
 	{
 		pylst->value = ft_memalloc(size);
-		ft_memcpy((*py_node)->value, value, size);
+		ft_memcpy(pylst->value, value, size);
 	}
 	else
-		(*py_node)->value = value;
+		pylst->value = value;
 	pylst->size = size;
 	pylst->ctype = ctype;
 	va_end(args);

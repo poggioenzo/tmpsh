@@ -128,7 +128,7 @@ void	variables_config(t_pylst *variables, t_bool only_env)
 	char		*value;
 
 	operation = NULL;
-	while (pylst_iter(variables, &operation))
+	while (iter_pylst(variables, &operation))
 	{
 		key = index_pylst(operation, 0);
 		mode = index_pylst(operation, 1);
@@ -146,8 +146,8 @@ void	tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 
 	token = index_pylst(tagstokens->tokens, index);
 	variable = retrieve_variable(token + 1);
-	pylst_replace(tagstok->tokens, index, variable, NO_COPY_BUT_FREE, _chare);
-	pylst_replace(tagstok->tags, index, tag, 0, _ptr);
+	update_pylst(tagstok->tokens, index, variable, NO_COPY_BUT_FREE, _chare);
+	update_pylst(tagstok->tags, index, tag, 0, _ptr);
 
 }
 

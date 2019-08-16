@@ -18,7 +18,7 @@ int		get_maxlen(t_pylst *iterator)
 	char	*value;
 
 	max_len = 0;
-	while (pylst_iter(iterator, (void **)&value))
+	while (iter_pylst(iterator, (void **)&value))
 	{
 		new_len = ft_strlen(value);
 		if (new_len > max_len)

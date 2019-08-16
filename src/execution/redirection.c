@@ -89,7 +89,7 @@ char	*join_cmd(const t_pylst *list_branch)
 	char		*tag;
 
 	final_cmd = ft_strnew(0);
-	while (pylst_iter(list_branch, branch))
+	while (iter_pylst(list_branch, branch))
 	{
 		index = 0;
 		tagstok = branch->tagstokens;
@@ -143,11 +143,11 @@ void	heredoc_apply(t_pylst *redirections_list, void (*func)(t_acb *))
 	t_acb				*redir_branch;
 
 	redirection = NULL;
-	while (pylst_iter(redirections_list, &redirection))
+	while (iter_pylst(redirections_list, &redirection))
 	{
 		if (ft_strequ(redirection->type, "HEREDOC"))
 		{
-			while (pylst_iter(redirection->heredoc_ast->list_branch, &redir_branch))
+			while (iter_pylst(redirection->heredoc_ast->list_branch, &redir_branch))
 				func(redir_branch);
 		}
 	}
@@ -172,7 +172,7 @@ void	setup_redirection(t_acb *branch)
 	fd_list = branch->redirectionfd;
 	index = 0;
 	nbr_redirection = len_pylst(fd_list);
-	while (pylst_iter(fd_list, &redirection))
+	while (iter_pylst(fd_list, &redirection))
 	{
 		if (is_heredoc(redirection->type))
 			prepare_heredoc(redirection);

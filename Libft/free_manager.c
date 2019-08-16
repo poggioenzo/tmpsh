@@ -1,7 +1,7 @@
 #include "libft.h"
 
 /*
-** setup_pyfreefct:
+** setup_freefct:
 **
 ** Prepare our global array of t_free_fct with each freeing
 ** function according to each data type.

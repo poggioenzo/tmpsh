@@ -13,7 +13,7 @@ static void	print_grammar(void)
 	while (ht_iter(g_grammar->grammar, &key, (void **)&value_lst))
 	{
 		ft_printf("    \"%s\" : [", key);
-		while (pylst_iter(value_lst, (void **)&value))
+		while (iter_pylst(value_lst, (void **)&value))
 			ft_printf("'%s', ", value);
 		ft_printf("],\n");
 	}

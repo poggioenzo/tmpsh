@@ -92,6 +92,7 @@ CONFIGURATION_SRCS :=  screen_size.c \
 					   t_caps_utils.c \
 					   termios_setter.c \
 					   environ_utils.c \
+					   environ_setup.c \
 					   $(PROMPT_CONF)
 
 CONFIGURATION_SRCS := $(addprefix $(CONFIGURATION_DIR), $(CONFIGURATION_SRCS))

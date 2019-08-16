@@ -126,7 +126,7 @@ void	remove(int index)
 	t_pylst		*job;
 
 	job = (t_pyslt *)index_pylst(g_jobs->list_jobs, index)->value;
-	pylst_remove(job);
+	remove_pylst(job);
 }
 
 void	clear(void)

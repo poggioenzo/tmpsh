@@ -23,7 +23,7 @@ void	get_reverse_grammar(void)
 	char	*value;
 
 	while (ht_iter(g_grammar->grammar, &key, (void **)&lst_values))
-		while (pylst_iter(lst_values, (void **)&value))
+		while (iter_pylst(lst_values, (void **)&value))
 			insert_value(g_grammar->reverse, value, key, _ptr);
 }
 

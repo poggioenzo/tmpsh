@@ -89,7 +89,7 @@ void	try_set_job_pgid(t_pylst *job_list)
 	}
 	if (pgid == 0)
 		return ;
-	while (pylst_iter(job_list, (void **)&job))
+	while (iter_pylst(job_list, (void **)&job))
 		job->pgid = pgid;
 }
 
@@ -99,7 +99,7 @@ void	close_subast_pipe(t_acb *branch)
 	int		nbr_subast;
 	t_ast	*subast;
 
-	while (pylst_iter(branch->subast, (void **)&subast))
+	while (iter_pylst(branch->subast, (void **)&subast))
 	{
 		if (ft_start_with(subast->type, "CMDSUBST"))
 			close(subast->link_fd);
@@ -201,7 +201,7 @@ void	prepare_cmd_subst(t_acb *branch)
 	t_ast	*subast;
 
 	heredoc_apply(branch->redirectionfd, prepare_cmd_subst);
-	while (pylst_iter(branch->subast, (void **)&subast))
+	while (iter_pylst(branch->subast, (void **)&subast))
 	{
 		if (ft_start_with(subast->type, "CMDSUBST"))
 			run_cmdsubst(subast);
@@ -215,7 +215,7 @@ void	replace_redirection(t_acb *branch, int change_index, char *content)
 	char				*tag;
 	char				*token;
 	t_redirection_fd	*redirection;
-	while (pylst_iter(branch->redirectionfd, &redirection))
+	while (iter_pylst(branch->redirectionfd, &redirection))
 	{
 		tag = (char *)redirection->tagstokens->tags->value;
 		token = (char *)redirection->tagstokens->tokens->value;
@@ -240,9 +240,9 @@ void	replace_subast(t_acb *branch, int change_index, char *content)
 		token = (char *)index_pylst(tagstok->tokens, index)->value;
 		if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
 		{
-			pylst_replace(tagstok->tokens, index, content, \
+			update_pylst(tagstok->tokens, index, content, \
 					sizeof(char) * (ft_strlen(content) + 1), _chare);
-			pylst_replace(tagstok->tags, index, "STMT", 0, _chare);
+			update_pylst(tagstok->tags, index, "STMT", 0, _chare);
 			return ;
 		}
 		index++;
@@ -310,7 +310,7 @@ void	perform_subast_replacement(t_acb *branch)
 	prepare_cmd_subst(branch);
 	heredoc_apply(branch->redirectionfd, perform_subast_replacement);
 	index = 0;
-	while (pylst_iter(branch->subast, &subast))
+	while (iter_pylst(branch->subast, &subast))
 	{
 		content = retrieve_content(subast);
 		if (content)

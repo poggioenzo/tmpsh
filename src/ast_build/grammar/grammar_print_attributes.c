@@ -39,7 +39,7 @@ void	print_spaces(void)
 
 	ft_printf("spaces:\n");
 	ft_printf("[");
-	while (pylst_iter(g_grammar->spaces, (void **)&value))
+	while (iter_pylst(g_grammar->spaces, (void **)&value))
 	{
 		ft_printf("'");
 		ft_puthidestr(value);
@@ -53,7 +53,7 @@ void	print_leaf_op(void)
 
 	ft_printf("leaf_op:\n");
 	ft_printf("[");
-	while (pylst_iter(g_grammar->leaf_op, &operator))
+	while (iter_pylst(g_grammar->leaf_op, &operator))
 	{
 		ft_printf("'");
 		ft_puthidestr(operator);

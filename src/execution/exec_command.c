@@ -40,7 +40,7 @@ void	join_stmt(t_acb *branch)
 		{
 			prev_token = index_pylst(tagstok->tokens, index - 1);
 			new_stmt = ft_strjoin(prev_token->value, prev_token->next->value);
-			pylst_replace(tagstok->tokens, index - 1, new_stmt, NO_COPY_BUT_FREE, \
+			update_pylst(tagstok->tokens, index - 1, new_stmt, NO_COPY_BUT_FREE, \
 					_chare);
 			del_portion_pylst(&pylst, index, index + 1);
 			//update_length(tagstok);
@@ -64,7 +64,7 @@ char		**convert_command(t_pylst *command)
 
 	cmd_array = ft_memalloc(sizeof(char *) * (len_pylst(command) + 1));
 	index = 0;
-	while (pylst_iter(command, &value))
+	while (iter_pylst(command, &value))
 		cmd_array[index++] = ft_strdup(value);
 	cmd_array[index] = NULL;
 	free_pylst(&command);

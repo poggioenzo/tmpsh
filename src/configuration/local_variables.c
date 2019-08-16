@@ -13,6 +13,12 @@ void	ft_setvar(char *variable, char *value)
 	insert_value(g_variables, variable, value, _chare);
 }
 
+/*
+** setup_var_table:
+**
+** Allocate the global hash table g_variables to store local variables.
+*/
+
 void	setup_var_table(void)
 {
 	int seed;

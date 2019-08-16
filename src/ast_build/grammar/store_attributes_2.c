@@ -8,7 +8,7 @@ static void		store_tags(t_pylst *opening_tags)
 	char	*tag_op;
 	char	*tag_end;
 
-	while (pylst_iter(opening_tags, (void **)&tag))
+	while (iter_pylst(opening_tags, (void **)&tag))
 	{
 		tag_split = ft_strsplit(tag, " ");
 		tag_op = tag_split[0];

@@ -19,7 +19,7 @@ static void	shell_grammar_init(void)
 	add_symbol("\n", "NEW_LINE");
 	get_leaf_op();
 	if ((tmp = search_value(g_grammar->grammar, "ESCAPE")))
-		pylst_strremove(&g_grammar->leaf_op, ((t_pylst *)tmp)->value);
+		strremove_pylst(&g_grammar->leaf_op, ((t_pylst *)tmp)->value);
 	g_grammar->maxlen_leaf_op = get_maxlen(g_grammar->leaf_op);
 	get_opening_tags();
 	get_abstract_terminator();
