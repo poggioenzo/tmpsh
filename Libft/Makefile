@@ -152,6 +152,7 @@ SRCS = ft_atoi.c \
 	   ft_strmove.c \
 	   ft_strreplace.c \
 	   ft_strcspn.c \
+	   ft_strspn.c \
 	   ft_incharset.c \
 	   ft_count.c \
 	   ft_wstrlen.c \

@@ -167,6 +167,9 @@ void			ft_strmove(char *begin_str, char *new_begin);
 char			*ft_strreplace(char *dst, char chr, char repl_chr);
 int				ft_move_strtab(char **array, int len, int from, int to);
 int				ft_arraylen(char **array);
+size_t			ft_strcspn(const char *s, const char *charset);
+size_t			ft_strspn(const char *s, const char *charset);
+char			*ft_strpbrk(const char *str, const char *charset);
 
 /*
 ** Comparaison functions
