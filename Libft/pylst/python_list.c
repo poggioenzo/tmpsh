@@ -111,6 +111,24 @@ t_pylst		*index_pylst(t_pylst *pylst, int index)
 	return (pylst);
 }
 
+
+/*
+** get_value_pylst:
+**
+** Arguments, in order :
+** @pylst: choosen list.
+** @index: index of chosen element.
+**
+** Return the value of the t_pylst element of the given index.
+** Allow performing negativ research.
+** WARNING : Will segfault if wrong index (IndexError)
+*/
+
+void			*get_value_pylst(t_pylst *pylst, int index)
+{
+	return ((pylst, index)->value);
+}
+
 /*
 ** slice_pylst:
 **
