@@ -45,8 +45,8 @@ class TagsTokens():
         self.get_tags()
         return self
 
-    def get_tags(self, i=0):
-        self.tags = self.tags[:i]
+    def get_tags(self):
+        i = 0
         tok = ''
         while i < self.length:
             tok = self.tokens[i]
