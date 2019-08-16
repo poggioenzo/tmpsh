@@ -9,7 +9,6 @@
 #include "shell_setup.h"
 #include "foreground.h"
 
-
 /*
 ** shell_interupt:
 **
@@ -19,12 +18,14 @@
 
 static void		shell_interupt(int status)
 {
-	t_line	*shell_repr;
+	t_line		*shell_repr;
 	t_cursor	*cursor;
 	pid_t		tpgid;
 
 	UNUSED(status);
 	tpgid = get_tpgid();
+	//SHOULD I wait with WNOHANG or normally, can be intersting
+	//to wait programs end, if the are doing some stuff before exiting?
 	while (waitpid(-tpgid, NULL, WNOHANG) != -1)
 		;
 	manage_shell_repr(GET, &shell_repr, &cursor);
@@ -36,7 +37,6 @@ static void		shell_interupt(int status)
 	*cursor = (t_cursor){.row = 0, .column = char_lst_len(shell_repr->chars)};
 	display_shell(shell_repr, cursor, TRUE);
 }
-
 
 /*
 ** shell_background:
@@ -68,7 +68,7 @@ static void		shell_background(int status)
 
 static void		shell_continue(int status)
 {
-	t_line	*shell_repr;
+	t_line		*shell_repr;
 	t_cursor	*cursor;
 
 	UNUSED(status);
@@ -95,7 +95,8 @@ static void		shell_reshape(int status)
 	display_shell(shell_repr, cursor, FALSE);
 }
 
-/* signal_setup:
+/*
+** signal_setup:
 **
 ** Link each signal to his corresponding signal handler.
 */
@@ -109,4 +110,3 @@ int				signal_setup(void)
 	signal(SIGWINCH, shell_reshape);
 	return (0);
 }
-
