@@ -52,9 +52,9 @@ void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 
 void	get_tag_tagstokens(t_tagstokens *self)
 {
-	int		iter;
-	int		len_tok;
-	char	*tok;
+	int			iter;
+	size_t		len_tok;
+	char		*tok;
 
 	// char *tag;
 	iter = 0;
