@@ -74,4 +74,5 @@ void		replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to);
 int			iter_pylst(t_pylst *pylst, void **value);
 void		remove_pylst(t_pylst **pylst, void *value);
 void		strremove_pylst(t_pylst	**pylst, char *value);
+void		*pop_pylst(t_pylst **pylst, int index);
 #endif

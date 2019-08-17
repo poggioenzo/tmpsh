@@ -128,6 +128,13 @@ EXECUTOR_DIR = executor/
 
 EXECUTOR_SRCS := exec_command.c \
 				 argv_formater.c \
+				 run_ast.c \
+				 run_ast_utils.c \
+                 subast_command.c \
+                 subshell.c \
+                 cmdsubst_replacement.c \
+                 cmdsubst_runner.c \
+				 tagstoken_replacement.c \
 
 EXECUTION_SRCS := $(addprefix $(EXECUTOR_DIR), $(EXECUTOR_SRCS))
 

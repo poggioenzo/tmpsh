@@ -66,7 +66,7 @@ static void		close_branch_stdfd(t_acb *branch)
 */
 
 // Need to recode reset_signals
-int				child_execution(t_acb *branch, char **argv, t_pylst *variables)
+static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 {
 	pid_t		pid;
 	char		*executable;

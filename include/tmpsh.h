@@ -204,7 +204,7 @@ typedef struct
 
 typedef struct
 {
-	t_tagstokens	tagstokens;
+	t_tagstokens	*tagstokens;
 	char			*type;
 	int				source;
 	void			*dest;
