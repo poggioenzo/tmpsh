@@ -78,11 +78,13 @@ void	pylst_strremove(t_pylst	**pylst, char *value);
 int in_pylst_chare(char *str, t_pylst *pylst);
 void			*get_value_pylst(t_pylst *pylst, int index);
 
+
 /*
 ** Printing
 */
 
 void	print_pylst_chare(t_pylst *pylst);
+char 	*str_chare_pylst(t_pylst *pylst);
 
 
 #endif
