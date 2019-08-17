@@ -74,16 +74,26 @@ static	void	fill_tags_tokens(t_tagstokens *self, char *str, int *spacing)
 char			*str_tagstokens(t_tagstokens *self)
 {
 	char	*str;
-	char	*tmp;
 	int		len;
 	int		*spacing;
 
+	// LEAKS + NORM = SHIT
 	spacing = (int *)ft_memalloc(self->length * sizeof(int));
 	len = (str_get_length(self, spacing) + 1) * 2 + 1;
 	str = (char *)ft_memalloc(len);
 	ft_memset((void *)str, 32, len - 1);
 	fill_tags_tokens(self, str, spacing);
-	tmp = str;
+	str = ft_strjoin(str, "Stack: ");
+	str = ft_strjoin(str, str_chare_pylst(self->stack));
+	str = ft_strjoin(str, "Valid: ");
+	str = ft_strjoin(str, (self->valid) ? GREEN"True"WHITE : RED"False"WHITE);
+	str = ft_strjoin(str, " | Incomplete: ");
+	str = ft_strjoin(str, (self->incomplete) ? RED"True"WHITE : GREEN"False"WHITE);
+	str = ft_strjoin(str, " | Tokken Error: '");
+	str = ft_strjoin(str, (self->token_error) ? self->token_error: "");
+	str = ft_strjoin(str, "' | Length: ");
+	str = ft_strjoin(str, ft_itoa(self->length));
+	str = ft_strjoin(str, "\n");
 	return (str);
 }
 
