@@ -46,4 +46,6 @@ void	get_tag_tagstokens(t_tagstokens *self)
 			push_pylst(&(self->tags), "STMT", 0, _ptr);
 		iter++;
 	}
+	// strip()
+	// update_length()
 }
