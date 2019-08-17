@@ -26,6 +26,7 @@
 ** Local methodes includes.
 */
 
+# include "tokenizer.h"
 # include "delitems_tagstokens.h"
 # include "init_tagstokens.h"
 # include "iter_tagstokens.h"
