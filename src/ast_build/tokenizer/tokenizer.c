@@ -158,9 +158,6 @@ void			tokenize(char *command, t_pylst **tokens)
 		else if (ft_incharset(*command, " \t"))
 			command += span_space(command, tokens, current);
 		else
-		{
-			current[ft_strlen(current)] = *command;
-			command++;
-		}
+			current[ft_strlen(current)] = *command++;
 	}
 }
