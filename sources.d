@@ -153,6 +153,7 @@ TAGSTOKENS_SRCS :=	init_tagstokens.c \
 					strip_tagstokens.c \
 					update_length_tagstokens.c \
 					copy_tagstokens.c\
+					append_tagstokens.c\
 
 
 TAGSTOKENS_SRCS := $(addprefix $(TAGSTOKENS_DIR), $(TAGSTOKENS_SRCS))
