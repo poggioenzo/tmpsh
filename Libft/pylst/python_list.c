@@ -520,16 +520,16 @@ char	*str_chare_pylst(t_pylst *pylst)
 	len = 3;
 	while (pylst_iter(pylst, (void **)&value))
 		len += ft_strlen(value) + 3;
-	str = (char *)ft_memalloc((len + 1) * sizeof(char))
+	str = (char *)ft_memalloc((len + 1) * sizeof(char));
 	len = 0;
 	str[len++] = '[';
 	while (pylst_iter(pylst, (void **)&value))
 	{
 		str[len++] = '\'';
 		while (*value)
-			str[len++] = *value++
+			str[len++] = *value++;
 		str[len++] = '\'';
-		str[len++] = ','';
+		str[len++] = ',';
 	}
 	str[len++] = ']';
 	str[len++] = '\n';
