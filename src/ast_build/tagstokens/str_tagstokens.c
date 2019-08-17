@@ -87,5 +87,8 @@ char			*str_tagstokens(t_tagstokens *self)
 
 void			print_tagstokens(t_tagstokens *self)
 {
-	ft_printf(str_tagstokens(self));
+	if (self)
+		ft_printf(str_tagstokens(self));
+	else
+		ft_printf(RED"Tagstokens Not Allocated\n"WHITE);
 }
