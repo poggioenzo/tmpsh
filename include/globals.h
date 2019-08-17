@@ -2,6 +2,8 @@
 # define GLOBALS_H
 
 # include <termios.h>
+# include "styles.h"
+
 
 extern char	**g_environ;
 extern t_ht_table	g_variables;
