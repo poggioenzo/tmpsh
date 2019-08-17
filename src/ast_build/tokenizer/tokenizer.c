@@ -62,7 +62,7 @@ static	int		span(char *command, t_pylst **tokens, char *current)
 	length_cmd = ft_strlen(command);
 	add_token(current, tokens);
 	while (j <= g_grammar->maxlen_leaf_op
-			&& j < length_cmd
+			&& j <= length_cmd
 			&& ops_begin_with((to_add = ft_strndup(command, j)),\
 				g_grammar->leaf_op)
 			&& !(ft_strdel(&to_add)))
