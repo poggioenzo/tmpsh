@@ -25,7 +25,6 @@ class TagsTokens():
         self.valid = True
         self.incomplete = False
         self.length = 0
-        self.strip()
         self.update_length()
 
     def strip(self):
@@ -63,7 +62,7 @@ class TagsTokens():
         self.update_length()
         return self
 
-    def check_syntax(self, heredoc=False):
+    def check_syntax(self):
         import utils.tagstokensmonitor as ttm
         ttm.TagsTokensMonitor(self)
         if self.valid:
