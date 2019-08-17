@@ -124,10 +124,16 @@ JOBCONTROL_SRCS := backgroundjobs.c \
 
 JOBCONTROL_SRCS := $(addprefix $(JOBCONTROL_DIR), $(JOBCONTROL_SRCS))
 
+EXECUTOR_DIR = executor/
+
+EXECUTOR_SRCS := exec_command.c \
+				 argv_formater.c \
+
+EXECUTION_SRCS := $(addprefix $(EXECUTOR_DIR), $(EXECUTOR_SRCS))
+
 EXECUTION_DIR = execution/
 
 EXECUTION_SRCS := fd_management.c \
-                  rights_file.c \
                   foreground.c \
                   assignation.c \
                   variable_replacement.c \
@@ -138,6 +144,7 @@ EXECUTION_SRCS := fd_management.c \
                   redirection_opener.c \
                   setup_redirection.c \
 				  $(JOBCONTROL_SRCS) \
+				  $(EXECUTION_SRCS) \
 
 EXECUTION_SRCS := $(addprefix $(EXECUTION_DIR), $(EXECUTION_SRCS))
 
