@@ -126,7 +126,14 @@ t_pylst		*index_pylst(t_pylst *pylst, int index)
 
 void			*get_value_pylst(t_pylst *pylst, int index)
 {
-	return (index_pylst(pylst, index)->value);
+	int length;
+
+	length = len_pylst(pylst);
+	if (pylst && index < length)
+		return (index_pylst(pylst, index)->value);
+	printf("Index out range. Pylst length is %d.\n", length);
+	exit(128);
+	return (NULL);
 }
 
 /*
