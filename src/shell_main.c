@@ -4,10 +4,7 @@
 #include "prompt_loop.h"
 #include <fcntl.h>
 
-#include "tokenizer.h"
 #include "tagstokens.h"
-#include "str_tagstokens.h"
-#include "tagging.h"
 #include "grammar_init.h"
 
 #include "libft.h"
