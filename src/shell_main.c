@@ -29,5 +29,7 @@ int		main(int argc, char **argv)//char **environ)
 	FREE(grammar_abs);
 	input_init_tagstokens(&tgtk, argv[1]);
 	print_tagstokens(tgtk);
+	// print_tagstokens(copy_tagstokens(tgtk, 1,3));
+	// print_tagstokens(NULL);
 	return (0);
 }
