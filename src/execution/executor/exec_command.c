@@ -51,9 +51,9 @@ static int		run_builtin(char **cmd_args, t_pylst *variables)
 
 static void		close_branch_stdfd(t_acb *branch)
 {
-	if (branch->stdin >= 0)
+	if (branch->stdin != -1)
 		close(branch->stdin);
-	if (branch->stdout >= 0)
+	if (branch->stdout != -1)
 		close(branch->stdout);
 }
 
@@ -115,7 +115,7 @@ void			exec_command(t_acb *branch)
 		close_branch_stdfd(branch);
 		if (len_pylst(variables) >= 1)
 		{
-			variables_config(variables, true);
+			variables_config(variables, false);
 			branch->status = 0;
 		}
 	}

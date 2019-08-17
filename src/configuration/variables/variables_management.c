@@ -31,15 +31,15 @@ void	setup_variables_elements(char **environ)
 
 void	update_var(char *variable, char *value, char *type, t_bool only_env)
 {
-	char	*saved_var;
+	char	*saved_value;
 
-	saved_var = ft_getenv(variable);
-	if (saved_var || only_env == true)
+	saved_value = ft_getenv(variable);
+	if (saved_value || only_env == true)
 	{
-		if (!saved_var)
-			saved_var = "";
+		if (!saved_value)
+			saved_value = "";
 		value = ft_strequ(type, "CONCATENATION") ? \
-				ft_strjoin(saved_var, value) : ft_strdup(value);
+				ft_strjoin(saved_value, value) : ft_strdup(value);
 		ft_setenv(variable, value);
 		ft_strdel(&value);
 	}
@@ -47,8 +47,8 @@ void	update_var(char *variable, char *value, char *type, t_bool only_env)
 	{
 		if (ft_strequ(type, "CONCATENATION"))
 		{
-			saved_var = ft_getvar(variable);
-			value = ft_strjoin(saved_var ? saved_var : "", value);
+			saved_value = ft_getvar(variable);
+			value = ft_strjoin(saved_value ? saved_value : "", value);
 		}
 		else
 			value = ft_strdup(value);
@@ -70,20 +70,14 @@ void	update_var(char *variable, char *value, char *type, t_bool only_env)
 
 char	*retrieve_variable(char *variable)
 {
-	char	*variable_str;
-	char	*tmp_var;
+	char	*value;
 
-	variable_str = NULL;
 	if (ft_strequ(variable, "?"))
-		variable_str = ft_itoa(g_last_status);
+		return (ft_itoa(g_last_status));
 	else if (ft_strequ(variable, "$"))
-		variable_str = ft_itoa(getpid());
-	else
-	{
-		tmp_var = ft_getenv(variable);
-		if (!tmp_var)
-			tmp_var = ft_getvar(variable);
-		variable_str = ft_strdup(tmp_var ? tmp_var : "");
-	}
-	return (variable_str);
+		return (ft_itoa(getpid()));
+	value = ft_getenv(variable);
+	if (!value)
+		value = ft_getvar(variable);
+	return (ft_strdup(value ? value : ""));
 }

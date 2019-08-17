@@ -22,7 +22,7 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index, \
 	token = (char *)index_pylst(tagstok->tokens, index)->value;
 	variable = retrieve_variable(token + 1);
 	update_pylst(tagstok->tokens, index, variable, NO_COPY_BUT_FREE, _chare);
-	update_pylst(tagstok->tags, index, tag, 0, _ptr);
+	update_pylst(tagstok->tags, index, "STMT", 0, _ptr);
 }
 
 /*

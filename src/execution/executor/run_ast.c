@@ -59,7 +59,7 @@ static void		analyse_branch_result(t_acb *branch, t_pylst **job_list)
 		g_last_status = 0;
 		add_job(*job_list);
 	}
-	else if (ft_strequ(branch->tag_end, "PIPE"))
+	else if (!ft_strequ(branch->tag_end, "PIPE"))
 	{
 		if (analyse_job_status(*job_list, WUNTRACED) == running)
 			add_job(*job_list);

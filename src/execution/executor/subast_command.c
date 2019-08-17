@@ -6,8 +6,6 @@
 #include "subshell.h"
 #undef stdin
 #undef stdout
-//run_ast include
-//run_subshell include
 
 /*
 ** is_bg_or_pipe:

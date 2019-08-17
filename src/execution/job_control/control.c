@@ -86,37 +86,37 @@ static enum e_waitstate	wait_subast(t_acb *job_branch, int mode)
 /*
 ** analyse_job_status:
 **
-** @job_list: Pipeline of commands, or single one branch, to analyse.
+** @job: Pipeline of commands, or single one branch, to analyse.
 ** @mode: waitpid options arguments.
 **
-** Go through each job, and try to wait each available process.
+** Go through each branch, and try to wait each available process.
 ** It could be the branch herself, but also any subast processes.
 ** Will care about wait each child process only a single time, to avoid zombie.
 */
 
-enum e_waitstate		analyse_job_status(t_pylst *job_list, int mode)
+enum e_waitstate		analyse_job_status(t_pylst *job, int mode)
 {
 	int		index;
-	t_acb	*job;
+	t_acb	*branch;
 	int		status[2];
 
-	index = len_pylst(job_list) - 1;
+	index = len_pylst(job) - 1;
 	while (index >= 0)
 	{
-		job = index_pylst(job_list, index)->value;
-		if (job->complete || job->pid == -1)
+		branch = (t_acb *)index_pylst(job, index)->value;
+		if (branch->complete || branch->pid == -1)
 		{
-			index -= 1;
+			index--;
 			continue ;
 		}
-		wait_subast(job, mode);
-		waitpid_layer(job->pid, mode, status);
+		wait_subast(branch, mode);
+		waitpid_layer(branch->pid, mode, status);
 		if (status[0] == 0 && status[1] == running)
 			return (running);
-		job->status = status[0];
+		branch->status = status[0];
 		if (status[1] == running)
 			return (running);
-		job->complete = true;
+		branch->complete = true;
 		index--;
 	}
 	return (finish);
@@ -151,9 +151,9 @@ void					relaunch(int index)
 	kill(-new_tpgid, SIGCONT);
 	if (analyse_job_status(job, WUNTRACED) == finish)
 	{
-		remove_bg(index);
 		last_job_branch = (t_acb *)index_pylst(job, -1)->value;
 		ft_printf("[%d] + %d continued\n", index, last_job_branch->pid);
+		remove_bg(index);
 	}
 	else
 		ft_printf("[%d] + Suspended.\n", index);
@@ -179,15 +179,15 @@ void					wait_zombie(void)
 	index = 0;
 	index_job = 0;
 	nbr_job = len_pylst(g_jobs->list_jobs);
-	while (index < nbr_job)
+	while (index_job < nbr_job)
 	{
 		if (is_running(index) == finish)
 		{
 			job = (t_pylst *)index_pylst(g_jobs->list_jobs, index)->value;
-			remove_bg(index);
-			index--;
 			last_branch = (t_acb *)index_pylst(job, -1)->value;
 			ft_printf("[%d] + Done %s\n", index_job, last_branch->command);
+			remove_bg(index);
+			index--;
 		}
 		index++;
 		index_job++;

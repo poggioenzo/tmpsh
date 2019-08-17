@@ -24,13 +24,10 @@ pid_t	run_subshell(t_acb *branch, t_ast *subast)
 		run_ast(subast);
 		exit(g_last_status);
 	}
-	else
-	{
-		if (branch->stdin >= 0)
-			close(branch->stdin);
-		if (branch->stdout >= 0)
-			close(branch->stdout);
-		return (pid);
-	}
+	if (branch->stdin >= 0)
+		close(branch->stdin);
+	if (branch->stdout >= 0)
+		close(branch->stdout);
+	return (pid);
 }
 

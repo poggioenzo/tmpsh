@@ -86,7 +86,7 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 		{
 			index += 1;
 			fill_assignation(&assignation_list, last_stmt, tag,\
-					index_pylst(branch->tagstokens->tokens, index)->value);
+				index_pylst(branch->tagstokens->tokens, index)->value);
 			last_stmt = NULL;
 		}
 		index++;

@@ -58,13 +58,11 @@ static char		*join_cmd(t_pylst *list_branch)
 static void		prepare_heredoc(t_redirection_fd *redirection)
 {
 	int		here_pipe[2];
-	int		input;
 	char	*content;
 
 	setup_pipe_fd(here_pipe);
 	redirection->source = 0;
-	input = here_pipe[0];
-	redirection->dest = &input;
+	redirection->dest = here_pipe;
 	content = join_cmd(redirection->heredoc_ast->list_branch);
 	write(here_pipe[1], content, ft_strlen(content));
 	close(here_pipe[1]);
@@ -82,13 +80,9 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 void			setup_redirection(t_acb *branch)
 {
 	t_pylst				*fd_list;
-	int					index;
-	int					nbr_redirection;
 	t_redirection_fd	*redirection;
 
 	fd_list = branch->redirectionfd;
-	index = 0;
-	nbr_redirection = len_pylst(fd_list);
 	while (iter_pylst(fd_list, (void **)&redirection))
 	{
 		if (is_heredoc(redirection->type))
@@ -97,6 +91,7 @@ void			setup_redirection(t_acb *branch)
 			open_redirection_file(redirection);
 		if (redirection->error == false)
 		{
+			//Check how dest can be NULL
 			if (redirection->dest)
 				replace_fd(*(int *)redirection->dest, redirection->source);
 			if (redirection->close)

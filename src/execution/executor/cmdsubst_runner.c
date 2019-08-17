@@ -17,15 +17,11 @@ static t_pylst		*prepare_cmdsubst_pipe(void)
 {
 	int		pipe_fd[2];
 	t_pylst	*pipe_lst;
-	int		stdin;
-	int		stdout;
 
 	setup_pipe_fd(pipe_fd);
 	pipe_lst = NULL;
-	stdin = pipe_fd[0];
-	stdout = pipe_fd[1];
-	push_pylst(&pipe_lst, &stdin, 0, _ptr);
-	push_pylst(&pipe_lst, &stdout, 0, _ptr);
+	push_pylst(&pipe_lst, pipe_fd, 0, _ptr);
+	push_pylst(&pipe_lst, pipe_fd + 1, 0, _ptr);
 	return (pipe_lst);
 }
 
@@ -55,10 +51,10 @@ static void		run_cmdsubst(t_ast *subast)
 		stdin = -1;
 		stdout = -1;
 		if (ft_strequ(subast->type, "CMDSUBST2"))
-			stdin = *(int *)pop_pylst(&pipe_fd, 0);
+			stdin = *((int *)pop_pylst(&pipe_fd, 0));
 		else if (ft_strequ(subast->type, "CMDSUBST1") || \
 				ft_strequ(subast->type, "CMDSUBST3"))
-			stdout = *(int *)pop_pylst(&pipe_fd, 1);
+			stdout = *((int *)pop_pylst(&pipe_fd, 1));
 		replace_std_fd(stdin, stdout);
 		close(*(int *)pop_pylst(&pipe_fd, 0));
 		run_ast(subast);

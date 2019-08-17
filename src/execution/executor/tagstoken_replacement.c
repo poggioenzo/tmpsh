@@ -13,6 +13,7 @@ static void		replace_redirection(t_acb *branch, int change_index, char *content)
 	char				*tag;
 	char				*token;
 	t_redirection_fd	*redirection;
+
 	while (iter_pylst(branch->redirectionfd, (void **)&redirection))
 	{
 		tag = (char *)redirection->tagstokens->tags->value;
