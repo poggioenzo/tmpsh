@@ -13,10 +13,21 @@
 
 #include "tagstokens.h"
 
-int		delitems_tagstokens(t_tagstokens *self, int start, int stop, int status)
+/*
+** delitems_tagstokens:
+**
+** @self: actual tagstokens.
+** @start: index of the first element to delete.
+** @end: index until it deletes.
+** @status: value to return.
+**
+** Delete tags and tokens of self according at from and to.
+*/
+
+int		delitems_tagstokens(t_tagstokens *self, int from, int to, int status)
 {
-	del_portion_pylst(&self->tokens, start, stop);
-	del_portion_pylst(&self->tags, start, stop);
+	del_portion_pylst(&self->tokens, from, to);
+	del_portion_pylst(&self->tags, from, to);
 	update_length_tagstokens(self);
 	return (status);
 }

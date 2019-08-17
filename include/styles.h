@@ -83,4 +83,14 @@
 # define BKI_CYAN        "\033[106m"
 # define BKI_WHITE        "\033[107m"
 
+
+/*
+**      True/False Macro
+*/
+
+# define RFALSE            "\033[0;31mFalse\033[0;37m"
+# define GFALSE            "\033[0;32mFalse\033[0;37m"
+# define RTRUE            "\033[0;31mTrue\033[0;37m"
+# define GTRUE            "\033[0;32mTrue\033[0;37m"
+
 #endif

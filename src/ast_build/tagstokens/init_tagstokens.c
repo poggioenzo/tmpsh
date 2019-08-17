@@ -6,12 +6,33 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/16 16:50:43 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/17 16:42:14 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/08/17 21:19:40 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "tagstokens.h"
+
+/*
+** init_tagstokens:
+**
+** Params:
+** @self: adress of a t_tagstokens pointer.
+** @tokens: pylst of token or NULL.
+** @tags: pylst of tag or NULL.
+**
+** Create and initialize a tagstokens.
+**
+** Attributs:
+** @tokens: pylst of token.
+** @tags: pylst of tag.
+** @stack: pylst of tag left after check_syntax_tagstokens.
+** @token_error: string of the token error.
+** @valid: True if tagstokens syntax is valid else False.
+** @incomplete: False if tagstokens syntax is complete else True.
+** @length: int that represent length of the tokens.
+** @iter: int to iterate through the tagstokens.
+*/
 
 void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 {
@@ -27,7 +48,18 @@ void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 	update_length_tagstokens(*self);
 }
 
-void input_init_tagstokens(t_tagstokens **self, char *input)
+/*
+** input_init_tagstokens:
+**
+** Params:
+** @self: adress of a t_tagstokens pointer.
+** @input: raw input command to tokenize and tag.
+**
+** Create a tagstokens. Set the tokenise input as tokens and get
+** get tags form it.
+*/
+
+void	input_init_tagstokens(t_tagstokens **self, char *input)
 {
 	init_tagstokens(self, NULL, NULL);
 	tokenize(input, &((*self)->tokens));

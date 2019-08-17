@@ -1,25 +1,67 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   append_tagstokens.c                              .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/08/17 21:12:19 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/08/17 21:15:53 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
 #include "tagstokens.h"
 
-static void _append_tag(t_pylst *tag_stack, char *tag)
+static	void	append_tag(t_pylst *tag_stack, char *tag)
 {
-    push_pylst(&tag_stack, tag, 0, _ptr);
+	push_pylst(&tag_stack, tag, 0, _ptr);
 }
 
-void stack_append_tagstokens(t_tagstokens *self, char *tag)
+/*
+** stack_append_tagstokens:
+**
+** Params:
+** @self: actual tagstokens.
+** @tag: string of the tag to append.
+**
+** Append tag to pylst self->stack.
+*/
+
+void			stack_append_tagstokens(t_tagstokens *self, char *tag)
 {
-    _append_tag(self->stack ,tag);
+	append_tag(self->stack, tag);
 }
 
-void append_tag_tagstokens(t_tagstokens *self, char *tag)
+/*
+** append_tag_tagstokens:
+**
+** Params:
+** @self: actual tagstokens.
+** @tag: string of the tag to append.
+**
+** Append tag to pylst self->tags.
+*/
+
+void			append_tag_tagstokens(t_tagstokens *self, char *tag)
 {
-    _append_tag(self->tags ,tag);
+	append_tag(self->tags, tag);
 }
 
-void append_token_tagstokens(t_tagstokens *self, char *token)
+/*
+** append_token_tagstokens:
+**
+** Params:
+** @self: actual tagstokens.
+** @token: string of the token to append.
+**
+** Append token to pylst self->tokens.
+*/
+
+void			append_token_tagstokens(t_tagstokens *self, char *token)
 {
-    push_pylst(&(self->tokens), ft_strdup(token), ft_strlen(token) + 1 *\
-            sizeof(char) , _chare);
+	push_pylst(&(self->tokens), ft_strdup(token), (ft_strlen(token) + 1) *\
+			sizeof(char), _chare);
 }
 
 /*
@@ -34,9 +76,9 @@ void append_token_tagstokens(t_tagstokens *self, char *token)
 ** Update self->length.
 */
 
-void append_tagstokens(t_tagstokens *self, char *token, char *tag)
+void			append_tagstokens(t_tagstokens *self, char *token, char *tag)
 {
-    append_tag_tagstokens(self, tag);
-    append_token_tagstokens(self, token);
-    self->length++;
+	append_tag_tagstokens(self, tag);
+	append_token_tagstokens(self, token);
+	self->length++;
 }

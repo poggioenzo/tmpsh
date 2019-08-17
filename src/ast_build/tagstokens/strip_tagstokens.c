@@ -13,6 +13,15 @@
 
 #include "tagstokens.h"
 
+/*
+** strip_tagstokens:
+**
+** @self: actual tagstokens.
+**
+** Strip tags and tokens at the begin and the end of self
+** if first or last equals SPACES.
+*/
+
 void	strip_tagstokens(t_tagstokens *self)
 {
 	if (self->length > 0 && \

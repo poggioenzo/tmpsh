@@ -6,20 +6,20 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/16 16:49:34 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/17 16:40:49 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/08/17 21:22:38 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "tagstokens.h"
 
-static	int		str_get_length(t_tagstokens *self, int *spacing)
+static	size_t		str_get_length(t_tagstokens *self, size_t *spacing)
 {
-	int		ret;
-	int		len_tag;
-	int		len_token;
-	char	*tag;
-	char	*token;
+	size_t		ret;
+	size_t		len_tag;
+	size_t		len_token;
+	char		*tag;
+	char		*token;
 
 	ret = 0;
 	while (iter_tagstokens(self, &token, &tag))
@@ -32,13 +32,14 @@ static	int		str_get_length(t_tagstokens *self, int *spacing)
 	return (ret);
 }
 
-static	void	fill_tags_tokens(t_tagstokens *self, char *str, int *spacing)
+static	void		fill_tags_tokens(t_tagstokens *self, char *str,\
+									size_t *spacing)
 {
-	char	*tag;
-	char	*token;
-	int		i;
-	int		remove;
-	int		countdown;
+	char		*tag;
+	char		*token;
+	size_t		i;
+	size_t		remove;
+	int			countdown;
 
 	i = 0;
 	remove = 0;
@@ -59,33 +60,60 @@ static	void	fill_tags_tokens(t_tagstokens *self, char *str, int *spacing)
 	str[i] = 0;
 }
 
-char			*str_tagstokens(t_tagstokens *self)
+static	char		*free_join(char *to_free, char *static_char, t_bool delete)
 {
-	char	*str;
-	int		len;
-	int		*spacing;
+	char *str;
 
-	spacing = (int *)ft_memalloc(self->length * sizeof(int));
-	len = (str_get_length(self, spacing) + 1) * 2 + 1;
-	str = (char *)ft_memalloc(len);
-	ft_memset((void *)str, 32, len - 1);
-	fill_tags_tokens(self, str, spacing);
-	str = ft_strjoin(str, "Stack: ");
-	str = ft_strjoin(str, str_chare_pylst(self->stack));
-	str = ft_strjoin(str, "Valid: ");
-	str = ft_strjoin(str, (self->valid) ? GREEN"True"WHITE : RED"False"WHITE);
-	str = ft_strjoin(str, " | Incomplete: ");
-	str = ft_strjoin(str, (self->incomplete) ? \
-			RED"True"WHITE : GREEN"False"WHITE);
-	str = ft_strjoin(str, " | Tokken Error: '");
-	str = ft_strjoin(str, (self->token_error) ? self->token_error : "");
-	str = ft_strjoin(str, "' | Length: ");
-	str = ft_strjoin(str, ft_itoa(self->length));
-	str = ft_strjoin(str, "\n");
+	str = ft_strjoin(to_free, static_char);
+	ft_strdel(&to_free);
+	if (delete)
+		ft_strdel(&static_char);
 	return (str);
 }
 
-void			print_tagstokens(t_tagstokens *self)
+/*
+** str_tagstokens:
+**
+** @self: actual tagstokens.
+**
+** Return a string representation of the tagstokens.
+*/
+
+char				*str_tagstokens(t_tagstokens *self)
+{
+	char		*str;
+	int			len;
+	size_t		*spacing;
+
+	spacing = (size_t *)ft_memalloc(self->length * sizeof(size_t));
+	len = (str_get_length(self, spacing) + 1) * 2 + 1 + 50;
+	str = (char *)ft_memalloc(len);
+	ft_memset((void *)str, 32, len - 1);
+	fill_tags_tokens(self, str, spacing);
+	str = free_join(str, "Stack: ", FALSE);
+	str = free_join(str, str_chare_pylst(self->stack), TRUE);
+	str = free_join(str, "Valid: ", FALSE);
+	str = free_join(str, (self->valid) ? GTRUE : RFALSE, 0);
+	str = free_join(str, " | Incomplete: ", FALSE);
+	str = free_join(str, (self->incomplete) ? RTRUE : GFALSE, FALSE);
+	str = free_join(str, " | Tokken Error: '", FALSE);
+	str = free_join(str, (self->token_error) ? self->token_error : "", FALSE);
+	str = free_join(str, "' | Length: ", FALSE);
+	str = free_join(str, ft_itoa(self->length), TRUE);
+	str = free_join(str, "\n", FALSE);
+	return (str);
+}
+
+/*
+** print_tagstokens:
+**
+** @self: tagstokens to print.
+**
+** If the tagstokens is allocated then a string version is displayed.
+** Else an error message will prompt.
+*/
+
+void				print_tagstokens(t_tagstokens *self)
 {
 	if (self)
 		ft_printf(str_tagstokens(self));
