@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   tagging.h                                        .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/08/17 16:45:51 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/08/17 16:46:19 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #ifndef TAGGING_H
 # define TAGGING_H
 
-void get_tag_tagstokens(t_tagstokens *self);
+void	get_tag_tagstokens(t_tagstokens *self);
 
 #endif
