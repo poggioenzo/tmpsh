@@ -6,20 +6,12 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/16 16:49:34 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/16 16:58:05 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/08/17 16:40:49 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "tagstokens.h"
-
-// char *str_chare_pylst(t_pylst pylst)
-// {
-//   int sum;
-//
-//   sum = 0;
-//
-// }
 
 static	int		str_get_length(t_tagstokens *self, int *spacing)
 {
@@ -73,7 +65,6 @@ char			*str_tagstokens(t_tagstokens *self)
 	int		len;
 	int		*spacing;
 
-	// LEAKS + NORM = SHIT
 	spacing = (int *)ft_memalloc(self->length * sizeof(int));
 	len = (str_get_length(self, spacing) + 1) * 2 + 1;
 	str = (char *)ft_memalloc(len);
@@ -84,9 +75,10 @@ char			*str_tagstokens(t_tagstokens *self)
 	str = ft_strjoin(str, "Valid: ");
 	str = ft_strjoin(str, (self->valid) ? GREEN"True"WHITE : RED"False"WHITE);
 	str = ft_strjoin(str, " | Incomplete: ");
-	str = ft_strjoin(str, (self->incomplete) ? RED"True"WHITE : GREEN"False"WHITE);
+	str = ft_strjoin(str, (self->incomplete) ? \
+			RED"True"WHITE : GREEN"False"WHITE);
 	str = ft_strjoin(str, " | Tokken Error: '");
-	str = ft_strjoin(str, (self->token_error) ? self->token_error: "");
+	str = ft_strjoin(str, (self->token_error) ? self->token_error : "");
 	str = ft_strjoin(str, "' | Length: ");
 	str = ft_strjoin(str, ft_itoa(self->length));
 	str = ft_strjoin(str, "\n");
@@ -97,6 +89,3 @@ void			print_tagstokens(t_tagstokens *self)
 {
 	ft_printf(str_tagstokens(self));
 }
-
-//\nValid: FALSE | Incomplete: FALSE | Token_error: "
-// | Length:

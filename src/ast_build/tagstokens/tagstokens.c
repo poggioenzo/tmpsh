@@ -6,24 +6,12 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/16 16:50:43 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/16 16:53:01 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/08/17 16:41:10 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "tagstokens.h"
-
-// typedef struct
-// {
-// 	t_pylst		*heredocs;
-// 	t_pylst		*tokens;
-// 	t_pylst		*tags;
-// 	t_pylst		*stack;
-// 	char		*token_error;
-// 	t_bool		valid;
-// 	t_bool		incomplete;
-// 	int			length;
-// }			t_tagstokens;
 
 void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 {
