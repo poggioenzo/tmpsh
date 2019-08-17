@@ -145,7 +145,7 @@ TOKENIZER_SRCS := $(addprefix $(TOKENIZER_DIR), $(TOKENIZER_SRCS))
 
 TAGSTOKENS_DIR = tagstokens/
 
-TAGSTOKENS_SRCS :=	tagstokens.c \
+TAGSTOKENS_SRCS :=	init_tagstokens.c \
 					str_tagstokens.c \
 					iter_tagstokens.c \
 					tagging.c \

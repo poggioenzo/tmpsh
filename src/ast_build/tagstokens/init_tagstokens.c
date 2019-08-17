@@ -26,3 +26,11 @@ void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 	(*self)->iter = -1;
 	update_length_tagstokens(*self);
 }
+
+void input_init_tagstokens(t_tagstokens **self, char *input)
+{
+	init_tagstokens(self, NULL, NULL);
+	tokenize(input, &((*self)->tokens));
+	update_length_tagstokens(*self);
+	get_tag_tagstokens(*self);
+}
