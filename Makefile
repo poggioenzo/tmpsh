@@ -1,14 +1,14 @@
 NAME = tmpsh
 
 CC = gcc
-CFLAGS = -g -Wall -Wextra #-fsanitize=address#-pedantic#-Wconversion #  -Wall -Wextra -Werror 
+CFLAGS = -g -Wall -Wextra -fsanitize=address#-pedantic#-Wconversion #  -Wall -Wextra -Werror 
 CPPFLAGS = $(addprefix -I , $(INCLUDES_LIST))
 
 include sources.d
 
 ifeq (test, $(MAKECMDGOALS))
 SOURCES := $(filter-out $(MAIN_FILE), $(SOURCES))
-endif 
+endif
 
 #according to a given c file, transform it in a hidden file format
 #Exemple : 'my/folder/file.o' will be 'my/folder/.file.o'

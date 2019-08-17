@@ -34,5 +34,6 @@
 # include "strip_tagstokens.h"
 # include "tagging.h"
 # include "update_length_tagstokens.h"
+# include "copy_tagstokens.h"
 
 #endif
