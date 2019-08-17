@@ -11,10 +11,7 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "tmpsh.h"
-#include "libft.h"
-#include "globals.h"
-#include "tagging.h"
+#include "tagstokens.h"
 
 // typedef struct
 // {
@@ -28,11 +25,6 @@
 // 	int			length;
 // }			t_tagstokens;
 
-void	update_length_tagstokens(t_tagstokens *self)
-{
-	self->length = len_pylst(self->tokens);
-}
-
 void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 {
 	*self = (t_tagstokens*)ft_memalloc(sizeof(t_tagstokens));
@@ -44,6 +36,5 @@ void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 	(*self)->incomplete = FALSE;
 	(*self)->length = 0;
 	(*self)->iter = -1;
-	// strip_tagstokens(self);
 	update_length_tagstokens(*self);
 }

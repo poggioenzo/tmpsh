@@ -11,9 +11,7 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "tmpsh.h"
-#include "libft.h"
-#include "globals.h"
+#include "tagstokens.h"
 
 /*
 ** break_tagstokens:

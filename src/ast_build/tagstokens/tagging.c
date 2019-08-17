@@ -11,9 +11,7 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "tmpsh.h"
-#include "libft.h"
-#include "globals.h"
+#include "tagstokens.h"
 
 /*
 ** get_tag_tagstokens:
@@ -46,6 +44,5 @@ void	get_tag_tagstokens(t_tagstokens *self)
 			push_pylst(&(self->tags), "STMT", 0, _ptr);
 		iter++;
 	}
-	// strip()
-	// update_length()
+	strip_tagstokens(self);
 }

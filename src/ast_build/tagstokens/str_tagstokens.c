@@ -11,11 +11,7 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "tmpsh.h"
-#include "libft.h"
-#include "globals.h"
-#include "iter_tagstokens.h"
+#include "tagstokens.h"
 
 // char *str_chare_pylst(t_pylst pylst)
 // {
