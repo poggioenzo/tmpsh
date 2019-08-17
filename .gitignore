@@ -14,7 +14,6 @@ test_shell
 
 # Prerequisites
 dependencies/*.d
-*.d
 
 # Object files
 *.o
