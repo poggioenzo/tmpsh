@@ -103,12 +103,6 @@ class BackgroundJobs:
     def __str__(self):
         return str(self.list_jobs)
 
-    def get_index_pid(self, index):
-        """
-        Return the jobs pid at the given index.
-        """
-        return self.list_jobs[index].pid
-
     def is_running(self, index):
         """
         Check if any process in the job is still running or if it's 

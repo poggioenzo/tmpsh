@@ -1,9 +1,22 @@
-#include "foreground.h"
+#include <signal.h>
 #include "tmpsh.h"
+#include "libft.h"
+#include "foreground.h"
+#include "job_control.h"
 
-t_background_job	*g_jobs;
+/*
+** waitpid_layer:
+**
+** @pid: pid to wait.
+** @mode: waitpid options argument.
+** @status: Array to store status and state.
+**
+** Layer for waitpid, who will analyse the result depending
+** of the program death. Return the good status value,
+** and the state, if it's finish or running.
+*/
 
-void		waitpid_layer(int pid, int mode, int status[2])
+static void				waitpid_layer(int pid, int mode, int status[2])
 {
 	int		return_status;
 
@@ -30,19 +43,31 @@ void		waitpid_layer(int pid, int mode, int status[2])
 	}
 }
 
-enum e_waitstate	wait_subast(t_acb *job_branch, int mode)
+/*
+** wait_subast:
+**
+** @job_branch: Branch where subast have to be waited.
+** @mode: waiptid options argument.
+**
+** Inside a single branch, go to wait subast who need to be waited.
+** Save his state in the subast->complete value.
+**
+** return : - the enum running if any suabst is not complete.
+**			- finish if all subast are complete.
+*/
+
+static enum e_waitstate	wait_subast(t_acb *job_branch, int mode)
 {
 	int		index;
 	int		nbr_subast;
 	t_ast	*subast;
 	int		wait_res[2];
-	int		state;
 
 	nbr_subast = len_pylst(job_branch->subast);
 	index = 0;
 	while (index < nbr_subast)
 	{
-		subast = index_pylst(job_branch->subast, index);
+		subast = index_pylst(job_branch->subast, index)->value;
 		if ((ft_strequ(subast->type, "CMDSUBST2") || \
 				ft_strequ(subast->type, "CMDSUBST3")) &&
 				subast->complete == false)
@@ -58,7 +83,18 @@ enum e_waitstate	wait_subast(t_acb *job_branch, int mode)
 	return (finish);
 }
 
-enum e_waitstate	analyse_job_status(t_pylst *job_list, int mode)
+/*
+** analyse_job_status:
+**
+** @job_list: Pipeline of commands, or single one branch, to analyse.
+** @mode: waitpid options arguments.
+**
+** Go through each job, and try to wait each available process.
+** It could be the branch herself, but also any subast processes.
+** Will care about wait each child process only a single time, to avoid zombie.
+*/
+
+enum e_waitstate		analyse_job_status(t_pylst *job_list, int mode)
 {
 	int		index;
 	t_acb	*job;
@@ -68,7 +104,7 @@ enum e_waitstate	analyse_job_status(t_pylst *job_list, int mode)
 	while (index >= 0)
 	{
 		job = index_pylst(job_list, index)->value;
-		if (job->complete || job.pid == -1)
+		if (job->complete || job->pid == -1)
 		{
 			index -= 1;
 			continue ;
@@ -86,55 +122,18 @@ enum e_waitstate	analyse_job_status(t_pylst *job_list, int mode)
 	return (finish);
 }
 
-void	init_background_jobs(void)
-{
-	g_jobs->list_jobs = NULL;
-	g_jobs->allow_background = true;
-	return ;
-}
+/*
+** relaunch:
+**
+** @index: Index of the job to relaunch.
+**
+** Check if the given job number can be relaunched and pushed
+** in foreground.
+** Will wait the given job and choose to keep or remove it from
+** the g_jobs->list_jobs if it's finish.
+*/
 
-void	add_job(t_pylst *new_job)
-{
-	int		job_index;
-	t_acb	*last_branch_job;
-
-	last_branch_job = (t_acb *)index_pylst(new_job, -1)->value;
-	push_pylst(&g_jobs->list_jobs, pylst_shacpy(new_job));
-	job_index = len_pylst(g_jobs->list_jobs) - 1;
-	ft_printf("[%d] %s\n", job_index, last_branch_job->pid); 
-}
-
-pid_t		get_index_pid(int index)
-{
-	t_pylst		*job;
-
-	job = index_pylst(g_jobs->list_jobs, index)->value;
-	return (value->pid);
-}
-
-
-enum e_waitstate	is_running(int index)
-{
-	t_pylst	*job;
-
-	job = (t_pylst *)index_pylst(g_jobs->list_jobs, index)->value;
-	return (analyse_job_status(job, WNOHANG));
-}
-
-void	remove(int index)
-{
-	t_pylst		*job;
-
-	job = (t_pyslt *)index_pylst(g_jobs->list_jobs, index)->value;
-	remove_pylst(job);
-}
-
-void	clear(void)
-{
-	free_pylst(&g_jobs->list_jobs, 0);
-}
-
-void	relaunch(int index)
+void					relaunch(int index)
 {
 	t_pylst		*job;
 	pid_t		new_tpgid;
@@ -142,19 +141,19 @@ void	relaunch(int index)
 
 	if (is_running(index) == finish)
 	{
-        ft_printf("tmpsh: fg: job has terminated\n");
-		remove(index);
+		ft_printf("tmpsh: fg: job has terminated\n");
+		remove_bg(index);
 		return ;
 	}
 	job = (t_pylst *)index_pylst(g_jobs->list_jobs, index)->value;
 	new_tpgid = ((t_acb *)job->value)->pgid;
-	set_foreground(new_pgid);
+	set_foreground(new_tpgid);
 	kill(-new_tpgid, SIGCONT);
 	if (analyse_job_status(job, WUNTRACED) == finish)
 	{
-		remove(index);
+		remove_bg(index);
 		last_job_branch = (t_acb *)index_pylst(job, -1)->value;
-		ft_printf("[%d] + %d continued\n", index, last_branch_job->pid);
+		ft_printf("[%d] + %d continued\n", index, last_job_branch->pid);
 	}
 	else
 		ft_printf("[%d] + Suspended.\n", index);
@@ -162,7 +161,14 @@ void	relaunch(int index)
 	restore_tcattr();
 }
 
-void	wait_zombie(void)
+/*
+** wait_zombie:
+**
+** Called before giving back the prompt to the user.
+** Check if some jobs are done and remove them from the current joblist.
+*/
+
+void					wait_zombie(void)
 {
 	int		index;
 	int		nbr_job;
@@ -178,7 +184,7 @@ void	wait_zombie(void)
 		if (is_running(index) == finish)
 		{
 			job = (t_pylst *)index_pylst(g_jobs->list_jobs, index)->value;
-			remove(index);
+			remove_bg(index);
 			index--;
 			last_branch = (t_acb *)index_pylst(job, -1)->value;
 			ft_printf("[%d] + Done %s\n", index_job, last_branch->command);

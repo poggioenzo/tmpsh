@@ -117,6 +117,13 @@ BUILTINS_SRCS := cd.c \
 
 BUILTINS_SRCS := $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
 
+JOBCONTROL_DIR = job_control/
+
+JOBCONTROL_SRCS := backgroundjobs.c \
+				   control.c \
+
+JOBCONTROL_SRCS := $(addprefix $(JOBCONTROL_DIR), $(JOBCONTROL_SRCS))
+
 EXECUTION_DIR = execution/
 
 EXECUTION_SRCS := fd_management.c \
@@ -130,6 +137,7 @@ EXECUTION_SRCS := fd_management.c \
                   heredoc_apply.c \
                   redirection_opener.c \
                   setup_redirection.c \
+				  $(JOBCONTROL_SRCS) \
 
 EXECUTION_SRCS := $(addprefix $(EXECUTION_DIR), $(EXECUTION_SRCS))
 
