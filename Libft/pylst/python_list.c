@@ -461,3 +461,22 @@ void	update_pylst(t_pylst *pylst, int index, ...)
 	pylst->ctype = ctype;
 	va_end(args);
 }
+
+/*
+** pop_pylst:
+**
+** Return a value and delete it from the pylst.
+*/
+
+void		*pop_pylst(t_pylst **pylst, int index)
+{
+	t_pylst		*expect_node;
+	void		*pop_value;
+
+	expect_node = index_pylst(*pylst, index);
+	expect_node->ctype = _ptr;
+	expect_node->size = 0;
+	pop_value = expect_node->value;
+	remove_pylst(pylst, expect_node);
+	return (pop_value);
+}
