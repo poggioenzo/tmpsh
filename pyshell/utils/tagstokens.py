@@ -94,6 +94,13 @@ class TagsTokens():
             i += 1
         return i
 
+    def replace_alias(self, alias_inputs, i):
+        tt_alias = TagsTokens().init_with_input(alias_inputs).check_syntax()
+        self.tokens = self.tokens[:i] + tt_alias.tokens + self.tokens[i + 1:]
+        self.tags = self.tags[:i] + tt_alias.tags + self.tags[i + 1:]
+        self.valid = tt_alias.valid
+        self.update_length()
+
     def find_prev_ind_token(self, i):
         if self.tags[i] == 'SPACES' and i - 1 >= 0:
             i -= 1
@@ -108,13 +115,6 @@ class TagsTokens():
         if self.tags[i] == 'SPACES' and i + 1 < self.length:
             i += 1
         return self.tokens[i] if get_token else self.tags[i]
-
-    def replace_alias(self, alias_inputs, i):
-        tt_alias = TagsTokens().init_with_input(alias_inputs).check_syntax()
-        self.tokens = self.tokens[:i] + tt_alias.tokens + self.tokens[i + 1:]
-        self.tags = self.tags[:i] + tt_alias.tags + self.tags[i + 1:]
-        self.valid = tt_alias.valid
-        self.update_length()
 
     def append(self, tag, token):
         self.tags.append(tag)
