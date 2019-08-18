@@ -68,5 +68,5 @@ void	input_init_tagstokens(t_tagstokens **self, char *input)
 	tokenize(input, &((*self)->tokens));
 	update_length_tagstokens(*self);
 	get_tag_tagstokens(*self);
-
+	check_syntax_tagstokens(*self);
 }
