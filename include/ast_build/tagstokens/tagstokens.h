@@ -37,5 +37,6 @@
 # include "copy_tagstokens.h"
 # include "append_tagstokens.h"
 # include "free_tagstokens.h"
+# include "find_tagstokens.h"
 
 #endif

@@ -31,6 +31,16 @@ int		main(int argc, char **argv)//char **environ)
 	FREE(grammar_abs);
 	input_init_tagstokens(&tgtk, argv[1]);
 	print_tagstokens(tgtk);
+
 	free_tagstokens(&tgtk, TRUE);
 	return (0);
 }
+
+/*
+** ft_printf("%d\n", find_prev_ind_token(tgtk, 3));
+** ft_printf("%s\n", find_prev_token(tgtk, 3, FALSE));
+** ft_printf("%s\n", find_prev_token(tgtk, 3, TRUE));
+** ft_printf("%d\n", find_next_ind_token(tgtk, 3));
+** ft_printf("%s\n", find_next_token(tgtk, 3, FALSE));
+** ft_printf("%s\n", find_next_token(tgtk, 3, TRUE));
+*/
