@@ -76,7 +76,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	pid = fork_prepare(branch->pgid, branch->background);
 	if (pid == 0)
 	{
-		//reset_signals();
+		reset_signals();
 		replace_std_fd(branch->stdin, branch->stdout);
 		setup_redirection(branch);
 		variables_config(variables, true);

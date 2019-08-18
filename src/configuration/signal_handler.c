@@ -108,5 +108,7 @@ int				signal_setup(void)
 	signal(SIGTSTP, shell_background);
 	signal(SIGCONT, shell_continue);
 	signal(SIGWINCH, shell_reshape);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
 	return (0);
 }

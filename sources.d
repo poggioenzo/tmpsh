@@ -101,6 +101,7 @@ CONFIGURATION_SRCS :=  screen_size.c \
 					   signal_handler.c \
 					   t_caps_utils.c \
 					   termios_setter.c \
+					   reset_signals.c \
                        $(VARIABLES_SRCS) \
 					   $(PROMPT_CONF)
 
