@@ -14,6 +14,7 @@ int		main(int argc, char **argv)//char **environ)
 {
 	char	*grammar_abs;
 	char	*grammar_file = "/pyshell/grammar/grammar.txt";
+	char	*cwd;
 	t_tagstokens *tgtk;
 
 	if (argc != 2)
@@ -23,8 +24,9 @@ int		main(int argc, char **argv)//char **environ)
 	}
 	tgtk = NULL;
 	setup_freefct();
-	grammar_abs = getcwd(NULL, 0);
-	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);
+	cwd = getcwd(NULL, 0);
+	grammar_abs = ft_strjoin(cwd, grammar_file);
+	free(cwd);
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
 	input_init_tagstokens(&tgtk, argv[1]);
