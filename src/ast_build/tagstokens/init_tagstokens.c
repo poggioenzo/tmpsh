@@ -56,13 +56,17 @@ void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 ** @input: raw input command to tokenize and tag.
 **
 ** Create a tagstokens. Set the tokenise input as tokens and get
-** get tags form it.
+** get tags form it. If input is NULL or full of spaces then self is NULL.
 */
 
 void	input_init_tagstokens(t_tagstokens **self, char *input)
 {
+	*self = NULL;
+	if (!(input) || ft_strspn(input, g_grammar->spaces) == ft_strlen(input))
+		return ;
 	init_tagstokens(self, NULL, NULL);
 	tokenize(input, &((*self)->tokens));
 	update_length_tagstokens(*self);
 	get_tag_tagstokens(*self);
+
 }
