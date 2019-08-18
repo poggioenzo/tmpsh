@@ -156,6 +156,9 @@ TAGSTOKENS_SRCS :=	init_tagstokens.c \
 					append_tagstokens.c \
 					free_tagstokens.c \
 					find_tagstokens.c \
+					check_syntax_tagstokens.c \
+					clear_stack_tagstokens.c \
+					replace_alias_tagstokens.c #skip_openning_tagstokens.c \
 
 
 TAGSTOKENS_SRCS := $(addprefix $(TAGSTOKENS_DIR), $(TAGSTOKENS_SRCS))
