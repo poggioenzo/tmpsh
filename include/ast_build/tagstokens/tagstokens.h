@@ -38,5 +38,9 @@
 # include "append_tagstokens.h"
 # include "free_tagstokens.h"
 # include "find_tagstokens.h"
+# include "check_syntax_tagstokens.h"
+# include "clear_stack_tagstokens.h"
+# include "replace_alias_tagstokens.h"
+# include "skip_openning_tagstokens.h"
 
 #endif
