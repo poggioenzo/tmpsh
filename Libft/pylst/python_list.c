@@ -131,8 +131,8 @@ void			*get_value_pylst(t_pylst *pylst, int index)
 	length = len_pylst(pylst);
 	if (pylst && index < length)
 		return (index_pylst(pylst, index)->value);
-	printf("Index out range. Pylst length is %d.\n", length);
-	exit(128);
+	ft_printf("Index out range. Pylst length is %d.\n", length);
+	exit(0);
 	return (NULL);
 }
 
@@ -560,6 +560,11 @@ void	print_pylst_chare(t_pylst *pylst)
   int first;
 
   first = 1;
+  if (!(pylst))
+  {
+	  ft_printf("Empty list.");
+	  return ;
+  }
   ft_printf("[");
   while (pylst_iter(pylst, (void **)&value))
   {
