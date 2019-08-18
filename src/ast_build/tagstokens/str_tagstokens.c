@@ -85,15 +85,18 @@ char				*str_tagstokens(t_tagstokens *self)
 	int			len;
 	size_t		*spacing;
 
-	spacing = (size_t *)ft_memalloc(self->length * sizeof(size_t));
-	len = (str_get_length(self, spacing) + 1) * 2 + 1 + 50;
+	if (!(self->length))
+		return (ft_strdup(YELLOW"Empty tagstokens\n"WHITE));
+	spacing = (size_t *)ft_memalloc((self->length + 1)* sizeof(size_t));
+	len = (str_get_length(self, spacing) + 1) * 2 + 1;
 	str = (char *)ft_memalloc(len);
 	ft_memset((void *)str, 32, len - 1);
 	fill_tags_tokens(self, str, spacing);
+	ft_memdel((void **)&spacing);
 	str = free_join(str, "Stack: ", FALSE);
 	str = free_join(str, str_chare_pylst(self->stack), TRUE);
 	str = free_join(str, "Valid: ", FALSE);
-	str = free_join(str, (self->valid) ? GTRUE : RFALSE, 0);
+	str = free_join(str, (self->valid) ? GTRUE : RFALSE, FALSE);
 	str = free_join(str, " | Incomplete: ", FALSE);
 	str = free_join(str, (self->incomplete) ? RTRUE : GFALSE, FALSE);
 	str = free_join(str, " | Tokken Error: '", FALSE);
@@ -115,8 +118,14 @@ char				*str_tagstokens(t_tagstokens *self)
 
 void				print_tagstokens(t_tagstokens *self)
 {
+	char *to_print;
+
 	if (self)
-		ft_printf(str_tagstokens(self));
+	{
+		to_print = str_tagstokens(self);
+		ft_printf(to_print);
+		ft_strdel(&to_print);
+	}
 	else
 		ft_printf(RED"Tagstokens Not Allocated\n"WHITE);
 }
