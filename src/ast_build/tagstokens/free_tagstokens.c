@@ -12,14 +12,14 @@
 
 int free_tagstokens(t_tagstokens **self, int status)
 {
-    if (*self)
+    if (self && *self)
     {
         free_pylst(&(*self)->tokens, status);
         free_pylst(&(*self)->tags, status);
         free_pylst(&(*self)->stack, status);
         if ((*self)->token_error)
             ft_strdel(&(*self)->token_error);
-        ft_memdel(self);
+        ft_memdel((void **)self);
     }
     return (status);
 }
