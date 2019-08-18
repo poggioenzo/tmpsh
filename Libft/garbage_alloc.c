@@ -48,6 +48,8 @@ void		garbage_free(void *ptr)
 	t_garblst	*prev_garb;
 	t_garblst	*curr_garb;
 
+	if (!ptr)
+		return ;
 	prev_garb = NULL;
 	curr_garb = g_garbage;
 	while (curr_garb && curr_garb->allocated != ptr)
@@ -75,6 +77,8 @@ void		*garbage_malloc(size_t size)
 {
 	t_garblst	*garb_item;
 
+	if (size == 0)
+		return (NULL);
 	if (!(garb_item = (t_garblst *)malloc(sizeof(t_garblst) + size)))
 		return (NULL);
 	garb_item->allocated = garb_item + 1;
