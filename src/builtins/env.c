@@ -44,16 +44,17 @@ static void		prepare_env(char **args, char **executable_file)
 		empty_environ();
 }
 
-void	built_env(char **args)
+int		built_env(char **args, char **environ)
 {
 	int		index;
 	pid_t	pid;
 	char	*executable;
 
+	UNUSED(environ);
 	if ((pid = fork()) > 0)
 	{
 		waitpid(pid, NULL, 0);
-		return ;
+		return (0);
 	}
 	prepare_env(args, &executable);
 	index = 0;
@@ -70,4 +71,5 @@ void	built_env(char **args)
 	}
 	else
 		show_env();
+	return (0);
 }

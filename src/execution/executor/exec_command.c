@@ -9,8 +9,6 @@
 #undef stdout
 #undef stdin
 
-t_ht_table	*g_builtins = NULL;
-
 /*
 ** run_builtin:
 **
@@ -32,8 +30,7 @@ static int		run_builtin(char **cmd_args, t_pylst *variables)
 		variables_config(variables, true);
 		free_pylst(&variables, 0);
 	}
-	// NEED TO SETUP BUILTINS HASHTABLE
-	builtin = search_value(g_builtins, cmd_args[0]);
+	builtin = (int (*)(char **, char **))search_value(g_builtins, cmd_args[0]);
 	status = builtin(cmd_args + 1, g_environ);
 	if (saved_environ)
 	{

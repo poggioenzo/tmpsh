@@ -19,18 +19,20 @@ static void		display_env(void)
 ** SYNTAX : setenv variable value
 */
 
-void	built_setenv(char **args)
+int		built_setenv(char **args, char **environ)
 {
 	int		argc;
 
+	UNUSED(environ);
 	argc = ft_arraylen(args);
 	if (argc > 2)
 	{
 		ft_dprintf(2, "setenv: Too many arguments.");
-		return ;
+		return (1);
 	}
 	else if (argc == 0)
 		display_env();
 	else
 		ft_setenv(args[0], args[1]);
+	return (0);
 }

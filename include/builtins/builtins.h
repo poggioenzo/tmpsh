@@ -2,10 +2,12 @@
 #ifndef BUILTINS_H
 # define BUILTINS_H
 
-void			built_cd(char **args);
-void		built_exit(char **args);
-void		built_setenv(char **args);
-void		built_env(char **args);
-void	built_echo(char **args);
+int			built_cd(char **args, char **environ);
+int			built_exit(char **args, char **environ);
+int			built_setenv(char **args, char **environ);
+int			built_env(char **args, char **environ);
+int			built_echo(char **args, char **environ);
+
+void		setup_builtins(void);
 
 #endif
