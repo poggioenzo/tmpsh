@@ -28,10 +28,7 @@ int		main(int argc, char **argv)//char **environ)
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
 	input_init_tagstokens(&tgtk, argv[1]);
-	// ft_printf("length: %d \n",tgtk->length);
-	// append_tagstokens(tgtk, "QWERT", "ASDFG");
 	print_tagstokens(tgtk);
-	// print_tagstokens(copy_tagstokens(tgtk, 1,3));
-	// print_tagstokens(NULL);
+	free_tagstokens(&tgtk, TRUE);
 	return (0);
 }
