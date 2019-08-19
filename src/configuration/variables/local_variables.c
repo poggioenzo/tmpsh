@@ -25,6 +25,11 @@ void	ft_setvar(char *variable, char *value)
 	insert_value(g_variables, variable, value, _chare);
 }
 
+void	ft_unsetvar(char *variable)
+{
+	delete_value(g_variables, variable);
+}
+
 /*
 ** setup_var_table:
 **

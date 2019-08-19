@@ -5,6 +5,7 @@
 
 extern char	**g_environ;
 extern t_ht_table	*g_variables;
+extern t_ht_table	*g_alias;
 
 extern t_ht_table	*g_builtins;
 extern t_background_job		*g_jobs;
