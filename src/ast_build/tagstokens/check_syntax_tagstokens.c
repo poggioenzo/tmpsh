@@ -22,14 +22,16 @@
 
 
 
+
+
 void check_syntax_tagstokens(t_tagstokens *self)
 {
     // init_tagstokensmonitor(self);
-    if (self->valid)
-    {
-        // self->stack = tgtk_shiftreduce(self, g_grammar->grammar);
-        if (self->length > 0 && )
-
-    }
-    clear_stack_tagstokens(self);
+    // if (self->valid)
+    // {
+    //     // self->stack = tgtk_shiftreduce(self, g_grammar->grammar);
+    //     if (self->length > 0 && )
+    //
+    // }
+    // clear_stack_tagstokens(self);
 }
