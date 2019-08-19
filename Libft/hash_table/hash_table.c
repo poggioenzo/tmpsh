@@ -194,3 +194,12 @@ int				ht_iter(t_ht_table *table, char **key, void **value)
 	*value = next_alveol->value;
 	return (1);
 }
+
+void	empty_ht(t_ht_table *table)
+{
+	int		index;
+
+	index = 0;
+	while (index < table->size)
+		free_alveol_list(&table->items[index++], 0);
+}
