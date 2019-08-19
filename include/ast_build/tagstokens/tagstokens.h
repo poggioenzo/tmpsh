@@ -23,10 +23,16 @@
 # include "globals.h"
 
 /*
-** Local methodes includes.
+** Utils for tagstokens.
 */
 
 # include "tokenizer.h"
+# include "shiftreduce.h"
+
+/*
+** Local methodes includes.
+*/
+
 # include "delitems_tagstokens.h"
 # include "init_tagstokens.h"
 # include "iter_tagstokens.h"
