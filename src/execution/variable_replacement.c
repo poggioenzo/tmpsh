@@ -13,8 +13,7 @@
 ** and remplace it inside the tagstokens element.
 */
 
-static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index, \
-		char *tag)
+static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 {
 	char	*variable;
 	char	*token;
@@ -48,7 +47,7 @@ void			replace_variable(t_acb *branch)
 	{
 		tag = index_pylst(branch->tagstokens->tags, index)->value;
 		if (ft_strequ(tag, "VAR"))
-			tagstoken_variable_swap(branch->tagstokens, index, tag);
+			tagstoken_variable_swap(branch->tagstokens, index);
 		else if (ft_strequ(tag, "SUBAST"))
 		{
 			subast = (t_ast *)index_pylst(branch->subast, index_subast)->value;

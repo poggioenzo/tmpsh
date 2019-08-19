@@ -115,6 +115,7 @@ BUILTINS_SRCS := cd.c \
 				 unsetenv.c \
                  echo.c \
 				 exit.c \
+				 argparser.c \
 				 builtins_builder.c \
 
 BUILTINS_SRCS := $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))

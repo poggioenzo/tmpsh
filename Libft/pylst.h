@@ -75,4 +75,5 @@ int			iter_pylst(t_pylst *pylst, void **value);
 void		remove_pylst(t_pylst **pylst, void *value);
 void		strremove_pylst(t_pylst	**pylst, char *value);
 void		*pop_pylst(t_pylst **pylst, int index);
+int			str_in_pylst(t_pylst *pylst, char *search);
 #endif

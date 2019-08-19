@@ -14,4 +14,9 @@ int		built_jobs(char **argv, char **environ)
 	return (0);
 }
 
-int		
+int		built_fg(char **argv, char **environ)
+{
+
+	if (ft_arraylen(argv) == 0)
+		index = 0;
+}

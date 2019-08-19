@@ -480,3 +480,28 @@ void		*pop_pylst(t_pylst **pylst, int index)
 	remove_pylst(pylst, expect_node);
 	return (pop_value);
 }
+
+/*
+** str_in_pylst:
+**
+** Arguments, in order :
+** @str: searched string.
+** @pylst: choosen list.
+**
+** Return True if str is a value of pylst else return False.
+** ! If str is founded pylst->iter_item is set to NULL !
+*/
+
+int			str_in_pylst(t_pylst *pylst, char *search)
+{
+	char	*tmp_value;
+
+	while (pylst)
+	{
+		tmp_value = (char *)pylst->value;
+		if (ft_strequ(search, tmp_value))
+			return (1);
+		pylst = pylst->next;
+	}
+	return (0);
+}
