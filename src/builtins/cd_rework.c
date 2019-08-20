@@ -18,7 +18,7 @@ int			next_fileis(char *abspath, char *expected_name)
 		abspath++;
 		expected_name++;
 	}
-	if (!expected_name && (*abspath == '/' || !*abspath))
+	if (!*expected_name && (*abspath == '/' || !*abspath))
 		return (1);
 	return (0);
 }
@@ -50,68 +50,130 @@ static void		remove_double_slash(char *path)
 	}
 }
 
-/*
-void		reset_previous_dir(char *abspath, char **curr_pos)
+void		retrieve_prev(char *absfile, char *curr_file, char **prev_file)
 {
-	char	*prev_file;
-	int		need_move;
+	char	*finder;
 
-	prev_file = *curr_pos;
-	if (prev_file - abspath == 0)
-		return ;
-	while ((prev_file - abspath) > 0 && *prev_file != '/')
-		prev_file--;
-	if (prev_file == *curr_pos)
-		return ;
-	if (prev_file == abspath && )
-}
-*/
-void		reset_previous_dir(char *abspath, char **curr_pos)
-{
-	char	*prev_file;
-	char	*tmp_ptr;
-	int		need_move;
-
-	tmp_ptr = abspath;
-	prev_file = abspath;
-	need_move = 0;
-	while (*tmp_ptr && tmp_ptr != *curr_pos)
+	finder = absfile;
+	*prev_file = NULL;
+	while (finder != curr_file)
 	{
-		if (*tmp_ptr == '/' && tmp_ptr + 1 != *curr_pos)
-			prev_file = tmp_ptr;
-		tmp_ptr++;
+		printf("FINDER : %s CURR %S PREV %s\n", finder, curr_file, prev_file);
+		*prev_file = finder;
+		finder = ft_strchr(finder + 1, '/');
 	}
-	if (tmp_ptr == *curr_pos)
-		return ;
-	if (prev_file + 1 == *curr_pos)
-		need_move = 1;
-	else if (!next_fileis(prev_file + 1, ".."))
-		need_move = 1;
-	if (need_move)
+	printf("PREV : %s ---------\n", *prev_file);
+}
+
+int			iter_filecompo(char *absfile, char **prev, char **curr)
+{
+	static char		*curr_save = NULL;
+
+	printf("IN iter save %s : prev %s | curr %s \n",
+			curr_save, *prev, *curr);
+	if (!curr_save)
 	{
-		tmp_ptr = (*curr_pos) + 3;
-		ft_memmove(prev_file, tmp_ptr, ft_strlen(tmp_ptr) + 1);
+		curr_save = absfile;
+		*curr = curr_save;
+		*prev = NULL;
+		return (1);
+	}
+	else if (!*curr_save)
+	{
+		curr_save = NULL;
+		return (0);
+	}
+	if (curr_save != *curr)
+	{
+		curr_save = *curr;
+		if (!*curr_save)
+			return (0);
+		printf("pos %s in %s\n", curr_save, absfile);
+		retrieve_prev(absfile, curr_save, prev);
+		return (1);
+	}
+	else
+		*prev = curr_save;
+	curr_save = ft_strchr(curr_save + 1, '/');
+	if (curr_save && curr_save[1])
+	{
+		*curr = curr_save;
+		printf("OUT iter save %s : prev %s | curr %s \n",
+				curr_save, *prev, *curr);
+		return (1);
+	}
+	printf("OUT prev %s curr %s\n", *prev, *curr);
+	curr_save += ft_strlen(curr_save);
+	return (1);
+}
+
+int		len_filename(char *filename)
+{
+	int		index;
+
+	index = 1;
+	while (filename[index] && filename[index] != '/')
+		index++;
+	return (index);
+}
+
+void		remove_dot(char *relpath)
+{
+	int		len_dot;
+	int		end_len;
+
+	len_dot = len_filename(relpath);
+	end_len = ft_strlen(relpath + len_dot) + 1;
+	ft_memmove(relpath, relpath + len_dot, end_len);
+}
+
+void	reset_previous_dir(char **curr_file, char *prev_file)
+{
+	char		*dot_end;
+
+	printf("there prev : %s, curr : %s\n", prev_file, *curr_file);
+	if (!prev_file)
+		return ;
+	if (!next_fileis(prev_file, ".."))
+	{
+		if (!(dot_end = ft_strchr((*curr_file) + 1 , '/')))
+		{
+			*prev_file = '\0';
+			*curr_file = prev_file;
+			printf("CUT\n");
+		}
+		else
+		{
+			ft_printf("dot |%s|, prev_file |%s|\n", dot_end, prev_file);
+			ft_strcpy(prev_file, dot_end);
+			ft_printf("prevdel %s\n", prev_file);
+			*curr_file = prev_file;
+
+		}
 	}
 }
 
 char		*canonicalize(char *path)
 {	
-	char	*curr_pos;
+	char *prev;
+	char *curr;
 
 	remove_double_slash(path);
-	ft_printf("rm slash : %s\n", path);
-	curr_pos = path;
-	if (*curr_pos == '/')
-		curr_pos++;
-	while (curr_pos && *curr_pos)
+	prev = NULL;
+	curr = NULL;
+	while (iter_filecompo(path, &prev, &curr))
 	{
-		if (!ft_strncmp(curr_pos, "./", 2) && curr_pos[2] != '\0')
-			ft_memmove(curr_pos, curr_pos + 2, ft_strlen(curr_pos + 2) + 1);
-		else if (!next_fileis(curr_pos, "..") && curr_pos[3])
-			reset_previous_dir(path, &curr_pos);
-		curr_pos = ft_strchr(curr_pos, '/');
-		if (curr_pos)
-			curr_pos++;
+		printf("FILE : %s, pos %s\n", path, curr);
+		if (next_fileis(curr, "."))
+		{
+			remove_dot(curr);
+			curr = prev;
+		}
+		else if (next_fileis(curr, ".."))
+		{
+			reset_previous_dir(&curr, prev);
+			ft_printf("WHEN REMOVED %s\n", path);
+		}
 	}
 }
 
