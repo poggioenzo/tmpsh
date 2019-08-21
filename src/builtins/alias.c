@@ -8,6 +8,14 @@ void		alias_init(void)
 	ht_new_table(&g_alias, 7, 65);
 }
 
+/*
+** error_args:
+**
+** Check if there is any options in argv,
+** and display an error message if any because
+** alias do not have options.
+*/
+
 static t_bool		error_args(char **argv)
 {
 	t_pylst		*options;
@@ -26,6 +34,12 @@ static t_bool		error_args(char **argv)
 	return (false);
 }
 
+/*
+** show_alias:
+**
+** Display all alias on stdout. Go trough the hash table of alias
+** and print them in the posix format : "%s=%s\n".
+*/
 static int		show_alias(void)
 {
 	char	*alias;
@@ -35,6 +49,14 @@ static int		show_alias(void)
 		ft_printf("%s='%s'\n", alias, value);
 	return (0);
 }
+
+/*
+** set_alias:
+**
+** Register the new alias inside the alias hash table.
+** Starting from a string in the format "alias=value",
+** separate the alias and the value to store it.
+*/
 
 static int		set_alias(char *argument)
 {
@@ -55,6 +77,25 @@ static int		set_alias(char *argument)
 	insert_value(g_alias, alias, value, _chare);
 	return (0);
 }
+
+/*
+** built_alias:
+**
+** alias builtin of the shell. 
+** Create, redefine or display aliases.
+** 
+** Synopsis : alias [alias-name[=string]...]
+**
+** The following operands are supported:
+**
+** alias-name
+**    Write the alias definition to standard output.
+** alias-name=string
+**    Assign the value of string to the alias alias-name.
+**
+** If no operands are given, all alias definitions 
+** shall be written to standard output.
+*/
 
 int		bulit_alias(char **argv, char **environ)
 {
@@ -84,5 +125,3 @@ int		bulit_alias(char **argv, char **environ)
 	}
 	return (0);
 }
-
-
