@@ -1,87 +1,23 @@
-#include "environ_utils.h"
 #include "libft.h"
+#include "tmpsh.h"
+#include "cd_canon.h"
+#include "cd_finder.h"
+#include "argparser.h"
+#include "variables.h"
 
-static char		*get_oldpwd(void)
-{
-	char	*oldpwd;
+char		*g_shell_dir;
 
-	if (!(oldpwd = ft_getenv("OLDPWD")))
-		ft_dprintf(2, "cd : OLDPWD not set.\n");
-	return (oldpwd);
-}
-
-
-
-int			built_cd(char **args, char **environ)
-{
-	char	*direction;
-	char	*oldpwd;
-
-	UNUSED(environ);
-	if (ft_arraylen(args) >= 2 && ft_dprintf(2, "cd : too many arguments.\n"))
-		return (1);
-	if (*args)
-		direction = *args;
-	else
-		if (!(direction = ft_getenv("HOME")))
-			return (0);
-	if (ft_strequ(direction, "-"))
-		if (!(direction = get_oldpwd()))
-			return (1);
-	oldpwd = getcwd(NULL, 0);
-	if (chdir(direction) == -1)
-	{
-		ft_dprintf(2, "cd : Probably a right error or no such directory : %s\n",
-				direction);
-		return (1);
-	}
-	ft_setenv("OLDPWD", oldpwd);
-	ft_strdel(&oldpwd);
-	return (0);
-}
-
-static int		allowed_access(char *filename)
-{
-	if (access(filename, F_OK) == -1)
-		return (0);
-	if (access(filename, X_OK) == -1)
-		return (0);
-	return (1);
-}
-
-static char		*parse_cdpath(char *pathname)
-{
-	char	*cdpath;
-	char	**split_folders;
-	int		index;
-	char	*new_dir;
-	char	*tmp;
-
-	if (!(cdpath = ft_getenv("CDPATH")))
-		return (pathname);
-	split_folders = ft_strsplit(cdpath, ":");
-	index = 0;
-	new_dir = NULL;
-	while (split_folders[index])
-	{
-		new_dir = ft_filejoin(split_folders[index], pathname, false, false);
-		if (allowed_access(new_dir))
-			break ;
-		ft_strdel(&new_dir);
-		tmp = "./";
-		new_dir = ft_filejoin(&tmp, &new_dir, false, true);
-		if (allowed_access(new_dir))
-			break ;
-		ft_strdel(&new_dir);
-		index++;
-	}
-	free_str_array(&split_folders);
-	return (new_dir ? new_dir : ft_strdup(pathname));
-}
+/*
+** check_option:
+**
+** Verify if the user is giving valid options for cd.
+**
+** return : - true if options are valid.
+**			- false if an option is invalid.
+*/
 
 int		check_option(t_pylst *options)
 {
-	t_pylst		*parse_opt;
 	char		*select_option;
 
 	if (!options)
@@ -97,37 +33,77 @@ int		check_option(t_pylst *options)
 	return (true);
 }
 
-void	change_directory(char *directory, t_pylst *options)
-{
-	if (!allowed_access(directory))
-		return ;
+/*
+** change_directory:
+**
+** @directory: Expected new directory.
+** @is_p: true if P options is activated, false otherwise.
+**
+** Try to change the working directory to @directory.
+** On success, setup PWD and OLDPWD environnement variables,
+** according to the options.
+**
+** return : - 0 on success.
+**			- 1 if the working directory don't change.
+*/
 
+int			change_directory(char *directory, int is_p)
+{
+	char		*cwd;
+
+	if (!allowed_access(directory, true))
+		return (1);
+	if (chdir(directory) == 0)
+	{
+		ft_setenv("OLDPWD", g_shell_dir);
+		ft_strdel(&g_shell_dir);
+		if (is_p)
+		{
+			cwd = getcwd(NULL, 0);
+			ft_strdel(&directory);
+			directory = ft_strdup(cwd);
+			free(cwd);
+		}
+		ft_strdel(&g_shell_dir);
+		g_shell_dir = directory;
+		ft_setenv("PWD", g_shell_dir);
+		return (0);
+	}
+	ft_strdel(&directory);
+	return (1);
 }
+
+/*
+** built_cd:
+**
+** Builtin for the cd command. POSIX compliant.
+** Available options : -P | -L
+**
+** Allow directory research with CDPATH variable.
+** Manage symlink directories with using canonical form
+** of the directory when using chdir.
+*/
 
 int		built_cd(char **argv, char **environ)
 {
 	t_pylst		*options;
-	int			argc;
 	char		*new_dir;
+	int			status;
+	int			is_p;
 
+	UNUSED(environ);
 	options = argparser(argv);
-	argc = ft_arraylen(argv);
-	if (argc >= 2)
+	if (ft_arraylen(argv) >= 2)
 	{
 		ft_printf("cd: too much arguments\n");
 		return (free_pylst(&options, 1));
 	}
 	if (check_option(options) == false)
 		return (1);
-	if (argc == 0 && !(new_dir = ft_getenv("HOME")))
-		return (free_pylst(&options, 0));
-	new_dir = new_dir ? ft_strdup(new_dir) : NULL;
-	else if (argv[0][0] == '/')
-		new_dir = ft_strdup(argv[0]);
-	else if (ft_start_with(argv[0], ".") || ft_start_with(argv[0], ".."))
-		new_dir = ft_strdup(argv[0]);
-	else
-		new_dir = parse_cdpath(argv[0]);
-	change_directory(new_dir);
-	free_pylst(&options);
+	is_p = options && *(char *)index_pylst(options, -1)->value == 'P';
+	if (!(new_dir = find_newdir(argv[0], is_p)))
+		return (1);
+	status = change_directory(new_dir, is_p);
+	free_pylst(&options, 0);
+	return (status);
 }

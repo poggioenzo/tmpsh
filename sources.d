@@ -110,6 +110,9 @@ CONFIGURATION_SRCS := $(addprefix $(CONFIGURATION_DIR), $(CONFIGURATION_SRCS))
 BUILTINS_DIR = builtins/
 
 BUILTINS_SRCS := cd.c \
+				 cd_finder.c \
+				 cd_canon.c \
+				 cd_canon_utils.c \
 				 env.c \
 				 setenv.c \
 				 unsetenv.c \

@@ -1,12 +1,4 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/stat.h>
-#include <limits.h>
-#include <fcntl.h>
-
 #include "libft.h"
-
-char		*shell_dir;
 
 /*
 ** next_fileis:
@@ -41,7 +33,7 @@ int			next_fileis(char *relpath, char *expected_name)
 ** to keep only one separator between each filename.
 */
 
-static void		remove_double_slash(char *path)
+void		remove_double_slash(char *path)
 {
 	char	*slash;
 	int		nbr_slash;
@@ -53,7 +45,8 @@ static void		remove_double_slash(char *path)
 		while (slash[nbr_slash] && slash[nbr_slash] == '/')
 			nbr_slash++;
 		if (nbr_slash)
-			ft_memmove(slash, slash + nbr_slash, ft_strlen(slash + nbr_slash) + 1);
+			ft_memmove(slash, slash + nbr_slash, \
+					ft_strlen(slash + nbr_slash) + 1);
 		path = slash;
 	}
 }
@@ -114,7 +107,7 @@ void		remove_dot(char *absolute, char *position)
 ** or if we are on root.
 */
 
-void	reset_previous_dir(char *abspath, char **curr_file)
+void		reset_previous_dir(char *abspath, char **curr_file)
 {
 	char		*prev_file;
 	char		*dot_end;
@@ -128,7 +121,7 @@ void	reset_previous_dir(char *abspath, char **curr_file)
 		return ;
 	if (!next_fileis(prev_file, "..") || is_root)
 	{
-		if (!(dot_end = ft_strchr((*curr_file) + 1 , '/')))
+		if (!(dot_end = ft_strchr((*curr_file) + 1, '/')))
 		{
 			prev_file += is_root;
 			prev_file[0] = '\0';
@@ -136,33 +129,5 @@ void	reset_previous_dir(char *abspath, char **curr_file)
 		else
 			ft_strcpy(prev_file, dot_end);
 		*curr_file = prev_file;
-	}
-}
-
-/*
-** canonicalize:
-**
-** From an absolute path, remove .. and . whenever it's possible.
-** Edit the given path to be the absolute filename in his
-** canonical form.
-*/
-
-void		canonicalize(char *path)
-{	
-	char *prev;
-	char *curr;
-	int	 is_root;
-
-	remove_double_slash(path);
-	prev = NULL;
-	curr = path;
-	while (curr && *curr)
-	{
-		if (next_fileis(curr, "."))
-			remove_dot(path, curr);
-		else if (next_fileis(curr, ".."))
-			reset_previous_dir(path, &curr);
-		else
-			curr = ft_strchr(curr + 1, '/');
 	}
 }

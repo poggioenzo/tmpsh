@@ -86,7 +86,7 @@ t_pylst		*argparser(char **argv)
 	{
 		if (ft_start_with(argv[index], "--"))
 			store_long_arg(&option_list, argv, index--);
-		else if (argv[index][0] == '-' && ft_strlen(argv[index] > 1))
+		else if (argv[index][0] == '-' && ft_strlen(argv[index]) > 1)
 			store_short_args(&option_list, argv, index--);
 		index++;
 	}
