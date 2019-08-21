@@ -56,21 +56,30 @@ int check_forbidden_shiftreduce(pylst *tags)
 {
     int i;
     int len_tags;
-    int spaces;
     t_pylst *instack;
+    t_pylst *forbidden;
     char *key;
 
     i = 0;
-    spaces = 0;
     len_tags = len_pylst(tags);
-    while (i < )
+    forbidden = search_value(g_grammar->grammar, "FORBIDDEN")
+    while (i < len_tags + 1)
     {
         key = join_pylst(instack, " ");
         if (cond_check_forbidden_shiftreduce(key, i, instack, tags))
             return FALSE;
+        else if (i < len_tags)
+        {
+            if (!(instack) || ops_begin_with(key, forbidden))
+                push_pylst(&instack, get_value_pylst(tags, i), 0, _ptr);
+            else
+                free_pylst(&instack, 42);
+        }
         ft_strdel(&key);
+        i++;
     }
-
+    free_pylst(&instack, 42);
+    return (TRUE);
 }
 
 
@@ -81,6 +90,6 @@ void shiftreduce(t_tagstokens *tgtk)
     int forbidden;
     char *next_tag;
 
-
+    
 
 }
