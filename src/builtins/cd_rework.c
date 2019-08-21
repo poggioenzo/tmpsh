@@ -8,20 +8,38 @@
 
 char		*shell_dir;
 
+/*
+** next_fileis:
+**
+** @relpath: relative position in a path.
+** @expected_name: Filename who is expected to be the next one.
+**
+** From a given position, check if the current filename
+** is corresponding to the expected one.
+*/
 
-int			next_fileis(char *abspath, char *expected_name)
+int			next_fileis(char *relpath, char *expected_name)
 {
-	if (*abspath == '/')
-		abspath++;
-	while (*abspath && *expected_name && (*abspath == *expected_name))
+	if (*relpath == '/')
+		relpath++;
+	while (*relpath && *expected_name && (*relpath == *expected_name))
 	{
-		abspath++;
+		relpath++;
 		expected_name++;
 	}
-	if (!*expected_name && (*abspath == '/' || !*abspath))
+	if (!*expected_name && (*relpath == '/' || !*relpath))
 		return (1);
 	return (0);
 }
+
+/*
+** remove_double_slash:
+**
+** @path: path where double slash have to be removed.
+**
+** Go through an entire path and remove each duplicate / symbol,
+** to keep only one separator between each filename.
+*/
 
 static void		remove_double_slash(char *path)
 {
@@ -40,6 +58,17 @@ static void		remove_double_slash(char *path)
 	}
 }
 
+/*
+** retrieve_prev:
+**
+** @absfile: Entire filename.
+** @curr_file: Current position in absfile.
+** @prev_file: Pointer to set at the previous file.
+**
+** From a given position, retrieve the begining of the filename/component,
+** which is preceding the curr_file position.
+*/
+
 void		retrieve_prev(char *absfile, char *curr_file, char **prev_file)
 {
 	char	*finder;
@@ -53,15 +82,12 @@ void		retrieve_prev(char *absfile, char *curr_file, char **prev_file)
 	}
 }
 
-int		len_filename(char *filename)
-{
-	int		index;
-
-	index = 1;
-	while (filename[index] && filename[index] != '/')
-		index++;
-	return (index);
-}
+/*
+** remove_dot:
+**
+** When a single dot is found in the filename,
+** remove it from the file.
+*/
 
 void		remove_dot(char *absolute, char *position)
 {
@@ -70,12 +96,23 @@ void		remove_dot(char *absolute, char *position)
 	char	*to_del;
 
 	is_root = absolute == position && *absolute == '/';
-	len_dot = len_filename(position);
+	len_dot = 1;
+	while (position[len_dot] && position[len_dot] != '/')
+		len_dot++;
 	to_del = position + len_dot;
 	ft_strcpy(position, to_del);
 	if (is_root && ft_strlen(absolute) == 0)
 		ft_strcpy(absolute, "/");
 }
+
+/*
+** reset_previous_dir:
+**
+** Whenever a double dot is found, remove the previous directory
+** if it's possbile.
+** It will be remove when the previous directory is not a dot-dot
+** or if we are on root.
+*/
 
 void	reset_previous_dir(char *abspath, char **curr_file)
 {
@@ -102,7 +139,15 @@ void	reset_previous_dir(char *abspath, char **curr_file)
 	}
 }
 
-char		*canonicalize(char *path)
+/*
+** canonicalize:
+**
+** From an absolute path, remove .. and . whenever it's possible.
+** Edit the given path to be the absolute filename in his
+** canonical form.
+*/
+
+void		canonicalize(char *path)
 {	
 	char *prev;
 	char *curr;
@@ -120,36 +165,4 @@ char		*canonicalize(char *path)
 		else
 			curr = ft_strchr(curr + 1, '/');
 	}
-}
-
-int		main(int argc, char **argv)
-{
-	struct stat  info;
-	char		*cwd;
-	char		*file;
-	
-	if (argc == 2)
-	{
-		canonicalize(argv[1]);
-		ft_printf("canonique : %s\n", argv[1]);
-	}
-/*
-	shell_dir = getcwd(NULL, 0);
-	printf("CWD : %s\n", cwd);
-	if (argc == 2)
-	{
-		printf("check : %s\n", argv[1]);
-		if (lstat(argv[1], &info) == -1)
-			return (1);
-		if (S_IFDIR & info.st_mode)
-			printf("directory\n");
-		if (S_IFREG & info.st_mode)
-			printf("regular file\n");
-		if (S_IFLNK & info.st_mode)
-			printf("symlink\n");
-		int fd = open(argv[1], O_RDONLY);
-		fchdir(fd);
-		cwd = getcwd(NULL, 0);
-		printf("CWD : %s\n", cwd);
-	}*/
 }
