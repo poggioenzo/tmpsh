@@ -73,6 +73,9 @@ static void		remove_duplicate_options(t_pylst **option_list)
 ** Difference can be done between short and long option using the length
 ** of the string. A long option have at least 2 caracter, when short option
 ** have a single caracter.
+** 
+** Stop the option whenever a "--" is find.
+** Keep also the "-" argument in argv, at least for cd because of cd.
 */
 
 t_pylst		*argparser(char **argv)
