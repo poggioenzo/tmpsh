@@ -1,11 +1,39 @@
 #include "libft.h"
 #include "tmpsh.h"
 
+/*
+** error_options:
+**
+** Display an error message if there is any option.
+*/
+
 static int		error_options(t_pylst *options)
 {
 	ft_print("type: invalid option: %s\n", options->value);
 	return (free_pylst(&options, 1));
 }
+
+/*
+** built_type:
+**
+** type - write a description of command type
+**
+** Synopsis : type name [...]
+**
+** Display how name will be interpreted by the
+** shell.
+**
+** Methods:
+** - name is a builtin.
+** - name is an alias.
+** - name is cached command, in hash table.
+** - name is a command, searched with PATH.
+** - name is an executable file.
+**
+** output : - absolute filename of the command.
+**			- description of the method if no file exist.
+**			- error message.
+*/
 
 int		built_type(char **argv, char **environ)
 {

@@ -40,6 +40,7 @@ static t_bool		error_args(char **argv)
 ** Display all alias on stdout. Go trough the hash table of alias
 ** and print them in the posix format : "%s=%s\n".
 */
+
 static int		show_alias(void)
 {
 	char	*alias;
@@ -81,8 +82,7 @@ static int		set_alias(char *argument)
 /*
 ** built_alias:
 **
-** alias builtin of the shell. 
-** Create, redefine or display aliases.
+** alias - Create, redefine or display aliases.
 ** 
 ** Synopsis : alias [alias-name[=string]...]
 **

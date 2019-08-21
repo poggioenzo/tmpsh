@@ -1,5 +1,13 @@
 #include "libft.h"
 
+/*
+** built_exit:
+**
+** exit - quit the current shell process
+**
+** Synopsis : exit [n]
+*/
+
 int		built_exit(char **args, char **env)
 {
 	int		argc;

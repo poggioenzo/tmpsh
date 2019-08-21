@@ -1,6 +1,14 @@
 #include "libft.h"
 #include "tmpsh.h"
 
+/*
+** remove_all:
+**
+** Verify if we have the -a option.
+** If it's the case, empty the shell hash table of alias.
+** Display an error message if the option is invalid.
+*/
+
 static int		remove_all(t_pylst *options)
 {
 	t_pylst		*error_option;
@@ -18,6 +26,19 @@ static int		remove_all(t_pylst *options)
 	free_pylst(&options, 0);
 	return (1);
 }
+
+/*
+** built_unalias:
+**
+** unalias - remove alias definition.
+**
+** Synopsis : unalias alias-name [...]
+**			  unalias -p
+**
+** Options:
+** -p : Remove all alias definition.
+**
+*/
 
 int		built_unalias(char **argv, char **environ)
 {

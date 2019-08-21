@@ -1,6 +1,13 @@
 #include "libft.h"
 #include "tmpsh.h"
 
+/*
+** show_exported_env:
+**
+** Print to stdout each exported variable,
+** in the POSIX format.
+*/
+
 static void	show_exported_env(char **environ)
 {
 	char	*variable;
@@ -19,6 +26,14 @@ static void	show_exported_env(char **environ)
 	}
 }
 
+/*
+** manage_display:
+**
+** Check if we have the -p option.
+** In this case, display the exported environnement.
+** Display an error message if an error occur.
+*/
+
 static int		manage_display(t_pylst *options, char **environ)
 {
 	t_pylst		*invalid_opt;
@@ -29,7 +44,7 @@ static int		manage_display(t_pylst *options, char **environ)
 		{
 			invalid_opt = ft_strequ(options->value, "p") ?\
 						  options->next : options;
-			ft_printf("export: invalid option: %s\n", invalid_opt->value);
+			ft_dprintf(2, "export: invalid option: %s\n", invalid_opt->value);
 			free_pylst(&options, 0);
 			return (1);
 		}
@@ -38,6 +53,16 @@ static int		manage_display(t_pylst *options, char **environ)
 	show_exported_env(environ);
 	return (0);
 }
+
+/*
+** export_assignation:
+**
+** @argument: single assignation to export.
+**
+** Perform an export of the given variable and his value.
+** If the variable already exists in the local environnement,
+** remove it.
+*/
 
 static void export_assignation(char *argument)
 {
@@ -54,6 +79,15 @@ static void export_assignation(char *argument)
 	}
 }
 
+/*
+** export_var:
+**
+** Verify if the given variable already exist,
+** and set it to the environnement.
+** If the variable do not exist, set an empty string
+** as value.
+*/
+
 static void		export_var(char *variable)
 {
 	char	*value;
@@ -63,6 +97,19 @@ static void		export_var(char *variable)
 		value = "";
 	ft_setvar(variable, value);
 }
+
+/*
+** built_export:
+**
+** export - set variable to the environnement.
+**
+** Synopsis: export name[=word]...
+**			 export -p
+**
+** Options:
+** -p : print to stdout name and value of exported
+**		environnement.
+*/
 
 int		built_export(char **argv, char **environ)
 {
