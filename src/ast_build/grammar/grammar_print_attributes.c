@@ -28,7 +28,7 @@ void	print_opening_tags(void)
 
 	ft_printf("opening_tags:\n");
 	ft_printf("{\n");
-	while (ht_iter(g_grammar->opening_tags, &key, &value))
+	while (ht_iter(g_grammar->opening_tags, &key, (void **)&value))
 		ft_printf("    \"%s\" : \"%s\",\n", key, value);
 	ft_printf("}\n");
 }
@@ -53,7 +53,7 @@ void	print_leaf_op(void)
 
 	ft_printf("leaf_op:\n");
 	ft_printf("[");
-	while (iter_pylst(g_grammar->leaf_op, &operator))
+	while (iter_pylst(g_grammar->leaf_op, (void **)&operator))
 	{
 		ft_printf("'");
 		ft_puthidestr(operator);
@@ -69,7 +69,7 @@ void	print_dquotes_opening_tags(void)
 
 	ft_printf("dquotes_opening_tags:\n");
 	ft_printf("{");
-	while (ht_iter(g_grammar->dquotes_opening_tags, &key, &value))
+	while (ht_iter(g_grammar->dquotes_opening_tags, &key, (void **)&value))
 		ft_printf("\"%s\" : \"%s\", ", key, value);
 	ft_printf("}\n");
 }

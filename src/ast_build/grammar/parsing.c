@@ -52,7 +52,7 @@ static char		*get_keyword(const char *line)
 ** value.
 */
 
-static void		parse_keyword_values(const char **lines, int *i)
+static void		parse_keyword_values(char **lines, int *i)
 {
 	char	*keyword;
 	char	*value;
