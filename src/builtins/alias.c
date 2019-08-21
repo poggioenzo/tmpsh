@@ -94,7 +94,7 @@ static int		set_alias(char *argument)
 **    Assign the value of string to the alias alias-name.
 **
 ** If no operands are given, all alias definitions 
-** shall be written to standard output.
+** are written to standard output.
 */
 
 int		bulit_alias(char **argv, char **environ)
