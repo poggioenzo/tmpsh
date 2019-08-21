@@ -158,10 +158,22 @@ TAGSTOKENS_SRCS :=	init_tagstokens.c \
 					find_tagstokens.c \
 					check_syntax_tagstokens.c \
 					clear_stack_tagstokens.c \
-					replace_alias_tagstokens.c #skip_openning_tagstokens.c \
+					replace_alias_tagstokens.c \
+					skip_openning_tagstokens.c \
 
 
 TAGSTOKENS_SRCS := $(addprefix $(TAGSTOKENS_DIR), $(TAGSTOKENS_SRCS))
+
+
+SHIFTREDUCE_DIR = shiftreduce/
+
+SHIFTREDUCE_SRCS :=	check_forbidden_shiftreduce.c \
+					tagstokens_shiftreduce.c \
+					keyinstack_shiftreduce.c \
+
+
+
+SHIFTREDUCE_SRCS := $(addprefix $(SHIFTREDUCE_DIR), $(SHIFTREDUCE_SRCS))
 
 
 
@@ -170,6 +182,7 @@ AST_DIR = ast_build/
 AST_SRCS := $(GRAMMAR_SRCS) \
 						$(TOKENIZER_SRCS) \
 						$(TAGSTOKENS_SRCS) \
+						$(SHIFTREDUCE_SRCS) \
 
 AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS)) \
 

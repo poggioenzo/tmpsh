@@ -110,7 +110,7 @@ def tagstokens_shift_reduce(tagstokens, grammar):
         stack = check_forbidden(stack, grammar)
         if "FORBIDDEN" in stack:
             tagstokens.valid = False
-            tagstokens.token_error = 'bad syntax'
+            tagstokens.token_error = tagstokens.find_prev_token(i - 1)
             break
         if instack > -1:
             stack = reduce_all(stack, instack, grammar, next_tag)
@@ -126,9 +126,9 @@ def tagstokens_shift_reduce(tagstokens, grammar):
                 break
             i += 1
     stack = check_forbidden(stack, grammar)
-    if "FORBIDDEN" in stack:
-        tagstokens.valid = False
-        tagstokens.token_error = 'bad syntax'
+    # if "FORBIDDEN" in stack:
+    #     tagstokens.valid = False
+    #     tagstokens.token_error = 'bad syntax'
     stack = ['CMD' if elt == 'COMMAND_SH' else elt for elt in stack]
     if tagstokens.valid and len(stack) > 0 and not all(
             [elt == 'CMD'for elt in stack]):

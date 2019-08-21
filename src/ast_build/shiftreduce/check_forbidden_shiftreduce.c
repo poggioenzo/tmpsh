@@ -1,38 +1,37 @@
-
 # include "tmpsh.h"
 # include "libft.h"
 # include "globals.h"
-# include "tokenizer.h"
+# include "tokenizer_utils.h"
 # include "tagstokens.h"
 
-static t_bool cond_check_forbidden_shiftreduce(char *key, int i, t_pylst *instack, t_pylst *tags)
+static t_bool cond_check_forbidden_shiftreduce(char *key, size_t i, t_pylst *instack, t_pylst *tags)
 {
-    int index_forbidden;
-    char **str_forbidden;
+    size_t index_forbidden;
+    t_pylst *forbidden_node;
 
     if (ft_strequ("FORBIDDEN", search_value(g_grammar->reverse, key)))
     {
-        index_forbidden = len_pylst(instack);
-        str_forbidden = (char **)&get_value_pylst(tags, index_forbidden);
-        if (ft_strequ("SPACES", *str_forbidden))
-            str_forbidden = (char **)&get_value_pylst(tags, --index_forbidden);
-        *str_forbidden = "FORBIDDEN";
+        index_forbidden = i - len_pylst(instack);
+        forbidden_node = index_pylst(tags, index_forbidden);
+        if (ft_strequ("SPACES", (char *)forbidden_node->value))
+            forbidden_node = index_pylst(tags, --index_forbidden);
+        forbidden_node->value = "FORBIDDEN";
         return (TRUE);
     }
     return (FALSE);
 }
 
-int check_forbidden_shiftreduce(pylst *tags)
+int check_forbidden_shiftreduce(t_pylst *tags)
 {
-    int i;
-    int len_tags;
+    size_t i;
+    size_t len_tags;
     t_pylst *instack;
     t_pylst *forbidden;
     char *key;
 
     i = 0;
     len_tags = len_pylst(tags);
-    forbidden = search_value(g_grammar->grammar, "FORBIDDEN")
+    forbidden = search_value(g_grammar->grammar, "FORBIDDEN");
     while (i < len_tags + 1)
     {
         key = join_pylst(instack, " ");
@@ -50,16 +49,4 @@ int check_forbidden_shiftreduce(pylst *tags)
     }
     free_pylst(&instack, 42);
     return (TRUE);
-}
-
-
-void shiftreduce(t_tagstokens *tgtk)
-{
-    int i;
-    t_bool instack;
-    int forbidden;
-    char *next_tag;
-
-
-
 }

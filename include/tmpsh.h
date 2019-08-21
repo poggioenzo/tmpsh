@@ -14,6 +14,7 @@
 #ifndef TMPSH_H
 # define TMPSH_H
 
+# include <string.h>
 
 # ifndef UNUSED_VAR
 #  define UNUSED_VAR
@@ -172,7 +173,7 @@ typedef struct
 	t_bool		valid;
 	t_bool		incomplete;
 	t_bool		not_heredocs;
-	int			length;
+	size_t			length;
 	int			iter;
 }			t_tagstokens;
 
