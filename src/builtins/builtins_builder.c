@@ -3,6 +3,15 @@
 
 t_ht_table		*g_builtins;
 
+/*
+** setup_builtins:
+**
+** Allocate builtin hash table.
+** Using the hash_table with the builtin name as
+** key, and a value of type : int (*builtin)(char **, char **)
+** Store each available pointer function.
+*/
+
 void		setup_builtins(void)
 {
 	ht_new_table(&g_builtins, 17, 30);
