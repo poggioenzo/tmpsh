@@ -80,7 +80,7 @@ int			change_directory(char *directory, int is_p)
 ** Available options : -P | -L
 **
 ** Allow directory research with CDPATH variable.
-** Manage symlink directories with using canonical form
+** Manage symlink directories by using canonical form
 ** of the directory when using chdir.
 */
 
