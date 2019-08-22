@@ -15,7 +15,7 @@
 # define TMPSH_H
 
 # include <string.h>
-
+# include "libft.h"
 # ifndef UNUSED_VAR
 #  define UNUSED_VAR
 #  define UNUSED(variable)	(void) variable
@@ -108,14 +108,9 @@ enum	malloc_fail
 	MALLOC_SUCCESS = 1
 };
 
-typedef enum
-{
-	false = 0,
-	true = 1,
-}	t_bool;
 
-# define TRUE		1
-# define FALSE		0
+//# define TRUE		1
+//# define FALSE		0
 
 # define SUCCESS	1
 # define FAILURE	0
