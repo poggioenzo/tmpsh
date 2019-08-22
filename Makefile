@@ -1,7 +1,7 @@
 NAME = tmpsh
 
 CC = gcc
-CFLAGS = -g -Wall -Wextra -fsanitize=address #-pedantic#-Wconversion #  -Wall -Wextra -Werror 
+CFLAGS = -g  -Wall -Wextra -Wno-error=unused-result # -fsanitize=address #-pedantic#-Wconversion #  -Wall -Wextra -Werror 
 CPPFLAGS = $(addprefix -I , $(INCLUDES_LIST))
 
 include sources.d
