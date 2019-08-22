@@ -170,6 +170,7 @@ SHIFTREDUCE_DIR = shiftreduce/
 SHIFTREDUCE_SRCS :=	check_forbidden_shiftreduce.c \
 					tagstokens_shiftreduce.c \
 					keyinstack_shiftreduce.c \
+					reduce_all_shiftreduce.c \
 
 
 

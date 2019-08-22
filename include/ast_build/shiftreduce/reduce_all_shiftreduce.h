@@ -1,0 +1,6 @@
+#ifndef REDUCE_ALL_SHIFTREDUCE_H
+# define REDUCE_ALL_SHIFTREDUCE_H
+
+
+
+#endif
