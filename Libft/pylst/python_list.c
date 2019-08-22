@@ -556,7 +556,6 @@ char	*str_chare_pylst(t_pylst *pylst)
 
 void	print_pylst_chare(t_pylst *pylst)
 {
-  char  *value;
   int first;
 
   first = 1;
@@ -565,13 +564,5 @@ void	print_pylst_chare(t_pylst *pylst)
 	  ft_printf("Empty list.\n");
 	  return ;
   }
-  ft_printf("[");
-  while (pylst_iter(pylst, (void **)&value))
-  {
-    if (!first)
-      ft_printf(",", value);
-    ft_printf("'%s'", value);
-    first = 0;
-  }
-  ft_printf("]\n");
+  ft_printf(str_chare_pylst(pylst));
 }

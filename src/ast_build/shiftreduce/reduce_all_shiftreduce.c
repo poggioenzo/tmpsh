@@ -3,12 +3,11 @@
 # include "globals.h"
 # include "shiftreduce.h"
 
-
 static t_pylst **reduce(t_pylst **stack, int instack)
 {
     char *key;
 
-    print_pylst_chare(index_pylst(*stack, instack));
+    ft_printf(str_chare_pylst(*stack));
     key = join_pylst(index_pylst(*stack, instack), " ");
     del_portion_pylst(stack, instack, len_pylst(*stack));
     push_pylst(stack, search_value(g_grammar->reverse, key) , 0, _ptr);
