@@ -16,7 +16,7 @@ NAME = libft.a
 #################### RULES IF MAKEFILE IS RUNNING ALONE ########################
 ifeq (1, $(words MAKEFILE_LIST))
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -O2
+CFLAGS = -Wall -Wextra  -g -O2
 CPPFLAGS = $(addprefix -I , $(INCLUDES))
 INCLUDES = . hash_table
 
