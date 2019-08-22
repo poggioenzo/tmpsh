@@ -1,3 +1,5 @@
+#include <ncurses.h>
+#include <term.h>
 #include "t_caps_utils.h"
 #include "libft.h"
 #include "environ_utils.h"
