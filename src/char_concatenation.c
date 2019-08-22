@@ -97,8 +97,7 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 	t_win	window;
 	char	*newline_tmp;
 
-	if (!(shell_str = ft_strnew(0)))
-		exit(-1);
+	shell_str = ft_strnew(0);
 	*total_lines = 0;
 	screen_size(&window);
 	while (prompt_lines)
@@ -124,26 +123,9 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 }
 
 /*
-** concat_escaped_line:
-**
-** Whenever a end of t_line is esacaped, will concat the next line recursively.
-*/
-
-static void	concat_escaped_line(t_line **shell_repr, char **current_line)
-{
-	char		*new_line;
-
-	*shell_repr = (*shell_repr)->next;
-	history_formatter(shell_repr, &new_line);
-	if (!(*current_line = ft_fstrjoin(current_line, &new_line, 1, 1)))
-		exit(-1);
-}
-
-/*
 ** history_formatter:
 **
-** Format a single string in a t_char * format into a char * string.
-** Replace the \ followed by a new line into a single line.
+** Format a single line of shell_repr
 */
 
 static void		history_formatter(t_line **shell_repr, char **format)
@@ -151,27 +133,17 @@ static void		history_formatter(t_line **shell_repr, char **format)
 	int line_len;
 	int	index;
 	t_char	*char_lst;
-	int		escape;
 
 	char_lst = get_unlocked_char((*shell_repr)->chars);
 	line_len = char_lst_len(char_lst);
-	if (!(*format = (char *)MALLOC(sizeof(char) * line_len + 1)))
-		exit(-1);
+	*format = (char *)ft_memalloc(sizeof(char) * line_len + 1);
 	index = 0;
-	escape = FALSE;
-	while (char_lst && (char_lst->letter != '\\' || char_lst->next || escape))
+	while (char_lst)
 	{
-		if (char_lst->letter == '\\' && escape == FALSE)
-			escape = TRUE;
-		else
-			escape = FALSE;
-
 		(*format)[index++] = char_lst->letter;
 		char_lst = char_lst->next;
 	}
 	(*format)[index] = '\0';
-	if (char_lst)
-		concat_escaped_line(shell_repr, format);
 }
 
 /*
@@ -187,21 +159,14 @@ char			*render_shell_content(t_line *prompt_lines)
 	char	*new_line;
 	char	*newline_tmp;
 
-	if (!(shell_str = ft_strnew(0)))
-		exit(-1);
+	shell_str = ft_strnew(0);
 	while (prompt_lines)
 	{
 		history_formatter(&prompt_lines, &new_line);
-		if (!(shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1)))
-			exit(-1);
+		shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1);
 		prompt_lines = prompt_lines->next;
 		newline_tmp = "\n";
-		if (prompt_lines)
-		{
-			shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0);
-			if (!shell_str)
-				exit(-1);
-		}
+		shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0);
 	}
 	return (shell_str);
 }

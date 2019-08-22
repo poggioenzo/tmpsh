@@ -15,6 +15,7 @@
 #ifdef __linux
  #include <time.h>
 #endif
+#include "tmpsh.h"
 
 /*
 ** add_date:
@@ -81,16 +82,9 @@ char		*add_cwd(void)
 	int		len_home;
 
 	cwd_tmp = getcwd(NULL, 0);
-	cwd = NULL;
-	if (cwd_tmp)
-	{
-		cwd = ft_strdup(cwd_tmp);
-		free(cwd_tmp);
-	}
-	if (!cwd)
-		exit(-1);
+	cwd = ft_strdup(g_shell_dir);
 	home = getenv("HOME");
-	if (home && *home && cwd && ft_start_with(cwd, home))
+	if (home && cwd && ft_start_with(cwd, home))
 	{
 		len_home = ft_strlen(home);
 		ft_strmove(cwd, cwd + len_home - 1);

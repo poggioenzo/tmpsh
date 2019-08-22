@@ -42,18 +42,6 @@ LINE_UTILS_SRCS := t_line_allocation.c \
 
 LINE_UTILS_SRCS := $(addprefix $(LINE_UTILS_DIR), $(LINE_UTILS_SRCS))
 
-
-NEWLINE_UTILS := char_skip.c \
-				 line_extend.c \
-				 operand_check.c \
-				 operand_deletion.c \
-				 syntax_error.c \
-				 t_operand_allocation.c \
-				 t_operand_utils.c \
-				 get_next_char.c \
-
-NEWLINE_UTILS := $(addprefix newline_utils/, $(NEWLINE_UTILS))
-
 CLIPBOARD_UTILS := cut_functions.c
 
 CLIPBOARD_UTILS := $(addprefix clipboard_utils/, $(CLIPBOARD_UTILS))
@@ -73,7 +61,7 @@ KEYPRESS_SRCS := char_deletion.c \
 				 clipboard.c \
 				 eof.c \
 				 char_analysis.c \
-				 $(NEWLINE_UTILS) \
+                 line_extend.c \
 				 $(CLIPBOARD_UTILS) \
                  $(CURSOR_MOVEMENT_SRCS)
 
