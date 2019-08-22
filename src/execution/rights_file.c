@@ -20,7 +20,7 @@ static void	print_error(char *msg, char *to_add)
 **
 ** From a given path, verify if the file exist, or if the file
 ** is readable + executable.
-** 
+**
 ** return : - If the file have permission to be used with execve,
 **			return the path.
 **			- Return NULL if it can't be used.
@@ -75,7 +75,7 @@ static char	*find_exec(char *cmd)
 	while (index < nbr_folder && !tmp_file)
 	{
 		tmp_file = exec_folders[index];
-		if (!(tmp_file = ft_filejoin(&tmp_file, &cmd, false, false)))
+		if (!(tmp_file = ft_filejoin(&tmp_file, &cmd, FALSE, FALSE)))
 			exit(-1);
 		if (access(tmp_file, F_OK) != -1)
 			return (tmp_file);
@@ -95,7 +95,7 @@ static char	*find_exec(char *cmd)
 ** Check if cmd if already a file, or if it's a simple
 ** shell command, search in PATH the corresponding executable file.
 **
-** return: - On error, NULL if no file is existing, or if the user 
+** return: - On error, NULL if no file is existing, or if the user
 **			 have no rights on the file.
 **		   - On success, the relative or absolute file to execve,
 **			 freshly allocated.

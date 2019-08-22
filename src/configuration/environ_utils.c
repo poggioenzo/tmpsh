@@ -116,7 +116,7 @@ void	ft_setenv(char *variable, char *value)
 		g_environ[index] = format_env;
 	}
 	else
-		g_environ = ft_array_extend(g_environ, format_env, false);
+		g_environ = ft_array_extend(g_environ, format_env, FALSE);
 }
 
 /*
@@ -131,5 +131,5 @@ void	ft_unsetenv(char *variable)
 
 	index = ft_getenv_index(variable);
 	if (index >= 0)
-		ft_array_remove(g_environ, g_environ[index], true);
+		ft_array_remove(g_environ, g_environ[index], TRUE);
 }

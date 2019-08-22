@@ -23,12 +23,10 @@
 
 
 
-typedef enum
-{
-        FALSE,
-        TRUE,
-}       t_bool;
+typedef int       t_bool;
 
+# define FALSE 0
+# define TRUE 1
 
 # define ALLOC_ERROR	0
 # define ALLOC_SUCCESS	1

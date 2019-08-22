@@ -48,9 +48,9 @@ void	get_opening_tags(void)
 	{
 		opening_tags = pylst_shacpy(tmp_search);
 		if ((tmp_search = search_value(g_grammar->grammar, "QUOTES")))
-			pylst_extend(&opening_tags, tmp_search, false);
+			pylst_extend(&opening_tags, tmp_search, FALSE);
 		if ((tmp_search = search_value(g_grammar->grammar, "COMMAND_SH")))
-			pylst_extend(&opening_tags, tmp_search, false);
+			pylst_extend(&opening_tags, tmp_search, FALSE);
 		store_tags(opening_tags);
 		if (search_value(g_grammar->grammar, "QUOTES"))
 			get_dquotes_opening_tags();
@@ -73,7 +73,7 @@ void	get_abstract_terminator(void)
 		push_pylst(&abs_term_lst, "CMDAND", 0, _chare);
 		push_pylst(&abs_term_lst, "CMDOR", 0, _chare);
 		push_pylst(&abs_term_lst, "PIPE", 0, _chare);
-		pylst_extend(&abs_term_lst, (t_pylst *)tmp_search, false);
+		pylst_extend(&abs_term_lst, (t_pylst *)tmp_search, FALSE);
 		insert_value(g_grammar->grammar, "ABS_TERMINATOR", abs_term_lst, _pylst);
 	}
 }

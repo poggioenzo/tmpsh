@@ -15,7 +15,7 @@ void	update_var(char *variable, char *value, char *type, t_bool only_env)
 	char	*new_var;
 
 	saved_var = ft_getenv(variable);
-	if (saved_var || only_env == true)
+	if (saved_var || only_env == TRUE)
 	{
 		if (!saved_var)
 			saved_var = "";
@@ -176,8 +176,3 @@ void	replace_variable(t_acb *branch)
 		index++;
 	}
 }
-
-
-
-
-
