@@ -37,8 +37,7 @@ static void	shell_grammar_init(void)
 
 void	grammar_init(char *path)
 {
-	if (!(g_grammar = (t_grammar *)ft_memalloc(sizeof(t_grammar))))
-		exit(-1);
+	g_grammar = (t_grammar *)ft_memalloc(sizeof(t_grammar));
 	g_grammar->path = path;
 	ht_new_table(&g_grammar->grammar, 63, 40);
 	ht_new_table(&g_grammar->reverse, 63, 40);
