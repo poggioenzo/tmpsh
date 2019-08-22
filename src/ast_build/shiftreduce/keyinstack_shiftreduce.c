@@ -11,10 +11,10 @@ t_bool revkeyinstack(t_pylst *stack)
 
     ret = FALSE;
     len_stack = len_pylst(stack);
-    while (--len_stack > -1 && !ret)
+    while (len_stack-- && !ret)
     {
         key = join_pylst(stack, " ");
-        if (ops_begin_with(key ,g_grammar->reverse))
+        if (search_value(g_grammar->reverse, key))
             ret = TRUE;
         ft_strdel(&key);
     }
@@ -32,7 +32,7 @@ static char *get_extend_key(char *key, char *next_tag)
         str = ft_strjoin(key, " ");
         ft_strdel(&key);
     }
-    return (ft_strjoin(str, next_tag))
+    return (ft_strjoin(str, next_tag));
 }
 
 
@@ -42,26 +42,25 @@ int     keyinstack(t_pylst *stack, char *next_tag)
     char    *key;
     char    *extend_key;
     int     i;
-    t_pylst *cp_stack;
 
     i = 0;
     extend_key = NULL;
-    // iterator pylst
-    while ((size_t) i < len_stack)
+    len_stack = len_pylst(stack);
+
+    while (stack)
     {
-        cp_stack = NULL;
-        key = join_pylst();
-        free_pylst(cp_stack);
+        key = join_pylst(stack, " ");
         extend_key = get_extend_key(key, next_tag);
         if (search_value(g_grammar->grammar, key))
         {
-            if (search_value(g_grammar->grammar, extend_key))
+            if (!search_value(g_grammar->grammar, extend_key))
                 break ;
             return (i);
         }
         ft_strdel(&key);
         ft_strdel(&extend_key);
         i++;
+        stack = stack->next;
     }
     return (-1);
 }
