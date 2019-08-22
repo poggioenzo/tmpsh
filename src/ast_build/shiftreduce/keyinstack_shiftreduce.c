@@ -21,7 +21,7 @@ t_bool revkeyinstack(t_pylst *stack)
     return ret;
 }
 
-static char *get_extend_key(char *key, char *next_tag)
+static char *get_ext_key(char *key, char *next_tag)
 {
 
     char *str;
@@ -40,25 +40,28 @@ int     keyinstack(t_pylst *stack, char *next_tag)
 {
     size_t  len_stack;
     char    *key;
-    char    *extend_key;
+    char    *ext_key;
     int     i;
+    t_pylst *cpstack;
 
     i = 0;
-    extend_key = NULL;
     len_stack = len_pylst(stack);
-
     while (stack)
     {
-        key = join_pylst(stack, " ");
-        extend_key = get_extend_key(key, next_tag);
+        cpstack = slice_pylst(stack, i, len_stack);
+        key = join_pylst(cpstack, " ");
+        ext_key = get_ext_key(key, next_tag);
+        ft_printf("%s \n",key);
+        ft_printf("%s \n",ext_key);
+        ft_printf("%p \n",search_value(g_grammar->grammar, key));
         if (search_value(g_grammar->grammar, key))
         {
-            if (!search_value(g_grammar->grammar, extend_key))
+            ft_printf("%p \n",search_value(g_grammar->grammar, ext_key));
+            if (search_value(g_grammar->grammar, ext_key))
                 break ;
             return (i);
         }
-        ft_strdel(&key);
-        ft_strdel(&extend_key);
+        free_pylst(&cpstack, ft_strdel_out(&ext_key, ft_strdel_out(&key, 0)));
         i++;
         stack = stack->next;
     }

@@ -236,10 +236,10 @@ char	*join_pylst(t_pylst *pylst, char *substr)
 	while (pylst)
 	{
 		py_str = pylst->value;
-		if (!(concat_str = ft_fstrjoin(&concat_str, &py_str, TRUE, FALSE)))
+		if (py_str && !(concat_str = ft_fstrjoin(&concat_str, &py_str, TRUE, FALSE)))
 			exit(-1);
 		pylst = pylst->next;
-		if (pylst)
+		if (py_str && pylst)
 		{
 			if (!(concat_str = ft_fstrjoin(&concat_str, &substr, TRUE, FALSE)))
 				exit(-1);
@@ -525,7 +525,7 @@ char	*str_chare_pylst(t_pylst *pylst)
 	char 	*value;
 
 	len = 3;
-	while (pylst_iter(pylst, (void **)&value))
+	while (pylst_iter(pylst, (void **)&value) && value)
 		len += ft_strlen(value) + 3;
 	str = (char *)ft_memalloc((len + 1) * sizeof(char));
 	len = 0;
@@ -562,7 +562,7 @@ void	print_pylst_chare(t_pylst *pylst)
   first = 1;
   if (!(pylst))
   {
-	  ft_printf("Empty list.");
+	  ft_printf("Empty list.\n");
 	  return ;
   }
   ft_printf("[");

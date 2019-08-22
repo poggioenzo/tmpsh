@@ -44,5 +44,5 @@ void	grammar_init(char *path)
 	get_grammar_from_path();
 	get_reverse_grammar();
 	shell_grammar_init();
-	// show_grammar_global();
+	show_grammar_global();
 }

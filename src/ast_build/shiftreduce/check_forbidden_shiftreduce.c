@@ -21,7 +21,7 @@ static t_bool cond_check_forbidden_shiftreduce(char *key, size_t i, t_pylst *ins
     return (FALSE);
 }
 
-int check_forbidden_shiftreduce(t_pylst *tags)
+t_bool check_forbidden_shiftreduce(t_pylst *tags)
 {
     size_t i;
     size_t len_tags;
@@ -32,11 +32,15 @@ int check_forbidden_shiftreduce(t_pylst *tags)
     i = 0;
     len_tags = len_pylst(tags);
     forbidden = search_value(g_grammar->grammar, "FORBIDDEN");
+    instack = NULL;
     while (i < len_tags + 1)
     {
         key = join_pylst(instack, " ");
         if (cond_check_forbidden_shiftreduce(key, i, instack, tags))
-            return FALSE;
+        {
+            ft_printf("LOL\n");
+            return (FALSE);
+        }
         else if (i < len_tags)
         {
             if (!(instack) || ops_begin_with(key, forbidden))
@@ -47,6 +51,5 @@ int check_forbidden_shiftreduce(t_pylst *tags)
         ft_strdel(&key);
         i++;
     }
-    free_pylst(&instack, 42);
-    return (TRUE);
+    return (free_pylst(&instack, TRUE));
 }
