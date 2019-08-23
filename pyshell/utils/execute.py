@@ -248,6 +248,8 @@ class Executor:
         final_tokens = []
         for token in tokens:
             final_tokens.extend([token, " "])
+        del final_tokens[-1]
+        del statements[-1]
         tagstokens.tokens[index:index+1] = final_tokens
         tagstokens.tags[index:index+1] = statements
         tagstokens.update_length()
