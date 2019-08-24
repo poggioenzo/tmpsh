@@ -21,6 +21,13 @@
 #  define UNUSED(variable)	(void) variable
 # endif
 
+# include "styles.h"
+
+# define DF ft_printf(PURPLE"%s\n"WHITE, __func__)
+# define DFE ft_printf(YELLOW"%s\n"WHITE, __func__)
+# define DFT ft_printf(GREEN"%s\n"WHITE, __func__)
+# define DFF ft_printf(RED"%s\n"WHITE, __func__)
+# define DFB ft_printf(BLUE"%s\n"WHITE, __func__)
 
 # ifndef NULL
 #  define NULL (void *) 0
