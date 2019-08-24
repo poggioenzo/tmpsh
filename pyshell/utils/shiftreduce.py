@@ -106,12 +106,13 @@ def tagstokens_shift_reduce(tagstokens, grammar):
 
     tagstokens.tags = check_forbidden(tagstokens.tags, grammar)
     while i <= len_tags:
-        instack = keyinstack(stack, grammar, next_tag)
         stack = check_forbidden(stack, grammar)
         if "FORBIDDEN" in stack:
             tagstokens.valid = False
             tagstokens.token_error = tagstokens.find_prev_token(i - 1)
             break
+        next_tag = tagstokens.tags[i] if i < len_tags else ""
+        instack = keyinstack(stack, grammar, next_tag)
         if instack > -1:
             stack = reduce_all(stack, instack, grammar, next_tag)
         else:
