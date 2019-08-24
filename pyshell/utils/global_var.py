@@ -25,6 +25,7 @@ HEREDOCS = []
 
 
 JOBS = None
+HASH = {}
 
 with open("/dev/tty") as term:
     TCSETTINGS = termios.tcgetattr(term.fileno())

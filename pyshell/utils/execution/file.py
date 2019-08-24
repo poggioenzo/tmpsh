@@ -2,6 +2,8 @@
 
 import os
 import sys
+from utils.builtins.hash import HashExec
+import utils.global_var as gv
 
 def read_fd(fd):
     """
@@ -23,7 +25,6 @@ def check_rights(cmd):
     Check permission + file existence.
     """
     if os.access(cmd, os.F_OK) == False:
-        #print(f"tmpsh: No such file or directory : {cmd}", file=sys.stderr)
         print("tmpsh: No such file or directory : {}".format(cmd), file=sys.stderr)
         return None
     if os.access(cmd, os.X_OK) is False or os.access(cmd, os.R_OK) is False:
@@ -38,13 +39,19 @@ def get_execname(cmd):
     Check if the given command can be run, display the appropriate
     error message otherwise.
     """
-    cmd = cmd#.strip() # ! Get space in STMT with PIPE
+    if cmd in gv.HASH:
+        gv.HASH[cmd].count += 1
+        return check_rights(gv.HASH[cmd].exec_file)
+    if cmd in ["jobs", "fg", "bg", "cd", "umask", "exit", "hash"]:
+        return cmd
     if "/" in cmd:
         return check_rights(cmd)
     exec_folders = os.environ["PATH"]
     for folder in exec_folders.split(":"):
         execname = os.path.join(folder, cmd)
         if os.path.isfile(execname):
+            gv.HASH[cmd] = HashExec(execname)
+            gv.HASH[cmd].count += 1
             return check_rights(execname)
     print("tmpsh: command not found: {}".format(cmd), file=sys.stderr)
     return None

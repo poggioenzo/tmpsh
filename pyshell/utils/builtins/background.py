@@ -42,7 +42,6 @@ def jobs(argv, environ):
             else:
                 print("jobs: No such job '{}'".format(argument))
                 return 1
-
     else:
         for index, job in enumerate(gv.JOBS.list_jobs):
             diplay_job(job, p_flag, l_flag)
