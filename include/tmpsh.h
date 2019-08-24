@@ -147,6 +147,7 @@ typedef struct
 	char *path;
 	t_ht_table	*grammar;
 	t_ht_table	*reverse;
+	t_pylst		*reverse_list;
 	char		*spaces;
 	char		*escape;
 	t_ht_table	*opening_tags;
