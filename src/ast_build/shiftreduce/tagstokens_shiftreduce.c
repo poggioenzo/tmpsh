@@ -9,8 +9,15 @@
 
 static t_bool find_error(t_tagstokens *tgtk, int i)
 {
+    char *tag;
+    char *tok;
+
     tgtk->valid = FALSE;
-    tgtk->token_error = ft_strdup(find_prev_token(tgtk, i, TRUE));
+    while (iter_tagstokens(tgtk, &tok, &tag))
+        if (ft_strequ(tag, "FORBIDDEN"))
+            tgtk->token_error = ft_strdup(tok);
+    if (!(tgtk->token_error))
+        tgtk->token_error = ft_strdup(find_prev_token(tgtk, i, TRUE));
     return (TRUE);
 }
 
