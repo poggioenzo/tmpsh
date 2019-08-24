@@ -76,6 +76,7 @@ def analyse_job_status(job_list, mode=os.WUNTRACED):
             return state
         job.status = status
         if state == WaitState.RUNNING:
+            job.running = False
             return WaitState.RUNNING
         job.complete = True
         index -= 1
@@ -89,7 +90,7 @@ class BackgroundJobs:
     def add_job(self, new_job):
         """Add a new process in the background process group"""
         self.list_jobs.append(new_job.copy())
-        print("[{}] {}".format(len(self.list_jobs), new_job[-1].pid))
+        print("[{}] {}".format(len(self.list_jobs) - 1, new_job[-1].pid))
 
     def __iter__(self):
         self._index = 0
@@ -109,10 +110,15 @@ class BackgroundJobs:
         already finish.
         """
         job = self.list_jobs[index]
-        return analyse_job_status(job, mode=os.WNOHANG)
+        return analyse_job_status(job, mode=os.WNOHANG|os.WUNTRACED)
 
     def remove(self, index):
         self.list_jobs.pop(index)
+
+    def get_job(self, index):
+        if len(self.list_jobs) - 1 < index:
+            return None
+        return self.list_jobs[index]
 
     def clear(self):
         self.list_jobs.clear()
@@ -149,6 +155,7 @@ class BackgroundJobs:
         #Check which jobs is over by waiting all of them
         #Add all of those who need to be removed in index_to_del list.
         while index < nbr_job:
+
             if self.is_running(index) == WaitState.FINISH:
                 job = self.list_jobs[index]
                 index_to_del.append(index)

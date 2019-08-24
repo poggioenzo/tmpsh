@@ -41,6 +41,7 @@ class Executor:
 
     def __init__(self, ast):
         ast.get_command()
+        gv.JOBS.wait_zombie()
         self.run_ast(ast)
 
     def run_ast(self, ast):
@@ -73,7 +74,6 @@ class Executor:
             self.close_subast_pipe(branch)
             self.analyse_branch_result(branch, job_list)
             index += 1
-        gv.JOBS.wait_zombie()
 
     ##################################################################
     ##                  Utils for self.run_ast                      ##
@@ -337,6 +337,7 @@ class Executor:
                 else:
                     pid = self.run_subshell(branch, subast)
                     branch.pid = pid
+                    branch.running = True
                 return True
             index += 1
         return False

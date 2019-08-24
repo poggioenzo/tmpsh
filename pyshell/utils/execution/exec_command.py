@@ -72,6 +72,7 @@ def child_execution(branch, argv, variables):
         os.execve(executable, argv, gv.ENVIRON)
     else:
         fd.close_fds([branch.stdin, branch.stdout, -1])
+        branch.running = True
         return pid
 
 def exec_command(branch):
