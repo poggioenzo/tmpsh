@@ -233,10 +233,31 @@ class Executor:
                 self.prepare_cmd_subst(subast.list_branch[0])
             index += 1
 
-    def replace_subast(self, branch, change_index, content):
+    def replace_cmdsubst1(self, content, tagstokens, index):
+        """
+        Insert CMDSUBST1 elements inside a tagstokens.
+        Split element by IFS caracters.
+        Replace each IFS caracters by one of them, and split all.
+        Insert tokens list to be mutliple STMT separated by
+        spaces.
+        """
+        replacer = lambda letter: " " if letter in "\n\t " else letter
+        tokens = "".join(list(map(replacer, content)))
+        tokens = [token for token in tokens.split(" ") if token != ""]
+        statements = ["STMT", "SPACES"] * len(tokens)
+        final_tokens = []
+        for token in tokens:
+            final_tokens.extend([token, " "])
+        del final_tokens[-1]
+        del statements[-1]
+        tagstokens.tokens[index:index+1] = final_tokens
+        tagstokens.tags[index:index+1] = statements
+        tagstokens.update_length()
+
+    def replace_subast(self, branch, change_index, content, type_ast):
         """
         Replace in a branch the content given by a subast with
-        a CMDSUBT[123].
+        a CMDSUBT[123], QUOTE or DQUOTES.
         Try to replace this content in the tagstokens list of the branch,
         or replace in the filedescriptor list if it's not found.
         """
@@ -245,8 +266,11 @@ class Executor:
             tag = branch.tagstokens.tags[index]
             token = branch.tagstokens.tokens[index]
             if tag == "SUBAST" and int(token) == change_index:
-                branch.tagstokens.tokens[index] = content
-                branch.tagstokens.tags[index] = "STMT"
+                if type_ast == "CMDSUBST1":
+                    self.replace_cmdsubst1(content, branch.tagstokens, index)
+                else:
+                    branch.tagstokens.tokens[index] = content
+                    branch.tagstokens.tags[index] = "STMT"
                 return None
             index += 1
         # If this point is reached, try to replace subast for filedescriptor
@@ -288,7 +312,7 @@ class Executor:
                 content = "".join(subast.list_branch[0].tagstokens.tokens)
             if subast.type in ["BRACEPARAM", "CMDSUBST1", "CMDSUBST2", "CMDSUBST3", "QUOTE",
                                "DQUOTES"]:
-                self.replace_subast(branch, index, content)
+                self.replace_subast(branch, index, content, subast.type)
             index += 1
 
     ##################################################################
