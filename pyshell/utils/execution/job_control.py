@@ -59,88 +59,119 @@ def wait_subast(job_branch, mode):
 
 
 
-def analyse_job_status(job_list, mode=os.WUNTRACED):
+def analyse_job_status(job_branches, mode=os.WUNTRACED):
     """
     Whenever a child die, behave properly to store information,
     manage background process.
     """
-    index = len(job_list) - 1
+    index = len(job_branches) - 1
     while index >= 0:
-        job = job_list[index]
-        if job.complete or job.pid is None:
+        branch = job_branches[index]
+        if branch.complete or branch.pid is None:
             index -= 1
             continue
-        wait_subast(job, mode)
-        status, state = waitpid_layer(job.pid, mode)
+        wait_subast(branch, mode)
+        status, state = waitpid_layer(branch.pid, mode)
         if status == 0 and state == WaitState.RUNNING:
             return state
-        job.status = status
+        branch.status = status
         if state == WaitState.RUNNING:
-            job.running = False
+            branch.running = False
             return WaitState.RUNNING
-        job.complete = True
+        branch.complete = True
         index -= 1
     return WaitState.FINISH
+
+class Job:
+    def __init__(self, job_branches, job_number):
+        self.branches = job_branches.copy()
+        self.number = job_number
+        self.pgid = job_branches[0].pgid
+        self.command = job_branches[-1].command
+
+    @classmethod
+    def create_new_index(cls, job_list):
+        nbr_jobs = len(job_list)
+        index = 0
+        while index < nbr_jobs:
+            job = job_list[index]
+            if job.number > index:
+                return index
+            index += 1
+        return index
+
+    @classmethod
+    def sort_jobs(cls, job_list):
+        sort_fct = lambda job : job.number
+        job_list.sort(key=sort_fct)
+
 
 class BackgroundJobs:
     def __init__(self):
         self.list_jobs = []
         self.allow_background = True
 
-    def add_job(self, new_job):
+    def add_job(self, job_branches):
         """Add a new process in the background process group"""
-        self.list_jobs.append(new_job.copy())
-        print("[{}] {}".format(len(self.list_jobs) - 1, new_job[-1].pid))
-
-    def __iter__(self):
-        self._index = 0
-        return iter(self.list_jobs)
-
-    def __next__(self):
-        jobs = self.list_jobs[self._index]
-        self._index += 1
-        return jobs
+        job_index = Job.create_new_index(self.list_jobs)
+        new_job = Job(job_branches, job_index)
+        self.list_jobs.append(new_job)
+        Job.sort_jobs(self.list_jobs)
+        print("[{}] {}".format(job_index, job_branches[0].pgid))
 
     def __str__(self):
         return str(self.list_jobs)
 
-    def is_running(self, index):
+    def is_running(self, job_id):
         """
         Check if any process in the job is still running or if it's 
         already finish.
         """
-        job = self.list_jobs[index]
-        return analyse_job_status(job, mode=os.WNOHANG|os.WUNTRACED)
+        job = self.get_job(job_id)
+        return analyse_job_status(job.branches, mode=os.WNOHANG|os.WUNTRACED)
 
-    def remove(self, index):
-        self.list_jobs.pop(index)
+    def remove(self, job_id):
+        nbr_jobs = len(self.list_jobs)
+        index = 0
+        while index < nbr_jobs:
+            job = self.list_jobs[index]
+            if job.number == job_id:
+                self.list_jobs.pop(index)
+                return
+            index += 1
 
-    def get_job(self, index):
-        if len(self.list_jobs) - 1 < index:
-            return None
-        return self.list_jobs[index]
+    def get_job(self, job_id):
+        nbr_jobs = len(self.list_jobs)
+        index = 0
+        while index < nbr_jobs:
+            job = self.list_jobs[index]
+            if job.number == job_id:
+                return job
+            index += 1
+        return None
 
     def clear(self):
         self.list_jobs.clear()
 
-    def relaunch(self, index):
+    def relaunch(self, job_id):
         """
         Push a job in foreground and send him SIGCONT.
         Keep it in the background job list if it's suspended.
         """
-        if self.is_running(index) == WaitState.FINISH:
+        if self.is_running(job_id) == WaitState.FINISH:
             print("tmpsh: fg: job has terminated")
-            self.remove(index)
+            self.remove(job_id)
             return
-        job = self.list_jobs[index]
-        foreground_pgid = job[0].pgid
-        fg.set_foreground(foreground_pgid)
-        os.kill(-foreground_pgid, signal.SIGCONT)
-        if analyse_job_status(job) == WaitState.FINISH:
-            self.remove(index)
-            print("[{}] + {} continued".format(index, job[-1].pid))
+        job = self.get_job(job_id)
+        fg.set_foreground(job.pgid)
+        os.kill(-job.pgid, signal.SIGCONT)
+        job.branches[0].running = True
+        print(job.command)
+        if analyse_job_status(job.branches) == WaitState.FINISH:
+            self.remove(job_id)
+            print("[{}] + {} continued".format(job_id, job.pgid))
         else:
-            print("[{}] + Suspended.".format(index))
+            print("[{}] + Suspended.".format(job_id))
         fg.set_foreground(os.getpgrp())
         fg.restore_tcattr()
 
@@ -151,22 +182,11 @@ class BackgroundJobs:
         """
         index = 0
         nbr_job = len(self.list_jobs)
-        index_to_del = []
-        #Check which jobs is over by waiting all of them
-        #Add all of those who need to be removed in index_to_del list.
         while index < nbr_job:
-
-            if self.is_running(index) == WaitState.FINISH:
-                job = self.list_jobs[index]
-                index_to_del.append(index)
-                print("[{}] + Done {}".format(index, job[-1].command))
+            job = self.list_jobs[index]
+            if self.is_running(job.number) == WaitState.FINISH:
+                print("[{}] + Done {}".format(job.number, job.command))
+                self.remove(job.number)
+                nbr_job -= 1
+                index -= 1
             index += 1
-
-        #Finally, remove from our joblist those which are over.
-        index = 0
-        nbr_deletion = len(index_to_del)
-        while index < nbr_deletion:
-            deletion_index = index_to_del[index]
-            del self.list_jobs[deletion_index - index]
-            index += 1
-

@@ -56,7 +56,7 @@ def child_execution(branch, argv, variables):
     Setup redirection and change stdin/stdout as needed by any kind of pipe.
     Setup list of variables as environnement variables.
     """
-    if argv[0] in ["jobs", "fg", "cd", "umask", "exit"]:
+    if argv[0] in ["jobs", "fg", "bg", "cd", "umask", "exit"]:
         branch.status = run_builtin(argv, variables)
         return None
     pid = forker.fork_prepare(branch.pgid, branch.background)
