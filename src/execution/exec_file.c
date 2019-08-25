@@ -28,6 +28,36 @@ static char		*check_rights(char *cmd)
 	return (cmd);
 }
 
+char	*parse_path(char *command)
+{
+	char	**folders;
+	int		index;
+	char	*execname;
+	t_hash_exec	*cache;
+
+
+	if (ft_getenv("PATH"))
+	{
+		folders = ft_strsplit(ft_getenv("PATH"), ":");
+		index = 0;
+		while (folders[index])
+		{
+			execname = ft_filejoin(folders + index++, &command, false, false);
+			if (access(execname, F_OK) != -1)
+			{
+				cache = hash_exec_init(execname);
+				insert_value(g_hash, command, cache, _ptr);//Use _t_hash_exec
+				cache->count++;
+				free_str_array(&folders, 0);
+				return (check_rights(execname));
+			}
+			ft_strdel(&execname);
+		}
+		free_str_array(&folders, 0);
+	}
+	return (NULL);
+}
+
 /*
 ** get_execname:
 **
@@ -39,29 +69,18 @@ static char		*check_rights(char *cmd)
 
 char			*get_execname(char *command)
 {
-	char	*path_env;
-	char	**folders;
-	int		index;
-	char	*execname;
+	t_hash_exec		*cache;
 
-	if (ft_strchr(command, '/'))
-		return (check_rights(ft_strdup(command)));
-	if ((path_env = ft_getenv("PATH")))
+	if ((cache = search_value(g_hash, command)))
 	{
-		folders = ft_strsplit(path_env, ":");
-		index = 0;
-		while (folders[index])
-		{
-			execname = ft_filejoin(folders + index++, &command, false, false);
-			if (access(execname, F_OK) != -1)
-			{
-				free_str_array(&folders, 0);
-				return (check_rights(execname));
-			}
-			ft_strdel(&execname);
-		}
-		free_str_array(&folders, 0);
+		cache->count++;
+		return (ft_strdup(cache->exec_file));
 	}
-	ft_dprintf(STDERR_FILENO, "tmpsh: command not found: %s\n", command);
-	return (NULL);
+	else if (search_value(g_builtins, command))
+		return (ft_strdup(command));
+	else if (ft_strchr(command, '/'))
+		return (check_rights(ft_strdup(command)));
+	else if (!(execname = parse_path(command)))
+		ft_dprintf(STDERR_FILENO, "tmpsh: command not found: %s\n", command);
+	return (execname);
 }

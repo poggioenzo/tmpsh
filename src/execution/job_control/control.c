@@ -94,16 +94,16 @@ static enum e_waitstate	wait_subast(t_acb *job_branch, int mode)
 ** Will care about wait each child process only a single time, to avoid zombie.
 */
 
-enum e_waitstate		analyse_job_status(t_pylst *job, int mode)
+enum e_waitstate		analyse_job_status(t_pylst *job_branches, int mode)
 {
 	int		index;
 	t_acb	*branch;
 	int		status[2];
 
-	index = len_pylst(job) - 1;
+	index = len_pylst(job_branches) - 1;
 	while (index >= 0)
 	{
-		branch = (t_acb *)index_pylst(job, index)->value;
+		branch = (t_acb *)index_pylst(job_branches, index)->value;
 		if (branch->complete || branch->pid == -1)
 		{
 			index--;

@@ -249,6 +249,12 @@ typedef struct
 	t_bool		allow_background;
 }	t_background_job;
 
+typedef struct
+{
+	char	*exec_file;
+	int		count;
+}	t_hash_exec;
+
 /*
 ** Debug functions
 */

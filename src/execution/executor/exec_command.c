@@ -68,7 +68,8 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	pid_t		pid;
 	char		*executable;
 
-	if (search_value(g_builtins, argv[0]))
+	executable = get_execname(argv[0]);
+	if (executable && ft_strchr(executable, "/"))
 	{
 		branch->status = run_builtin(argv, variables);
 		return (-1);
@@ -80,7 +81,6 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 		replace_std_fd(branch->stdin, branch->stdout);
 		setup_redirection(branch);
 		variables_config(variables, true);
-		executable = get_execname(argv[0]);
 		if (!executable)
 			exit(127);
 		if (execve(executable, argv, g_environ) == -1)
