@@ -23,6 +23,17 @@ static t_bool cond_check_forbidden_shiftreduce(char *key, size_t i,\
     return (FALSE);
 }
 
+/*
+** check_forbidden_shiftreduce:
+**
+** Params:
+** @tags: list or stack of tags to check.
+**
+** Find forbidden pattern in a list of tags.
+** The first tag composing the forbidden pattern is change
+** to forbidden.
+*/
+
 t_bool check_forbidden_shiftreduce(t_pylst *tags)
 {
     size_t i;

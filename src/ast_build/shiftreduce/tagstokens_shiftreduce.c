@@ -38,6 +38,20 @@ static t_bool append_stack(t_tagstokens *tgtk, char *next_tag, size_t i)
     return (ret);
 }
 
+/*
+** tagstokens_shiftreduce:
+**
+** Params:
+** @tgtk: Actual tagstokens.
+**
+** Make coffee function.
+** First check if forbidden pattern in tags, to avoid useless shiftreduce.
+** Then check if we can reduce the stack if we can't try to append th next
+** tag. At every iteration forbidden pattern are checked. If forbidden pattern
+** is found or if key patten in stack is not in the reverse grammar then
+** the token error is duplicate in tgtk->token_error. If so validity is False.
+** At the en if the stack is not empty the tagstokens is set as incomplete.
+*/
 
 void tagstokens_shiftreduce(t_tagstokens *tgtk)
 {
@@ -55,9 +69,7 @@ void tagstokens_shiftreduce(t_tagstokens *tgtk)
              break ;
         next_tag = (i < tgtk->length) ? get_value_pylst(tgtk->tags, i) : "";
         if ((instack = keyinstack(tgtk->stack, next_tag)) > -1)
-        {
             tgtk->stack = reduce_all(&tgtk->stack, instack, next_tag);
-        }
         else if (!(append_stack(tgtk, next_tag, i)) || !(++i))
             break ;
     }

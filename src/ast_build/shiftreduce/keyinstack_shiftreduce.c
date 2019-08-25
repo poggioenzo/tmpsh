@@ -3,6 +3,17 @@
 # include "globals.h"
 # include "tokenizer_utils.h"
 
+/*
+** revkeyinstack:
+**
+** Params:
+** @stack: actual list of tags composing the stack.
+**
+** Return True if the pattern which is create in stack is syntaxic.
+** Else return False.
+** Tell us if we can append a new tag.
+*/
+
 t_bool revkeyinstack(t_pylst *stack)
 {
     size_t  len_stack;
@@ -27,6 +38,7 @@ t_bool revkeyinstack(t_pylst *stack)
     return ret;
 }
 
+
 static char *get_ext_key(char *key, char *next_tag)
 {
     char *str;
@@ -40,6 +52,17 @@ static char *get_ext_key(char *key, char *next_tag)
     return (ft_strjoin(str, next_tag));
 }
 
+/*
+** keyinstack:
+**
+** Params:
+** @stack: actual list of tags composing the stack.
+** @next_tag: next tag which will may append to stack.
+**
+** Return the length of the reducable tags in the stack.
+** If the next tag form a longer key -1 is return.
+** If there is no pattern key finded -1 is return.
+*/
 
 int     keyinstack(t_pylst *stack, char *next_tag)
 {

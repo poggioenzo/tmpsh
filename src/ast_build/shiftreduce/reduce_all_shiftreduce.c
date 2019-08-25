@@ -15,6 +15,19 @@ static t_pylst **reduce(t_pylst **stack, int instack)
 
 }
 
+/*
+** reduce_all:
+**
+** Params:
+** @stack: actual list of tags composing the stack.
+** @instack: length of the reducable pattern.
+** @next_tag: next tag which will may append to stack.
+**
+** Return the reduced stack. Transformed pattern values
+** in pattern keys. While it's possible to transformed
+** pattern instead of instack it's transformed.
+*/
+
 t_pylst *reduce_all(t_pylst **stack, int instack, char *next_tag)
 {
     while (instack > -1)
