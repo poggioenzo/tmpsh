@@ -6,6 +6,7 @@
 
 #include "tagstokens.h"
 #include "grammar_init.h"
+#include "ast.h"
 
 #include "libft.h"
 #include "builtins.h"
@@ -16,6 +17,7 @@ int		main(int argc, char **argv)//char **environ)
 	char	*grammar_file = "/pyshell/grammar/grammar.txt";
 	char	*cwd;
 	t_tagstokens *tgtk;
+	t_ast *ast;
 
 	if (argc != 2)
 	{
@@ -30,8 +32,8 @@ int		main(int argc, char **argv)//char **environ)
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
 	input_init_tagstokens(&tgtk, argv[1]);
-	print_tagstokens(tgtk);
-
+	// print_tagstokens(tgtk);
+	ast = init_ast(tgtk);
 	free_tagstokens(&tgtk, TRUE);
 	return (0);
 }

@@ -177,6 +177,16 @@ SHIFTREDUCE_SRCS :=	check_forbidden_shiftreduce.c \
 SHIFTREDUCE_SRCS := $(addprefix $(SHIFTREDUCE_DIR), $(SHIFTREDUCE_SRCS))
 
 
+ASTSRC_DIR = ast/
+
+ASTSRC_SRCS :=	free_ast.c \
+				init_ast.c \
+				split_branch_ast.c \
+
+
+ASTSRC_SRCS := $(addprefix $(ASTSRC_DIR), $(ASTSRC_SRCS))
+
+
 
 AST_DIR = ast_build/
 
@@ -184,6 +194,7 @@ AST_SRCS := $(GRAMMAR_SRCS) \
 						$(TOKENIZER_SRCS) \
 						$(TAGSTOKENS_SRCS) \
 						$(SHIFTREDUCE_SRCS) \
+						$(ASTSRC_SRCS) \
 
 AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS)) \
 
