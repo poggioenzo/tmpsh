@@ -75,6 +75,7 @@ SRCS = ft_atoi.c \
 	   ft_isprint.c \
 	   ft_isspace.c \
 	   ft_istrcmp.c \
+	   digitstr.c \
 	   ft_itoa.c \
 	   ft_lltoa.c \
 	   ft_itoabase.c \

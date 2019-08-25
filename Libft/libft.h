@@ -205,6 +205,7 @@ int				ft_isascii(int c);
 int				ft_isprint(int c);
 int				ft_isspace(int c);
 int				ft_incharset(char c, const char *charset);
+int				digitstr(char *str);
 
 /*
 ** Memory functions
