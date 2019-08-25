@@ -200,6 +200,7 @@ typedef struct
 	pid_t			pid;
 	pid_t			pgid;
 	t_bool			complete;
+	t_bool			running;
 }			t_acb;
 
 typedef struct
@@ -233,6 +234,14 @@ enum	e_waitstate
 	finish = 0,
 	running = 1,
 };
+
+typedef struct
+{
+	t_pylst			*branches;
+	unsigned int	number;
+	pid_t			pgid;
+	char			*command;
+}	t_job;
 
 typedef struct
 {

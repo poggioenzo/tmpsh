@@ -24,15 +24,73 @@ static void		replace_redirection(t_acb *branch, int change_index, char *content)
 }
 
 /*
+** get_final_fields:
+**
+** Prepare for replace_cmdsubst1 the list of tokens and tags to insert
+** inside a tagstokens.
+*/
+
+static void		get_final_fields(char *content, t_pylst **final_tokens, \
+		t_pylst **statements)
+{
+	char		**tokens_list;
+	int			nbr_tokens;
+	int			index;
+	char		*token;
+
+	tokens_list = ft_strsplit(content, "\n\t ");
+	index = 0;
+	nbr_tokens = ft_arraylen(tokens_list);
+	while (index < nbr_tokens)
+	{
+		token = tokens_list[index++];
+		push_pylst(final_tokens, token, ft_strlen(token) + 1, _chare);
+		push_pylst(statements, "STMT", 0, _ptr);
+		if (index < nbr_tokens)
+		{
+			push_pylst(final_tokens, " ", 0, _ptr);
+			push_pylst(statements, "SPACES", 0, _ptr);
+		}
+	}
+	free_str_array(&tokens_list, 0);
+}
+
+/*
+** replace_cmdsubst1:
+**
+** Insert CMDSUBST1 elements inside a tagstokens.
+** Split element by IFS caracters.
+** Replace each IFS caracters by one of them, and split all.
+** Insert tokens list to be mutliple STMT separated by
+** spaces.
+*/
+
+void	replace_cmdsubst1(char *content, t_tagstokens *tagstokens, int index)
+{
+	t_pylst		*final_tokens;
+	t_pylst		*statements;
+	char		**tokens;
+	int			nbr_token;
+
+	nbr_token = ft_arraylen(tokens);
+	final_tokens = NULL;
+	statements = NULL;
+	get_final_fields(content, &final_tokens, &statements);
+	replace_pylst(&tagstokens->tokens, final_tokens, index, index + 1);
+	replace_pylst(&tagstokens->tags, statements, index, index + 1);
+}
+
+/*
 ** replace_subast:
 **
 ** Replace in a branch the content given by a subast with
-** a CMDSUBT[123].
+** a CMDSUBT[123], QUOTE or DQUOTES.
 ** Try to replace this content in the tagstokens list of the branch,
 ** or replace in the filedescriptor list if it's not found.
 */
 
-void			replace_subast(t_acb *branch, int change_index, char *content)
+void			replace_subast(t_acb *branch, int change_index, char *content, \
+		char *type_ast)
 {
 	int		index;
 	char	*tag;
@@ -47,9 +105,14 @@ void			replace_subast(t_acb *branch, int change_index, char *content)
 		token = (char *)index_pylst(tagstok->tokens, index)->value;
 		if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
 		{
-			update_pylst(tagstok->tokens, index, content, \
-					sizeof(char) * (ft_strlen(content) + 1), _chare);
-			update_pylst(tagstok->tags, index, "STMT", 0, _chare);
+			if (ft_strequ("CMDSUBST1", type_ast))
+				replace_cmdsubst1(content, branch->tagstokens, index);
+			else
+			{
+				update_pylst(tagstok->tokens, index, content, \
+						sizeof(char) * (ft_strlen(content) + 1), _chare);
+				update_pylst(tagstok->tags, index, "STMT", 0, _chare);
+			}
 			return ;
 		}
 		index++;

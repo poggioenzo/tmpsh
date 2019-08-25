@@ -57,12 +57,12 @@ static void		analyse_branch_result(t_acb *branch, t_pylst **job_list)
 	if (ft_strequ(branch->tag_end, "BACKGROUND_JOBS"))
 	{
 		g_last_status = 0;
-		add_job(*job_list);
+		add_job(job_list);
 	}
 	else if (!ft_strequ(branch->tag_end, "PIPE"))
 	{
 		if (analyse_job_status(*job_list, WUNTRACED) == running)
-			add_job(*job_list);
+			add_job(job_list);
 		if (branch->background == false && g_jobs->allow_background == true)
 		{
 			set_foreground(getpgrp());
@@ -116,4 +116,10 @@ void			run_ast(t_ast *ast)
 		index++;
 	}
 	wait_zombie();
+}
+
+void		executor(t_ast *ast)
+{
+	wait_zombie();
+	run_ast(ast);
 }

@@ -51,7 +51,10 @@ t_bool		perform_command_as_subast(t_acb *branch)
 				save_std_fd(restore);
 			}
 			else
+			{
 				branch->pid = run_subshell(branch, subast);
+				branch->running = true;
+			}
 			return (true);
 		}
 		index++;

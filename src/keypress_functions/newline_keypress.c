@@ -64,7 +64,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	if (tagstoken->valid && !tagstoken->incomplete)
 	{
 		register_command(shell_content);
-		run_ast(ast_init(tagstoken));
+		executor(ast_init(tagstoken));
 		shell_preconfig(shell_repr, cursor);
 		//MUST FREE TAGSTOKEN
 		return (false);

@@ -87,6 +87,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 			exit(-1);
 	}
 	close_branch_stdfd(branch);
+	branch->running = true;
 	return (pid);
 }
 

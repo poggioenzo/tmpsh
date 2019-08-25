@@ -97,6 +97,6 @@ void			perform_subast_replacement(t_acb *branch)
 	{
 		content = retrieve_content(subast);
 		if (content)
-			replace_subast(branch, index++, content);
+			replace_subast(branch, index++, content, subast->type);
 	}
 }

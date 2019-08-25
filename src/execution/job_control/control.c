@@ -125,7 +125,7 @@ enum e_waitstate		analyse_job_status(t_pylst *job, int mode)
 /*
 ** relaunch:
 **
-** @index: Index of the job to relaunch.
+** @job_id: Index of the job to relaunch.
 **
 ** Check if the given job number can be relaunched and pushed
 ** in foreground.
@@ -133,30 +133,29 @@ enum e_waitstate		analyse_job_status(t_pylst *job, int mode)
 ** the g_jobs->list_jobs if it's finish.
 */
 
-void					relaunch(int index)
+void					relaunch(int job_id)
 {
 	t_pylst		*job;
 	pid_t		new_tpgid;
 	t_acb		*last_job_branch;
 
-	if (is_running(index) == finish)
+	if (is_running(job_id) == finish)
 	{
 		ft_printf("tmpsh: fg: job has terminated\n");
-		remove_bg(index);
+		remove_bg(job_id);
 		return ;
 	}
-	job = (t_pylst *)index_pylst(g_jobs->list_jobs, index)->value;
-	new_tpgid = ((t_acb *)job->value)->pgid;
-	set_foreground(new_tpgid);
-	kill(-new_tpgid, SIGCONT);
-	if (analyse_job_status(job, WUNTRACED) == finish)
+	job = get_job(job_id);
+	set_foreground(job->pgid);
+	kill(-job->pgid, SIGCONT);
+	((t_acb *)job->branches->value)->running = true;
+	if (analyse_job_status(job->branches, WUNTRACED) == finish)
 	{
-		last_job_branch = (t_acb *)index_pylst(job, -1)->value;
-		ft_printf("[%d] + %d continued\n", index, last_job_branch->pid);
-		remove_bg(index);
+		remove_bg(job_id);
+		ft_printf("[%d] + %d continued\n", job_id, job->pgid);
 	}
 	else
-		ft_printf("[%d] + Suspended.\n", index);
+		ft_printf("[%d] + Suspended.\n", job_id);
 	set_foreground(getpgrp());
 	restore_tcattr();
 }
@@ -168,28 +167,22 @@ void					relaunch(int index)
 ** Check if some jobs are done and remove them from the current joblist.
 */
 
-void					wait_zombie(void)
+void				wait_zombie(void)
 {
-	int		index;
-	int		nbr_job;
-	int		index_job;
-	t_pylst	*job;
-	t_acb	*last_branch;
+	t_pylst		*list_jobs;
+	t_pylst		*next_list_jobs;
+	t_job		*job;
 
-	index = 0;
-	index_job = 0;
-	nbr_job = len_pylst(g_jobs->list_jobs);
-	while (index_job < nbr_job)
+	list_jobs = g_jobs->list_jobs;
+	while (list_jobs)
 	{
-		if (is_running(index) == finish)
+		job = (t_job *)list_jobs->value;
+		next_list_jobs = list_jobs->next;
+		if (is_running(job->number) == finish)
 		{
-			job = (t_pylst *)index_pylst(g_jobs->list_jobs, index)->value;
-			last_branch = (t_acb *)index_pylst(job, -1)->value;
-			ft_printf("[%d] + Done %s\n", index_job, last_branch->command);
-			remove_bg(index);
-			index--;
+			ft_printf("[%d] + Done %s\n", job->number, job->command);
+			remove_bg(job->number);
 		}
-		index++;
-		index_job++;
+		list_jobs = next_list_jobs;
 	}
 }
