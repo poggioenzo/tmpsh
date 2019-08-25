@@ -25,9 +25,7 @@ static t_ht_alveol	**alloc_item_table(int size)
 	t_ht_alveol	**table;
 	int			index;
 
-	table = (t_ht_alveol **)MALLOC(sizeof(t_ht_alveol *) * size);
-	if (!table)
-		exit(-1);
+	table = (t_ht_alveol **)ft_memalloc(sizeof(t_ht_alveol *) * size);
 	index = 0;
 	while (index < size)
 		table[index++] = NULL;
@@ -64,8 +62,8 @@ int					free_hash_table(t_ht_table **hash_table, int status)
 
 void				ht_new_table(t_ht_table **hash_table, int seed, int size)
 {
-	if (!(*hash_table = (t_ht_table *)MALLOC(sizeof(t_ht_table))))
-		exit(-1);
+	*hash_table = (t_ht_table *)ft_memalloc(sizeof(t_ht_table));
+	(*hash_table)->count = 0;
 	(*hash_table)->size = size;
 	(*hash_table)->seed = seed;
 	(*hash_table)->iter_index = 0;

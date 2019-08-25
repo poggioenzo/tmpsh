@@ -138,7 +138,8 @@ void			delete_value(t_ht_table *table, char *key)
 	int		hash;
 
 	hash = hash_function(key, table->seed, table->size);
-	extract_alveol(&table->items[hash], key);
+	if (extract_alveol(&table->items[hash], key) == 1)
+		table->count--;
 }
 
 /*
@@ -202,4 +203,5 @@ void	empty_ht(t_ht_table *table)
 	index = 0;
 	while (index < table->size)
 		free_alveol_list(&table->items[index++], 0);
+	table->count = 0;
 }

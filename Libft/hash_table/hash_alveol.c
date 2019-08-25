@@ -61,11 +61,9 @@ int				free_alveol_list(t_ht_alveol **alveol, int status)
 static void		create_alveol(const char *key, void *value, \
 		t_ht_alveol **alveol, int ctype)
 {
-	if (!(*alveol = (t_ht_alveol *)MALLOC(sizeof(**alveol))))
-		exit(-1);
+	*alveol = (t_ht_alveol *)MALLOC(sizeof(**alveol));
 	(*alveol)->value = value;
-	if (!((*alveol)->key = ft_strdup(key)))
-		exit(-1);
+	(*alveol)->key = ft_strdup(key);
 	(*alveol)->ctype = ctype;
 	(*alveol)->next = NULL;
 }
