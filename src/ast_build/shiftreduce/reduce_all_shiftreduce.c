@@ -3,9 +3,9 @@
 # include "globals.h"
 # include "shiftreduce.h"
 
-static t_pylst **reduce(t_pylst **stack, int instack)
+static  t_pylst     **reduce(t_pylst **stack, int instack)
 {
-    char *key;
+    char    *key;
 
     key = join_pylst(index_pylst(*stack, instack), " ");
     del_portion_pylst(stack, instack, len_pylst(*stack));
@@ -28,7 +28,7 @@ static t_pylst **reduce(t_pylst **stack, int instack)
 ** pattern instead of instack it's transformed.
 */
 
-t_pylst *reduce_all(t_pylst **stack, int instack, char *next_tag)
+t_pylst             *reduce_all(t_pylst **stack, int instack, char *next_tag)
 {
     while (instack > -1)
     {

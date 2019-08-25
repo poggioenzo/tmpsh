@@ -53,7 +53,7 @@ static t_bool append_stack(t_tagstokens *tgtk, char *next_tag, size_t i)
 ** At the en if the stack is not empty the tagstokens is set as incomplete.
 */
 
-void tagstokens_shiftreduce(t_tagstokens *tgtk)
+void    tagstokens_shiftreduce(t_tagstokens *tgtk)
 {
     size_t i;
     int instack;

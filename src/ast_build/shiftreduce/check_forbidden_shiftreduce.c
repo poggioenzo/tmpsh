@@ -4,11 +4,11 @@
 # include "tokenizer_utils.h"
 # include "tagstokens.h"
 
-static t_bool cond_check_forbidden_shiftreduce(char *key, size_t i,\
+static  t_bool  cond_check_forbidden_shiftreduce(char *key, size_t i,\
                                                 t_pylst *instack,\
                                                 t_pylst *tags)
 {
-    size_t index_forbidden;
+    size_t  index_forbidden;
     t_pylst *forbidden_node;
 
     if (ft_strequ("FORBIDDEN", search_value(g_grammar->reverse, key)))
@@ -34,12 +34,12 @@ static t_bool cond_check_forbidden_shiftreduce(char *key, size_t i,\
 ** to forbidden.
 */
 
-t_bool check_forbidden_shiftreduce(t_pylst *tags)
+t_bool          check_forbidden_shiftreduce(t_pylst *tags)
 {
-    size_t i;
-    size_t len_tags;
+    size_t  i;
+    size_t  len_tags;
     t_pylst *instack;
-    char *key;
+    char    *key;
 
     i = -1;
     len_tags = len_pylst(tags);

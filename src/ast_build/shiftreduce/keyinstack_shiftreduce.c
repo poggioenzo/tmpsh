@@ -14,7 +14,7 @@
 ** Tell us if we can append a new tag.
 */
 
-t_bool revkeyinstack(t_pylst *stack)
+t_bool          revkeyinstack(t_pylst *stack)
 {
     size_t  len_stack;
     char    *key;
@@ -39,9 +39,9 @@ t_bool revkeyinstack(t_pylst *stack)
 }
 
 
-static char *get_ext_key(char *key, char *next_tag)
+static  char    *get_ext_key(char *key, char *next_tag)
 {
-    char *str;
+    char  *str;
 
     str = "";
     if (key)
@@ -64,7 +64,7 @@ static char *get_ext_key(char *key, char *next_tag)
 ** If there is no pattern key finded -1 is return.
 */
 
-int     keyinstack(t_pylst *stack, char *next_tag)
+int             keyinstack(t_pylst *stack, char *next_tag)
 {
     size_t  len_stack;
     char    *key;
