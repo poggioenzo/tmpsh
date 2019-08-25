@@ -115,7 +115,10 @@ enum e_waitstate		analyse_job_status(t_pylst *job, int mode)
 			return (running);
 		branch->status = status[0];
 		if (status[1] == running)
+		{
+			branch->running = false;
 			return (running);
+		}
 		branch->complete = true;
 		index--;
 	}
