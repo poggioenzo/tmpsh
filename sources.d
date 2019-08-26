@@ -147,6 +147,7 @@ TAGSTOKENS_DIR = tagstokens/
 
 TAGSTOKENS_SRCS :=	init_tagstokens.c \
 					str_tagstokens.c \
+					str_command_tagstokens.c \
 					iter_tagstokens.c \
 					tagging_tagstokens.c \
 					delitems_tagstokens.c \

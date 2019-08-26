@@ -11,13 +11,9 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef STR_TAGSTOKENS_H
-# define STR_TAGSTOKENS_H
+#ifndef STR_COMMAND_TAGSTOKENS_H
+# define STR_COMMAND_TAGSTOKENS_H
 
-char *str_tagstokens(t_tagstokens *self);
-void print_tagstokens(t_tagstokens *self);
-
-// move to libft
-char	*free_join(char *to_free, char *static_char, t_bool delete);
+char *str_command_tagstokens(t_tagstokens *self);
 
 #endif

@@ -13,6 +13,7 @@
 
 int		main(int argc, char **argv)//char **environ)
 {
+	DF;
 	char	*grammar_abs;
 	char	*grammar_file = "/pyshell/grammar/grammar.txt";
 	char	*cwd;
@@ -34,7 +35,11 @@ int		main(int argc, char **argv)//char **environ)
 	input_init_tagstokens(&tgtk, argv[1]);
 	// print_tagstokens(tgtk);
 	ast = init_ast(tgtk);
+	// ft_printf("%s\n", "LOL");
+	ft_printf("%s\n", str_ast(ast));
+	// ft_printf("%s\n", "LOL");
 	free_tagstokens(&tgtk, TRUE);
+	DFE;
 	return (0);
 }
 

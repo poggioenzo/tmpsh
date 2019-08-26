@@ -49,7 +49,9 @@ static	void		fill_tags_tokens(t_tagstokens *self, char *str,\
 		while (iter_tagstokens(self, &token, &tag))
 		{
 			while ((countdown ? *tag : *token))
+			{
 				str[i++] = (countdown ? *tag++ : *token++);
+			}
 			while (i - remove < spacing[self->iter])
 				i++;
 		}
@@ -60,10 +62,12 @@ static	void		fill_tags_tokens(t_tagstokens *self, char *str,\
 	str[i] = 0;
 }
 
-static	char		*free_join(char *to_free, char *static_char, t_bool delete)
+char		*free_join(char *to_free, char *static_char, t_bool delete)
 {
 	char *str;
 
+	// ft_printf("to_free : %s\n", to_free);
+	// ft_printf("static_char : %s\n", static_char);
 	str = ft_strjoin(to_free, static_char);
 	ft_strdel(&to_free);
 	if (delete)

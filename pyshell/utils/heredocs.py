@@ -75,7 +75,7 @@ class Heredocs():
         self.tagstokens.not_heredoc = False
         if self.minus:
             self.striplines()
-        self.tagstokens.check_syntax(True)
+        self.tagstokens.check_syntax()
         self.closed = True
         # self.tagstokens.incomplete = False
 

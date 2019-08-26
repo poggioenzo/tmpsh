@@ -187,6 +187,7 @@ typedef struct
 	int			link_fd;
 	pid_t		pid;
 	char		*command;
+	char		*print;
 	t_bool		complete;
 }			t_ast;
 
@@ -199,6 +200,7 @@ typedef struct
 	t_pylst			*subcmd_type;
 	t_pylst			*redirectionfd;
 	char			*command;
+	char			*print;
 	int				stdin;
 	int				stdout;
 	t_bool			background;
@@ -214,6 +216,7 @@ typedef struct
 	char			*type;
 	int				source;
 	char			*dest;
+	char			*print;
 	t_bool			close;
 	t_bool			error;
 }		t_redirection_fd;
