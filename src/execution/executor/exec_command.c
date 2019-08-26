@@ -69,7 +69,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	char		*executable;
 
 	executable = get_execname(argv[0]);
-	if (executable && ft_strchr(executable, "/"))
+	if (executable && ft_strchr(executable, '/'))
 	{
 		branch->status = run_builtin(argv, variables);
 		return (-1);
