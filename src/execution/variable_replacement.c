@@ -4,6 +4,15 @@
 #include "heredoc_apply.h"
 
 /*
+** variable_replacement.c
+**
+** Use to replace inside tagstoken variable element, when
+** a token look like $VARIABLE only (without "${VAR}").
+**
+** Manage the replacement of local and environnement variable.
+*/
+
+/*
 ** tagstoken_variable_swap:
 **
 ** @tagstok: tagstokens where replacement have to be done.
@@ -18,8 +27,8 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 	char	*variable;
 	char	*token;
 
-	token = (char *)index_pylst(tagstok->tokens, index)->value;
-	variable = retrieve_variable(token + 1);
+	token = vindex_pylst(tagstok->tokens, index);
+	variable = retrieve_variable(token + 1); //Verify allocation
 	update_pylst(tagstok->tokens, index, variable, NO_COPY_BUT_FREE, _chare);
 	update_pylst(tagstok->tags, index, "STMT", 0, _ptr);
 }
@@ -45,12 +54,12 @@ void			replace_variable(t_acb *branch)
 	index_subast = 0;
 	while (index < branch->tagstokens->length)
 	{
-		tag = index_pylst(branch->tagstokens->tags, index)->value;
+		tag = vindex_pylst(branch->tagstokens->tags, index);
 		if (ft_strequ(tag, "VAR"))
 			tagstoken_variable_swap(branch->tagstokens, index);
 		else if (ft_strequ(tag, "SUBAST"))
 		{
-			subast = (t_ast *)index_pylst(branch->subast, index_subast)->value;
+			subast = vindex_pylst(branch->subast, index_subast);
 			if (ft_strequ(subast->type, "DQUOTES"))
 				replace_variable(subast->list_branch->value);
 			index_subast++;

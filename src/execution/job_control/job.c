@@ -46,8 +46,8 @@ t_job		*job_init(t_pylst **job_branches)
 	new_job->branches = *job_branches;
 	*job_branches = NULL;// Check how job have top be copied !!!
 	new_job->number = create_job_index();
-	last_branch = (t_acb *)index_pylst(*job_branches, -1)->value;
+	last_branch = vindex_pylst(*job_branches, -1);
 	new_job->pgid = last_branch->pgid;
-	new_job->command = last_branch->command;
+	new_job->command = last_branch->command;//Need to get good command
 	return (new_job);
 }

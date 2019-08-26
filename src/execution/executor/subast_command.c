@@ -38,7 +38,7 @@ t_bool		perform_command_as_subast(t_acb *branch)
 	nbr_subast = len_pylst(branch->subast);
 	while (index < nbr_subast)
 	{
-		subast = index_pylst(branch->subast, index)->value;
+		subast = vindex_pylst(branch->subast, index);
 		if (ft_strequ(subast->type, "CURSH") || ft_strequ(subast->type, "SUBSH"))
 		{
 			if (ft_strequ(subast->type, "CURSH") && !is_bg_or_pipe(branch))

@@ -16,7 +16,7 @@ void		setup_branch_pipe(t_ast *ast, int index, t_acb *branch)
 	t_acb	*next_branch;
 	int		new_pipe[2];
 
-	next_branch = index_pylst(ast->list_branch, index + 1)->value;
+	next_branch = (t_acb *)vindex_pylst(ast->list_branch, index + 1);
 	setup_pipe_fd(new_pipe);
 	next_branch->stdin = new_pipe[0];
 	branch->stdout = new_pipe[1];
@@ -39,7 +39,7 @@ void		close_subast_pipe(t_acb *branch)
 		if (ft_start_with(subast->type, "CMDSUBST"))
 			close(subast->link_fd);
 		else if (ft_strequ(subast->type, "DQUOTES"))
-			close_subast_pipe((t_acb *)subast->list_branch->value);
+			close_subast_pipe(subast->list_branch->value);
 	}
 }
 
@@ -57,7 +57,7 @@ t_bool		check_background(t_pylst *list_branch, int index)
 	t_acb	*branch;
 	t_acb	*next_branch;
 
-	branch = (t_acb *)index_pylst(list_branch, index)->value;
+	branch = vindex_pylst(list_branch, index);
 	if (branch->background == true)
 		return (true);
 	else if (ft_strequ(branch->tag_end, "BACKGROUND_JOBS"))
@@ -69,7 +69,7 @@ t_bool		check_background(t_pylst *list_branch, int index)
 		return (false);
 	else if (ft_strequ(branch->tag_end, "PIPE"))
 	{
-		next_branch = (t_acb *)index_pylst(list_branch, index + 1)->value;
+		next_branch = vindex_pylst(list_branch, index + 1);
 		next_branch->pgid = branch->pgid;
 		branch->background = check_background(list_branch, index + 1);
 		return (branch->background);

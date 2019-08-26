@@ -16,29 +16,29 @@
 ** Avoid to search pgid if already set.
 */
 
-static void		try_set_job_pgid(t_pylst *job_list)
+static void		try_set_job_pgid(t_pylst *job_branches)
 {
 	int		index;
 	pid_t	pgid;
 	int		nbr_job;
-	t_acb	*job;
+	t_acb	*branch;
 
-	if (((t_acb *)job_list->value)->pgid != 0)
+	if (((t_acb *)job_branches->value)->pgid != 0)
 		return ;
 	index = 0;
-	nbr_job = len_pylst(job_list);
+	nbr_job = len_pylst(job_branches);
 	pgid = 0;
 	while (index < nbr_job && pgid == 0)
 	{
-		job = (t_acb *)index_pylst(job_list, index)->value;
-		if (job->pid != -1)
-			pgid = getpgid(job->pid);
+		branch = vindex_pylst(job_branches, index);
+		if (branch->pid != -1)
+			pgid = getpgid(branch->pid);
 		index++;
 	}
 	if (pgid == 0)
 		return ;
-	while (iter_pylst(job_list, (void **)&job))
-		job->pgid = pgid;
+	while (iter_pylst(job_branches, (void **)&branch))
+		branch->pgid = pgid;
 }
 
 /*
@@ -95,8 +95,8 @@ void			run_ast(t_ast *ast)
 	job_list = NULL;
 	while (index < nbr_branch)
 	{
-		branch = (t_acb *)index_pylst(ast->list_branch, index)->value;
-		push_pylst(&job_list, branch, 0, _ptr);
+		branch = (t_acb *)vindex_pylst(ast->list_branch, index);
+		push_pylst(&job_list, branch, 0, _ptr); //Need to use branch ??
 		replace_variable(branch);
 		if (check_andor(branch) == false)
 		{
@@ -115,7 +115,6 @@ void			run_ast(t_ast *ast)
 		analyse_branch_result(branch, &job_list);
 		index++;
 	}
-	wait_zombie();
 }
 
 void		executor(t_ast *ast)

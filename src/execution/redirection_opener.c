@@ -5,22 +5,6 @@
 #include "fd_management.h"
 
 /*
-** digit_string:
-**
-** Check if the given string contain only digits.
-*/
-
-static int		digit_string(char *str)
-{
-	while (*str)
-	{
-		if (!ft_isdigit(*str++))
-			return (0);
-	}
-	return (1);
-}
-
-/*
 ** need_open_file:
 **
 ** Check according to the redirection type if a file have to be open.
@@ -42,9 +26,10 @@ static void		convert_dest(t_redirection_fd *redirection)
 {
 	int		dest_fd;
 
-	if (digit_string(redirection->dest))
+	if (digitstr(redirection->dest))
 	{
 		dest_fd = ft_atoi(redirection->dest);
+		ft_strdel((char **)&redirection->dest);
 		redirection->dest = &dest_fd;
 	}
 	else

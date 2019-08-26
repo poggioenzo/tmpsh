@@ -6,6 +6,7 @@
 #include "heredoc_apply.h"
 #include "job_control.h"
 #include "run_ast.h"
+#include <signal.h>
 
 /*
 ** prepare_cmdsubst_pipe:
@@ -88,6 +89,6 @@ void	prepare_cmd_subst(t_acb *branch)
 		if (ft_start_with(subast->type, "CMDSUBST"))
 			run_cmdsubst(subast);
 		else if (ft_strequ(subast->type, "DQUOTES"))
-			prepare_cmd_subst((t_acb *)subast->list_branch->value);
+			prepare_cmd_subst(subast->list_branch->value);
 	}
 }

@@ -103,7 +103,7 @@ enum e_waitstate		analyse_job_status(t_pylst *job_branches, int mode)
 	index = len_pylst(job_branches) - 1;
 	while (index >= 0)
 	{
-		branch = (t_acb *)index_pylst(job_branches, index)->value;
+		branch = vindex_pylst(job_branches, index);
 		if (branch->complete || branch->pid == -1)
 		{
 			index--;
@@ -150,6 +150,7 @@ void					relaunch(int job_id)
 	set_foreground(job->pgid);
 	kill(-job->pgid, SIGCONT);
 	((t_acb *)job->branches->value)->running = true;
+	ft_printf("%s\n", job->command);
 	if (analyse_job_status(job->branches, WUNTRACED) == finish)
 	{
 		remove_bg(job_id);

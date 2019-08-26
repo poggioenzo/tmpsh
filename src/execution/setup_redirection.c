@@ -35,7 +35,7 @@ static char		*join_cmd(t_pylst *list_branch)
 		tagstok = branch->tagstokens;
 		while (index < tagstok->length)
 		{
-			tag = index_pylst(tagstok->tags, index)->value;
+			tag = vindex_pylst(tagstok->tags, index);
 			if (ft_strequ(tag, "STMT") || ft_strequ(tag, "SPACES"))
 				final_cmd = ft_fstrjoin(&final_cmd, &tag, true, false);
 			index++;
@@ -65,6 +65,7 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 	redirection->dest = here_pipe;
 	content = join_cmd(redirection->heredoc_ast->list_branch);
 	write(here_pipe[1], content, ft_strlen(content));
+	ft_strdel(&content);
 	close(here_pipe[1]);
 }
 
@@ -79,11 +80,9 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 
 void			setup_redirection(t_acb *branch)
 {
-	t_pylst				*fd_list;
 	t_redirection_fd	*redirection;
 
-	fd_list = branch->redirectionfd;
-	while (iter_pylst(fd_list, (void **)&redirection))
+	while (iter_pylst(branch->redirectionfd, (void **)&redirection))
 	{
 		if (is_heredoc(redirection->type))
 			prepare_heredoc(redirection);

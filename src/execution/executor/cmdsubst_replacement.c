@@ -67,7 +67,7 @@ static char		*retrieve_content(t_ast *subast)
 	else if (ft_strequ(subast->type, "BRACEPARAM"))
 	{
 		tmp_str = ((t_acb *)subast->list_branch->value)->tagstokens->tokens->value;
-		content = ft_strdup(retrieve_variable(tmp_str));
+		content = retrieve_variable(tmp_str);
 	}
 	else if (ft_strequ(subast->type, "DQUOTES"))
 	{
@@ -97,6 +97,7 @@ void			perform_subast_replacement(t_acb *branch)
 	{
 		content = retrieve_content(subast);
 		if (content)
-			replace_subast(branch, index++, content, subast->type);
+			replace_subast(branch, index, content, subast->type);
+		index++;
 	}
 }

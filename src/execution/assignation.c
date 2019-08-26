@@ -21,6 +21,7 @@ static void		fill_assignation(t_pylst **assignations, char *key, \
 	t_pylst		*operation;
 
 	operation = NULL;
+	//Probably dont need duplication here.
 	key = ft_strdup(key);
 	value = ft_strdup(value);
 	push_pylst(&operation, key, NO_COPY_BUT_FREE, _chare);
@@ -78,15 +79,15 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 	last_stmt = NULL;
 	while (index < branch->tagstokens->length)
 	{
-		tag = index_pylst(branch->tagstokens->tags, index)->value;
+		tag = vindex_pylst(branch->tagstokens->tags, index);
 		if (!last_stmt && ft_strequ(tag, "STMT"))
-			last_stmt = index_pylst(branch->tagstokens->tokens, index)->value;
+			last_stmt = vindex_pylst(branch->tagstokens->tokens, index);
 		else if (ft_strequ(tag, "CONCATENATION") || \
 				ft_strequ(tag, "ASSIGNATION_EQUAL"))
 		{
 			index += 1;
 			fill_assignation(&assignation_list, last_stmt, tag,\
-				index_pylst(branch->tagstokens->tokens, index)->value);
+				vindex_pylst(branch->tagstokens->tokens, index));
 			last_stmt = NULL;
 		}
 		index++;
@@ -104,6 +105,7 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 ** Facility to set up a list of assignations, storing each given value.
 */
 
+//MALLOC: What should I clean @assignations ?
 void			variables_config(t_pylst *assignations, t_bool only_env)
 {
 	t_pylst		*operation;
@@ -114,9 +116,9 @@ void			variables_config(t_pylst *assignations, t_bool only_env)
 	operation = NULL;
 	while (iter_pylst(assignations, (void **)&operation))
 	{
-		key = index_pylst(operation, 0)->value;
-		mode = index_pylst(operation, 1)->value;
-		value = index_pylst(operation, 2)->value;
+		key = vindex_pylst(operation, 0);
+		mode = vindex_pylst(operation, 1);
+		value = vindex_pylst(operation, 2);
 		update_var(key, value, mode, only_env);
 	}
 }

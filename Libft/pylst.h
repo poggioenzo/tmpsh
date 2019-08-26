@@ -64,6 +64,7 @@ t_pylst		*pylst_deepcpy(t_pylst *pylst);
 
 int			len_pylst(t_pylst *pylst);
 t_pylst		*index_pylst(t_pylst *pylst, int index);
+void		*vindex_pylst(t_pylst *pylst, int index);
 void		update_pylst(t_pylst *pylst, int index, ...);
 t_pylst		*slice_pylst(t_pylst *pylst, int from, int to);
 char		*join_pylst(t_pylst *pylst, char *substr);

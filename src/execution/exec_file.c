@@ -57,7 +57,7 @@ char	*parse_path(char *command)
 		execname = ft_filejoin(folders + index++, &command, false, false);
 		if (access(execname, F_OK) != -1)
 		{
-			cache = hash_exec_init(execname);
+			cache = hash_exec_init(execname); //Control duplication
 			insert_value(g_hash, command, cache, _ptr);//Use _t_hash_exec
 			cache->count++;
 			free_str_array(&folders, 0);
@@ -66,6 +66,7 @@ char	*parse_path(char *command)
 		ft_strdel(&execname);
 	}
 	free_str_array(&folders, 0);
+	ft_dprintf(STDERR_FILENO, "tmpsh: command not found: %s\n", command);
 	return (NULL);
 }
 
@@ -81,7 +82,6 @@ char	*parse_path(char *command)
 char			*get_execname(char *command)
 {
 	t_hash_exec		*cache;
-	char			*execname;
 
 	if ((cache = search_value(g_hash, command)))
 	{
@@ -92,7 +92,5 @@ char			*get_execname(char *command)
 		return (ft_strdup(command));
 	else if (ft_strchr(command, '/'))
 		return (check_rights(ft_strdup(command)));
-	else if (!(execname = parse_path(command)))
-		ft_dprintf(STDERR_FILENO, "tmpsh: command not found: %s\n", command);
-	return (execname);
+	return (parse_path(command));
 }

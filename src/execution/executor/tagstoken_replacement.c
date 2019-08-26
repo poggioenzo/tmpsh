@@ -16,8 +16,8 @@ static void		replace_redirection(t_acb *branch, int change_index, char *content)
 
 	while (iter_pylst(branch->redirectionfd, (void **)&redirection))
 	{
-		tag = (char *)redirection->tagstokens->tags->value;
-		token = (char *)redirection->tagstokens->tokens->value;
+		tag = redirection->tagstokens->tags->value;
+		token = redirection->tagstokens->tokens->value;
 		if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
 			redirection->dest = content;
 	}
@@ -75,6 +75,7 @@ void	replace_cmdsubst1(char *content, t_tagstokens *tagstokens, int index)
 	get_final_fields(content, &final_tokens, &statements);
 	replace_pylst(&tagstokens->tokens, final_tokens, index, index + 1);
 	replace_pylst(&tagstokens->tags, statements, index, index + 1);
+	//update_length(tagstokens);
 }
 
 /*
@@ -98,8 +99,8 @@ void			replace_subast(t_acb *branch, int change_index, char *content, \
 	tagstok = branch->tagstokens;
 	while (index < tagstok->length)
 	{
-		tag = (char *)index_pylst(tagstok->tags, index)->value;
-		token = (char *)index_pylst(tagstok->tokens, index)->value;
+		tag = vindex_pylst(tagstok->tags, index);
+		token = vindex_pylst(tagstok->tokens, index);
 		if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
 		{
 			if (ft_strequ("CMDSUBST1", type_ast))
@@ -107,7 +108,7 @@ void			replace_subast(t_acb *branch, int change_index, char *content, \
 			else
 			{
 				update_pylst(tagstok->tokens, index, content, \
-						sizeof(char) * (ft_strlen(content) + 1), _chare);
+						NO_COPY_BUT_FREE, _chare);
 				update_pylst(tagstok->tags, index, "STMT", 0, _chare);
 			}
 			return ;

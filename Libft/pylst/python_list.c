@@ -114,6 +114,20 @@ t_pylst		*index_pylst(t_pylst *pylst, int index)
 }
 
 /*
+** vindex_pylst:
+**
+** Like index_pylst, but return the t_pylst->value element.
+*/
+
+void		*vindex_pylst(t_pylst *pylst, int index)
+{
+	t_pylst		*expect_node;
+	
+	expect_node = index_pylst(pylst, index);
+	return (expect_node ? expect_node->value : NULL);
+}
+
+/*
 ** slice_pylst:
 **
 ** Return a new allocated portion of the given list in the

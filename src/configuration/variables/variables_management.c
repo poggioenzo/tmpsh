@@ -28,7 +28,7 @@ void	setup_variables_elements(char **environ)
 ** for local variables of environnement variables.
 ** Behave properly if the assignement is a concatenation or not.
 */
-
+//MALLOC: Check if caller char *value is freed.
 void	update_var(char *variable, char *value, char *type, t_bool only_env)
 {
 	char	*saved_value;

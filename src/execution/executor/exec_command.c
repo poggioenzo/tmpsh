@@ -31,7 +31,7 @@ static int		run_builtin(char **cmd_args, t_pylst *variables)
 		variables_config(variables, true);
 		free_pylst(&variables, 0);
 	}
-	builtin = (int (*)(char **, char **))search_value(g_builtins, cmd_args[0]);
+	builtin = search_value(g_builtins, cmd_args[0]);
 	status = builtin(cmd_args + 1, g_environ);
 	if (saved_environ)
 	{
@@ -63,14 +63,13 @@ static void		close_branch_stdfd(t_acb *branch)
 ** Setup list of variables as environnement variables.
 */
 
-// Need to recode reset_signals
 static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 {
 	pid_t		pid;
 	char		*executable;
 
 	executable = get_execname(argv[0]);
-	if (executable && ft_strchr(executable, '/'))
+	if (executable && !ft_strchr(executable, '/'))
 	{
 		branch->status = run_builtin(argv, variables);
 		return (-1);
@@ -89,7 +88,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	}
 	close_branch_stdfd(branch);
 	branch->running = true;
-	return (pid);
+	return (free_pylst(&variables, pid));
 }
 
 /*

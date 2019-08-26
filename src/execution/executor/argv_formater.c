@@ -13,7 +13,7 @@ static int		prev_is_stmt(t_pylst *tags, int index)
 
 	if (index >= 1)
 	{
-		prev_tag = index_pylst(tags, index - 1)->value;
+		prev_tag = vindex_pylst(tags, index - 1);
 		return (ft_strequ(prev_tag, "STMT"));
 	}
 	return (0);
@@ -37,10 +37,10 @@ static void		join_stmt(t_acb *branch)
 	index = 0;
 	while (index < tagstok->length)
 	{
-		curr_tag = index_pylst(tagstok->tags, index)->value;
+		curr_tag = vindex_pylst(tagstok->tags, index);
 		if (ft_strequ(curr_tag, "STMT") && prev_is_stmt(tagstok->tags, index))
 		{
-			prev_token = index_pylst(tagstok->tokens, index - 1)->value;
+			prev_token = index_pylst(tagstok->tokens, index - 1);
 			new_stmt = ft_strjoin(prev_token->value, prev_token->next->value);
 			update_pylst(tagstok->tokens, index - 1, new_stmt, \
 					NO_COPY_BUT_FREE, _chare);
@@ -68,7 +68,7 @@ static char		**convert_command(t_pylst *command)
 	cmd_array = ft_memalloc(sizeof(char *) * (len_pylst(command) + 1));
 	index = 0;
 	while (iter_pylst(command, (void **)&value))
-		cmd_array[index++] = ft_strdup(value);
+		cmd_array[index++] = value;
 	cmd_array[index] = NULL;
 	free_pylst(&command, 0);
 	return (cmd_array);
@@ -92,11 +92,11 @@ char			**extract_cmd(t_acb *branch)
 	command = NULL;
 	while (index < branch->tagstokens->length)
 	{
-		tag = index_pylst(branch->tagstokens->tags, index)->value;
+		tag = vindex_pylst(branch->tagstokens->tags, index);
 		if (ft_strequ(tag, "STMT"))
 		{
-			token = index_pylst(branch->tagstokens->tokens, index)->value;
-			push_pylst(&command, token, ft_strlen(token) + 1, _chare);
+			token = vindex_pylst(branch->tagstokens->tokens, index);
+			push_pylst(&command, token, ft_strlen(token) + 1, _ptr);
 		}
 		index++;
 	}
