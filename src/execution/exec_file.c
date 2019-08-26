@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "tmpsh.h"
 #include "variables.h"
+#include "hash.h"
 
 /*
 ** check_rights:
@@ -28,6 +29,17 @@ static char		*check_rights(char *cmd)
 	return (cmd);
 }
 
+/*
+** parse_path:
+**
+** @command: Command name to concat with PATH folders.
+**
+** Go through each PATH folders and check if the given command exist.
+**
+** return : - Absolute path of an executable is command is found.
+**			- NULL otherwise.
+*/
+
 char	*parse_path(char *command)
 {
 	char	**folders;
@@ -36,25 +48,24 @@ char	*parse_path(char *command)
 	t_hash_exec	*cache;
 
 
-	if (ft_getenv("PATH"))
+	if (!ft_getenv("PATH"))
+		return (NULL);
+	folders = ft_strsplit(ft_getenv("PATH"), ":");
+	index = 0;
+	while (folders[index])
 	{
-		folders = ft_strsplit(ft_getenv("PATH"), ":");
-		index = 0;
-		while (folders[index])
+		execname = ft_filejoin(folders + index++, &command, false, false);
+		if (access(execname, F_OK) != -1)
 		{
-			execname = ft_filejoin(folders + index++, &command, false, false);
-			if (access(execname, F_OK) != -1)
-			{
-				cache = hash_exec_init(execname);
-				insert_value(g_hash, command, cache, _ptr);//Use _t_hash_exec
-				cache->count++;
-				free_str_array(&folders, 0);
-				return (check_rights(execname));
-			}
-			ft_strdel(&execname);
+			cache = hash_exec_init(execname);
+			insert_value(g_hash, command, cache, _ptr);//Use _t_hash_exec
+			cache->count++;
+			free_str_array(&folders, 0);
+			return (check_rights(execname));
 		}
-		free_str_array(&folders, 0);
+		ft_strdel(&execname);
 	}
+	free_str_array(&folders, 0);
 	return (NULL);
 }
 
@@ -70,6 +81,7 @@ char	*parse_path(char *command)
 char			*get_execname(char *command)
 {
 	t_hash_exec		*cache;
+	char			*execname;
 
 	if ((cache = search_value(g_hash, command)))
 	{

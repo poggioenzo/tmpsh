@@ -6,5 +6,6 @@ void				add_job(t_pylst **job_branches);
 enum e_waitstate	is_running(int index);
 void				remove_bg(int index);
 void				clear(void);
+t_job				*get_job(int job_id);
 
 #endif

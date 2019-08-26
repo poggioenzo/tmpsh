@@ -102,12 +102,20 @@ BUILTINS_SRCS := cd.c \
 				 cd_canon.c \
 				 cd_canon_utils.c \
 				 env.c \
-				 setenv.c \
-				 unsetenv.c \
+				 envvar_builtins.c \
+				 localvar_builtins.c \
                  echo.c \
 				 exit.c \
 				 argparser.c \
+				 hash.c \
+				 bg_fg.c \
+				 jobs.c \
+				 unalias.c \
+				 alias.c \
+				 export.c \
+				 type.c \
 				 builtins_builder.c \
+				 background_utils.c \
 
 BUILTINS_SRCS := $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
 
@@ -115,6 +123,7 @@ JOBCONTROL_DIR = job_control/
 
 JOBCONTROL_SRCS := backgroundjobs.c \
 				   control.c \
+				   job.c \
 
 JOBCONTROL_SRCS := $(addprefix $(JOBCONTROL_DIR), $(JOBCONTROL_SRCS))
 

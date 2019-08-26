@@ -6,6 +6,7 @@
 #include "fd_management.h"
 #include "setup_redirection.h"
 #include "exec_file.h"
+#include "reset_signals.h"
 #undef stdout
 #undef stdin
 

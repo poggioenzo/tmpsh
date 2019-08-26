@@ -1,5 +1,7 @@
 #include "libft.h"
 #include "tmpsh.h"
+#include "variables.h"
+#include "argparser.h"
 
 /*
 ** show_exported_env:
@@ -16,7 +18,7 @@ static void	show_exported_env(char **environ)
 	while (*environ)
 	{
 		variable = *environ;
-		value = ft_strchr(*environ, "=");
+		value = ft_strchr(*environ, '=');
 		*value++ = '\0';
 		if (ft_strlen(value) > 0)
 			ft_printf("export %s=%s\n", variable, value);
@@ -69,7 +71,8 @@ static void export_assignation(char *argument)
 	char	*variable;
 	char	*value;
 
-	value = ft_strchr(argument, "=");
+	value = ft_strchr(argument, '=');
+	variable = argument;
 	*value++ = '\0';
 	if (ft_strlen(variable) > 0)
 	{
@@ -114,7 +117,6 @@ static void		export_var(char *variable)
 int		built_export(char **argv, char **environ)
 {
 	t_pylst		*options;
-	int			argc;
 	int			index;
 
 	options = argparser(argv);
@@ -123,7 +125,7 @@ int		built_export(char **argv, char **environ)
 	index = 0;
 	while (argv[index])
 	{
-		if (ft_strchr(argv[index], "="))
+		if (ft_strchr(argv[index], '='))
 			export_assignation(argv[index]);
 		else
 			export_var(argv[index]);

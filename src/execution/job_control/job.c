@@ -17,7 +17,7 @@ static int			create_job_index(void)
 	t_job	*job;
 	t_pylst	*job_list;
 
-	job_list = g_jobs;
+	job_list = g_jobs->list_jobs;
 	nbr_jobs = len_pylst(job_list);
 	index = 0;
 	while (index < nbr_jobs)

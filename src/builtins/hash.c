@@ -5,6 +5,12 @@
 //ht_new_table(&g_hash, 47, 50);
 t_ht_table		*g_hash;
 
+/*
+** hash_exec_init:
+**
+** Allocate a single t_hash_exec element.
+*/
+
 t_hash_exec		*hash_exec_init(char *exec_file)
 {
 	t_hash_exec		*hash_exec;
@@ -15,12 +21,19 @@ t_hash_exec		*hash_exec_init(char *exec_file)
 	return (hash_exec);
 }
 
-int		display_hash(char **argv)
+/*
+** display_hash:
+**
+** Print each command cached in g_hash. Show the number of "hits"
+** and the associated execfile.
+*/
+
+static int		display_hash(void)
 {
 	char			*cmd;
 	t_hash_exec		*cache;
 
-	if (t_hash->count == 0)
+	if (g_hash->count == 0)
 	{
 		ft_dprintf(2, "hash: hash table empty\n");
 		return (1);
@@ -31,7 +44,18 @@ int		display_hash(char **argv)
 	return (0);
 }
 
-int		hash_options(char **argv)
+/*
+** hash_options:
+**
+** Parse argv options and check if arguments are valid.
+** Allowed options are -r and -p, and require specific
+** set of arguments.
+**
+** return: - 1 if any error occur.
+**		   - 0 if options are correct.
+*/
+
+static int		hash_options(char **argv)
 {
 	int		argc;
 
@@ -57,7 +81,13 @@ int		hash_options(char **argv)
 	return (0);
 }
 
-int		add_new_command(char **argv)
+/*
+** add_new_command:
+**
+** Register in the g_hash table a new command associated to a file.
+*/
+
+static int		add_new_command(char **argv)
 {
 	char	*new_path;
 	char	*command;
@@ -70,15 +100,36 @@ int		add_new_command(char **argv)
 	return (0);
 }
 
-int		hash(char **argv, char **environ)
+/*
+** built_hash:
+**
+** hash - remember or repot command locations.
+**
+** Synopsis: hash [cmd ...]
+**			 hash -r
+**			 hash -p <execfile> <command>
+**
+** Options:
+** -r : Remove all remembered location.
+** -p : Use <execfile> when <command> is used.
+**
+** Hash display or manage hash location of executable for any command.
+** Hash count how many times a given command have been executed.
+**
+** 1) With no arguments, hash will display all remembered location and their
+** number of hits.
+** 2) If any <cmd> argument is given, reset to 0 the counter of this command.
+*/
+
+int		built_hash(char **argv, char **environ)
 {
-	t_pylst		*options;
 	t_hash_exec	*cache;
 
-	if (hash_options(argv, &options) == 1)
+	UNUSED(environ);
+	if (hash_options(argv) == 1)
 		return (1);
 	if (ft_arraylen(argv) == 0)
-		return (display_hash(argv));
+		return (display_hash());
 	if (ft_strequ(argv[0], "-r"))
 		empty_ht(g_hash);
 	else if (ft_strequ(argv[0], "-p"))

@@ -238,7 +238,7 @@ enum	e_waitstate
 typedef struct
 {
 	t_pylst			*branches;
-	unsigned int	number;
+	int				number;
 	pid_t			pgid;
 	char			*command;
 }	t_job;

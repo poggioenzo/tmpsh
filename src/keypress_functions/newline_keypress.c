@@ -51,7 +51,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	char			*shell_content;
 
 	shell_content = render_shell_content(*shell_repr);
-	input_init_tagstokens(&tagstoken, shell_content);
+	//input_init_tagstokens(&tagstoken, shell_content);
 	if (tagstoken->incomplete)
 	{
 		add_new_line(*shell_repr, tagstoken, *cursor);
@@ -64,7 +64,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	if (tagstoken->valid && !tagstoken->incomplete)
 	{
 		register_command(shell_content);
-		executor(ast_init(tagstoken));
+		//executor(ast_init(tagstoken));
 		shell_preconfig(shell_repr, cursor);
 		//MUST FREE TAGSTOKEN
 		return (false);

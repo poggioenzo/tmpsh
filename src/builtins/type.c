@@ -1,5 +1,7 @@
 #include "libft.h"
 #include "tmpsh.h"
+#include "exec_file.h"
+#include "argparser.h"
 
 /*
 ** error_options:
@@ -9,7 +11,7 @@
 
 static int		error_options(t_pylst *options)
 {
-	ft_print("type: invalid option: %s\n", options->value);
+	ft_dprintf(2, "type: invalid option: %s\n", options->value);
 	return (free_pylst(&options, 1));
 }
 
@@ -37,28 +39,30 @@ static int		error_options(t_pylst *options)
 
 int		built_type(char **argv, char **environ)
 {
-	int		index;
 	char	*used_elem;
 	t_pylst	*options;
 	int		status;
 
 	UNUSED(environ);
-	options = argparser(options);
+	options = argparser(argv);
 	if (len_pylst(options) > 0)
 		return (error_options(options));
-	index = 0;
 	status = 0;
-	while (argv[index])
+	while (*argv)
 	{
-		if ((used_elem = search_value(g_alias, argv[index])))
-			ft_printf("%s is aliased to '%s'\n", argv[index], used_elem);
-		else if ((search_value(g_builtins, argv[index])))
+		if ((used_elem = search_value(g_hash, *argv)))
+			ft_printf("%s\n", used_elem);
+		if ((used_elem = search_value(g_alias, *argv)))
+			ft_printf("%s is aliased to '%s'\n", *argv, used_elem);
+		else if ((search_value(g_builtins, *argv)))
 			ft_printf("%s is a shell builtin\n");
-		else if ((used_elem = get_execname(argv[index])))
+		else if ((used_elem = get_execname(*argv)))
 			ft_printf("%s\n", used_elem);
 		else
-			ft_printf("type: %s: not found\n", argv[index]) && status = 1;
-		index++;
+		{
+			ft_printf("type: %s: not found\n", *argv);
+			status = 1;
+		}
 	}
 	return (status);
 }

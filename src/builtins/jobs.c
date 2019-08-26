@@ -2,8 +2,17 @@
 #include "tmpsh.h"
 #include "background_utils.h"
 #include "argparser.h"
+#include "job_control.h"
 
-static void		check_jobs_options(char **argv, int *p_flag, int *l_flag)
+/*
+** check_jobs_options:
+**
+** Check if options are valid and contain only -p or -l. Use the last given
+** option, overide previous one.
+** If an invalid options if found, display an error message.
+*/
+
+static int		check_jobs_options(char **argv, int *p_flag, int *l_flag)
 {
 	t_pylst		*options;
 	char		*option_str;
@@ -30,7 +39,14 @@ static void		check_jobs_options(char **argv, int *p_flag, int *l_flag)
 	return (free_pylst(&options, 0));
 }
 
-void	display_job(t_job *job, int p_flag, int l_flag)
+/*
+** display_job:
+**
+** Print on stdout information about the given job.
+** Format the output according to the expected options.
+*/
+
+static void	display_job(t_job *job, int p_flag, int l_flag)
 {
 	char	*status;
 	t_acb	*first_branch;
@@ -46,7 +62,15 @@ void	display_job(t_job *job, int p_flag, int l_flag)
 		ft_printf("[%d] - %s	%s\n", job->number, status, job->command);
 }
 
-int		display_jobs_args(char **argv, int p_flag, int l_flag)
+/*
+** display_jobs_args:
+**
+** Go through each jobs arguments, and try to display all given job_id.
+** Display appropriate error message if a wrong job id is given, and stop
+** the display.
+*/
+
+static int		display_jobs_args(char **argv, int p_flag, int l_flag)
 {
 	int		job_id;
 	t_job	*job;
@@ -74,13 +98,30 @@ int		display_jobs_args(char **argv, int p_flag, int l_flag)
 	return (0);
 }
 
-int		jobs(char **argv, char **environ)
+/*
+** built_jobs:
+**
+** jobs - display status of jobs in the current session
+**
+** Synopsis: jobs [-l | -p] [job_id ...]
+**
+** Options:
+** -l : Display job in long format, with job_id. 
+**		Include the job number, pgid, state and command.
+** -p : Only print pgid.
+**
+** Display information about all or each given job.
+*/
+
+
+int		built_jobs(char **argv, char **environ)
 {
 	int		p_flag;
 	int		l_flag;
 	t_pylst	*list_job;
 	t_job	*job;
 
+	UNUSED(environ);
 	if (check_jobs_options(argv, &p_flag, &l_flag) == 1)
 		return (1);
 	if (ft_arraylen(argv) > 0)

@@ -5,6 +5,7 @@
 #include "job_control.h"
 #include "fd_management.h"
 #include "run_ast.h"
+#include "reset_signals.h"
 #undef stdin
 #undef stdout
 

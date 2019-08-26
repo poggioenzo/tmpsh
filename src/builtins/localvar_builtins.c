@@ -50,7 +50,7 @@ static int		show_variables(void)
 	char	*variable;
 	char	*value;
 
-	while (ht_iter(g_variables, &variable, &value))
+	while (ht_iter(g_variables, &variable, (void **)&value))
 		ft_printf("%s=%s\n", variable, value);
 	return (0);
 }
@@ -80,7 +80,7 @@ int		built_set(char **argv, char **environ)
 	index = 0;
 	while (argv[index])
 	{
-		if ((equal = ft_strchr(argv[index], "=")))
+		if ((equal = ft_strchr(argv[index], '=')))
 		{
 			*equal = '\0';
 			variable = argv[index];

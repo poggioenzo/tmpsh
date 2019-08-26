@@ -1,6 +1,7 @@
 #include "tmpsh.h"
 #include "libft.h"
 #include "job_control.h"
+#include "job.h"
 
 t_background_job		*g_jobs = NULL;
 
@@ -31,8 +32,6 @@ void				init_backgroundjobs(void)
 
 t_job			*get_job(int job_id)
 {
-	int		nbr_jobs;
-	int		index;
 	t_pylst	*list_jobs;
 	t_job	*job;
 
@@ -71,11 +70,9 @@ static int			sort_jobs(t_pylst *job_a, t_pylst *job_b)
 
 void				add_job(t_pylst **job_branches)
 {
-	int		job_index;
-	t_acb	*last_branch_job;
 	t_job	*new_job;
 
-	new_job = job_init(new_job);
+	new_job = job_init(job_branches);
 	push_pylst(&g_jobs->list_jobs, new_job, NO_COPY_BUT_FREE, _ptr); //Use _job as type
 	sort_pylst(&g_jobs->list_jobs, sort_jobs);
 	ft_printf("[%d] %s\n", new_job->number, new_job->pgid);

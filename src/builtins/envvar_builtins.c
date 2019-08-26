@@ -71,7 +71,7 @@ int		built_setenv(char **argv, char **environ)
 	index = 0;
 	while (argv[index])
 	{
-		if ((value = ft_strchr(argv[index], "=")))
+		if ((value = ft_strchr(argv[index], '=')))
 		{
 			*value++ = '\0';
 			variable = argv[index];

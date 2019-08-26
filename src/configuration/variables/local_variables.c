@@ -25,6 +25,12 @@ void	ft_setvar(char *variable, char *value)
 	insert_value(g_variables, variable, value, _chare);
 }
 
+/*
+** ft_unsetvar:
+**
+** Remove a variable from the local variables.
+*/
+
 void	ft_unsetvar(char *variable)
 {
 	delete_value(g_variables, variable);

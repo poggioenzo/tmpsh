@@ -69,10 +69,7 @@ void	replace_cmdsubst1(char *content, t_tagstokens *tagstokens, int index)
 {
 	t_pylst		*final_tokens;
 	t_pylst		*statements;
-	char		**tokens;
-	int			nbr_token;
 
-	nbr_token = ft_arraylen(tokens);
 	final_tokens = NULL;
 	statements = NULL;
 	get_final_fields(content, &final_tokens, &statements);

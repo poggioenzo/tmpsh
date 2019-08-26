@@ -18,6 +18,16 @@ void		setup_builtins(void)
 	insert_value(g_builtins, "cd", built_cd, _ptr);
 	insert_value(g_builtins, "exit", built_exit, _ptr);
 	insert_value(g_builtins, "setenv", built_setenv, _ptr);
+	insert_value(g_builtins, "unsetenv", built_unsetenv, _ptr);
+	insert_value(g_builtins, "unset", built_unset, _ptr);
+	insert_value(g_builtins, "set", built_set, _ptr);
+	insert_value(g_builtins, "export", built_export, _ptr);
 	insert_value(g_builtins, "env", built_env, _ptr);
 	insert_value(g_builtins, "echo", built_echo, _ptr);
+	insert_value(g_builtins, "alias", built_alias, _ptr);
+	insert_value(g_builtins, "unalias", built_unalias, _ptr);
+	insert_value(g_builtins, "bg", built_bg, _ptr);
+	insert_value(g_builtins, "fg", built_fg, _ptr);
+	insert_value(g_builtins, "jobs", built_jobs, _ptr);
+	insert_value(g_builtins, "type", built_type, _ptr);
 }

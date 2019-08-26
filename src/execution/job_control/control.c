@@ -138,9 +138,7 @@ enum e_waitstate		analyse_job_status(t_pylst *job_branches, int mode)
 
 void					relaunch(int job_id)
 {
-	t_pylst		*job;
-	pid_t		new_tpgid;
-	t_acb		*last_job_branch;
+	t_job		*job;
 
 	if (is_running(job_id) == finish)
 	{

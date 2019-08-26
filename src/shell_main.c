@@ -13,10 +13,12 @@ int		g_last_status;
 
 int		main(int argc, char **argv, char **environ)
 {
-	int		status = 0;
 	char	*grammar_abs;
 	char	*grammar_file = "/pyshell/grammar/grammar.txt";
 
+	UNUSED(argc);
+	UNUSED(argv);
+	UNUSED(environ);
 	setup_freefct();
 	grammar_abs = getcwd(NULL, 0);
 	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);

@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "tmpsh.h"
+#include "argparser.h"
 
 t_ht_table		*g_alias = NULL;
 
@@ -46,7 +47,7 @@ static int		show_alias(void)
 	char	*alias;
 	char	*value;
 
-	while (ht_iter(g_alias, &alias, &value))
+	while (ht_iter(g_alias, &alias, (void **)&value))
 		ft_printf("%s='%s'\n", alias, value);
 	return (0);
 }
@@ -65,7 +66,7 @@ static int		set_alias(char *argument)
 	char	*alias;
 	char	*value;
 
-	equal = ft_strchr(argument, "=");
+	equal = ft_strchr(argument, '=');
 	*equal = '\0';
 	alias = argument;
 	value = equal + 1;
@@ -97,23 +98,24 @@ static int		set_alias(char *argument)
 ** are written to standard output.
 */
 
-int		bulit_alias(char **argv, char **environ)
+int		built_alias(char **argv, char **environ)
 {
 	int		argc;
 	int		index;
 	char	*argument;
 	char	*arg_value;
 
+	UNUSED(environ);
 	if (error_args(argv) == true)
 		return (1);
-	argc = len_pylst(argv);
+	argc = ft_arraylen(argv);
 	if (argc == 0)
 		return (show_alias());
 	index = 0;
 	while (index < argc)
 	{
 		argument = argv[index];
-		if (!ft_strchr(argument, "="))
+		if (!ft_strchr(argument, '='))
 		{
 			arg_value = search_value(g_alias, argument);
 			if (arg_value)
