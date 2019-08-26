@@ -18,6 +18,7 @@ int skip_openning_tagstokens(t_tagstokens *self, size_t i, char *until)
     char    *tag;
     char    *end_tag;
 
+    stack = NULL;
     tag = (char *)get_value_pylst(self->tags, i++);
     push_pylst(&stack, search_value(g_grammar->opening_tags, tag), 0, _ptr);
     while (i < self->length)

@@ -24,7 +24,7 @@
 
 void	get_tag_tagstokens(t_tagstokens *self)
 {
-	int			iter;
+	size_t		iter;
 	size_t		len_tok;
 	char		*tok;
 

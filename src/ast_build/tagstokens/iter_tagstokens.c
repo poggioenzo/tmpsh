@@ -59,7 +59,7 @@ int		break_out_tagstokens(t_tagstokens *self, int status)
 t_bool	iter_tagstokens(t_tagstokens *self, char **token, char **tag)
 {
 	self->iter++;
-	if (self->iter < self->length)
+	if (self->iter < (int )self->length)
 	{
 		*token = (char *)get_value_pylst(self->tokens, self->iter);
 		*tag = (char *)get_value_pylst(self->tags, self->iter);

@@ -30,7 +30,7 @@ int     find_prev_ind_token(t_tagstokens *self, int i)
 int     find_next_ind_token(t_tagstokens *self, int i)
 {
     if (ft_strequ(get_value_pylst(self->tags, i),"SPACES") &&\
-                                                        i + 1 < self->length)
+                                                    i + 1 < (int)self->length)
         i++;
     return (i);
 }
@@ -70,7 +70,7 @@ char    *find_next_token(t_tagstokens *self, int i, t_bool get_token)
 {
 
     if (ft_strequ(get_value_pylst(self->tags, i),"SPACES") &&\
-                                                        i + 1 < self->length)
+                                                    i + 1 < (int)self->length)
         i++;
     return (get_token ? get_value_pylst(self->tokens, i) :\
                                             get_value_pylst(self->tags, i));
