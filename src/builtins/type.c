@@ -37,13 +37,12 @@ static int		error_options(t_pylst *options)
 **			- error message.
 */
 
-int		built_type(char **argv, char **environ)
+int				built_type(char **argv, NOT_USE(char **environ))
 {
 	char	*used_elem;
 	t_pylst	*options;
 	int		status;
 
-	UNUSED(environ);
 	options = argparser(argv);
 	if (len_pylst(options) > 0)
 		return (error_options(options));

@@ -12,12 +12,11 @@
 ** -n : avoid printing a newline.
 */
 
-int		built_echo(char **args, char **environ)
+int		built_echo(char **args, NOT_USE(char **environ))
 {
 	int		newline;
 	int		error;
 
-	UNUSED(environ);
 	newline = true;
 	error = false;
 	if (ft_strequ(*args, "-n"))

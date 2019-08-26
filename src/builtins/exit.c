@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "tmpsh.h"
 
 /*
 ** built_exit:
@@ -8,12 +9,11 @@
 ** Synopsis : exit [n]
 */
 
-int		built_exit(char **args, char **env)
+int		built_exit(char **args, NOT_USE(char **env))
 {
 	int		argc;
 	int		value;
 
-	UNUSED(env);
 	argc = ft_arraylen(args);
 	if (argc > 2)
 	{

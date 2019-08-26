@@ -10,7 +10,7 @@
 ** (Not really good)
 */
 
-static void		empty_environ(void)
+static void			empty_environ(void)
 {
 	int		index;
 
@@ -25,7 +25,7 @@ static void		empty_environ(void)
 ** Print the entire environnement on stdout.
 */
 
-static void		show_env(void)
+static void			show_env(void)
 {
 	int		index;
 
@@ -44,7 +44,7 @@ static void		show_env(void)
 **			- NULL if env have no command.
 */
 
-static char		*find_execfile(char **args)
+static char			*find_execfile(char **args)
 {
 	int		index;
 
@@ -63,7 +63,7 @@ static char		*find_execfile(char **args)
 ** environnement.
 */
 
-static void		prepare_env(char **args, char **executable_file)
+static void			prepare_env(char **args, char **executable_file)
 {
 	int		empty;
 
@@ -85,18 +85,17 @@ static void		prepare_env(char **args, char **executable_file)
 ** Launch the command utility with the given environnement.
 **
 ** Options:
-** -i : Invoke utility with exactly the environment specified by 
+** -i : Invoke utility with exactly the environment specified by
 **		the arguments; the inherited environment shall be
 **		ignored completely
 */
 
-int		built_env(char **args, char **environ)
+int					built_env(char **args, NOT_USE(char **environ))
 {
 	int		index;
 	pid_t	pid;
 	char	*executable;
 
-	UNUSED(environ);
 	if ((pid = fork()) > 0)
 	{
 		waitpid(pid, NULL, 0);
@@ -113,7 +112,7 @@ int		built_env(char **args, char **environ)
 	if (args[index])
 	{
 		execve(executable, args + index, g_environ);
-		perror("execve"); //Not good.
+		exit(1);
 	}
 	else
 		show_env();

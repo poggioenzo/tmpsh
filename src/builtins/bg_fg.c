@@ -24,9 +24,8 @@ static void		fg_action(t_job *job)
 ** Synopsis : fg [job_id ...]
 */
 
-int		built_fg(char **argv, char **environ)
+int				built_fg(char **argv, NOT_USE(char **environ))
 {
-	UNUSED(environ);
 	return (bg_fg_base(argv, "fg", fg_action));
 }
 
@@ -61,8 +60,7 @@ static void		bg_action(t_job *job)
 ** Relaunch all or given job who are stopped in the background.
 */
 
-int		built_bg(char **argv, char **environ)
+int				built_bg(char **argv, NOT_USE(char **environ))
 {
-	UNUSED(environ);
 	return (bg_fg_base(argv, "bg", bg_action));
 }

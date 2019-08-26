@@ -20,6 +20,9 @@
 #  define UNUSED(variable)	(void) variable
 # endif
 
+# define NOT_USE(arg) __attribute__((unused))arg
+
+
 
 # ifndef NULL
 #  define NULL (void *) 0

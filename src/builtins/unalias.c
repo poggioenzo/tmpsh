@@ -38,16 +38,14 @@ static int		remove_all(t_pylst *options)
 **
 ** Options:
 ** -p : Remove all alias definition.
-**
 */
 
-int		built_unalias(char **argv, char **environ)
+int				built_unalias(char **argv, NOT_USE(char **environ))
 {
 	t_pylst		*options;
 	int			argc;
 	int			index;
-	
-	UNUSED(environ);
+
 	argc = ft_arraylen(argv);
 	if (argc == 0)
 	{

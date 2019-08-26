@@ -11,7 +11,7 @@
 ** https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/\
 ** V1_chap03.html#tag_03_204 !!
 **
-** Jobs id are only working with digit, with pattern like : 
+** Jobs id are only working with digit, with pattern like :
 ** "%[0-9]+"
 */
 
@@ -60,7 +60,7 @@ static int		bg_fg_map_argument(char **argv, char *caller, \
 ** a function pointer. (See bg et fg definition)
 */
 
-int			bg_fg_base(char **argv, char *caller, \
+int				bg_fg_base(char **argv, char *caller, \
 		void (*function)(t_job *job))
 {
 	t_job	*default_job;
@@ -78,4 +78,3 @@ int			bg_fg_base(char **argv, char *caller, \
 	}
 	return (bg_fg_map_argument(argv, caller, function));
 }
-

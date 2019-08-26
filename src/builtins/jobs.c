@@ -12,7 +12,7 @@
 ** If an invalid options if found, display an error message.
 */
 
-static int		check_jobs_options(char **argv, int *p_flag, int *l_flag)
+static int	check_jobs_options(char **argv, int *p_flag, int *l_flag)
 {
 	t_pylst		*options;
 	char		*option_str;
@@ -70,7 +70,7 @@ static void	display_job(t_job *job, int p_flag, int l_flag)
 ** the display.
 */
 
-static int		display_jobs_args(char **argv, int p_flag, int l_flag)
+static int	display_jobs_args(char **argv, int p_flag, int l_flag)
 {
 	int		job_id;
 	t_job	*job;
@@ -106,22 +106,20 @@ static int		display_jobs_args(char **argv, int p_flag, int l_flag)
 ** Synopsis: jobs [-l | -p] [job_id ...]
 **
 ** Options:
-** -l : Display job in long format, with job_id. 
+** -l : Display job in long format, with job_id.
 **		Include the job number, pgid, state and command.
 ** -p : Only print pgid.
 **
 ** Display information about all or each given job.
 */
 
-
-int		built_jobs(char **argv, char **environ)
+int			built_jobs(char **argv, NOT_USE(char **environ))
 {
 	int		p_flag;
 	int		l_flag;
 	t_pylst	*list_job;
 	t_job	*job;
 
-	UNUSED(environ);
 	if (check_jobs_options(argv, &p_flag, &l_flag) == 1)
 		return (1);
 	if (ft_arraylen(argv) > 0)

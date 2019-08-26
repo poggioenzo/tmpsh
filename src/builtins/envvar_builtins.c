@@ -10,11 +10,10 @@
 ** Synopsis : unsetenv [variable ... ]
 */
 
-int		built_unsetenv(char **argv, char **environ)
+int				built_unsetenv(char **argv, NOT_USE(char **environ))
 {
 	int		index;
 
-	UNUSED(environ);
 	if (ft_arraylen(argv) == 0)
 	{
 		ft_dprintf(2, "unsetenv: no arguments.\n");
@@ -60,7 +59,7 @@ static int		show_environ(char **environ)
 ** Otherwise, et each given variable assignation to the environnement.
 */
 
-int		built_setenv(char **argv, char **environ)
+int				built_setenv(char **argv, char **environ)
 {
 	int		index;
 	char	*variable;

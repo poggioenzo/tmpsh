@@ -89,8 +89,8 @@ static int		hash_options(char **argv)
 
 static int		add_new_command(char **argv)
 {
-	char	*new_path;
-	char	*command;
+	char			*new_path;
+	char			*command;
 	t_hash_exec		*cache;
 
 	new_path = argv[1];
@@ -121,11 +121,10 @@ static int		add_new_command(char **argv)
 ** 2) If any <cmd> argument is given, reset to 0 the counter of this command.
 */
 
-int		built_hash(char **argv, char **environ)
+int				built_hash(char **argv, NOT_USE(char **environ))
 {
 	t_hash_exec	*cache;
 
-	UNUSED(environ);
 	if (hash_options(argv) == 1)
 		return (1);
 	if (ft_arraylen(argv) == 0)

@@ -16,7 +16,7 @@ char		*g_shell_dir;
 **			- false if an option is invalid.
 */
 
-int		check_option(t_pylst *options)
+static int	check_option(t_pylst *options)
 {
 	char		*select_option;
 
@@ -24,7 +24,7 @@ int		check_option(t_pylst *options)
 		return (true);
 	while (iter_pylst(options, (void **)&select_option))
 	{
-		if (!(ft_strequ(select_option, "L")  || ft_strequ(select_option, "P")))
+		if (!(ft_strequ(select_option, "L") || ft_strequ(select_option, "P")))
 		{
 			ft_dprintf(2, "cd: invalid option %s\n", select_option);
 			return (free_pylst(&options, false));
@@ -47,7 +47,7 @@ int		check_option(t_pylst *options)
 **			- 1 if the working directory don't change.
 */
 
-int			change_directory(char *directory, int is_p)
+static int	change_directory(char *directory, int is_p)
 {
 	char		*cwd;
 
@@ -84,14 +84,13 @@ int			change_directory(char *directory, int is_p)
 ** of the directory when using chdir.
 */
 
-int		built_cd(char **argv, char **environ)
+int			built_cd(char **argv, NOT_USE(char **environ))
 {
 	t_pylst		*options;
 	char		*new_dir;
 	int			status;
 	int			is_p;
 
-	UNUSED(environ);
 	options = argparser(argv);
 	if (ft_arraylen(argv) >= 2)
 	{

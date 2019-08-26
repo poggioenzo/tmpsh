@@ -10,7 +10,7 @@
 ** message if it do not exist.
 */
 
-char		*get_oldpwd(void)
+char				*get_oldpwd(void)
 {
 	char	*oldpwd;
 
@@ -29,7 +29,7 @@ char		*get_oldpwd(void)
 **			- 1 if access is allowed.
 */
 
-int			allowed_access(char *filename, int print_error)
+int					allowed_access(char *filename, int print_error)
 {
 	if (access(filename, F_OK) == -1)
 	{
@@ -58,7 +58,7 @@ int			allowed_access(char *filename, int print_error)
 ** the value <folder>/<pathname> followed by ./<folder>/<pathname>.
 */
 
-static char		*parse_cdpath(char *pathname)
+static char			*parse_cdpath(char *pathname)
 {
 	char	*cdpath;
 	char	**split_folders;
@@ -73,7 +73,7 @@ static char		*parse_cdpath(char *pathname)
 	new_dir = NULL;
 	while (split_folders[index])
 	{
-		new_dir = ft_filejoin(split_folders + index, &pathname, false, false);
+		new_dir = ft_filejoin(split_folders + index++, &pathname, false, false);
 		if (allowed_access(new_dir, false))
 			break ;
 		ft_strdel(&new_dir);
@@ -82,7 +82,6 @@ static char		*parse_cdpath(char *pathname)
 		if (allowed_access(new_dir, false))
 			break ;
 		ft_strdel(&new_dir);
-		index++;
 	}
 	free_str_array(&split_folders, 0);
 	return (new_dir ? new_dir : ft_strdup(pathname));
@@ -99,7 +98,7 @@ static char		*parse_cdpath(char *pathname)
 **			- canonical filename where try chdir.
 */
 
-char		*find_newdir(char *argument, int p_opt)
+char				*find_newdir(char *argument, int p_opt)
 {
 	char	*new_dir;
 

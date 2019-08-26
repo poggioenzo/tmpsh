@@ -10,7 +10,7 @@
 ** in the POSIX format.
 */
 
-static void	show_exported_env(char **environ)
+static void		show_exported_env(char **environ)
 {
 	char	*variable;
 	char	*value;
@@ -45,7 +45,7 @@ static int		manage_display(t_pylst *options, char **environ)
 		if (len_pylst(options) >= 2 || !ft_strequ(options->value, "p"))
 		{
 			invalid_opt = ft_strequ(options->value, "p") ?\
-						  options->next : options;
+						options->next : options;
 			ft_dprintf(2, "export: invalid option: %s\n", invalid_opt->value);
 			free_pylst(&options, 0);
 			return (1);
@@ -66,7 +66,7 @@ static int		manage_display(t_pylst *options, char **environ)
 ** remove it.
 */
 
-static void export_assignation(char *argument)
+static void		export_assignation(char *argument)
 {
 	char	*variable;
 	char	*value;
@@ -114,7 +114,7 @@ static void		export_var(char *variable)
 **		environnement.
 */
 
-int		built_export(char **argv, char **environ)
+int				built_export(char **argv, char **environ)
 {
 	t_pylst		*options;
 	int			index;

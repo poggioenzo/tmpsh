@@ -54,7 +54,7 @@ static void		remove_duplicate_options(t_pylst **option_list)
 
 	tmp_opt = *option_list;
 	while (tmp_opt)
-	{;
+	{
 		option = tmp_opt->value;
 		tmp_opt = tmp_opt->next;
 		if (str_in_pylst(tmp_opt, option))
@@ -73,12 +73,12 @@ static void		remove_duplicate_options(t_pylst **option_list)
 ** Difference can be done between short and long option using the length
 ** of the string. A long option have at least 2 caracter, when short option
 ** have a single caracter.
-** 
+**
 ** Stop the option whenever a "--" is find.
 ** Keep also the "-" argument in argv, at least for cd because of cd.
 */
 
-t_pylst		*argparser(char **argv)
+t_pylst			*argparser(char **argv)
 {
 	t_pylst		*option_list;
 	int			index;

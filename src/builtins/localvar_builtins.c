@@ -13,12 +13,11 @@
 ** -v : remove alse environnement variables.
 */
 
-int		built_unset(char **argv, char **environ)
+int			built_unset(char **argv, NOT_USE(char **environ))
 {
 	int		index;
 	int		rm_env;
 
-	UNUSED(environ);
 	if (ft_arraylen(argv) == 0)
 	{
 		ft_dprintf(2, "unset: not enough arguments.\n");
@@ -45,7 +44,7 @@ int		built_unset(char **argv, char **environ)
 ** Print local variables in the POSIX format.
 */
 
-static int		show_variables(void)
+static int	show_variables(void)
 {
 	char	*variable;
 	char	*value;
@@ -67,14 +66,13 @@ static int		show_variables(void)
 ** variables.
 */
 
-int		built_set(char **argv, char **environ)
+int			built_set(char **argv, NOT_USE(char **environ))
 {
 	int		index;
 	char	*equal;
 	char	*variable;
 	char	*value;
 
-	UNUSED(environ);
 	if (ft_arraylen(argv) == 0)
 		return (show_variables());
 	index = 0;

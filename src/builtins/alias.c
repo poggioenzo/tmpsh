@@ -4,7 +4,7 @@
 
 t_ht_table		*g_alias = NULL;
 
-void		alias_init(void)
+void				alias_init(void)
 {
 	ht_new_table(&g_alias, 7, 65);
 }
@@ -42,7 +42,7 @@ static t_bool		error_args(char **argv)
 ** and print them in the posix format : "%s=%s\n".
 */
 
-static int		show_alias(void)
+static int			show_alias(void)
 {
 	char	*alias;
 	char	*value;
@@ -60,7 +60,7 @@ static int		show_alias(void)
 ** separate the alias and the value to store it.
 */
 
-static int		set_alias(char *argument)
+static int			set_alias(char *argument)
 {
 	char	*equal;
 	char	*alias;
@@ -84,7 +84,7 @@ static int		set_alias(char *argument)
 ** built_alias:
 **
 ** alias - Create, redefine or display aliases.
-** 
+**
 ** Synopsis : alias [alias-name[=string]...]
 **
 ** The following operands are supported:
@@ -94,36 +94,35 @@ static int		set_alias(char *argument)
 ** alias-name=string
 **    Assign the value of string to the alias alias-name.
 **
-** If no operands are given, all alias definitions 
+** If no operands are given, all alias definitions
 ** are written to standard output.
 */
 
-int		built_alias(char **argv, char **environ)
+int					built_alias(char **argv, NOT_USE(char **environ))
 {
 	int		argc;
 	int		index;
 	char	*argument;
 	char	*arg_value;
 
-	UNUSED(environ);
 	if (error_args(argv) == true)
 		return (1);
-	argc = ft_arraylen(argv);
-	if (argc == 0)
+	if ((argc = ft_arraylen(argv)) == 0)
 		return (show_alias());
 	index = 0;
 	while (index < argc)
 	{
-		argument = argv[index];
+		argument = argv[index++];
 		if (!ft_strchr(argument, '='))
 		{
-			arg_value = search_value(g_alias, argument);
-			if (arg_value)
+			if ((arg_value = search_value(g_alias, argument)))
 				ft_printf("%s='%s'\n", argument, arg_value);
 		}
 		else
+		{
 			if (set_alias(argument) == 1)
 				return (1);
+		}
 	}
 	return (0);
 }
