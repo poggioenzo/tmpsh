@@ -43,9 +43,9 @@ def run_builtin(cmd_args, variables):
     if save_environ:
         save_environ = gv.ENVIRON.copy()
         variables_mod.variables_config(variables, only_env=True)
-    cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
-            dict(os.environ))
-    status = exec(cmd)
+    status = None
+    builtin_fct = getattr(builtins, cmd_args[0])
+    status = builtin_fct(cmd_args[1:], os.environ)
     if save_environ:
         gv.ENVIRON = save_environ
     return status
