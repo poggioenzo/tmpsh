@@ -520,27 +520,17 @@ int in_pylst_chare(char *str, t_pylst *pylst)
 
 char	*str_chare_pylst(t_pylst *pylst)
 {
-	int		len;
-	char	*str;
-	char 	*value;
 
-	len = 3;
-	while (pylst_iter(pylst, (void **)&value) && value)
-		len += ft_strlen(value) + 3;
-	str = (char *)ft_memalloc((len + 1) * sizeof(char));
-	len = 0;
-	str[len++] = '[';
-	while (pylst_iter(pylst, (void **)&value))
-	{
-		str[len++] = '\'';
-		while (*value)
-			str[len++] = *value++;
-		str[len++] = '\'';
-		str[len++] = ',';
-	}
-	str[len++] = ']';
-	str[len++] = '\n';
-	str[len] = 0;
+	char *str;
+	char *cara;
+
+	if (!pylst)
+		return ft_strdup("[]");
+	cara = "['";
+	str = join_pylst(pylst, "', '");
+	str = ft_fstrjoin(&cara, &str, FALSE, TRUE);
+	cara = "']\n";
+	str = ft_fstrjoin(&str, &cara, TRUE, FALSE);
 	return (str);
 }
 
