@@ -161,9 +161,7 @@ class ACB():
         while lentags >= 0:
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
-                if lentags > 0 and \
-                        self.tagstokens.find_prev_token(
-                            lentags - 1).isdigit() and tag != 'HEREDOC':
+                if lentags > 0 and self.tagstokens.find_prev_token(lentags - 1).isdigit() and self.tagstokens.find_prev_token(lentags - 1, False) != 'SUBAST' and tag not in ['HEREDOC', 'HEREDOCMINUS', 'TRIPLEHEREDOC']:
                     source = self.tagstokens.find_prev_token(lentags - 1)
                 self.redirectionfd.append(
                     RedirectionFD(self.tagstokens.copytt(previous),
