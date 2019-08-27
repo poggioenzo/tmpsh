@@ -212,13 +212,14 @@ typedef struct
 
 typedef struct
 {
-	t_tagstokens	tagstokens;
+	t_tagstokens	*tagstokens;
 	char			*type;
 	int				source;
 	char			*dest;
 	char			*print;
 	t_bool			close;
 	t_bool			error;
+	t_ast			*heredoc_ast;
 }		t_redirection_fd;
 
 typedef struct
