@@ -10,7 +10,7 @@
 # include "globals.h"
 
 /*
-** Utils for ast.
+** Utils for tagstokens.
 */
 
 # include "tagstokens.h"
@@ -20,8 +20,5 @@
 ** Local methodes includes.
 */
 
-# include "free_ast.h"
-# include "init_ast.h"
-# include "split_branch_ast.h"
 
 #endif
