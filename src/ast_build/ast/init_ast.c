@@ -2,33 +2,7 @@
 
 #include "ast.h"
 
-char *split_shift(char **str)
-{
-    char **splitted;
-    char **actual;
-    char *shifted;
-    char *tmp;
 
-    shifted = ft_strnew(0);
-    splitted = ft_strsplit(*str, "\n");
-    actual = splitted;
-    tmp = "\t";
-    while (*actual)
-    {
-        *actual = ft_fstrjoin(&tmp, actual, FALSE, TRUE);
-        actual++;
-    }
-    tmp = "\n";
-    actual = splitted;
-    while (*splitted)
-    {
-        *splitted = ft_fstrjoin(splitted, &tmp, TRUE, FALSE);
-        shifted = ft_fstrjoin(&shifted, splitted++, TRUE, TRUE);
-    }
-    ft_memdel((void **)actual);
-    ft_strdel(str);
-    return (shifted);
-}
 
 
 char *str_acb(t_acb *self)
