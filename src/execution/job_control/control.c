@@ -68,8 +68,7 @@ static enum e_waitstate	wait_subast(t_acb *job_branch, int mode)
 	while (index < nbr_subast)
 	{
 		subast = index_pylst(job_branch->subast, index)->value;
-		if ((ft_strequ(subast->type, "CMDSUBST2") || \
-				ft_strequ(subast->type, "CMDSUBST3")) &&
+		if (in(subast->type, "CMDSUBST2", "CMDSUBST3", NULL) &&
 				subast->complete == false)
 		{
 			waitpid_layer(subast->pid, mode, wait_res);

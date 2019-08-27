@@ -5,8 +5,7 @@
 
 static int		is_heredoc(char *type)
 {
-	return (ft_strequ(type, "HEREDOC") || ft_strequ(type, "TRIPLEHEREDOC") || \
-			ft_strequ(type, "HEREDOCMINUS"));
+	return (in(type, "HEREDOC","TRIPLEHEREDOC", "HEREDOCMINUS", NULL));
 }
 
 /*
@@ -35,7 +34,7 @@ static char		*join_cmd(t_pylst *list_branch)
 		while (index < branch->tagstokens->length)
 		{
 			tag = vindex_pylst(branch->tagstokens->tags, index);
-			if (ft_strequ(tag, "STMT") || ft_strequ(tag, "SPACES"))
+			if (in(tag, "STMT", "SPACES", NULL))
 			{
 				token = vindex_pylst(branch->tagstokens->tokens, index);
 				final_cmd = ft_fstrjoin(&final_cmd, &token, true, false);

@@ -1,7 +1,6 @@
 TO DO:
 
 - For CMDSUBST1 replacement, is split with "\n\t " enough ?
-- Create freeing function for different type (t_job, t_hash_exec ...).
 - Remove or change malloc protection
 - Set update tagstoken function.
 - Check if we allow leave shell with background jobs ? Check free in this case

@@ -57,8 +57,7 @@ static char		*retrieve_content(t_ast *subast)
 		waitpid(subast->pid, 0, WUNTRACED);
 		rstrip(content);
 	}
-	else if (ft_strequ(subast->type, "CMDSUBST2") || \
-			ft_strequ(subast->type, "CMDSUBST3"))
+	else if (in(subast->type, "CMDSUBST2", "CMDSUBST3", NULL))
 	{
 		tmp_str = ft_itoa(subast->link_fd);
 		content = ft_strjoin("/dev/fd/", tmp_str);

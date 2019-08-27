@@ -79,8 +79,7 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 		tag = vindex_pylst(branch->tagstokens->tags, index);
 		if (!last_stmt && ft_strequ(tag, "STMT"))
 			last_stmt = vindex_pylst(branch->tagstokens->tokens, index);
-		else if (ft_strequ(tag, "CONCATENATION") || \
-				ft_strequ(tag, "ASSIGNATION_EQUAL"))
+		else if (in(tag, "CONCATENATION", "ASSIGNATION_EQUAL", NULL))
 		{
 			index += 1;
 			fill_assignation(&assignation_list, last_stmt, tag,\

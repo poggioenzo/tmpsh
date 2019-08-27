@@ -53,8 +53,7 @@ static void		run_cmdsubst(t_ast *subast)
 		stdout = -1;
 		if (ft_strequ(subast->type, "CMDSUBST2"))
 			stdin = *((int *)pop_pylst(&pipe_fd, 0));
-		else if (ft_strequ(subast->type, "CMDSUBST1") || \
-				ft_strequ(subast->type, "CMDSUBST3"))
+		else if (in(subast->type, "CMDSUBST1", "CMDSUBST3", NULL))
 			stdout = *((int *)pop_pylst(&pipe_fd, 1));
 		replace_std_fd(stdin, stdout);
 		close(*(int *)pop_pylst(&pipe_fd, 0));

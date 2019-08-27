@@ -5,18 +5,6 @@
 #include "fd_management.h"
 
 /*
-** need_open_file:
-**
-** Check according to the redirection type if a file have to be open.
-*/
-
-static int		need_open_file(char *type)
-{
-	return (ft_strequ(type, "TRUNC") || ft_strequ(type, "APPEND") || \
-			ft_strequ(type, "READ_FROM"));
-}
-
-/*
 ** convert_dest:
 **
 ** Retrieve the int value of the string redirection->dest.
@@ -48,7 +36,7 @@ void			open_redirection_file(t_redirection_fd *redirection)
 	int		fd;
 	int		flags;
 
-	if (need_open_file(redirection->type))
+	if (in(redirection->type, "TRUNC", "APPEND", "READ_FROM", NULL))
 	{
 		flags = 0;
 		if (access(redirection->dest, F_OK) == -1)

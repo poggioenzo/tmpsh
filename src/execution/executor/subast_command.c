@@ -15,8 +15,7 @@
 
 static int		is_bg_or_pipe(t_acb *branch)
 {
-	return (ft_strequ(branch->tag_end, "BACKGROUND_JOBS") || \
-			ft_strequ(branch->tag_end, "PIPE"));
+	return (in(branch->tag_end, "BACKGROUND_JOBS", "PIPE", NULL));
 }
 
 /*
@@ -39,7 +38,7 @@ t_bool		perform_command_as_subast(t_acb *branch)
 	while (index < nbr_subast)
 	{
 		subast = vindex_pylst(branch->subast, index);
-		if (ft_strequ(subast->type, "CURSH") || ft_strequ(subast->type, "SUBSH"))
+		if (in(subast->type, "CURSH", "SUBSH", NULL))
 		{
 			if (ft_strequ(subast->type, "CURSH") && !is_bg_or_pipe(branch))
 			{
