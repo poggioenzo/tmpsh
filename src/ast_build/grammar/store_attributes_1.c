@@ -16,7 +16,7 @@
 ** }
 */
 
-void	get_reverse_grammar(void)
+void		get_reverse_grammar(void)
 {
 	t_pylst	*lst_values;
 	char	*key;

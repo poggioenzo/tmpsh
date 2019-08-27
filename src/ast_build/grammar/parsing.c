@@ -11,7 +11,7 @@
 **			- 0 if the line do not contain a value.
 */
 
-static int		is_value_line(const char *line)
+static int			is_value_line(const char *line)
 {
 	if (line && ft_strlen(line) > 0)
 	{
@@ -31,7 +31,7 @@ static int		is_value_line(const char *line)
 ** return : - Allocated keyword string.
 */
 
-static char		*get_keyword(const char *line)
+static char			*get_keyword(const char *line)
 {
 	char	**split_key;
 	char	*keyword;
@@ -52,7 +52,7 @@ static char		*get_keyword(const char *line)
 ** value.
 */
 
-static void		parse_keyword_values(char **lines, int *i)
+static void			parse_keyword_values(char **lines, int *i)
 {
 	char	*keyword;
 	char	*value;
@@ -64,7 +64,8 @@ static void		parse_keyword_values(char **lines, int *i)
 	if (!keyword_list)
 	{
 		insert_value(g_grammar->grammar, keyword, NULL, _pylst);
-		keyword_list = (t_pylst **)search_value_addr(g_grammar->grammar, keyword);
+		keyword_list = (t_pylst **)search_value_addr(g_grammar->grammar, \
+				keyword);
 	}
 	ft_strdel(&keyword);
 	while (is_value_line(lines[*i]))
@@ -74,7 +75,6 @@ static void		parse_keyword_values(char **lines, int *i)
 		*i += 1;
 	}
 }
-
 
 /*
 ** get_grammar_from_path:
@@ -90,7 +90,7 @@ static void		parse_keyword_values(char **lines, int *i)
 **		}
 */
 
-void get_grammar_from_path(void)
+void				get_grammar_from_path(void)
 {
 	char	*content;
 	char	**lines;
@@ -111,4 +111,3 @@ void get_grammar_from_path(void)
 	}
 	free_str_array(&lines, 0);
 }
-

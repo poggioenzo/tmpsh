@@ -37,19 +37,19 @@ int		get_maxlen(t_pylst *iterator)
 ** and or our reverse->background.
 */
 
-void		add_symbol(char *symbol, char *symbol_name)
+void	add_symbol(char *symbol, char *symbol_name)
 {
 	t_pylst		**tmp_lst;
 
 	if (!search_value(g_grammar->grammar, symbol_name))
 	{
 		insert_value(g_grammar->grammar, symbol_name, NULL, _pylst);
-		tmp_lst = (t_pylst **)search_value_addr(g_grammar->grammar, symbol_name);
+		tmp_lst = (t_pylst **)search_value_addr(g_grammar->grammar, \
+				symbol_name);
 		push_pylst(tmp_lst, symbol, 0, _chare);
 	}
 	insert_value(g_grammar->reverse, symbol, symbol_name, _ptr);
 }
-
 
 int		containalphanum(char *str)
 {

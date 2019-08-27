@@ -21,7 +21,7 @@ static void		ft_puthidestr(char *str)
 	}
 }
 
-void	print_opening_tags(void)
+void			print_opening_tags(void)
 {
 	char	*value;
 	char	*key;
@@ -33,7 +33,7 @@ void	print_opening_tags(void)
 	ft_printf("}\n");
 }
 
-void	print_spaces(void)
+void			print_spaces(void)
 {
 	char	*value;
 
@@ -47,7 +47,8 @@ void	print_spaces(void)
 	}
 	ft_printf("]\n");
 }
-void	print_leaf_op(void)
+
+void			print_leaf_op(void)
 {
 	char *operator;
 
@@ -62,7 +63,7 @@ void	print_leaf_op(void)
 	ft_printf("]\n");
 }
 
-void	print_dquotes_opening_tags(void)
+void			print_dquotes_opening_tags(void)
 {
 	char	*value;
 	char	*key;
@@ -73,4 +74,3 @@ void	print_dquotes_opening_tags(void)
 		ft_printf("\"%s\" : \"%s\", ", key, value);
 	ft_printf("}\n");
 }
-

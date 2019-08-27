@@ -7,7 +7,7 @@
 
 t_grammar	*g_grammar = NULL;
 
-static void	shell_grammar_init(void)
+static void		shell_grammar_init(void)
 {
 	void	*tmp;
 
@@ -31,7 +31,7 @@ static void	shell_grammar_init(void)
 ** Deallocate each t_grammar attributes.
 */
 
-void		free_grammar(void)
+void			free_grammar(void)
 {
 	free_pylst(&g_grammar->leaf_op, 0);
 	free_hash_table(&g_grammar->dquotes_opening_tags, 0);
@@ -53,7 +53,7 @@ void		free_grammar(void)
 ** Setup each attribute of the variable, differents dictionnaries, lists etc.
 */
 
-void	grammar_init(char *path)
+void			grammar_init(char *path)
 {
 	g_grammar = (t_grammar *)ft_memalloc(sizeof(t_grammar));
 	g_grammar->path = path;
