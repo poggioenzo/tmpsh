@@ -49,6 +49,8 @@ enum			e_ctype
 	_inte,
 	_pylst,
 	_hash_table,
+	_hash_exec,
+	_job,
 	size
 };
 

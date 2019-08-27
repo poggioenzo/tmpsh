@@ -178,6 +178,15 @@ GRAMMAR_SRCS := grammar_init.c \
 
 GRAMMAR_SRCS := $(addprefix $(GRAMMAR_DIR), $(GRAMMAR_SRCS))
 
+FREE_DIR = free_memory/
+
+FREE_SRCS := free_manager.c \
+			 free_type1.c \
+			 free_execution.c \
+
+
+FREE_SRCS := $(addprefix $(FREE_DIR), $(FREE_SRCS))
+
 AST_DIR = ast_build/
 
 AST_SRCS := $(GRAMMAR_SRCS) \
@@ -194,3 +203,4 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(BUILTINS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(EXECUTION_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(AST_SRCS)) \
+		   $(addprefix $(SOURCES_DIR), $(FREE_SRCS)) \

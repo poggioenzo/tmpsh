@@ -174,8 +174,6 @@ SRCS = ft_atoi.c \
 	   create_tab.c \
 	   find_index.c \
 	   ft_arraylen.c \
-	   free_manager.c \
-	   free_type1.c \
 	   garbage_alloc.c \
 	   $(SRCS_PRINTF) \
 	   $(SRCS_HASH_TABLE) \

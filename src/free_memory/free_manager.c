@@ -1,4 +1,5 @@
 #include "libft.h"
+#include "freeing.h"
 
 /*
 ** setup_freefct:
@@ -15,4 +16,6 @@ void		setup_freefct(void)
 	g_free_fct[_inte] = free_inte;
 	g_free_fct[_pylst] = free_pylst_type;
 	g_free_fct[_hash_table] = free_hash_table_type;
+	g_free_fct[_job] = free_job_type;
+	g_free_fct[_hash_exec] = free_hash_exec_type;
 }

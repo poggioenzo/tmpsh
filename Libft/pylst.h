@@ -38,19 +38,9 @@ struct		s_pylst
 
 void		push_pylst(t_pylst **pylst, void *value, int size, int ctype);
 
-/*
-** Freeing function for each data type
-*/
 
 int		free_pylst(t_pylst **pylst, int status);
 int		free_pylst_node(t_pylst **py_node, int status);
-
-void			no_free(void *ptr);
-void			free_chare(void *str_ptr);
-void			free_charee(void *array_ptr);
-void			free_inte(void *array_ptr);
-void			free_pylst_type(void *pylst_ptr);
-void			free_hash_table_type(void *table_ptr);
 
 void	pylst_clean_node(t_pylst *node);
 void	pylst_clean(t_pylst *pylst);
