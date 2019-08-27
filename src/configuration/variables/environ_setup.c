@@ -38,5 +38,6 @@ void			duplicate_environ(char **environ)
 	{
 		bins_files = get_path_default();
 		ft_setenv("PATH", bins_files);
+		ft_strdel(&bins_files);
 	}
 }

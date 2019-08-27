@@ -21,12 +21,9 @@ static void		fill_assignation(t_pylst **assignations, char *key, \
 	t_pylst		*operation;
 
 	operation = NULL;
-	//Probably dont need duplication here.
-	key = ft_strdup(key);
-	value = ft_strdup(value);
-	push_pylst(&operation, key, NO_COPY_BUT_FREE, _chare);
+	push_pylst(&operation, key, 0, _chare);
 	push_pylst(&operation, method, 0, _chare);
-	push_pylst(&operation, value, NO_COPY_BUT_FREE, _chare);
+	push_pylst(&operation, value, 0, _chare);
 	push_pylst(assignations, operation, NO_COPY_BUT_FREE, _pylst);
 }
 
@@ -105,7 +102,6 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 ** Facility to set up a list of assignations, storing each given value.
 */
 
-//MALLOC: What should I clean @assignations ?
 void			variables_config(t_pylst *assignations, t_bool only_env)
 {
 	t_pylst		*operation;
@@ -121,4 +117,5 @@ void			variables_config(t_pylst *assignations, t_bool only_env)
 		value = vindex_pylst(operation, 2);
 		update_var(key, value, mode, only_env);
 	}
+	free_pylst(&assignations, 0);
 }

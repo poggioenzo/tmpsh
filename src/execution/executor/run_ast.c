@@ -95,7 +95,7 @@ void			run_ast(t_ast *ast)
 	job_list = NULL;
 	while (index < nbr_branch)
 	{
-		branch = (t_acb *)vindex_pylst(ast->list_branch, index);
+		branch = vindex_pylst(ast->list_branch, index);
 		push_pylst(&job_list, branch, 0, _ptr); //Need to use branch ??
 		replace_variable(branch);
 		if (check_andor(branch) == false)

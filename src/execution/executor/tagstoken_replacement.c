@@ -19,7 +19,10 @@ static void		replace_redirection(t_acb *branch, int change_index, char *content)
 		tag = redirection->tagstokens->tags->value;
 		token = redirection->tagstokens->tokens->value;
 		if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
+		{
+			ft_memdel(&redirection->dest);
 			redirection->dest = content;
+		}
 	}
 }
 
@@ -39,12 +42,13 @@ static void		get_final_fields(char *content, t_pylst **final_tokens, \
 	char		*token;
 
 	tokens_list = ft_strsplit(content, "\n\t ");
+	ft_strdel(&content);
 	index = 0;
 	nbr_tokens = ft_arraylen(tokens_list);
 	while (index < nbr_tokens)
 	{
 		token = tokens_list[index++];
-		push_pylst(final_tokens, token, ft_strlen(token) + 1, _chare);
+		push_pylst(final_tokens, token, NO_COPY_BUT_FREE, _chare);
 		push_pylst(statements, "STMT", 0, _ptr);
 		if (index < nbr_tokens)
 		{
@@ -52,7 +56,7 @@ static void		get_final_fields(char *content, t_pylst **final_tokens, \
 			push_pylst(statements, "SPACES", 0, _ptr);
 		}
 	}
-	free_str_array(&tokens_list, 0);
+	ft_memdel(&tokens_list);
 }
 
 /*

@@ -25,23 +25,25 @@ static char		*join_cmd(t_pylst *list_branch)
 	char			*final_cmd;
 	t_acb			*branch;
 	int				index;
-	t_tagstokens	*tagstok;
+	char			*token;
 	char			*tag;
 
 	final_cmd = ft_strnew(0);
 	while (iter_pylst(list_branch, (void **)&branch))
 	{
 		index = 0;
-		tagstok = branch->tagstokens;
-		while (index < tagstok->length)
+		while (index < branch->tagstokens->length)
 		{
-			tag = vindex_pylst(tagstok->tags, index);
+			tag = vindex_pylst(branch->tagstokens->tags, index);
 			if (ft_strequ(tag, "STMT") || ft_strequ(tag, "SPACES"))
-				final_cmd = ft_fstrjoin(&final_cmd, &tag, true, false);
+			{
+				token = vindex_pylst(branch->tagstokens->tokens, index);
+				final_cmd = ft_fstrjoin(&final_cmd, &tokens, true, false);
+			}
 			index++;
 		}
-		tag = "\n";
-		final_cmd = ft_fstrjoin(&final_cmd, &tag, true, false);
+		token = "\n";
+		final_cmd = ft_fstrjoin(&final_cmd, &token, true, false);
 	}
 	return (final_cmd);
 }

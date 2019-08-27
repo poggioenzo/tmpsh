@@ -2,9 +2,10 @@ TO DO:
 
 - check if update_pylst function work.
 - For CMDSUBST1 replacement, is split with "\n\t " enough ?
-- Need to setup all global variable in the right place.
+- Need to setup all global variable in the right place + Freeing them
 - Create freeing function for different type (t_job, t_hash_exec ...).
 - Remove or change malloc protection
+- Set update tagstoken function.
 -------------------------------
 
 

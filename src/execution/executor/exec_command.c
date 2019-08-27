@@ -55,6 +55,12 @@ static void		close_branch_stdfd(t_acb *branch)
 		close(branch->stdout);
 }
 
+static int		execution_cleaner(char **argv, char *command, int status)
+{
+	ft_strdel(&command);
+	return (free_str_array(&argv, status));
+}
+
 /*
 ** child_execution:
 **
@@ -72,7 +78,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	if (executable && !ft_strchr(executable, '/'))
 	{
 		branch->status = run_builtin(argv, variables);
-		return (-1);
+		return (execution_cleaner(argv, executable, -1));
 	}
 	pid = fork_prepare(branch->pgid, branch->background);
 	if (pid == 0)
@@ -88,7 +94,8 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	}
 	close_branch_stdfd(branch);
 	branch->running = true;
-	return (free_pylst(&variables, pid));
+	free_pylst(&variables, pid);
+	return (execution_cleaner(argv, command, pid));
 }
 
 /*
