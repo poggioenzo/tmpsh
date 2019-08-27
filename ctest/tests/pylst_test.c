@@ -38,18 +38,18 @@ void	simple_int_pylst(void)
 
 	// Push a single element
 	int		value = 150;
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 
 	// Add one more element to have 2 node
 	int		value2 = -150;
-	push_pylst(&pylst, &value2, 0, _int);
+	push_pylst(&pylst, &value2, 0, _ptr);
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 	ASSERT_INTCMP(x_test, *(int *)pylst->next->value, value2);
 
 	// Test with 3 nodes
 	int		value3 = 0;
-	push_pylst(&pylst, &value3, 0, _int);
+	push_pylst(&pylst, &value3, 0, _ptr);
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 	ASSERT_INTCMP(x_test, *(int *)pylst->next->value, value2);
 	ASSERT_INTCMP(x_test, *(int *)pylst->next->next->value, value3);
@@ -63,7 +63,7 @@ void	multitype_pylst(void)
 	// Test if we can have multiple element in a list
 	int		value = 101;
 	char	*str = "a string";
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	push_pylst(&pylst, str, sizeof(char) * (ft_strlen(str) + 1), _chare);
 	ASSERT_INTCMP(x_test, *(int *)pylst->value, value);
 	ASSERT_STRCMP(x_test, (char *)pylst->next->value, str);
@@ -87,15 +87,15 @@ void	len_pylst_test(void)
 	// Simplie test with few elements
 	int		value = -1500;
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 0);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 1);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 2);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 3);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 4);
-	push_pylst(&pylst, &value, 0, _int);
+	push_pylst(&pylst, &value, 0, _ptr);
 	ASSERT_INTCMP(x_test, len_pylst(pylst), 5);
 }
 
@@ -457,4 +457,73 @@ void	replace_negativ_pylst_test(void)
 	lst_to_test = PYLST(3, "TEST", "string", "CONTENT");
 	replace_pylst(&lst_to_test, PYLST(1, "middle"), -2, -1);
 	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(3, "TEST", "middle", "CONTENT"));
+}
+
+void	update_pylst_test(void)
+{
+	int		x_test = 0;
+	t_pylst	*lst_to_test;
+	int		first_allocsize;
+	int		second_allocsize;
+	char	*first_var;
+	char	*second_var;
+
+	//Simple test change the first node
+	first_var = "New";
+	push_pylst(&lst_to_test, "VALUE", 0, _ptr);
+	first_allocsize = sizeof(char) * (ft_strlen(first_var) + 1);
+	update_pylst(lst_to_test, 0, first_var, first_allocsize, _chare);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(1, first_var));
+
+	//Verify if attributes have been set properly
+	ASSERT_INTCMP(x_test, lst_to_test->ctype, _chare);
+	ASSERT_INTCMP(x_test, lst_to_test->size, first_allocsize);
+
+	//Add a new element, and change each index one by one.
+	first_var = "Rock";
+	first_allocsize = sizeof(char) * (ft_strlen(first_var) + 1);
+	push_pylst(&lst_to_test, "Random", 0, _ptr);
+	update_pylst(lst_to_test, 0, first_var, first_allocsize, _chare);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, first_var, "Random")); 
+
+	//Change the second element
+	second_var = "N'roll";
+	second_allocsize = sizeof(char) * (ft_strlen(second_var) + 1);
+	update_pylst(lst_to_test, 1, second_var, second_allocsize, _chare);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, PYLST(2, first_var, second_var)); 
+
+	//Test for each new element if attributes are set properly
+	//Check for index 0
+	ASSERT_INTCMP(x_test, lst_to_test->ctype, _chare);
+	ASSERT_INTCMP(x_test, lst_to_test->size, first_allocsize);
+
+	//Check for index 1
+	ASSERT_INTCMP(x_test, lst_to_test->next->ctype, _chare);
+	ASSERT_INTCMP(x_test, lst_to_test->next->size, second_allocsize);
+
+	//Create a bigger pylst and change some random index
+	//(each extreme and some in the middle)
+	lst_to_test = PYLST(6, "0", "1", "2", "3", "4", "5");
+
+	//Replace each extreme
+	//the 0th index first.
+	update_pylst(lst_to_test, 0, "Test0", 0, _ptr);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, \
+			PYLST(6, "Test0", "1", "2", "3", "4", "5")); 
+
+	//last index (aka 5)
+	update_pylst(lst_to_test, 5, "Test5", 0, _chare);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, \
+			PYLST(6, "Test0", "1", "2", "3", "4", "Test5")); 
+
+	//Replace index 2 and 4, to test middle of the pylst
+	//Index 2
+	update_pylst(lst_to_test, 2, "Test2", 0, _chare);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, \
+			PYLST(6, "Test0", "1", "Test2", "3", "4", "Test5")); 
+
+	//Index 4
+	update_pylst(lst_to_test, 4, "Test4", 0, _chare);
+	ASSERT_PYLSTCMP(x_test, lst_to_test, \
+			PYLST(6, "Test0", "1", "Test2", "3", "Test4", "Test5")); 
 }
