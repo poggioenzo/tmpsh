@@ -277,4 +277,6 @@ int				ft_isfolder(char *filename);
 int				find_index(char *str, char c);
 char			**create_tab(int size);
 
+int             digitstr(char *str);
+
 #endif

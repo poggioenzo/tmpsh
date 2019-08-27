@@ -116,7 +116,7 @@ SRCS = ft_atoi.c \
 	   ft_strset.c \
 	   ft_strdel_out.c \
 	   ft_strdup.c \
-		 ft_strndup.c \
+	   ft_strndup.c \
 	   ft_strequ.c \
 	   ft_striter.c \
 	   ft_striteri.c \
@@ -175,6 +175,7 @@ SRCS = ft_atoi.c \
 	   find_index.c \
 	   ft_arraylen.c \
 	   free_manager.c \
+	   digitstr.c\
 	   free_type1.c \
 	   garbage_alloc.c \
 	   $(SRCS_PRINTF) \
