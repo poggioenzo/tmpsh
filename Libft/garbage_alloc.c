@@ -12,7 +12,6 @@
 /* ************************************************************************** */
 
 #include "garbage.h"
-int		ft_printf(char *format, ...);
 
 t_garblst		*g_garbage = NULL;
 
