@@ -8,7 +8,8 @@ COMMON_SRCS := char_concatenation.c \
 			   display.c \
 			   edition.c \
 			   t_cursor_utils.c \
-			   prompt_loop.c
+			   prompt_loop.c\
+			   setup_shell_freefct.c
 
 COMMON_SRCS := $(addprefix $(SOURCES_DIR), $(COMMON_SRCS)) \
 			   $(MAIN_FILE)
@@ -194,6 +195,7 @@ ACB_DIR = acb/
 ACB_SRCS :=	check_redirection_acb.c\
 			init_acb.c\
 			str_acb.c\
+			free_acb.c\
 			check_subast_acb.c\
 			set_subast_type_acb.c\
 
@@ -206,6 +208,8 @@ REDIRECTIONFD_DIR = redirectionfd/
 REDIRECTIONFD_SRCS :=	get_heredoc_redfd.c\
 						init_redfd.c\
 						str_redfd.c\
+						free_redfd.c\
+
 
 REDIRECTIONFD_SRCS := $(addprefix $(REDIRECTIONFD_DIR), $(REDIRECTIONFD_SRCS))
 

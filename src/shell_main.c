@@ -4,6 +4,7 @@
 #include "prompt_loop.h"
 #include <fcntl.h>
 
+#include "setup_shell_freefct.h"
 #include "tagstokens.h"
 #include "grammar_init.h"
 #include "ast.h"
@@ -25,7 +26,7 @@ int		main(int argc, char **argv)//char **environ)
 		return (64);
 	}
 	tgtk = NULL;
-	setup_freefct();
+	setup_shell_freefct();
 	cwd = getcwd(NULL, 0);
 	grammar_abs = ft_strjoin(cwd, grammar_file);
 	free(cwd);
@@ -37,6 +38,7 @@ int		main(int argc, char **argv)//char **environ)
 	// ft_printf("%s\n", "LOL");
 	ft_printf("%s\n", str_ast(ast));
 	// ft_printf("%s\n", "LOL");
+	free_ast(ast);
 	free_tagstokens(&tgtk, TRUE);
 	return (0);
 }

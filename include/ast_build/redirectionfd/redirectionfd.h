@@ -22,5 +22,6 @@
 # include "get_heredoc_redfd.h"
 # include "init_redfd.h"
 # include "str_redfd.h"
+# include "free_redfd.h"
 
 #endif

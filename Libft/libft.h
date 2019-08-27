@@ -47,6 +47,9 @@ enum			e_ctype
 	_inte,
 	_pylst,
 	_hash_table,
+	_ast,
+	_acb,
+	_redfd,
 	size
 };
 

@@ -27,5 +27,6 @@
 # include "check_subast_acb.h"
 # include "set_subast_type_acb.h"
 # include "str_acb.h"
+# include "free_acb.h"
 
 #endif
