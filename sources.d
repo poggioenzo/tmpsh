@@ -180,12 +180,41 @@ SHIFTREDUCE_SRCS := $(addprefix $(SHIFTREDUCE_DIR), $(SHIFTREDUCE_SRCS))
 
 AST_DIR = ast/
 
-AST_SRCS :=	free_ast.c \
-				init_ast.c \
-				split_branch_ast.c \
+AST_SRCS :=	free_ast.c\
+			init_ast.c\
+			split_branch_ast.c\
+			str_ast.c\
 
 
 AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS))
+
+
+ACB_DIR = acb/
+
+ACB_SRCS :=	check_redirection_acb.c\
+			init_acb.c\
+			str_acb.c\
+			check_subast_acb.c\
+			set_subast_type_acb.c\
+
+
+ACB_SRCS := $(addprefix $(ACB_DIR), $(ACB_SRCS))
+
+
+REDIRECTIONFD_DIR = redirectionfd/
+
+REDIRECTIONFD_SRCS :=	get_heredoc_redfd.c\
+						init_redfd.c\
+						str_redfd.c\
+
+REDIRECTIONFD_SRCS := $(addprefix $(REDIRECTIONFD_DIR), $(REDIRECTIONFD_SRCS))
+
+
+UTILS_DIR = utils/
+
+UTILS_SRCS :=	split_shift.c\
+
+UTILS_SRCS := $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
 
 
 
@@ -196,6 +225,9 @@ AST_BUILD_SRCS := $(GRAMMAR_SRCS) \
 						$(TAGSTOKENS_SRCS) \
 						$(SHIFTREDUCE_SRCS) \
 						$(AST_SRCS) \
+						$(ACB_SRCS) \
+						$(REDIRECTIONFD_SRCS) \
+						$(UTILS_SRCS) \
 
 AST_BUILD_SRCS := $(addprefix $(AST_BUILD_DIR), $(AST_BUILD_SRCS)) \
 
