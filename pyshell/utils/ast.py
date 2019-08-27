@@ -171,7 +171,6 @@ class ACB():
                 if source:
                     del self.tagstokens[self.tagstokens.find_prev_ind_token(
                         lentags - 1)]
-                    self.tagstokens.update_length()
                     lentags = self.tagstokens.length - 1
                     source = None
             elif tag != 'SPACES':
