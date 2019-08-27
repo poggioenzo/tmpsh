@@ -13,7 +13,6 @@
 
 int		main(int argc, char **argv)//char **environ)
 {
-	DF;
 	char	*grammar_abs;
 	char	*grammar_file = "/pyshell/grammar/grammar.txt";
 	char	*cwd;
@@ -39,7 +38,6 @@ int		main(int argc, char **argv)//char **environ)
 	ft_printf("%s\n", str_ast(ast));
 	// ft_printf("%s\n", "LOL");
 	free_tagstokens(&tgtk, TRUE);
-	DFE;
 	return (0);
 }
 
