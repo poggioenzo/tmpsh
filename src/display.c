@@ -8,7 +8,7 @@
 ** Delete the given number of line, moving up the cursor each time.
 */
 
-void			clean_lines(int nb_line, int is_last_line)
+void	clean_lines(int nb_line, int is_last_line)
 {
 	ft_printf(g_caps->start_line);
 	while (nb_line--)
@@ -27,7 +27,7 @@ void			clean_lines(int nb_line, int is_last_line)
 ** Write the entire shell in a single write for optimisation.
 */
 
-void		display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
+void	display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
 {
 	static int	displayed_lines = 0;
 	int			curr_line_size;

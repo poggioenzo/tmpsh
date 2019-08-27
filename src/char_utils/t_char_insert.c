@@ -9,7 +9,7 @@
 ** Insert a new char at the cursor position, incrementing his position.
 */
 
-void		cursor_insert(t_line *shell_repr, char letter, t_cursor *cursor)
+void	cursor_insert(t_line *shell_repr, char letter, t_cursor *cursor)
 {
 	t_char		*prev_char;
 	t_line		*cursor_line;
@@ -27,7 +27,7 @@ void		cursor_insert(t_line *shell_repr, char letter, t_cursor *cursor)
 ** Protection by creating a new node if the given t_char * is NULL.
 */
 
-void			insert_char(t_char **char_lst, char letter, int lock)
+void	insert_char(t_char **char_lst, char letter, int lock)
 {
 	t_char	*new_char;
 
@@ -56,6 +56,6 @@ void	insert_string(t_char **char_lst, char *string, int lock)
 	while (*string)
 	{
 		insert_char(char_lst, *string++, lock);
-		char_lst = &(*char_lst)->next;		
+		char_lst = &(*char_lst)->next;
 	}
 }

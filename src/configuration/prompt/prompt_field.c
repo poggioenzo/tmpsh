@@ -13,7 +13,7 @@
 
 #include "libft.h"
 #ifdef __linux
- #include <time.h>
+# include <time.h>
 #endif
 #include "tmpsh.h"
 

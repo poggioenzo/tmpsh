@@ -62,10 +62,10 @@ void		create_t_line(t_line **new_line, int position)
 ** Extend a t_line element, add a new t_line at the end of the current list.
 */
 
-void			push_end_line(t_line **line_lst)
+void		push_end_line(t_line **line_lst)
 {
 	t_line	*tmp_line;
-	
+
 	if (!*line_lst)
 		create_t_line(line_lst, 0);
 	else

@@ -2,7 +2,7 @@
 #include "libft.h"
 #include "t_caps_utils.h"
 
-void		alloc_cursor(t_cursor **cursor)
+void	alloc_cursor(t_cursor **cursor)
 {
 	if (!(*cursor = (t_cursor *)MALLOC(sizeof(t_cursor))))
 		exit(-1);

@@ -24,7 +24,7 @@ void		lower_str(char *str)
 /*
 ** fill_all_strings:
 **
-** Use the array allocated by fill_operand_table to prepare the locked part of 
+** Use the array allocated by fill_operand_table to prepare the locked part of
 ** the new added line. Add operand in their apparition order.
 */
 
@@ -43,7 +43,8 @@ static void	fill_all_strings(t_pylst *stack, char **joined_separator)
 		lower_str(new_operand);
 		if (stack->next)
 			new_operand = ft_fstrjoin(&new_operand, &tmp_str, true, false);
-		*joined_separator = ft_fstrjoin(joined_separator, &new_operand, true, true);
+		*joined_separator = \
+					ft_fstrjoin(joined_separator, &new_operand, true, true);
 		stack = stack->next;
 	}
 }
@@ -72,7 +73,7 @@ static void	format_operand_string(t_pylst *stack, char **operand_str)
 ** Format this new line depending of the current operand chained list.
 */
 
-void			add_new_line(t_line *shell_repr, t_tagstokens *tagstok, \
+void		add_new_line(t_line *shell_repr, t_tagstokens *tagstok, \
 				t_cursor *cursor)
 {
 	char	*operand_str;

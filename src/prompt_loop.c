@@ -52,10 +52,10 @@ static int		char_loop(t_line **shell_repr, t_cursor **cursor, char *buffer)
 
 void			prompt_loop(void)
 {
-	int		read_ret;
-	char	buff[PROMPT_BUFF + 1];
-	t_cursor		*cursor;
-	t_line			*shell_repr;
+	int			read_ret;
+	char		buff[PROMPT_BUFF + 1];
+	t_cursor	*cursor;
+	t_line		*shell_repr;
 
 	manage_termios(SETUP);
 	history_store(CREATE, NULL);

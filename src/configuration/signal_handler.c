@@ -25,7 +25,7 @@ static void		shell_interupt(int status)
 	UNUSED(status);
 	tpgid = get_tpgid();
 	//SHOULD I wait with WNOHANG or normally, can be intersting
-	//to wait programs end, if the are doing some stuff before exiting?
+	//to wait programs end, if they are doing some stuff before exiting?
 	while (waitpid(-tpgid, NULL, WNOHANG) != -1)
 		;
 	manage_shell_repr(GET, &shell_repr, &cursor);

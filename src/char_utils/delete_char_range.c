@@ -19,8 +19,8 @@
 char	*delete_char_range(t_char *char_lst, t_char *from,\
 				t_char *to, int get_str)
 {
-	t_char	*prev_char;
-	char	*cutted_str;
+	t_char		*prev_char;
+	char		*cutted_str;
 	t_cursor	fake_cursor;
 
 	fake_cursor = (t_cursor){.row = -1, .column = -1};

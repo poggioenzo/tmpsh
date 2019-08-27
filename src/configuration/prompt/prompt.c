@@ -46,7 +46,7 @@ static void	insert_field(char **prompt, int index, char *(*data_func)(void))
 ** value.
 */
 
-static char		*parse_prompt_format(char *format)
+static char	*parse_prompt_format(char *format)
 {
 	char	*final_prompt;
 	int		index;
@@ -80,7 +80,7 @@ static char		*parse_prompt_format(char *format)
 ** - %d : Display the current directory
 */
 
-char	*format_prompt(void)
+char		*format_prompt(void)
 {
 	char	*default_format;
 

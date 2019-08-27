@@ -11,7 +11,7 @@
 ** The history is having a format like : "#123: my_cmd"
 */
 
-static int		is_new_command(char *line)
+static int	is_new_command(char *line)
 {
 	int		index;
 
@@ -27,14 +27,13 @@ static int		is_new_command(char *line)
 	return (FALSE);
 }
 
-
 /*
 ** command_len:
 **
 ** From our current commands list, get the len of the next command.
 */
 
-static int		command_len(char *command)
+static int	command_len(char *command)
 {
 	int		index;
 
@@ -58,7 +57,7 @@ static int		command_len(char *command)
 ** to start the next time at a command beginning.
 */
 
-static char		*cut_next_command(char **command_list)
+static char	*cut_next_command(char **command_list)
 {
 	char	*cursor_pos;
 	int		len;
@@ -90,7 +89,7 @@ static char		*cut_next_command(char **command_list)
 ** - the string of the new command.
 */
 
-char	*get_next_command(char *filename)
+char		*get_next_command(char *filename)
 {
 	static char		*history_content = NULL;
 	static int		stored = FALSE;

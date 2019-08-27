@@ -16,8 +16,8 @@
 int			rewrite_history(t_hist *history)
 {
 	unsigned int	index;
-	int		hist_fd;
-	char	*history_filename;
+	int				hist_fd;
+	char			*history_filename;
 
 	history_filename = replace_home(HISTORY_FILE);
 	hist_fd = open(history_filename, O_CREAT | O_WRONLY, 0600);

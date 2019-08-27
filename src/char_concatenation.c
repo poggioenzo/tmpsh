@@ -34,7 +34,7 @@ static int		get_repr_len(t_char *char_lst, t_cursor *cursor, int line)
 ** the reverse video mode.
 */
 
-static void	add_cursor_repr(char *line, int *str_index, char cursor_letter)
+static void		add_cursor_repr(char *line, int *str_index, char cursor_letter)
 {
 	ft_strcpy(line + *str_index, g_caps->video);
 	*str_index += ft_strlen(g_caps->video);
@@ -51,7 +51,7 @@ static void	add_cursor_repr(char *line, int *str_index, char cursor_letter)
 ** Concet the string with the locked part of the t_char.
 */
 
-char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
+char			*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 {
 	char	*line_repr;
 	int		line_len;
@@ -59,20 +59,20 @@ char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 	int		cursor_displayed;
 
 	line_len = get_repr_len(char_lst, cursor, line);
-	if (!(line_repr = (char *)MALLOC(sizeof(char) * (line_len+ 5))))
+	if (!(line_repr = (char *)MALLOC(sizeof(char) * (line_len + 5))))
 		exit(-1);
 	index = 0;
 	cursor_displayed = FALSE;
 	while (char_lst)
 	{
-			if (line == cursor->row && cursor->column == char_lst->position)
-			{
-				add_cursor_repr(line_repr, &index, char_lst->letter);
-				cursor_displayed = TRUE;
-			}
-			else
-				line_repr[index++] = char_lst->letter;
-			char_lst = char_lst->next;
+		if (line == cursor->row && cursor->column == char_lst->position)
+		{
+			add_cursor_repr(line_repr, &index, char_lst->letter);
+			cursor_displayed = TRUE;
+		}
+		else
+			line_repr[index++] = char_lst->letter;
+		char_lst = char_lst->next;
 	}
 	if (cursor_displayed == FALSE && line == cursor->row)
 		add_cursor_repr(line_repr, &index, ' ');
@@ -130,8 +130,8 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 
 static void		history_formatter(t_line **shell_repr, char **format)
 {
-	int line_len;
-	int	index;
+	int		line_len;
+	int		index;
 	t_char	*char_lst;
 
 	char_lst = get_unlocked_char((*shell_repr)->chars);

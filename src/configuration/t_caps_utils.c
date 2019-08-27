@@ -12,7 +12,7 @@
 void		alloc_capabilities_struct(t_caps **capabilities)
 {
 	if (tgetent(ft_getenv("TERM"), NULL) == -1)
-		exit(-1); // WHAT SHOULD I DO ?
+		exit(-1);
 	if (!(*capabilities = (t_caps *)MALLOC(sizeof(t_caps))))
 		exit(-1);
 	(*capabilities)->clear = tgetstr("cl", NULL);

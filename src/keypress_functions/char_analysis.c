@@ -13,13 +13,13 @@
 ** Store the last char in the global g_last_char.
 */
 
-int			char_analysis(t_line **shell_repr, char *new_char, t_cursor **cursor)
+int		char_analysis(t_line **shell_repr, char *new_char, t_cursor **cursor)
 {
 	if (ft_isprint(*new_char))
 		cursor_insert(*shell_repr, *new_char, *cursor);
 	else if (*new_char == 127)
 		delete_char(*shell_repr, *cursor);
-	else if (is_key_movement(new_char)) 
+	else if (is_key_movement(new_char))
 		simple_cursor_move(*shell_repr, new_char, *cursor);
 	else if (UP_KEY(new_char) || DOWN_KEY(new_char))
 		history_manager(new_char, *shell_repr, *cursor);

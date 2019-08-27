@@ -2,6 +2,7 @@
 #include "t_line_utils.h"
 #include "char_utils.h"
 #include "libft.h"
+
 /*
 ** is_cursor_pos:
 **
@@ -23,6 +24,7 @@ static int		is_cursor_pos(t_line *shell_repr, t_char *char_lst, \
 ** until the cursor position to get the cursor's previous char.
 ** Whenever a new word start is found, store his position.
 */
+
 static void	research_prev_info(t_line *shell_repr, t_cursor *cursor, \
 		t_cursor *word_cursor, t_char **search_char)
 {
@@ -61,7 +63,7 @@ static void	research_prev_info(t_line *shell_repr, t_cursor *cursor, \
 void	get_last_word(t_line *shell_repr, t_cursor *cursor, \
 		t_cursor *word_cursor, t_char **word_char)
 {
-	t_char	*search_char;
+	t_char		*search_char;
 	t_cursor	word_save;
 
 	search_char = NULL;
