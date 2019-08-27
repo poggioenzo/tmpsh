@@ -7,11 +7,10 @@
 ** description:
 ** Check if there is subast in command. If it's the case create an new
 ** ast to ge deepth branch. Do some modification on the tagstokens of the
-** branch. 
+** branch.
 **
 ** parameter:
 ** - (t_acb *) self : Actual abstract command branch.
-**
 */
 
 static void     replace_subast(t_tagstokens *tgtk, size_t begin,
