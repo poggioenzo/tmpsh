@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/16 16:49:34 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/17 21:22:38 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/08/27 20:27:41 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -62,12 +62,10 @@ static	void		fill_tags_tokens(t_tagstokens *self, char *str,\
 	str[i] = 0;
 }
 
-char		*free_join(char *to_free, char *static_char, t_bool delete)
+char				*free_join(char *to_free, char *static_char, t_bool delete)
 {
 	char *str;
 
-	// ft_printf("to_free : %s\n", to_free);
-	// ft_printf("static_char : %s\n", static_char);
 	str = ft_strjoin(to_free, static_char);
 	ft_strdel(&to_free);
 	if (delete)
@@ -91,7 +89,7 @@ char				*str_tagstokens(t_tagstokens *self)
 
 	if (!(self->length))
 		return (ft_strdup(YELLOW"Empty tagstokens\n"WHITE));
-	spacing = (size_t *)ft_memalloc((self->length + 1)* sizeof(size_t));
+	spacing = (size_t *)ft_memalloc((self->length + 1) * sizeof(size_t));
 	len = (str_get_length(self, spacing) + 1) * 2 + 1;
 	str = (char *)ft_memalloc(len);
 	ft_memset((void *)str, 32, len - 1);

@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/16 12:38:33 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/16 16:50:04 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/08/27 20:19:30 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -59,7 +59,7 @@ int		break_out_tagstokens(t_tagstokens *self, int status)
 t_bool	iter_tagstokens(t_tagstokens *self, char **token, char **tag)
 {
 	self->iter++;
-	if (self->iter < (int )self->length)
+	if (self->iter < (int)self->length)
 	{
 		*token = (char *)get_value_pylst(self->tokens, self->iter);
 		*tag = (char *)get_value_pylst(self->tags, self->iter);

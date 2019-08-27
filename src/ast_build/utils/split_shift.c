@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   split_shift.c                                    .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/08/27 19:55:19 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/08/27 19:56:47 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "utils.h"
 
 /*
@@ -14,30 +27,30 @@
 ** - (char *) value : splited shifted and joined string.
 */
 
-char *split_shift(char **str)
+char	*split_shift(char **str)
 {
-    char **splitted;
-    char **actual;
-    char *shifted;
-    char *tmp;
+	char	**splitted;
+	char	**actual;
+	char	*shifted;
+	char	*tmp;
 
-    shifted = ft_strnew(0);
-    splitted = ft_strsplit(*str, "\n");
-    actual = splitted;
-    tmp = "\t";
-    while (*actual)
-    {
-        *actual = ft_fstrjoin(&tmp, actual, FALSE, TRUE);
-        actual++;
-    }
-    tmp = "\n";
-    actual = splitted;
-    while (*splitted)
-    {
-        *splitted = ft_fstrjoin(splitted, &tmp, TRUE, FALSE);
-        shifted = ft_fstrjoin(&shifted, splitted++, TRUE, TRUE);
-    }
-    ft_memdel((void **)actual);
-    ft_strdel(str);
-    return (shifted);
+	shifted = ft_strnew(0);
+	splitted = ft_strsplit(*str, "\n");
+	actual = splitted;
+	tmp = "\t";
+	while (*actual)
+	{
+		*actual = ft_fstrjoin(&tmp, actual, FALSE, TRUE);
+		actual++;
+	}
+	tmp = "\n";
+	actual = splitted;
+	while (*splitted)
+	{
+		*splitted = ft_fstrjoin(splitted, &tmp, TRUE, FALSE);
+		shifted = ft_fstrjoin(&shifted, splitted++, TRUE, TRUE);
+	}
+	ft_memdel((void **)actual);
+	ft_strdel(str);
+	return (shifted);
 }
