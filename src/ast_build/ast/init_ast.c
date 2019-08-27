@@ -2,23 +2,9 @@
 
 #include "ast.h"
 
-// typedef struct
-// {
-// 	t_tagstokens	*tagstokens;
-// 	char			*begin_andor;
-// 	char			*tag_end;
-// 	t_pylst			*subast;
-// 	t_pylst			*subcmd_type;
-// 	t_pylst			*redirectionfd;
-// 	char			*command;
-// 	int				stdin;
-// 	int				stdout;
-// 	t_bool			background;
-// 	int				status;
-// 	pid_t			pid;
-// 	pid_t			pgid;
-// 	t_bool			complete;
-// }			t_acb;
+t_redirection_fd    *init_redfd(t_tagstokens *tgtk, char *type,\
+     char *source);
+
 
 char *split_shift(char **str)
 {
@@ -53,42 +39,33 @@ char *str_ast(t_ast *self);
 
 char *str_acb(t_acb *self)
 {
-    DF;
     char *str;
     char *str_subast;
     t_ast *value;
 
     str = ft_strnew(0);
     str_subast = ft_strnew(0);
-    ft_printf("LOL\n");
-    str = free_join(str, BLUE, FALSE);
+    str = free_join(str, BLUE"__", FALSE);
     str = free_join(str, self->begin_andor ? self->begin_andor : "", FALSE);
-    str = free_join(str, WHITE, FALSE);
-    ft_printf("LOL\n");
+    str = free_join(str, "__ "WHITE, FALSE);
     str = free_join(str, self->print ? self->print : "", FALSE);
-    ft_printf("LOL\n");
-    str = free_join(str, RED, FALSE);
+    str = free_join(str, RED" __", FALSE);
     str = free_join(str, self->tag_end ? self->tag_end : "", FALSE);
-    ft_printf("LOL\n");
-    str = free_join(str, GREEN, FALSE);
+    str = free_join(str, "__ "GREEN" ", FALSE);
     // while (pylst_iter(self->redirectionfd, &value))
     //     str = free_join(&str, value->print, FALSE);
     str = free_join(str, WHITE, FALSE);
     str = free_join(str, "\n", FALSE);
-    ft_printf("LOL\n");
     while (pylst_iter(self->subast, (void **)&value))
         str_subast = free_join(str_subast, str_ast(value), FALSE);
     str_subast = split_shift(&str_subast);
-    ft_printf("LOL\n");
     str = free_join(str, str_subast, TRUE);
-    DFE;
     return (str);
 
 }
 
 char *str_ast(t_ast *self)
 {
-    DFB;
     char *str;
     char *string_acb;
     t_acb *value;
@@ -96,20 +73,13 @@ char *str_ast(t_ast *self)
     str = ft_strnew(0);
     string_acb = ft_strnew(0);
     str = free_join(str, YELLOW, FALSE);
-    ft_printf("LOL\n");
     str = free_join(str, self->type ? self->type : "NONE", FALSE);
     str = free_join(str, "\n  ", FALSE);
     str = free_join(str, WHITE, FALSE);
-    ft_printf("LOL\n");
     while (pylst_iter(self->list_branch, (void **)&value))
-    {
-        ft_printf("LOL\n");
         string_acb = free_join(string_acb, str_acb(value), TRUE);
-    }
-    ft_printf("LOL\n");
     string_acb = split_shift(&string_acb);
     str = free_join(str, string_acb, TRUE);
-    DFT;
     return (str);
 }
 
@@ -139,24 +109,95 @@ void check_subast(t_acb *self)
     char *tag;
 
     i = 0;
+    print_tagstokens(self->tagstokens);
     while (i < self->tagstokens->length)
     {
         tag = get_value_pylst(self->tagstokens->tags, i);
-        ft_printf( GREEN"%s"WHITE, tag);
         if (search_value(g_grammar->opening_tags, tag))
         {
-            ft_printf( RED"\n%s"WHITE, tag);
             begin = i + 1;
+            printf("i->%zu\n",i);
             push_pylst(&self->subcmd_type, tag, 0, _ptr);
             i = skip_openning_tagstokens(self->tagstokens, i, NULL) - 1;
-            push_pylst(&self->subast, copy_tagstokens(self->tagstokens,
-                 begin, i), 0, _ptr);
+            printf("i->%zu skip\n",i);
+            push_pylst(&self->subast, init_ast(copy_tagstokens(self->tagstokens,
+                 begin, i)), 0, _ptr);
             replace_subast(self->tagstokens, begin - 1, i + 1, \
                 len_pylst(self->subast) - 1);
             i = begin - 1;
         }
-        ft_printf("\n");
         i++;
+    }
+}
+
+
+static char *get_source(t_tagstokens *tgtk, size_t lentags, char *tag)
+{
+    char *source;
+
+    source = NULL;
+    if (lentags > 0
+        && digitstr(find_prev_token(tgtk, lentags - 1, TRUE))
+        && !ft_strequ(find_prev_token(tgtk, lentags - 1, FALSE), "SUBAST")
+        && !ft_strequ(tag, "HEREDOC")
+        && !ft_strequ(tag, "HEREDOCMINUS"))
+        source = ft_strdup(find_prev_token(tgtk, lentags - 1, TRUE));
+    return (source);
+}
+
+
+static int del_tgtk_red(t_tagstokens *tgtk, int lentags, int previous, char *source)
+{
+    int begin;
+
+    begin = lentags;
+    if (source)
+        begin = find_prev_ind_token(tgtk, lentags - 1);
+    source = NULL;
+    delitems_tagstokens(tgtk, begin, previous, 42);
+    return (tgtk->length - 1);
+}
+
+
+void    check_redirection(t_acb *self)
+{
+    int lentags;
+    int previous;
+    char *tag;
+    char *src;
+
+    lentags = (int)self->tagstokens->length;
+    while (--lentags >= 0)
+    {
+        tag = get_value_pylst(self->tagstokens->tags, lentags);
+        if (in_pylst_chare(tag ,\
+            search_value(g_grammar->grammar , "REDIRECTION")))
+        {
+            src = get_source(self->tagstokens, lentags, tag);
+            push_pylst(&self->redirectionfd,
+                init_redfd(
+                    copy_tagstokens(self->tagstokens, previous, previous + 1),
+                tag, src), 0, _ptr);
+            lentags = del_tgtk_red(self->tagstokens, lentags, previous, src);
+        }
+        else if (!ft_strequ(tag, "SPACES"))
+            previous = lentags;
+    }
+    strip_tagstokens(self->tagstokens);
+    reverse_pylst(&self->redirectionfd);
+}
+
+void    set_subast_type(t_acb *self)
+{
+    t_ast   *current;
+    char    *value;
+    int     i;
+
+    i = 0;
+    while (pylst_iter(self->subcmd_type, (void **)&value))
+    {
+        current = get_value_pylst(self->subast, i++);
+        current->type = value;
     }
 }
 
@@ -174,20 +215,19 @@ t_acb    *init_acb(t_tagstokens *tgtk, char *begin_andor, char *tag_end)
     self->subast = NULL;
     self->subcmd_type = NULL;
     self->redirectionfd = NULL;
-    self->command = str_command_tagstokens(tgtk);
     self->stdin = -1;
     self->stdout = -1;
-    self->background = FALSE;
     self->status = -1;
     self->pid = -1;
     self->pgid = 0;
+    self->background = FALSE;
     self->complete = FALSE;
     strip_tagstokens(tgtk);
+    self->command = str_command_tagstokens(tgtk);
     check_subast(self);
     self->print = str_command_tagstokens(tgtk);
-    ft_printf("%s\n", self->print);
-    // self.set_subast_type()
-    // self.check_redirection()
+    set_subast_type(self);
+    check_redirection(self);
     return (self);
 }
 
@@ -234,7 +274,30 @@ t_ast	*init_ast(t_tagstokens *tgtk)
     self->complete = FALSE;
     split_branch_ast(self, tgtk);
     update_length_tagstokens(tgtk);
-    // self->print = str_command_tagstokens(tgtk);
-    // ft_printf("%s\n", self->print);
+    return (self);
+}
+
+t_redirection_fd    *init_redfd(t_tagstokens *tgtk, char *type,\
+     char *source)
+{
+    t_redirection_fd    *self;
+
+    self = (t_redirection_fd*)ft_memalloc(sizeof(t_redirection_fd));
+    self->tagstokens = tgtk;
+    self->print = str_command_tagstokens(tgtk);
+    self->type = type;
+    self->heredoc_ast = NULL;
+    if (!source)
+        source = (ft_strequ(self->type, "READ_FROM_FD")\
+        || ft_strequ(self->type, "READ_FROM")) ?  "0" : "1" ;
+    self->source = ft_atoi(source);
+    self->dest = get_value_pylst(self->tagstokens->tokens,\
+        self->tagstokens->length - 1);
+    self->close = (ft_strequ(self->type, "READ_FROM_FD")\
+        || ft_strequ(self->type, "TRUNC_TO_FD")) && ft_strequ(self->dest, "-");
+    self->error = FALSE;
+    if ((ft_strequ(self->type, "HEREDOCMINUS") \
+        || ft_strequ(self->type, "HEREDOC")))
+        ;// get_heredoc_ast(self);
     return (self);
 }
