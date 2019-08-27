@@ -96,7 +96,7 @@ static void     replace_subast(t_tagstokens *tgtk, size_t begin, size_t end, int
 }
 
 
-void check_subast(t_acb *self)
+void check_subast_acb(t_acb *self)
 {
     size_t i;
     size_t begin;

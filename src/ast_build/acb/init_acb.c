@@ -16,7 +16,7 @@ t_acb    *init_acb(t_tagstokens *tgtk, char *begin_andor, char *tag_end)
     self->pid = -1;
     strip_tagstokens(tgtk);
     self->command = str_command_tagstokens(tgtk);
-    check_subast(self);
+    check_subast_acb(self);
     set_subast_type_acb(self);
     check_redirection_acb(self);
     strip_tagstokens(tgtk);
