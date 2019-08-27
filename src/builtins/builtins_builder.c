@@ -30,4 +30,5 @@ void		setup_builtins(void)
 	insert_value(g_builtins, "fg", built_fg, _ptr);
 	insert_value(g_builtins, "jobs", built_jobs, _ptr);
 	insert_value(g_builtins, "type", built_type, _ptr);
+	insert_value(g_builtins, "hash", built_hash, _ptr);
 }

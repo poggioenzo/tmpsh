@@ -38,7 +38,7 @@ static char		*join_cmd(t_pylst *list_branch)
 			if (ft_strequ(tag, "STMT") || ft_strequ(tag, "SPACES"))
 			{
 				token = vindex_pylst(branch->tagstokens->tokens, index);
-				final_cmd = ft_fstrjoin(&final_cmd, &tokens, true, false);
+				final_cmd = ft_fstrjoin(&final_cmd, &token, true, false);
 			}
 			index++;
 		}

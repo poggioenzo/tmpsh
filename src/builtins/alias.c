@@ -4,11 +4,6 @@
 
 t_ht_table		*g_alias = NULL;
 
-void				alias_init(void)
-{
-	ht_new_table(&g_alias, 7, 65);
-}
-
 /*
 ** error_args:
 **

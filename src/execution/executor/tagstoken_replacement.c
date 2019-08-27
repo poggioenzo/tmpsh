@@ -56,7 +56,7 @@ static void		get_final_fields(char *content, t_pylst **final_tokens, \
 			push_pylst(statements, "SPACES", 0, _ptr);
 		}
 	}
-	ft_memdel(&tokens_list);
+	ft_memdel((void **)&tokens_list);
 }
 
 /*

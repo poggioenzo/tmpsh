@@ -57,7 +57,7 @@ static char		*format_env_variable(char *variable, char *value)
 
 	len_var = ft_strlen(variable);
 	len_val = ft_strlen(value);
-	format_env = MALLOC(sizeof(char) * (len_var + len_val + 2));
+	format_env = ft_memalloc(sizeof(char) * (len_var + len_val + 2));
 	ft_strcpy(format_env, variable);
 	format_env[len_var] = '=';
 	ft_strcpy(format_env + len_var + 1, value);

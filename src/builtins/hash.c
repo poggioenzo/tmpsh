@@ -1,8 +1,6 @@
 #include "libft.h"
 #include "tmpsh.h"
 
-//Need to initialize the hash table
-//ht_new_table(&g_hash, 47, 50);
 t_ht_table		*g_hash;
 
 /*

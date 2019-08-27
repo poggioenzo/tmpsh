@@ -3,6 +3,9 @@
 #include "variable_management.h"
 #include "prompt_loop.h"
 #include <fcntl.h>
+#include "variables.h"
+#include "job_control.h"
+#include "foreground.h"
 
 #include "grammar_init.h"
 
@@ -11,20 +14,34 @@
 
 int		g_last_status;
 
-int		main(int argc, char **argv, char **environ)
+void	setup_globals(char **environ)
 {
-	char	*grammar_abs;
-	char	*grammar_file = "/pyshell/grammar/grammar.txt";
+	char	*grammar_file;
+	char	*cwd;
 
+	setup_freefct();
+	grammar_file = "/pyshell/grammar/grammar.txt";
+	cwd = getcwd(NULL, 0);
+	g_shell_dir = ft_strdup(cwd);
+	free(cwd);
+	grammar_file = ft_strjoin(g_shell_dir, grammar_file);
+	grammar_init(grammar_file);
+	ft_strdel(&grammar_file);
+	setup_builtins();
+	setup_variables_elements(environ);
+	ht_new_table(&g_alias, 47, 65);
+	ht_new_table(&g_hash, 47, 50);
+	init_backgroundjobs();
+	init_tcsettings();
+}
+int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
+{
 	UNUSED(argc);
 	UNUSED(argv);
 	UNUSED(environ);
-	setup_freefct();
-	grammar_abs = getcwd(NULL, 0);
-	grammar_abs = ft_fstrjoin(&grammar_abs, &grammar_file, true, false);
-	grammar_init(grammar_abs);
-	FREE(grammar_abs);
-	setup_builtins();
+
+	setup_globals(environ);
+
 	//setup_variables_elements(environ);
 
 	/*

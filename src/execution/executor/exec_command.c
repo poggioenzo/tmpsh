@@ -95,7 +95,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	close_branch_stdfd(branch);
 	branch->running = true;
 	free_pylst(&variables, pid);
-	return (execution_cleaner(argv, command, pid));
+	return (execution_cleaner(argv, executable, pid));
 }
 
 /*
