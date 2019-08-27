@@ -2,10 +2,6 @@
 
 #include "ast.h"
 
-t_redirection_fd    *init_redfd(t_tagstokens *tgtk, char *type,\
-     char *source);
-
-
 char *split_shift(char **str)
 {
     char **splitted;
@@ -33,8 +29,6 @@ char *split_shift(char **str)
     ft_strdel(str);
     return (shifted);
 }
-
-char *str_ast(t_ast *self);
 
 
 char *str_acb(t_acb *self)
@@ -128,7 +122,7 @@ void check_subast(t_acb *self)
 }
 
 
-static char *get_source(t_tagstokens *tgtk, size_t lentags, char *tag)
+static char *get_source_acb(t_tagstokens *tgtk, size_t lentags, char *tag)
 {
     char *source;
 
@@ -160,7 +154,7 @@ static int del_tgtk_red(t_tagstokens *tgtk, int lentags, int previous, char *sou
 }
 
 
-void    check_redirection(t_acb *self)
+void    check_redirection_acb(t_acb *self)
 {
     int lentags;
     int previous;
@@ -174,7 +168,7 @@ void    check_redirection(t_acb *self)
         if (in_pylst_chare(tag ,\
             search_value(g_grammar->grammar , "REDIRECTION")))
         {
-            src = get_source(self->tagstokens, lentags, tag);
+            src = get_source_acb(self->tagstokens, lentags, tag);
             push_pylst(&self->redirectionfd,
                 init_redfd(
                     copy_tagstokens(self->tagstokens, previous, previous + 1),
@@ -188,7 +182,7 @@ void    check_redirection(t_acb *self)
     reverse_pylst(&self->redirectionfd);
 }
 
-void    set_subast_type(t_acb *self)
+void    set_subast_type_acb(t_acb *self)
 {
     t_ast   *current;
     char    *value;
@@ -220,8 +214,8 @@ t_acb    *init_acb(t_tagstokens *tgtk, char *begin_andor, char *tag_end)
     strip_tagstokens(tgtk);
     self->command = str_command_tagstokens(tgtk);
     check_subast(self);
-    set_subast_type(self);
-    check_redirection(self);
+    set_subast_type_acb(self);
+    check_redirection_acb(self);
     strip_tagstokens(tgtk);
     self->print = str_command_tagstokens(tgtk);
     return (self);
