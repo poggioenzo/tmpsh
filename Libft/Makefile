@@ -112,6 +112,7 @@ SRCS = ft_atoi.c \
 	   ft_array_remove.c \
 	   ft_array_extend.c \
 	   ft_array_in.c \
+	   in.c \
 	   ft_duparray.c \
 	   ft_strclear.c \
 	   ft_strset.c \
