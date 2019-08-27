@@ -77,6 +77,7 @@ void		pylst_remove(t_pylst **pylst, void *value);
 void	pylst_strremove(t_pylst	**pylst, char *value);
 int in_pylst_chare(char *str, t_pylst *pylst);
 void			*get_value_pylst(t_pylst *pylst, int index);
+void	reverse_pylst(t_pylst **pylst);
 
 
 /*
