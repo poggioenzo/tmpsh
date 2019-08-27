@@ -178,26 +178,26 @@ SHIFTREDUCE_SRCS :=	check_forbidden_shiftreduce.c \
 SHIFTREDUCE_SRCS := $(addprefix $(SHIFTREDUCE_DIR), $(SHIFTREDUCE_SRCS))
 
 
-ASTSRC_DIR = ast/
+AST_DIR = ast/
 
-ASTSRC_SRCS :=	free_ast.c \
+AST_SRCS :=	free_ast.c \
 				init_ast.c \
 				split_branch_ast.c \
 
 
-ASTSRC_SRCS := $(addprefix $(ASTSRC_DIR), $(ASTSRC_SRCS))
+AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS))
 
 
 
-AST_DIR = ast_build/
+AST_BUILD_DIR = ast_build/
 
-AST_SRCS := $(GRAMMAR_SRCS) \
+AST_BUILD_SRCS := $(GRAMMAR_SRCS) \
 						$(TOKENIZER_SRCS) \
 						$(TAGSTOKENS_SRCS) \
 						$(SHIFTREDUCE_SRCS) \
-						$(ASTSRC_SRCS) \
+						$(AST_SRCS) \
 
-AST_SRCS := $(addprefix $(AST_DIR), $(AST_SRCS)) \
+AST_BUILD_SRCS := $(addprefix $(AST_BUILD_DIR), $(AST_BUILD_SRCS)) \
 
 SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(CHAR_UTILS)) \
@@ -208,4 +208,4 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(FILE_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(BUILTINS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(EXECUTION_SRCS)) \
-		   $(addprefix $(SOURCES_DIR), $(AST_SRCS)) \
+		   $(addprefix $(SOURCES_DIR), $(AST_BUILD_SRCS)) \

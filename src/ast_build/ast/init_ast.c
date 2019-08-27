@@ -51,9 +51,9 @@ char *str_acb(t_acb *self)
     str = free_join(str, self->print ? self->print : "", FALSE);
     str = free_join(str, RED" __", FALSE);
     str = free_join(str, self->tag_end ? self->tag_end : "", FALSE);
-    str = free_join(str, "__ "GREEN" ", FALSE);
-    // while (pylst_iter(self->redirectionfd, &value))
-    //     str = free_join(&str, value->print, FALSE);
+    str = free_join(str, "__ ", FALSE);
+    while (pylst_iter(self->redirectionfd, (void**)&value))
+         str = free_join(str, value->print, FALSE);
     str = free_join(str, WHITE, FALSE);
     str = free_join(str, "\n", FALSE);
     while (pylst_iter(self->subast, (void **)&value))
@@ -137,6 +137,7 @@ static char *get_source(t_tagstokens *tgtk, size_t lentags, char *tag)
         && digitstr(find_prev_token(tgtk, lentags - 1, TRUE))
         && !ft_strequ(find_prev_token(tgtk, lentags - 1, FALSE), "SUBAST")
         && !ft_strequ(tag, "HEREDOC")
+        && !ft_strequ(tag, "TRIPLEHEREDOC")
         && !ft_strequ(tag, "HEREDOCMINUS"))
         source = ft_strdup(find_prev_token(tgtk, lentags - 1, TRUE));
     return (source);
@@ -147,11 +148,14 @@ static int del_tgtk_red(t_tagstokens *tgtk, int lentags, int previous, char *sou
 {
     int begin;
 
-    begin = lentags;
+    delitems_tagstokens(tgtk, previous, previous + 1, 42);
+    delitems_tagstokens(tgtk, lentags, lentags + 1, 42);
     if (source)
+    {
         begin = find_prev_ind_token(tgtk, lentags - 1);
+        delitems_tagstokens(tgtk, begin, begin + 1, 42);
+    }
     source = NULL;
-    delitems_tagstokens(tgtk, begin, previous, 42);
     return (tgtk->length - 1);
 }
 
@@ -209,22 +213,17 @@ t_acb    *init_acb(t_tagstokens *tgtk, char *begin_andor, char *tag_end)
     self->tag_end = "";
     if (in_pylst_chare(tag_end, search_value(g_grammar->grammar,"ABS_TERMINATOR")))
         self->tag_end = tag_end;
-    self->subast = NULL;
-    self->subcmd_type = NULL;
-    self->redirectionfd = NULL;
     self->stdin = -1;
     self->stdout = -1;
     self->status = -1;
     self->pid = -1;
-    self->pgid = 0;
-    self->background = FALSE;
-    self->complete = FALSE;
     strip_tagstokens(tgtk);
     self->command = str_command_tagstokens(tgtk);
     check_subast(self);
-    self->print = str_command_tagstokens(tgtk);
     set_subast_type(self);
     check_redirection(self);
+    strip_tagstokens(tgtk);
+    self->print = str_command_tagstokens(tgtk);
     return (self);
 }
 
@@ -274,6 +273,23 @@ t_ast	*init_ast(t_tagstokens *tgtk)
     return (self);
 }
 
+
+char *str_redfd(t_redirection_fd    *self)
+{
+    char *str;
+
+    str = ft_strnew(0);
+    str = free_join(str, GREEN, FALSE);
+    str = free_join(str, self->type, FALSE);
+    str = free_join(str, WHITE" ", FALSE);
+    str = free_join(str, str_command_tagstokens(self->tagstokens), TRUE);
+    str = free_join(str, " source:", FALSE);
+    str = free_join(str, ft_itoa(self->source), TRUE);
+    str = free_join(str, " | ", FALSE);
+    return (str);
+}
+
+
 t_redirection_fd    *init_redfd(t_tagstokens *tgtk, char *type,\
      char *source)
 {
@@ -281,7 +297,6 @@ t_redirection_fd    *init_redfd(t_tagstokens *tgtk, char *type,\
 
     self = (t_redirection_fd*)ft_memalloc(sizeof(t_redirection_fd));
     self->tagstokens = tgtk;
-    self->print = str_command_tagstokens(tgtk);
     self->type = type;
     self->heredoc_ast = NULL;
     if (!source)
@@ -296,5 +311,6 @@ t_redirection_fd    *init_redfd(t_tagstokens *tgtk, char *type,\
     if ((ft_strequ(self->type, "HEREDOCMINUS") \
         || ft_strequ(self->type, "HEREDOC")))
         ;// get_heredoc_ast(self);
+    self->print = str_redfd(self);
     return (self);
 }
