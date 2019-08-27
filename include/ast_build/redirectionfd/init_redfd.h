@@ -2,6 +2,6 @@
 # define INIT_REDFD_H
 
 t_redirection_fd    *init_redfd(t_tagstokens *tgtk, char *type,\
-     char *source)
+     char *source);
 
 #endif

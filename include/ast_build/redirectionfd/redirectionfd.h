@@ -1,5 +1,5 @@
-#ifndef AST_H
-# define AST_H
+#ifndef REDIRECTIONFD_H
+# define REDIRECTIONFD_H
 
 /*
 ** General includes.
@@ -19,5 +19,8 @@
 ** Local methodes includes.
 */
 
+# include "get_heredoc_redfd.h"
+# include "init_redfd.h"
+# include "str_redfd.h"
 
 #endif

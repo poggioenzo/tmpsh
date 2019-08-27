@@ -24,5 +24,6 @@
 # include "free_ast.h"
 # include "init_ast.h"
 # include "split_branch_ast.h"
+# include "str_ast.h"
 
 #endif

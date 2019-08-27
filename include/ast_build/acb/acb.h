@@ -24,6 +24,8 @@
 
 # include "check_redirection_acb.h"
 # include "init_acb.h"
-
+# include "check_subast_acb.h"
+# include "set_subast_type_acb.h"
+# include "str_acb.h"
 
 #endif
