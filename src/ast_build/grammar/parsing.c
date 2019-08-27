@@ -66,6 +66,7 @@ static void		parse_keyword_values(char **lines, int *i)
 		insert_value(g_grammar->grammar, keyword, NULL, _pylst);
 		keyword_list = (t_pylst **)search_value_addr(g_grammar->grammar, keyword);
 	}
+	ft_strdel(&keyword);
 	while (is_value_line(lines[*i]))
 	{
 		value = ft_strtrim(lines[*i]);
@@ -98,6 +99,7 @@ void get_grammar_from_path(void)
 
 	content = readfile(g_grammar->path);
 	lines = ft_strsplit(content, "\n");
+	ft_strdel(&content);
 	nbr_lines = ft_arraylen(lines);
 	i = 0;
 	while (i < nbr_lines)
@@ -107,5 +109,6 @@ void get_grammar_from_path(void)
 		else
 			i++;
 	}
+	free_str_array(&lines, 0);
 }
 

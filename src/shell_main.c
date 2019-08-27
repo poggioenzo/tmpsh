@@ -26,7 +26,6 @@ void	setup_globals(char **environ)
 	free(cwd);
 	grammar_file = ft_strjoin(g_shell_dir, grammar_file);
 	grammar_init(grammar_file);
-	ft_strdel(&grammar_file);
 	setup_builtins();
 	setup_variables_elements(environ);
 	ht_new_table(&g_alias, 47, 65);
@@ -34,6 +33,24 @@ void	setup_globals(char **environ)
 	init_backgroundjobs();
 	init_tcsettings();
 }
+
+void	remove_globals(void)
+{
+	ft_strdel(&g_shell_dir);
+	free_hash_table(&g_variables, 0);
+	free_hash_table(&g_builtins, 0);
+	free_str_array(&g_environ, 0);
+	free_hash_table(&g_alias, 0);
+	free_hash_table(&g_hash, 0);
+
+
+	//Depend if we allow leaving the programm with or without background jobs.
+	//free_pylst(&g_jobs->list_jobs);
+	ft_memdel((void **)&g_jobs);
+	free_grammar();
+
+}
+
 int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
 {
 	UNUSED(argc);
@@ -41,6 +58,7 @@ int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
 	UNUSED(environ);
 
 	setup_globals(environ);
+	remove_globals();
 
 	//setup_variables_elements(environ);
 

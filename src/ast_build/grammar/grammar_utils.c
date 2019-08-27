@@ -47,7 +47,7 @@ void		add_symbol(char *symbol, char *symbol_name)
 		tmp_lst = (t_pylst **)search_value_addr(g_grammar->grammar, symbol_name);
 		push_pylst(tmp_lst, symbol, 0, _chare);
 	}
-	insert_value(g_grammar->reverse, symbol, symbol_name, _chare);
+	insert_value(g_grammar->reverse, symbol, symbol_name, _ptr);
 }
 
 

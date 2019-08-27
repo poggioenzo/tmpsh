@@ -52,6 +52,7 @@ void	get_opening_tags(void)
 		if ((tmp_search = search_value(g_grammar->grammar, "COMMAND_SH")))
 			pylst_extend(&opening_tags, tmp_search, false);
 		store_tags(opening_tags);
+		free_pylst(&opening_tags, 0);
 		if (search_value(g_grammar->grammar, "QUOTES"))
 			get_dquotes_opening_tags();
 	}

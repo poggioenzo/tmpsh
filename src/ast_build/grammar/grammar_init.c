@@ -26,6 +26,24 @@ static void	shell_grammar_init(void)
 }
 
 /*
+** free_grammar:
+**
+** Deallocate each t_grammar attributes.
+*/
+
+void		free_grammar(void)
+{
+	free_pylst(&g_grammar->leaf_op, 0);
+	free_hash_table(&g_grammar->dquotes_opening_tags, 0);
+	free_hash_table(&g_grammar->opening_tags, 0);
+	free_pylst(&g_grammar->spaces, 0);
+	free_hash_table(&g_grammar->reverse, 0);
+	free_hash_table(&g_grammar->grammar, 0);
+	ft_strdel(&g_grammar->path);
+	ft_memdel((void **)&g_grammar);
+}
+
+/*
 ** grammar_init:
 **
 ** @path: absolute path of the text file containing the grammar.
