@@ -109,17 +109,14 @@ void check_subast(t_acb *self)
     char *tag;
 
     i = 0;
-    print_tagstokens(self->tagstokens);
     while (i < self->tagstokens->length)
     {
         tag = get_value_pylst(self->tagstokens->tags, i);
         if (search_value(g_grammar->opening_tags, tag))
         {
             begin = i + 1;
-            printf("i->%zu\n",i);
             push_pylst(&self->subcmd_type, tag, 0, _ptr);
             i = skip_openning_tagstokens(self->tagstokens, i, NULL) - 1;
-            printf("i->%zu skip\n",i);
             push_pylst(&self->subast, init_ast(copy_tagstokens(self->tagstokens,
                  begin, i)), 0, _ptr);
             replace_subast(self->tagstokens, begin - 1, i + 1, \
