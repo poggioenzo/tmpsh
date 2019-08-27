@@ -591,5 +591,5 @@ void	reverse_pylst(t_pylst **pylst)
 		precedence = reverse_lst;
 		reverse_lst = next;
 	}
-	*pylst = reverse_lst;
+	*pylst = precedence;
 }
