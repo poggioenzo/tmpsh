@@ -18,6 +18,8 @@ static int	check_jobs_options(char **argv, int *p_flag, int *l_flag)
 	char		*option_str;
 
 	options = argparser(argv);
+	*p_flag = false;
+	*l_flag = false;
 	while (iter_pylst(options, (void **)&option_str))
 	{
 		if (ft_strequ(option_str, "l"))
