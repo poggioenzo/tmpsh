@@ -1,5 +1,7 @@
 TO DO:
 
+- Ctrl + C can crash with waitpid (undefined)
+
 - For CMDSUBST1 replacement, is split with "\n\t " enough ?
 - Remove or change malloc protection
 - Set update tagstoken function.
