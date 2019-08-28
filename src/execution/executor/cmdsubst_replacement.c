@@ -22,21 +22,6 @@ static char		*get_quote_content(t_ast *subast)
 }
 
 /*
-** rstrip:
-**
-** Remove all newline at the end of the string.
-*/
-
-static void		rstrip(char *str)
-{
-	int		index;
-
-	index = ft_strlen(str) - 1;
-	while (index >= 0 && str[index] == '\n')
-		str[index--] = '\0';
-}
-
-/*
 ** retrieve_content:
 **
 ** For the given subast, format the content of the substitution

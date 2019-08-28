@@ -23,6 +23,7 @@ static void		shell_interupt(int status)
 	pid_t		tpgid;
 
 	UNUSED(status);
+	ft_strcpy(g_last_char, "");
 	tpgid = get_tpgid();
 	//SHOULD I wait with WNOHANG or normally, can be intersting
 	//to wait programs end, if they are doing some stuff before exiting?

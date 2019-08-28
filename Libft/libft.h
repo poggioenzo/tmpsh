@@ -148,6 +148,7 @@ char			*ft_fstrrchr(const char *str, int (*fct)(int));
 char			*ft_strpbrk(const char *str, const char *charset);
 void			ft_strclr(char *str);
 char			*ft_strtrim(const char *str);
+void			rstrip(char *str);
 char			*ft_strsub(char const *s, unsigned int start, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_fstrjoin(char **s1, char **s2, int free_s1, \

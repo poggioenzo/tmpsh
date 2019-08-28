@@ -6,9 +6,6 @@ TO DO:
 - Check all builtins
 - Restore termios with bg && fg
 
-
-- Segfault if I do the following sequence : Up for history + CTRL_C + up for history
-
 - For CMDSUBST1 replacement, is split with "\n\t " enough ?
 - Remove or change malloc protection
 - Check if we allow leave shell with background jobs ? Check free in this case

@@ -141,6 +141,7 @@ SRCS = ft_atoi.c \
 	   ft_strstr.c \
 	   ft_strsub.c \
 	   ft_strtrim.c \
+	   rstrip.c \
 	   ft_tolower.c \
 	   ft_toupper.c \
 	   ft_wordcount.c \

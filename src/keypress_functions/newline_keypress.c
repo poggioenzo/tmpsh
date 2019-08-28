@@ -30,6 +30,7 @@ static void		register_command(char *shell_str)
 		exit(-1);
 	if (shell_cpy[0])
 	{
+		rstrip(shell_cpy);
 		push_t_hist(&history, shell_cpy, FALSE);
 		rewrite_history(history);
 	}
