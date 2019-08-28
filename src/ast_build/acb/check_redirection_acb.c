@@ -21,9 +21,10 @@ static	char	*get_source_acb(t_tagstokens *tgtk, size_t lentags, char *tag)
 	if (lentags > 0
 			&& digitstr(find_prev_token(tgtk, lentags - 1, TRUE))
 			&& !ft_strequ(find_prev_token(tgtk, lentags - 1, FALSE), "SUBAST")
-			&& !ft_strequ(tag, "HEREDOC")
-			&& !ft_strequ(tag, "TRIPLEHEREDOC")
-			&& !ft_strequ(tag, "HEREDOCMINUS"))
+			&& !in(tag, "HEREDOC", "TRIPLEHEREDOC", "HEREDOCMINUS"))
+			// && !ft_strequ(tag, "HEREDOC")
+			// && !ft_strequ(tag, "TRIPLEHEREDOC")
+			// && !ft_strequ(tag, "HEREDOCMINUS"))
 		source = ft_strdup(find_prev_token(tgtk, lentags - 1, TRUE));
 	return (source);
 }
