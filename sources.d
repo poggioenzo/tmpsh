@@ -259,6 +259,7 @@ REDIRECTIONFD_SRCS := $(addprefix $(REDIRECTIONFD_DIR), $(REDIRECTIONFD_SRCS))
 UTILS_DIR = utils/
 
 UTILS_SRCS :=	split_shift.c\
+				in_hash_g_grammar.c\
 
 UTILS_SRCS := $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
 
