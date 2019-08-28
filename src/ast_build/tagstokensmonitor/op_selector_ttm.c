@@ -1,0 +1,20 @@
+#include "op_selector_ttm.h"
+
+
+/*
+** op_selector_ttm:
+**
+** description:
+** describe what you function do.
+**
+** parameter:
+** - (type) name : what is this param?
+**
+** return value:
+** - (type) value : descibe output.
+*/
+
+int op_selector_ttm(void)
+{
+	return (0);
+}
