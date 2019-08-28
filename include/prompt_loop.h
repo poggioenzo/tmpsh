@@ -5,6 +5,6 @@
 
 # define PROMPT_BUFF	4
 
-int		prompt_loop(void);
+void		prompt_loop(void);
 
 #endif

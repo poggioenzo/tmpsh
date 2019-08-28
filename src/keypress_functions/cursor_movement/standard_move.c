@@ -9,7 +9,7 @@
 ** decrementing the cursor if it's possible.
 */
 
-void		move_left(t_line *shell_repr, t_cursor *cursor)
+void			move_left(t_line *shell_repr, t_cursor *cursor)
 {
 	t_char	*prev_char;
 	t_line	*cursor_line;
@@ -34,7 +34,7 @@ void		move_left(t_line *shell_repr, t_cursor *cursor)
 ** decrementing the cursor if it's possible.
 */
 
-void		move_right(t_line *shell_repr, t_cursor *cursor)
+void			move_right(t_line *shell_repr, t_cursor *cursor)
 {
 	t_char	*prev_char;
 
@@ -75,7 +75,7 @@ static void		cursor_calibration(t_char *char_lst, t_cursor *cursor)
 ** Recalculate the cursor->column position if needed.
 */
 
-void		move_down(t_line *shell_repr, t_cursor *cursor)
+void			move_down(t_line *shell_repr, t_cursor *cursor)
 {
 	t_line	*cursor_line;
 
@@ -94,7 +94,7 @@ void		move_down(t_line *shell_repr, t_cursor *cursor)
 ** Recalculate the cursor->column position if needed.
 */
 
-void		move_up(t_line *shell_repr, t_cursor *cursor)
+void			move_up(t_line *shell_repr, t_cursor *cursor)
 {
 	t_line		*cursor_line;
 

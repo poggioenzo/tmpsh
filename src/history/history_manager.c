@@ -16,14 +16,14 @@
 
 void	history_manager(char *key, t_line *shell_repr, t_cursor *cursor)
 {
-	static int	    is_repetition = FALSE;
-	static t_hist	*history = (void *) 0;
-    t_line          *cursor_line;
+	static int		is_repetition = FALSE;
+	static t_hist	*history = (void *)0;
+	t_line			*cursor_line;
 
 	is_repetition = DOWN_KEY(g_last_char) || UP_KEY(g_last_char);
-    clean_lastest_history(is_repetition, shell_repr, cursor, history);
-    select_current_history(key, &history, is_repetition);
-    add_new_history(shell_repr, cursor, history);
-    cursor_line = get_cursor_line(shell_repr, cursor);
-    cursor->column = char_lst_len(cursor_line->chars);
+	clean_lastest_history(is_repetition, shell_repr, cursor, history);
+	select_current_history(key, &history, is_repetition);
+	add_new_history(shell_repr, cursor, history);
+	cursor_line = get_cursor_line(shell_repr, cursor);
+	cursor->column = char_lst_len(cursor_line->chars);
 }

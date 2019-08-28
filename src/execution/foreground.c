@@ -49,3 +49,19 @@ int		get_tpgid(void)
 	close(term_fd);
 	return (tpgid);
 }
+
+/*
+** init_tcsettings:
+**
+** Store controlling terminal configuration at the shell launch
+** and store it in g_tcsettings.
+*/
+
+void		init_tcsettings(void)
+{
+	int		term_fd;
+
+	term_fd = open("/dev/tty", O_RDONLY);
+	tcgetattr(term_fd, &g_tcsettings);
+	close(term_fd);
+}

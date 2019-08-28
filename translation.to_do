@@ -1,0 +1,18 @@
+- revoir builtin env
+- Coder dernier builtin (export, fg, jobs...)
+- Recoder prompt.py
+
+- builtins :
+1) echo
+2) cd
+3) exit
+4) type
+5) jobs
+6) fg
+7) bg
+8) export
+9) set
+10) unset
+11) alias
+12) unalias
+13) hash ?

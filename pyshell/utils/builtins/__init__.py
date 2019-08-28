@@ -4,3 +4,4 @@ from .background import *
 from .cd import *
 from .umask import *
 from .exit import *
+from .hash import *

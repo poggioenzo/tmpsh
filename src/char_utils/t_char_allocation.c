@@ -7,7 +7,7 @@
 ** Allocate a single t_char element.
 */
 
-void	create_char(t_char	**char_node, char letter, int position, int lock)
+void	create_char(t_char **char_node, char letter, int position, int lock)
 {
 	*char_node = (t_char *)ft_memalloc(sizeof(t_char));
 	(*char_node)->letter = letter;
@@ -22,12 +22,12 @@ void	create_char(t_char	**char_node, char letter, int position, int lock)
 ** Create at the end of the t_char * chained list a new t_char element.
 */
 
-void			push_end_char(t_char **char_node, char letter, int lock)
+void	push_end_char(t_char **char_node, char letter, int lock)
 {
 	t_char	*tmp_char;
 
 	if (!*char_node)
-		 create_char(char_node, letter, 0, lock);
+		create_char(char_node, letter, 0, lock);
 	else
 	{
 		tmp_char = *char_node;
@@ -56,7 +56,7 @@ void	free_t_char(t_char **char_node)
 ** Return the given status value.
 */
 
-int			free_t_char_lst(t_char **char_lst, int status)
+int		free_t_char_lst(t_char **char_lst, int status)
 {
 	t_char	*tmp_char;
 	t_char	*next_char;

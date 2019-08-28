@@ -16,15 +16,14 @@
 ** }
 */
 
-void	get_reverse_grammar(void)
+void		get_reverse_grammar(void)
 {
 	t_pylst	*lst_values;
 	char	*key;
 	char	*value;
 
 	while (ht_iter(g_grammar->grammar, &key, (void **)&lst_values))
-		while (pylst_iter(lst_values, (void **)&value))
-		{
+		while (iter_pylst(lst_values, (void **)&value))
 			insert_value(g_grammar->reverse, value, key, _ptr);
 			push_pylst(&g_grammar->reverse_list, value, 0, _ptr);
 		}

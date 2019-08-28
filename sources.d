@@ -6,7 +6,6 @@ COMMON_SRCS := char_concatenation.c \
 			   cursor_dependent_selection.c \
 			   debug.c \
 			   display.c \
-			   edition.c \
 			   t_cursor_utils.c \
 			   prompt_loop.c\
 			   setup_shell_freefct.c
@@ -43,18 +42,6 @@ LINE_UTILS_SRCS := t_line_allocation.c \
 
 LINE_UTILS_SRCS := $(addprefix $(LINE_UTILS_DIR), $(LINE_UTILS_SRCS))
 
-
-NEWLINE_UTILS := char_skip.c \
-				 line_extend.c \
-				 operand_check.c \
-				 operand_deletion.c \
-				 syntax_error.c \
-				 t_operand_allocation.c \
-				 t_operand_utils.c \
-				 get_next_char.c \
-
-NEWLINE_UTILS := $(addprefix newline_utils/, $(NEWLINE_UTILS))
-
 CLIPBOARD_UTILS := cut_functions.c
 
 CLIPBOARD_UTILS := $(addprefix clipboard_utils/, $(CLIPBOARD_UTILS))
@@ -74,7 +61,7 @@ KEYPRESS_SRCS := char_deletion.c \
 				 clipboard.c \
 				 eof.c \
 				 char_analysis.c \
-				 $(NEWLINE_UTILS) \
+                 line_extend.c \
 				 $(CLIPBOARD_UTILS) \
                  $(CURSOR_MOVEMENT_SRCS)
 
@@ -86,13 +73,24 @@ PROMPT_CONF :=  prompt.c \
 
 PROMPT_CONF := $(addprefix prompt/, $(PROMPT_CONF))
 
+VARIABLES_DIR = variables/
+
+VARIABLES_SRCS := environ_utils.c \
+                  environ_setup.c \
+                  local_variables.c \
+                  variables_management.c \
+
+VARIABLES_SRCS := $(addprefix $(VARIABLES_DIR), $(VARIABLES_SRCS))
+
+
 CONFIGURATION_DIR = configuration/
 
 CONFIGURATION_SRCS :=  screen_size.c \
 					   signal_handler.c \
 					   t_caps_utils.c \
 					   termios_setter.c \
-					   environ_utils.c \
+					   reset_signals.c \
+                       $(VARIABLES_SRCS) \
 					   $(PROMPT_CONF)
 
 CONFIGURATION_SRCS := $(addprefix $(CONFIGURATION_DIR), $(CONFIGURATION_SRCS))
@@ -100,19 +98,63 @@ CONFIGURATION_SRCS := $(addprefix $(CONFIGURATION_DIR), $(CONFIGURATION_SRCS))
 BUILTINS_DIR = builtins/
 
 BUILTINS_SRCS := cd.c \
+				 cd_finder.c \
+				 cd_canon.c \
+				 cd_canon_utils.c \
 				 env.c \
-				 setenv.c \
-				 unsetenv.c \
+				 envvar_builtins.c \
+				 localvar_builtins.c \
                  echo.c \
 				 exit.c \
+				 argparser.c \
+				 hash.c \
+				 bg_fg.c \
+				 jobs.c \
+				 unalias.c \
+				 alias.c \
+				 export.c \
+				 type.c \
+				 builtins_builder.c \
+				 background_utils.c \
 
 BUILTINS_SRCS := $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
+
+JOBCONTROL_DIR = job_control/
+
+JOBCONTROL_SRCS := backgroundjobs.c \
+				   control.c \
+				   job.c \
+
+JOBCONTROL_SRCS := $(addprefix $(JOBCONTROL_DIR), $(JOBCONTROL_SRCS))
+
+EXECUTOR_DIR = executor/
+
+EXECUTOR_SRCS := exec_command.c \
+				 argv_formater.c \
+				 run_ast.c \
+				 run_ast_utils.c \
+                 subast_command.c \
+                 subshell.c \
+                 cmdsubst_replacement.c \
+                 cmdsubst_runner.c \
+				 tagstoken_replacement.c \
+
+EXECUTION_SRCS := $(addprefix $(EXECUTOR_DIR), $(EXECUTOR_SRCS))
 
 EXECUTION_DIR = execution/
 
 EXECUTION_SRCS := fd_management.c \
-                  rights_file.c \
                   foreground.c \
+                  assignation.c \
+                  variable_replacement.c \
+                  exec_file.c \
+                  forker.c \
+                  sigmask_modif.c \
+                  heredoc_apply.c \
+                  redirection_opener.c \
+                  setup_redirection.c \
+				  $(JOBCONTROL_SRCS) \
+				  $(EXECUTION_SRCS) \
 
 EXECUTION_SRCS := $(addprefix $(EXECUTION_DIR), $(EXECUTION_SRCS))
 
@@ -221,6 +263,17 @@ UTILS_SRCS :=	split_shift.c\
 UTILS_SRCS := $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
 
 
+FREE_DIR = free_memory/
+
+FREE_SRCS := free_manager.c \
+			 free_type1.c \
+			 free_execution.c \
+
+
+FREE_SRCS := $(addprefix $(FREE_DIR), $(FREE_SRCS))
+
+AST_DIR = ast_build/
+
 
 AST_BUILD_DIR = ast_build/
 
@@ -245,3 +298,4 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(BUILTINS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(EXECUTION_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(AST_BUILD_SRCS)) \
+		   $(addprefix $(SOURCES_DIR), $(FREE_SRCS)) \

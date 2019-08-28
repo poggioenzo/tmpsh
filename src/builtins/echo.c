@@ -1,23 +1,37 @@
-
+#include "tmpsh.h"
 #include "libft.h"
 
-void	built_echo(char **args)
+/*
+** built_echo:
+**
+** echo - Write argument to standard output.
+**
+** Synopsis : echo [string ...]
+**
+** Options :
+** -n : avoid printing a newline.
+*/
+
+int		built_echo(char **args, NOT_USE(char **environ))
 {
 	int		newline;
+	int		error;
 
-	newline = 1;
-	if (ft_array_in(args, "-n"))
+	newline = true;
+	error = false;
+	if (ft_strequ(*args, "-n"))
 	{
-		ft_array_remove(args, "-n", 1);
-		newline = 0;
+		args++;
+		newline = false;
 	}
 	while (*args)
 	{
-		ft_printf(*args);
-		if (*(args + 1))
-			ft_printf(" ");
+		error = ft_printf(*args) == -1 ? true : false;
+		if (error == false && *(args + 1))
+			error = ft_printf(" ") == -1 ? true : false;
 		args++;
 	}
-	if (newline)
-		ft_printf("\n");
+	if (error == false && newline)
+		error = ft_printf("\n") == -1 ? true : false;
+	return (error == true ? -1 : 0);
 }

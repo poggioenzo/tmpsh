@@ -52,7 +52,7 @@ void			manage_shell_repr(int action, t_line **prompt_line, \
 ** Get the prompt representation and add it in the t_line structure.
 */
 
-static void				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
+static void		insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 {
 	char	*prompt_format;
 
@@ -68,7 +68,7 @@ static void				insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 ** the shell.
 */
 
-void	shell_cleaner(void)
+void			shell_cleaner(void)
 {
 	history_store(GO_FREE, NULL);
 	manage_shell_repr(GO_FREE, NULL, NULL);
@@ -84,9 +84,9 @@ void	shell_cleaner(void)
 ** Print a last time the current shell to remove the fake cursor.
 */
 
-void		shell_exit(int status)
+void			shell_exit(int status)
 {
-	t_line	*shell_repr;
+	t_line		*shell_repr;
 	t_cursor	*cursor;
 
 	manage_shell_repr(GET, &shell_repr, &cursor);
@@ -113,4 +113,3 @@ void			shell_preconfig(t_line **shell, t_cursor **cursor)
 	ft_printf(g_caps->hide_cursor);
 	display_shell(*shell, *cursor, TRUE);
 }
-

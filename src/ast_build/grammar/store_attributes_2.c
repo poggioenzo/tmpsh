@@ -8,13 +8,11 @@ static void		store_tags(t_pylst *opening_tags)
 	char	*tag_op;
 	char	*tag_end;
 
-	while (pylst_iter(opening_tags, (void **)&tag))
+	while (iter_pylst(opening_tags, (void **)&tag))
 	{
 		tag_split = ft_strsplit(tag, " ");
 		tag_op = tag_split[0];
 		tag_end = ft_strdup(tag_split[ft_arraylen(tag_split) - 1]);
-		//Perform a check to see if the key is already available,
-		//will leak otherwise.
 		insert_value(g_grammar->opening_tags, tag_op, tag_end, _chare);
 		free_str_array(&tag_split, 0);
 	}
@@ -27,7 +25,7 @@ static void		store_tags(t_pylst *opening_tags)
 ** are an opening element inside double quotes, like BRACEPARAM, DQUOTES etc.
 */
 
-static void	get_dquotes_opening_tags(void)
+static void		get_dquotes_opening_tags(void)
 {
 	void	*tmp_search;
 
@@ -35,11 +33,11 @@ static void	get_dquotes_opening_tags(void)
 		insert_value(g_grammar->dquotes_opening_tags, "BRACEPARAM", \
 				tmp_search, _ptr);
 	if ((tmp_search = search_value(g_grammar->opening_tags, "CMDSUBST1")))
-		insert_value(g_grammar->dquotes_opening_tags, "CMDSUBST1", tmp_search, _ptr);
-
+		insert_value(g_grammar->dquotes_opening_tags, "CMDSUBST1", tmp_search, \
+				_ptr);
 }
 
-void	get_opening_tags(void)
+void			get_opening_tags(void)
 {
 	t_pylst		*opening_tags;
 	t_pylst		*tmp_search;
@@ -52,6 +50,7 @@ void	get_opening_tags(void)
 		if ((tmp_search = search_value(g_grammar->grammar, "COMMAND_SH")))
 			pylst_extend(&opening_tags, tmp_search, FALSE);
 		store_tags(opening_tags);
+		free_pylst(&opening_tags, 0);
 		if (search_value(g_grammar->grammar, "QUOTES"))
 			get_dquotes_opening_tags();
 	}
@@ -61,7 +60,7 @@ void	get_opening_tags(void)
 ** get_abstract_terminator:
 */
 
-void	get_abstract_terminator(void)
+void			get_abstract_terminator(void)
 {
 	void	*tmp_search;
 	t_pylst	*abs_term_lst;
@@ -73,7 +72,8 @@ void	get_abstract_terminator(void)
 		push_pylst(&abs_term_lst, "CMDAND", 0, _chare);
 		push_pylst(&abs_term_lst, "CMDOR", 0, _chare);
 		push_pylst(&abs_term_lst, "PIPE", 0, _chare);
-		pylst_extend(&abs_term_lst, (t_pylst *)tmp_search, FALSE);
-		insert_value(g_grammar->grammar, "ABS_TERMINATOR", abs_term_lst, _pylst);
+		pylst_extend(&abs_term_lst, (t_pylst *)tmp_search, false);
+		insert_value(g_grammar->grammar, "ABS_TERMINATOR", abs_term_lst, \
+				_pylst);
 	}
 }

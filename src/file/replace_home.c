@@ -34,7 +34,6 @@ char		*getuser_home(char *username, int uid)
 ** Remove his name from the filename when it's done.
 */
 
-
 char		*specific_user_home(char *filename)
 {
 	char	*username;
@@ -64,7 +63,8 @@ char		*specific_user_home(char *filename)
 **
 ** return value:
 ** - A new allocated filename with the tild replaced.
-** - NULL if there is a probleme to get a user home, or if tild is followed by a number.
+** - NULL if there is a probleme to get a user home,
+**   or if tild is followed by a number.
 */
 
 char		*replace_home(char *filename)

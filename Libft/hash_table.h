@@ -48,6 +48,7 @@ int					hash_function(const char *string, int seed, int size);
 
 int				ht_iter(t_ht_table *table, char **key, void **value);
 
+void	empty_ht(t_ht_table *table);
 /*
 ** Debug functions.
 */

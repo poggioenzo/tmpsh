@@ -28,6 +28,7 @@
 # define DFT ft_printf(GREEN"%s\n"WHITE, __func__)
 # define DFF ft_printf(RED"%s\n"WHITE, __func__)
 # define DFB ft_printf(BLUE"%s\n"WHITE, __func__)
+# define NOT_USE(arg) __attribute__((unused))arg
 
 # ifndef NULL
 #  define NULL (void *) 0
@@ -207,6 +208,7 @@ typedef struct
 	pid_t			pid;
 	pid_t			pgid;
 	t_bool			complete;
+	t_bool			running;
 }			t_acb;
 
 typedef struct
@@ -214,8 +216,9 @@ typedef struct
 	t_tagstokens	*tagstokens;
 	char			*type;
 	int				source;
-	char			*dest;
 	char			*print;
+	void			*dest;
+	t_ast			*heredoc_ast;
 	t_bool			close;
 	t_bool			error;
 	t_ast			*heredoc_ast;
@@ -236,7 +239,7 @@ typedef struct
 ** Background jobs
 */
 
-enum	waitstate
+enum	e_waitstate
 {
 	finish = 0,
 	running = 1,
@@ -244,9 +247,23 @@ enum	waitstate
 
 typedef struct
 {
+	t_pylst			*branches;
+	int				number;
+	pid_t			pgid;
+	char			*command;
+}	t_job;
+
+typedef struct
+{
 	t_pylst		*list_jobs;
 	t_bool		allow_background;
 }	t_background_job;
+
+typedef struct
+{
+	char	*exec_file;
+	int		count;
+}	t_hash_exec;
 
 /*
 ** Debug functions
@@ -256,7 +273,7 @@ void		DEBUG_print_line(t_line *shell_lines, int fd);
 int		fd_debug;
 void	show_history(t_hist *history);
 
-#include "debug.h"
+# include "debug.h"
 # include "globals.h"
 
 #endif

@@ -50,6 +50,8 @@ enum			e_ctype
 	_ast,
 	_acb,
 	_redfd,
+	_hash_exec,
+	_job,
 	size
 };
 
@@ -134,6 +136,7 @@ char			*ft_strndup(const char *s1, size_t n);
 char			**ft_duparray(char **array);
 char			**ft_array_extend(char **array, char *string, int dup_str);
 int				ft_array_in(char **array, char *string);
+int				in(char *value, ...);
 char			*ft_strcat(char *dest, const char *src);
 char			*ft_strncat(char *s1, const char *s2, size_t n);
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
@@ -210,6 +213,7 @@ int				ft_isascii(int c);
 int				ft_isprint(int c);
 int				ft_isspace(int c);
 int				ft_incharset(char c, const char *charset);
+int				digitstr(char *str);
 
 /*
 ** Memory functions

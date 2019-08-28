@@ -137,6 +137,20 @@ void			*get_value_pylst(t_pylst *pylst, int index)
 }
 
 /*
+** vindex_pylst:
+**
+** Like index_pylst, but return the t_pylst->value element.
+*/
+
+void		*vindex_pylst(t_pylst *pylst, int index)
+{
+	t_pylst		*expect_node;
+
+	expect_node = index_pylst(pylst, index);
+	return (expect_node ? expect_node->value : NULL);
+}
+
+/*
 ** slice_pylst:
 **
 ** Return a new allocated portion of the given list in the
@@ -356,7 +370,7 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 }
 
 /*
-** pylst_iter:
+** iter_pylst:
 **
 ** @pylst: chained list head selected to iterate.
 ** @value: void * pointer to get value one by one in the list.
@@ -364,12 +378,13 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 ** Used in a while loop to iterate over each element of a pylst.
 ** Make a for loop inspired from python.
 ** ! No change on the pylst should be done during the iteration !
+** ! The list have to be iterate entirely (or reset iter_item) !
 **
 ** return : - 1 if a next element if found.
 **			- 0 if pylst is NULL, or if the entire list is parsed.
 */
 
-int		pylst_iter(t_pylst *pylst, void **value)
+int		iter_pylst(t_pylst *pylst, void **value)
 {
 	if (!pylst)
 		return (0);
@@ -386,7 +401,7 @@ int		pylst_iter(t_pylst *pylst, void **value)
 }
 
 /*
-** pylst_remove:
+** remove_pylst:
 **
 ** @pylst: list where the element have to be removed.
 ** @value: Value tu remove.
@@ -394,7 +409,7 @@ int		pylst_iter(t_pylst *pylst, void **value)
 ** Delete a single value in the current list.
 */
 
-void		pylst_remove(t_pylst **pylst, void *value)
+void		remove_pylst(t_pylst **pylst, void *value)
 {
 	t_pylst		*prev;
 	t_pylst		*curr;
@@ -416,15 +431,15 @@ void		pylst_remove(t_pylst **pylst, void *value)
 }
 
 /*
-** pylst_strremove:
+** strremove_pylst:
 **
 ** @pylst: list where the element have to be removed.
 ** @value: Value tu remove.
 **
-** Like pylst_remove, but use a char * as value.
+** Like remove_pylst, but use a char * as value.
 */
 
-void	pylst_strremove(t_pylst	**pylst, char *value)
+void	strremove_pylst(t_pylst **pylst, char *value)
 {
 	t_pylst		*prev;
 	t_pylst		*curr;
@@ -446,7 +461,7 @@ void	pylst_strremove(t_pylst	**pylst, char *value)
 }
 
 /*
-** pylst_replace:
+** update_pylst:
 **
 ** Arguments, in order :
 ** @pylst: choosen list.
@@ -459,7 +474,7 @@ void	pylst_strremove(t_pylst	**pylst, char *value)
 ** Is an equivalent in python to 'my_lst[x] = y'.
 */
 
-void	pylst_replace(t_pylst *pylst, int index, ...)
+void	update_pylst(t_pylst *pylst, int index, ...)
 {
 	va_list		args;
 	void		*value;
@@ -473,14 +488,109 @@ void	pylst_replace(t_pylst *pylst, int index, ...)
 	ctype = va_arg(args, enum e_ctype);
 	pylst = index_pylst(pylst, index);
 	pylst_clean_node(pylst);
-	pylst->value = value;
+	if (size > 0)
+	{
+		pylst->value = ft_memalloc(size);
+		ft_memcpy(pylst->value, value, size);
+	}
+	else
+		pylst->value = value;
 	pylst->size = size;
 	pylst->ctype = ctype;
 	va_end(args);
 }
 
+int			str_in_pylst(t_pylst *pylst, char *search)
+{
+	char	*tmp_value;
+
+	while (pylst)
+	{
+		tmp_value = (char *)pylst->value;
+		if (ft_strequ(search, tmp_value))
+			return (1);
+		pylst = pylst->next;
+	}
+	return (0);
+}
+
 /*
-** in_pylst_chare:
+** insert_sort_pylst:
+**
+** Utils for sort_pylst. Insert a new element inside a sorted list.
+*/
+
+static void	insert_sort_pylst(t_pylst **new_pylst, t_pylst *new_node, \
+		int (*cmp)(t_pylst *, t_pylst *))
+{
+	t_pylst		*prev;
+	t_pylst		*curr;
+
+	prev = NULL;
+	curr = *new_pylst;
+	while (curr && cmp(curr, new_node) <= 0)
+	{
+		prev = curr;
+		curr = curr->next;
+	}
+	if (!prev)
+		*new_pylst = new_node;
+	else
+		prev->next = new_node;
+	if (curr)
+		new_node->next = curr;
+}
+
+/*
+** sort_pylst:
+**
+** @pylst: list to sort.
+** @cmp: Compare function to perform the sort
+**
+** Sort the given chained list by performing an insert sort.
+*/
+
+void		sort_pylst(t_pylst **pylst, int (*cmp)(t_pylst *, t_pylst *))
+{
+	t_pylst		*sorted_pylst;
+	t_pylst		*to_sort;
+	t_pylst		*next;
+
+	sorted_pylst = NULL;
+	to_sort = *pylst;
+	while (to_sort)
+	{
+		next = to_sort->next;
+		to_sort->next = NULL;
+		insert_sort_pylst(&sorted_pylst, to_sort, cmp);
+		to_sort = next;
+	}
+	*pylst = sorted_pylst;
+}
+
+
+
+/*
+** pop_pylst:
+**
+** Return a value and delete it from the pylst.
+*/
+
+void		*pop_pylst(t_pylst **pylst, int index)
+{
+	t_pylst		*expect_node;
+	void		*pop_value;
+
+	expect_node = index_pylst(*pylst, index);
+	expect_node->ctype = _ptr;
+	expect_node->size = 0;
+	pop_value = expect_node->value;
+	remove_pylst(pylst, expect_node);
+	return (pop_value);
+}
+
+/*
+** str_in_pylst:
 **
 ** Arguments, in order :
 ** @str: searched string.

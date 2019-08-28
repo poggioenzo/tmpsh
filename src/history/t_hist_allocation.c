@@ -24,7 +24,7 @@ static void		create_t_hist(t_hist **hist_node, t_hist *prev, char *content,
 ** Push it at the end of our list.
 */
 
-void	push_t_hist(t_hist **history, char *content, int is_tmp)
+void			push_t_hist(t_hist **history, char *content, int is_tmp)
 {
 	t_hist	*curr_node;
 
@@ -45,7 +45,7 @@ void	push_t_hist(t_hist **history, char *content, int is_tmp)
 ** Free a single element of t_hist.
 */
 
-static void	free_history_node(t_hist **hist_node)
+static void		free_history_node(t_hist **hist_node)
 {
 	FREE((*hist_node)->line);
 	FREE(*hist_node);
@@ -59,7 +59,7 @@ static void	free_history_node(t_hist **hist_node)
 ** Setting up his pointer to NULL, and returning status.
 */
 
-int		free_history(t_hist **history, int status)
+int				free_history(t_hist **history, int status)
 {
 	t_hist		*tmp_node;
 	t_hist		*next_node;

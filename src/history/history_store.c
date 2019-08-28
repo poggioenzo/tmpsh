@@ -17,13 +17,10 @@
 
 void	history_store(int action, t_hist **history)
 {
-	static t_hist	*saved_history;
+	static t_hist	*saved_history = NULL;
 
 	if (action == CREATE)
-	{
-		load_history(history);
-		saved_history = *history;
-	}
+		load_history(&saved_history);
 	else if (action == STORE)
 		saved_history = *history;
 	else if (action == GET)

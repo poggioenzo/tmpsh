@@ -21,6 +21,7 @@ void	del_negativ_portion_test(void);
 void	del_after_pylst_test(void);
 void	replace_negativ_pylst_test(void);
 void	replace_pylst_test(void);
+void	update_pylst_test(void);
 
 // Tests for hash table
 void	hash_creation(void);

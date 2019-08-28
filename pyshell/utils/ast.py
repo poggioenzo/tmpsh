@@ -125,6 +125,7 @@ class ACB():
         self.pid = None
         self.pgid = 0
         self.complete = False
+        self.running = False
         self.check_subast()
         self.set_subast_type()
         self.check_redirection()

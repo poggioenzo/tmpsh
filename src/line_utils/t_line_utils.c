@@ -70,7 +70,6 @@ void		extract_line(t_line *shell_repr, t_line *to_del)
 	free_t_line(&shell_repr, 0);
 }
 
-
 /*
 ** line_proper:
 **
@@ -78,10 +77,10 @@ void		extract_line(t_line *shell_repr, t_line *to_del)
 ** Delete the unlocked part of a t_char list.
 */
 
-void    line_proper(t_line *cursor_line)
+void		line_proper(t_line *cursor_line)
 {
-    t_char  *char_lst;
+	t_char	*char_lst;
 
-    get_last_lock(cursor_line->chars, &char_lst);
-    free_t_char_lst(&char_lst->next, 0);
+	get_last_lock(cursor_line->chars, &char_lst);
+	free_t_char_lst(&char_lst->next, 0);
 }

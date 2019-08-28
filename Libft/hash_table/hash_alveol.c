@@ -61,7 +61,11 @@ int				free_alveol_list(t_ht_alveol **alveol, int status)
 static void		create_alveol(const char *key, void *value, \
 		t_ht_alveol **alveol, int ctype)
 {
+<<<<<<< HEAD
 	*alveol = (t_ht_alveol *)ft_memalloc(sizeof(**alveol));
+=======
+	*alveol = (t_ht_alveol *)MALLOC(sizeof(**alveol));
+>>>>>>> executor_translate
 	(*alveol)->value = value;
 	(*alveol)->key = ft_strdup(key);
 	(*alveol)->ctype = ctype;
