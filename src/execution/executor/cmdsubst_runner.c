@@ -21,9 +21,18 @@ static t_pylst		*prepare_cmdsubst_pipe(void)
 
 	setup_pipe_fd(pipe_fd);
 	pipe_lst = NULL;
-	push_pylst(&pipe_lst, pipe_fd, 0, _ptr);
-	push_pylst(&pipe_lst, pipe_fd + 1, 0, _ptr);
+	push_pylst(&pipe_lst, pipe_fd, sizeof(int), _ptr);
+	push_pylst(&pipe_lst, pipe_fd + 1, sizeof(int), _ptr);
 	return (pipe_lst);
+}
+
+static int		clean_popper(int *value)
+{
+	int		int_value;
+
+	int_value = *value;
+	ft_memdel((void **)&value);
+	return (int_value);
 }
 
 /*
@@ -52,11 +61,11 @@ static void		run_cmdsubst(t_ast *subast)
 		stdin = -1;
 		stdout = -1;
 		if (ft_strequ(subast->type, "CMDSUBST2"))
-			stdin = *((int *)pop_pylst(&pipe_fd, 0));
+			stdin = clean_popper(pop_pylst(&pipe_fd, 0));
 		else if (in(subast->type, "CMDSUBST1", "CMDSUBST3", NULL))
-			stdout = *((int *)pop_pylst(&pipe_fd, 1));
+			stdout = clean_popper(pop_pylst(&pipe_fd, 1));
 		replace_std_fd(stdin, stdout);
-		close(*(int *)pop_pylst(&pipe_fd, 0));
+		close(clean_popper(pop_pylst(&pipe_fd, 0)));
 		run_ast(subast);
 		exit(g_last_status);
 	}
@@ -64,10 +73,10 @@ static void		run_cmdsubst(t_ast *subast)
 	{
 		subast->pid = pid;
 		if (ft_strequ(subast->type, "CMDSUBST2"))
-			subast->link_fd = *(int *)pop_pylst(&pipe_fd, 1);
+			subast->link_fd = clean_popper(pop_pylst(&pipe_fd, 1));
 		else
-			subast->link_fd = *(int *)pop_pylst(&pipe_fd, 0);
-		close(*(int *)pop_pylst(&pipe_fd, 0));
+			subast->link_fd = clean_popper(pop_pylst(&pipe_fd, 0));
+		close(clean_popper(pop_pylst(&pipe_fd, 0)));
 	}
 }
 
