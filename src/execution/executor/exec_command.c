@@ -18,7 +18,7 @@
 ** Save, modify and restore the global environnement if needed.
 */
 
-static int		run_builtin(char **cmd_args, t_pylst *variables)
+static int		run_builtin(t_acb *branch, char **cmd_args, t_pylst *variables)
 {
 	char	**saved_environ;
 	int		(*builtin)(char **, char **);
@@ -32,7 +32,11 @@ static int		run_builtin(char **cmd_args, t_pylst *variables)
 		free_pylst(&variables, 0);
 	}
 	builtin = search_value(g_builtins, cmd_args[0]);
+	save_std_fd(save);
+	replace_std_fd(branch->stdin, branch->stdout);
+	setup_redirection(branch);
 	status = builtin(cmd_args + 1, g_environ);
+	save_std_fd(restore);
 	if (saved_environ)
 	{
 		free_str_array(&g_environ, 0);
@@ -77,7 +81,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	executable = get_execname(argv[0]);
 	if (executable && !ft_strchr(executable, '/'))
 	{
-		branch->status = run_builtin(argv, variables);
+		branch->status = run_builtin(branch, argv, variables);
 		return (execution_cleaner(argv, executable, -1));
 	}
 	pid = fork_prepare(branch->pgid, branch->background);
