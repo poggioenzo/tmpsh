@@ -30,7 +30,6 @@ void		lower_str(char *str)
 
 static void	fill_all_strings(t_pylst *stack, char **joined_separator)
 {
-	int		allocated;
 	char	*tmp_str;
 	char	*new_operand;
 
@@ -38,7 +37,6 @@ static void	fill_all_strings(t_pylst *stack, char **joined_separator)
 	tmp_str = " ";
 	while (iter_pylst(stack, (void **)&new_operand))
 	{
-		allocated = false;
 		new_operand = ft_strdup(new_operand);
 		lower_str(new_operand);
 		if (stack->next)

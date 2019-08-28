@@ -631,9 +631,6 @@ char	*str_chare_pylst(t_pylst *pylst)
 
 void	print_pylst_chare(t_pylst *pylst)
 {
-  int first;
-
-  first = 1;
   if (!(pylst))
   {
 	  ft_printf("Empty list.\n");

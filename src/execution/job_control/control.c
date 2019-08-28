@@ -1,4 +1,5 @@
 #include <signal.h>
+#include <sys/wait.h>
 #include "tmpsh.h"
 #include "libft.h"
 #include "foreground.h"

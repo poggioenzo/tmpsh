@@ -78,13 +78,11 @@ static	char	*get_ext_key(char *key, char *next_tag)
 
 int				keyinstack(t_pylst *stack, char *next_tag)
 {
-	size_t	len_stack;
 	char	*key;
 	char	*ext_key;
 	int		i;
 
 	i = 0;
-	len_stack = len_pylst(stack);
 	while (stack)
 	{
 		key = join_pylst(stack, " ");

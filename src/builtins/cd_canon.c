@@ -11,11 +11,9 @@
 
 void		canonicalize(char *path)
 {
-	char	*prev;
 	char	*curr;
 
 	remove_double_slash(path);
-	prev = NULL;
 	curr = path;
 	while (curr && *curr)
 	{

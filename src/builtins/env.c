@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "environ_utils.h"
 #include "path_check.h"
+#include <sys/wait.h>
 
 /*
 ** empty_environ:
