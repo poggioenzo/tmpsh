@@ -63,12 +63,12 @@ t_bool			check_forbidden_shiftreduce(t_pylst *tags)
 		if (cond_check_forbidden_shiftreduce(key, i, instack, tags))
 			return (free_pylst(&instack, ft_strdel_out(&key, FALSE)));
 		else if (i < len_tags && !ft_strequ("SPACES", \
-					(char *)get_value_pylst(tags, i)))
+					(char *)vindex_pylst(tags, i)))
 		{
 			if (!ops_begin_with(key, \
 						search_value(g_grammar->grammar, "FORBIDDEN")))
 				free_pylst(&instack, 42);
-			push_pylst(&instack, get_value_pylst(tags, i), 0, _ptr);
+			push_pylst(&instack, vindex_pylst(tags, i), 0, _ptr);
 		}
 		ft_strdel(&key);
 	}

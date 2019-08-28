@@ -44,7 +44,7 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 
 void			replace_variable(t_acb *branch)
 {
-	int		index;
+	size_t		index;
 	int		index_subast;
 	char	*tag;
 	t_ast	*subast;

@@ -31,7 +31,7 @@ void	get_tag_tagstokens(t_tagstokens *self)
 	iter = free_pylst(&self->tags, 0);
 	while (iter < self->length)
 	{
-		tok = (char *)get_value_pylst(self->tokens, iter);
+		tok = (char *)vindex_pylst(self->tokens, iter);
 		len_tok = ft_strlen(tok);
 		if (in_pylst_chare(tok, g_grammar->leaf_op))
 			push_pylst(&(self->tags), \

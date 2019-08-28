@@ -56,21 +56,17 @@ void	remove_globals(void)
 
 int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
 {
-	UNUSED(argc);
-	UNUSED(argv);
-	UNUSED(environ);
-
+	int status;
 	setup_globals(environ);
-	remove_globals();
+	// setup_variables_elements(environ);
 
-	//setup_variables_elements(environ);
-
-	/*
 	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	if (argc == 1)
-		return (prompt_loop());
-	return (status);
-	*/
+		prompt_loop();
+	remove_globals();
+	return ((status=0));
+
+
 }
 
 /*
