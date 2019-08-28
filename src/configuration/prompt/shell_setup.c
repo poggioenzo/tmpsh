@@ -72,7 +72,7 @@ void			shell_cleaner(void)
 {
 	history_store(GO_FREE, NULL);
 	manage_shell_repr(GO_FREE, NULL, NULL);
-	manage_termios(RESET);
+	manage_termios(remove_term);
 	clipboard_store(GO_FREE, NULL);
 	free_capabilities_struct(&g_caps, 0);
 }

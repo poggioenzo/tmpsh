@@ -54,7 +54,7 @@ void			check_redirection_acb(t_acb *self)
 	lentags = (int)self->tagstokens->length;
 	while (--lentags >= 0)
 	{
-		tag = get_value_pylst(self->tagstokens->tags, lentags);
+		tag = vindex_pylst(self->tagstokens->tags, lentags);
 		if (in_pylst_chare(tag,\
 					search_value(g_grammar->grammar, "REDIRECTION")))
 		{

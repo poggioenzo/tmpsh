@@ -117,8 +117,21 @@ enum	malloc_fail
 };
 
 
-//# define TRUE		1
-//# define FALSE		0
+// typedef int	t_bool;
+
+#undef false
+#undef true
+#undef stdout
+#undef stdin
+typedef enum
+{
+	false = 0,
+	true = 1,
+}	t_bool;
+
+
+# define TRUE		1
+# define FALSE		0
 
 # define SUCCESS	1
 # define FAILURE	0
@@ -271,6 +284,7 @@ typedef struct
 void		DEBUG_print_line(t_line *shell_lines, int fd);
 int		fd_debug;
 void	show_history(t_hist *history);
+void		DEBUG_cursor(t_cursor *cursor, int fd);
 
 # include "debug.h"
 # include "globals.h"

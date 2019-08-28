@@ -15,6 +15,9 @@
 #include "libft.h"
 #include "builtins.h"
 
+
+//To remove
+#include "termios_setter.h"
 int		g_last_status;
 
 void	setup_globals(char **environ)
@@ -54,30 +57,21 @@ void	remove_globals(void)
 
 }
 
-int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
+void	exit_termios(void)
 {
-	UNUSED(argc);
-	UNUSED(argv);
-	UNUSED(environ);
-
-	setup_globals(environ);
-	remove_globals();
-
-	//setup_variables_elements(environ);
-
-	/*
-	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
-	if (argc == 1)
-		return (prompt_loop());
-	return (status);
-	*/
+	manage_termios(remove_term);
 }
 
-/*
-** ft_printf("%d\n", find_prev_ind_token(tgtk, 3));
-** ft_printf("%s\n", find_prev_token(tgtk, 3, FALSE));
-** ft_printf("%s\n", find_prev_token(tgtk, 3, TRUE));
-** ft_printf("%d\n", find_next_ind_token(tgtk, 3));
-** ft_printf("%s\n", find_next_token(tgtk, 3, FALSE));
-** ft_printf("%s\n", find_next_token(tgtk, 3, TRUE));
-*/
+int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
+{
+	int status;
+	setup_globals(environ);
+	// setup_variables_elements(environ);
+	atexit(exit_termios);
+
+	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	if (argc == 1)
+		prompt_loop();
+	remove_globals();
+	return ((status=0));
+}

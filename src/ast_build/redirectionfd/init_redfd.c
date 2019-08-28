@@ -42,7 +42,7 @@ t_redirection_fd	*init_redfd(t_tagstokens *tgtk, char *type,\
 		source = (ft_strequ(self->type, "READ_FROM_FD")\
 				|| ft_strequ(self->type, "READ_FROM")) ? "0" : "1";
 	self->source = ft_atoi(source);
-	self->dest = get_value_pylst(self->tagstokens->tokens,\
+	self->dest = vindex_pylst(self->tagstokens->tokens,\
 			self->tagstokens->length - 1);
 	self->close = (ft_strequ(self->type, "READ_FROM_FD")\
 	|| ft_strequ(self->type, "TRUNC_TO_FD")) && ft_strequ(self->dest, "-");

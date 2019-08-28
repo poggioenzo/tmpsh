@@ -27,7 +27,7 @@ static int		prev_is_stmt(t_pylst *tags, int index)
 
 static void		join_stmt(t_acb *branch)
 {
-	int				index;
+	size_t			index;
 	t_tagstokens	*tagstok;
 	char			*curr_tag;
 	t_pylst			*prev_token;
@@ -82,7 +82,7 @@ static char		**convert_command(t_pylst *command)
 
 char			**extract_cmd(t_acb *branch)
 {
-	int			index;
+	size_t			index;
 	t_pylst		*command;
 	char		*tag;
 	char		*token;

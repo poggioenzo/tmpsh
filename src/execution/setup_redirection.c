@@ -23,7 +23,7 @@ static char		*join_cmd(t_pylst *list_branch)
 {
 	char			*final_cmd;
 	t_acb			*branch;
-	int				index;
+	size_t			index;
 	char			*token;
 	char			*tag;
 

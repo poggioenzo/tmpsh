@@ -45,6 +45,12 @@ void		DEBUG_operand_lst(t_operand *operand_list)
 		ft_dprintf(fd_debug, "NULL\n");
 	}
 }
+
+void		DEBUG_cursor(t_cursor *cursor, int fd)
+{
+	ft_dprintf(fd, "(%d, %d)\n", cursor->row, cursor->column);
+}
+
 void	DEBUG_history(t_hist *history)
 {
 	while (history)
@@ -55,4 +61,3 @@ void	DEBUG_history(t_hist *history)
 		history = history->next;
 	}
 }
-

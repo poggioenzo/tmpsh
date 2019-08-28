@@ -61,8 +61,8 @@ t_bool	iter_tagstokens(t_tagstokens *self, char **token, char **tag)
 	self->iter++;
 	if (self->iter < (int)self->length)
 	{
-		*token = (char *)get_value_pylst(self->tokens, self->iter);
-		*tag = (char *)get_value_pylst(self->tags, self->iter);
+		*token = (char *)vindex_pylst(self->tokens, self->iter);
+		*tag = (char *)vindex_pylst(self->tags, self->iter);
 		return (TRUE);
 	}
 	self->iter = -1;

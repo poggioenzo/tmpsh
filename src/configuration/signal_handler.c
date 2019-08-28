@@ -55,7 +55,7 @@ static void		shell_background(int status)
 	fake_cursor = (t_cursor){.row = -1, .column = -1};
 	display_shell(shell_repr, &fake_cursor, FALSE);
 	ft_printf(g_caps->reset_cursor);
-	manage_termios(RESET);
+	manage_termios(remove_term);
 	signal(SIGTSTP, SIG_DFL);
 	kill(getpid(), SIGTSTP);
 }
@@ -73,7 +73,7 @@ static void		shell_continue(int status)
 
 	UNUSED(status);
 	manage_shell_repr(GET, &shell_repr, &cursor);
-	manage_termios(SETUP);
+	manage_termios(setup_term);
 	ft_printf(g_caps->hide_cursor);
 	display_shell(shell_repr, cursor, TRUE);
 	signal(SIGTSTP, shell_background);

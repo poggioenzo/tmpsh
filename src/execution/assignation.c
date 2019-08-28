@@ -68,7 +68,7 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 {
 	t_pylst			*assignation_list;
 	char			*last_stmt;
-	int				index;
+	size_t			index;
 	char			*tag;
 
 	index = 0;

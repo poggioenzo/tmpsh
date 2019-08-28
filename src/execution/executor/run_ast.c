@@ -8,6 +8,9 @@
 #include "subast_command.h"
 #include "exec_command.h"
 
+
+#include "ast.h"
+
 /*
 ** try_set_job_pgid:
 **

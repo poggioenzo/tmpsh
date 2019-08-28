@@ -78,7 +78,7 @@ void			tagstokens_shiftreduce(t_tagstokens *tgtk)
 	{
 		if (!(forbidden = check_forbidden_shiftreduce(tgtk->stack)))
 			break ;
-		next_tag = (i < tgtk->length) ? get_value_pylst(tgtk->tags, i) : "";
+		next_tag = (i < tgtk->length) ? vindex_pylst(tgtk->tags, i) : "";
 		if ((instack = keyinstack(tgtk->stack, next_tag)) > -1)
 			tgtk->stack = reduce_all(&tgtk->stack, instack, next_tag);
 		else if (!(append_stack(tgtk, next_tag, i)) || !(++i))

@@ -3,10 +3,13 @@
 
 # include <termios.h>
 
-int				manage_termios(int action);
+enum e_term_action
+{
+	remove_term = 0,
+	setup_term,
+	restore_term,
+};
 
-# define SETUP	1
-# define RESET	0
-
+int				manage_termios(enum e_term_action action);
 
 #endif

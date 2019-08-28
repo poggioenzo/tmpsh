@@ -51,7 +51,7 @@ void			check_subast_acb(t_acb *self)
 	i = 0;
 	while (i < self->tagstokens->length)
 	{
-		tag = get_value_pylst(self->tagstokens->tags, i);
+		tag = vindex_pylst(self->tagstokens->tags, i);
 		if (search_value(g_grammar->opening_tags, tag))
 		{
 			begin = i + 1;

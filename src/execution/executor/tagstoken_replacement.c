@@ -94,7 +94,7 @@ void	replace_cmdsubst1(char *content, t_tagstokens *tagstokens, int index)
 void			replace_subast(t_acb *branch, int change_index, char *content, \
 		char *type_ast)
 {
-	int		index;
+	size_t		index;
 	char	*tag;
 	char	*token;
 	t_tagstokens	*tagstok;
