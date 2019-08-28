@@ -221,7 +221,6 @@ typedef struct
 	t_ast			*heredoc_ast;
 	t_bool			close;
 	t_bool			error;
-	t_ast			*heredoc_ast;
 }		t_redirection_fd;
 
 typedef struct
