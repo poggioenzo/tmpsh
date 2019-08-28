@@ -7,7 +7,7 @@
 
 t_grammar	*g_grammar = NULL;
 
-static void	shell_grammar_init(void)
+static void		shell_grammar_init(void)
 {
 	void	*tmp;
 
@@ -18,10 +18,28 @@ static void	shell_grammar_init(void)
 	add_symbol("\n", "NEW_LINE");
 	get_leaf_op();
 	if ((tmp = search_value(g_grammar->grammar, "ESCAPE")))
-		pylst_strremove(&g_grammar->leaf_op, ((t_pylst *)tmp)->value);
+		strremove_pylst(&g_grammar->leaf_op, ((t_pylst *)tmp)->value);
 	g_grammar->maxlen_leaf_op = get_maxlen(g_grammar->leaf_op);
 	get_opening_tags();
 	get_abstract_terminator();
+}
+
+/*
+** free_grammar:
+**
+** Deallocate each t_grammar attributes.
+*/
+
+void			free_grammar(void)
+{
+	free_pylst(&g_grammar->leaf_op, 0);
+	free_hash_table(&g_grammar->dquotes_opening_tags, 0);
+	free_hash_table(&g_grammar->opening_tags, 0);
+	free_pylst(&g_grammar->spaces, 0);
+	free_hash_table(&g_grammar->reverse, 0);
+	free_hash_table(&g_grammar->grammar, 0);
+	ft_strdel(&g_grammar->path);
+	ft_memdel((void **)&g_grammar);
 }
 
 /*
@@ -34,10 +52,9 @@ static void	shell_grammar_init(void)
 ** Setup each attribute of the variable, differents dictionnaries, lists etc.
 */
 
-void	grammar_init(char *path)
+void			grammar_init(char *path)
 {
-	if (!(g_grammar = (t_grammar *)ft_memalloc(sizeof(t_grammar))))
-		exit(-1);
+	g_grammar = (t_grammar *)ft_memalloc(sizeof(t_grammar));
 	g_grammar->path = path;
 	ht_new_table(&g_grammar->grammar, 63, 40);
 	ht_new_table(&g_grammar->reverse, 63, 40);

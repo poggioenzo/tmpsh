@@ -1,6 +1,15 @@
 #include "libft.h"
+#include "tmpsh.h"
 
-void		built_exit(char **args)
+/*
+** built_exit:
+**
+** exit - quit the current shell process
+**
+** Synopsis : exit [n]
+*/
+
+int		built_exit(char **args, NOT_USE(char **env))
 {
 	int		argc;
 	int		value;
@@ -9,7 +18,7 @@ void		built_exit(char **args)
 	if (argc > 2)
 	{
 		ft_dprintf(2, "exit: too many arguments\n");
-		return ;
+		return (1);
 	}
 	else if (argc == 1)
 		value = ft_atoi(args[0]);

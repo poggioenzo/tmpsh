@@ -2,7 +2,7 @@
 #include "libft.h"
 #include "t_caps_utils.h"
 
-void		alloc_cursor(t_cursor **cursor)
+void	alloc_cursor(t_cursor **cursor)
 {
 	*cursor = (t_cursor *)ft_memalloc(sizeof(t_cursor));
 	(*cursor)->row = 0;

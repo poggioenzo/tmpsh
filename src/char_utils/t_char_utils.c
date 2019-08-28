@@ -7,7 +7,7 @@
 ** Return the position of the junction to update cursor position.
 */
 
-int		extend_char(t_char *prev_chars, t_char *char_to_add)
+int			extend_char(t_char *prev_chars, t_char *char_to_add)
 {
 	t_char		*start_line;
 
@@ -18,7 +18,6 @@ int		extend_char(t_char *prev_chars, t_char *char_to_add)
 	update_position(start_line);
 	return (prev_chars->position + 1);
 }
-
 
 /*
 ** update_position:
@@ -46,7 +45,7 @@ void		update_position(t_char *char_lst)
 ** starting from the given t_char position.
 */
 
-void	increment_char_end(t_char *char_lst)
+void		increment_char_end(t_char *char_lst)
 {
 	int reference_pos;
 

@@ -1,45 +1,108 @@
-#include "environ_utils.h"
 #include "libft.h"
+#include "tmpsh.h"
+#include "cd_canon.h"
+#include "cd_finder.h"
+#include "argparser.h"
+#include "variables.h"
 
-static char		*get_oldpwd(void)
+char		*g_shell_dir;
+
+/*
+** check_option:
+**
+** Verify if the user is giving valid options for cd.
+**
+** return : - true if options are valid.
+**			- false if an option is invalid.
+*/
+
+static int	check_option(t_pylst *options)
 {
-	char	*oldpwd;
+	char		*select_option;
 
-	if (!(oldpwd = ft_getenv("OLDPWD")))
+	if (!options)
+		return (true);
+	while (iter_pylst(options, (void **)&select_option))
 	{
-		ft_dprintf(2, "cd : OLDPWD not found, retry again.\n");
-		return (NULL);
+		if (!(ft_strequ(select_option, "L") || ft_strequ(select_option, "P")))
+		{
+			ft_dprintf(2, "cd: invalid option %s\n", select_option);
+			return (free_pylst(&options, false));
+		}
 	}
-	return (oldpwd);
+	return (true);
 }
 
-void			built_cd(char **args)
-{
-	char	*direction;
-	char	*oldpwd;
+/*
+** change_directory:
+**
+** @directory: Expected new directory.
+** @is_p: true if P options is activated, false otherwise.
+**
+** Try to change the working directory to @directory.
+** On success, setup PWD and OLDPWD environnement variables,
+** according to the options.
+**
+** return : - 0 on success.
+**			- 1 if the working directory don't change.
+*/
 
-	if (*args)
+static int	change_directory(char *directory, int is_p)
+{
+	char		*cwd;
+
+	if (!allowed_access(directory, true))
+		return (1);
+	if (chdir(directory) == 0)
 	{
-		direction = *args;
-		if (ft_arraylen(args) >= 2 && ft_dprintf(2, "cd : Mayday Mayday.\n"))
-			return ;
+		ft_setenv("OLDPWD", g_shell_dir);
+		ft_strdel(&g_shell_dir);
+		if (is_p)
+		{
+			cwd = getcwd(NULL, 0);
+			ft_strdel(&directory);
+			directory = ft_strdup(cwd);
+			free(cwd);
+		}
+		ft_strdel(&g_shell_dir);
+		g_shell_dir = directory;
+		ft_setenv("PWD", g_shell_dir);
+		return (0);
 	}
-	else
+	ft_strdel(&directory);
+	return (1);
+}
+
+/*
+** built_cd:
+**
+** Builtin for the cd command. POSIX compliant.
+** Available options : -P | -L
+**
+** Allow directory research with CDPATH variable.
+** Manage symlink directories by using canonical form
+** of the directory when using chdir.
+*/
+
+int			built_cd(char **argv, NOT_USE(char **environ))
+{
+	t_pylst		*options;
+	char		*new_dir;
+	int			status;
+	int			is_p;
+
+	options = argparser(argv);
+	if (ft_arraylen(argv) >= 2)
 	{
-		// Can get the home from the uid instead of environnement
-		if (!(direction = ft_getenv("HOME")) && \
-				ft_dprintf(2, "cd : HOME not set\n"))
-			return ;
+		ft_printf("cd: too much arguments\n");
+		return (free_pylst(&options, 1));
 	}
-	if (ft_strequ(direction, "-"))
-		if (!(direction = get_oldpwd()))
-			return ;
-	oldpwd = getcwd(NULL, 0);
-	if (chdir(direction) == -1)
-		//Can use errno
-		ft_dprintf(2, "cd : Probably a right error or no such directory : %s\n",
-				direction);
-	else
-		ft_setenv("OLDPWD", oldpwd);
-	ft_strdel(&oldpwd);
+	if (check_option(options) == false)
+		return (1);
+	is_p = options && *(char *)index_pylst(options, -1)->value == 'P';
+	if (!(new_dir = find_newdir(argv[0], is_p)))
+		return (1);
+	status = change_directory(new_dir, is_p);
+	free_pylst(&options, 0);
+	return (status);
 }

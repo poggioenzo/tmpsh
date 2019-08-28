@@ -19,7 +19,6 @@ void		next_word(t_line *shell_repr, t_cursor *cursor)
 	ft_memcpy(cursor, &word_cursor, sizeof(t_cursor));
 }
 
-
 /*
 ** previous_word:
 **

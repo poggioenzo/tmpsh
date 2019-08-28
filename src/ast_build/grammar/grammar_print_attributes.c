@@ -21,7 +21,7 @@ static void		ft_puthidestr(char *str)
 	}
 }
 
-void	print_opening_tags(void)
+void			print_opening_tags(void)
 {
 	char	*value;
 	char	*key;
@@ -33,19 +33,20 @@ void	print_opening_tags(void)
 	ft_printf("}\n");
 }
 
-void	print_spaces(void)
+void			print_spaces(void)
 {
 	ft_printf("spaces:\n[");
 	ft_puthidestr(g_grammar->spaces);
 	ft_printf("]\n");
 }
-void	print_leaf_op(void)
+
+void			print_leaf_op(void)
 {
 	char *operator;
 
 	ft_printf("leaf_op:\n");
 	ft_printf("[");
-	while (pylst_iter(g_grammar->leaf_op, (void **)&operator))
+	while (iter_pylst(g_grammar->leaf_op, (void **)&operator))
 	{
 		ft_printf("'");
 		ft_puthidestr(operator);
@@ -54,7 +55,7 @@ void	print_leaf_op(void)
 	ft_printf("]\n");
 }
 
-void	print_dquotes_opening_tags(void)
+void			print_dquotes_opening_tags(void)
 {
 	char	*value;
 	char	*key;

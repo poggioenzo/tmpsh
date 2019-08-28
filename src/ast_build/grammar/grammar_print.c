@@ -2,7 +2,7 @@
 #include "tmpsh.h"
 #include "grammar_print_attributes.h"
 
-static void	print_grammar(void)
+static void		print_grammar(void)
 {
 	t_pylst		*value_lst;
 	char		*key;
@@ -13,14 +13,14 @@ static void	print_grammar(void)
 	while (ht_iter(g_grammar->grammar, &key, (void **)&value_lst))
 	{
 		ft_printf("    \"%s\" : [", key);
-		while (pylst_iter(value_lst, (void **)&value))
+		while (iter_pylst(value_lst, (void **)&value))
 			ft_printf("'%s', ", value);
 		ft_printf("],\n");
 	}
 	ft_printf("}\n");
 }
 
-static void	print_reverse_grammar(void)
+static void		print_reverse_grammar(void)
 {
 	char	*key;
 	char	*value;
@@ -32,14 +32,13 @@ static void	print_reverse_grammar(void)
 	ft_printf("}\n");
 }
 
-static void	print_escape(void)
+static void		print_escape(void)
 {
 	ft_printf("escape:\n");
 	ft_printf("%s\n", g_grammar->escape);
 }
 
-
-void	show_grammar_global(void)
+void			show_grammar_global(void)
 {
 	print_grammar();
 	print_reverse_grammar();

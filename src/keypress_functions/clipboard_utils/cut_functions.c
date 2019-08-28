@@ -13,11 +13,12 @@
 ** clipboard_store.
 */
 
-void	line_cut(t_line	*shell_repr, t_cursor *cursor)
+void		line_cut(t_line *shell_repr, t_cursor *cursor)
 {
 	t_line	*cursor_line;
-	char	*cut = NULL;
+	char	*cut;
 
+	cut = NULL;
 	cursor_line = get_cursor_line(shell_repr, cursor);
 	cut = delete_char_range(cursor_line->chars, NULL, NULL, TRUE);
 	cursor->column = char_lst_len(cursor_line->chars);
@@ -91,8 +92,7 @@ void		cut_prev_word(t_line *shell_repr, t_cursor *cursor)
 	char	*cut;
 
 	shell_repr = get_cursor_line(shell_repr, cursor);
-	tmp_char = get_unlocked_char(shell_repr->chars);
-	if (!tmp_char)
+	if (!(tmp_char = get_unlocked_char(shell_repr->chars)))
 		return ;
 	in_word = FALSE;
 	last_word = tmp_char;
@@ -121,7 +121,7 @@ void		cut_prev_word(t_line *shell_repr, t_cursor *cursor)
 ** local clipped string.
 */
 
-void	paste_clipboard(t_line *shell_repr, t_cursor *cursor)
+void		paste_clipboard(t_line *shell_repr, t_cursor *cursor)
 {
 	char	*cut;
 

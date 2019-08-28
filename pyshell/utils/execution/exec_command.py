@@ -43,9 +43,9 @@ def run_builtin(cmd_args, variables):
     if save_environ:
         save_environ = gv.ENVIRON.copy()
         variables_mod.variables_config(variables, only_env=True)
-    cmd = "builtins.{}({}, {})".format(cmd_args[0], cmd_args[1:],\
-            dict(os.environ))
-    status = exec(cmd)
+    status = None
+    builtin_fct = getattr(builtins, cmd_args[0])
+    status = builtin_fct(cmd_args[1:], os.environ)
     if save_environ:
         gv.ENVIRON = save_environ
     return status
@@ -56,7 +56,9 @@ def child_execution(branch, argv, variables):
     Setup redirection and change stdin/stdout as needed by any kind of pipe.
     Setup list of variables as environnement variables.
     """
-    if argv[0] in ["jobs", "fg", "cd", "umask", "exit"]:
+    command = argv[0]
+    command = file.get_execname(command)
+    if command is not None and "/" not in command:
         branch.status = run_builtin(argv, variables)
         return None
     pid = forker.fork_prepare(branch.pgid, branch.background)
@@ -66,12 +68,12 @@ def child_execution(branch, argv, variables):
         fd.replace_std_fd(branch.stdin, branch.stdout)
         redirection.setup_redirection(branch)
         variables_mod.variables_config(variables, only_env=True)
-        executable = file.get_execname(argv[0])
-        if executable == None:
+        if command == None:
             exit(127)
-        os.execve(executable, argv, gv.ENVIRON)
+        os.execve(command, argv, gv.ENVIRON)
     else:
         fd.close_fds([branch.stdin, branch.stdout, -1])
+        branch.running = True
         return pid
 
 def exec_command(branch):

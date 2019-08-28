@@ -34,7 +34,7 @@ static int		get_repr_len(t_char *char_lst, t_cursor *cursor, int line)
 ** the reverse video mode.
 */
 
-static void	add_cursor_repr(char *line, int *str_index, char cursor_letter)
+static void		add_cursor_repr(char *line, int *str_index, char cursor_letter)
 {
 	ft_strcpy(line + *str_index, g_caps->video);
 	*str_index += ft_strlen(g_caps->video);
@@ -51,7 +51,7 @@ static void	add_cursor_repr(char *line, int *str_index, char cursor_letter)
 ** Concet the string with the locked part of the t_char.
 */
 
-char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
+char			*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 {
 	char	*line_repr;
 	int		line_len;
@@ -59,19 +59,19 @@ char		*format_char_lst(t_char *char_lst, t_cursor *cursor, int line)
 	int		cursor_displayed;
 
 	line_len = get_repr_len(char_lst, cursor, line);
-	line_repr = (char *)ft_memalloc(sizeof(char) * (line_len+ 5));
+	line_repr = (char *)ft_memalloc(sizeof(char) * (line_len + 5));
 	index = 0;
 	cursor_displayed = FALSE;
 	while (char_lst)
 	{
-			if (line == cursor->row && cursor->column == char_lst->position)
-			{
-				add_cursor_repr(line_repr, &index, char_lst->letter);
-				cursor_displayed = TRUE;
-			}
-			else
-				line_repr[index++] = char_lst->letter;
-			char_lst = char_lst->next;
+		if (line == cursor->row && cursor->column == char_lst->position)
+		{
+			add_cursor_repr(line_repr, &index, char_lst->letter);
+			cursor_displayed = TRUE;
+		}
+		else
+			line_repr[index++] = char_lst->letter;
+		char_lst = char_lst->next;
 	}
 	if (cursor_displayed == FALSE && line == cursor->row)
 		add_cursor_repr(line_repr, &index, ' ');
@@ -118,52 +118,27 @@ char			*concat_shell(t_line *prompt_lines, t_cursor *cursor, \
 }
 
 /*
-** concat_escaped_line:
-**
-** Whenever a end of t_line is esacaped, will concat the next line recursively.
-*/
-
-static void	concat_escaped_line(t_line **shell_repr, char **current_line)
-{
-	char		*new_line;
-
-	*shell_repr = (*shell_repr)->next;
-	history_formatter(shell_repr, &new_line);
-	*current_line = ft_fstrjoin(current_line, &new_line, 1, 1);
-}
-
-/*
 ** history_formatter:
 **
-** Format a single string in a t_char * format into a char * string.
-** Replace the \ followed by a new line into a single line.
+** Format a single line of shell_repr
 */
 
 static void		history_formatter(t_line **shell_repr, char **format)
 {
-	int line_len;
-	int	index;
+	int		line_len;
+	int		index;
 	t_char	*char_lst;
-	int		escape;
 
 	char_lst = get_unlocked_char((*shell_repr)->chars);
 	line_len = char_lst_len(char_lst);
 	*format = (char *)ft_memalloc(sizeof(char) * line_len + 1);
 	index = 0;
-	escape = FALSE;
-	while (char_lst && (char_lst->letter != '\\' || char_lst->next || escape))
+	while (char_lst)
 	{
-		if (char_lst->letter == '\\' && escape == FALSE)
-			escape = TRUE;
-		else
-			escape = FALSE;
-
 		(*format)[index++] = char_lst->letter;
 		char_lst = char_lst->next;
 	}
 	(*format)[index] = '\0';
-	if (char_lst)
-		concat_escaped_line(shell_repr, format);
 }
 
 /*
@@ -186,12 +161,7 @@ char			*render_shell_content(t_line *prompt_lines)
 		shell_str = ft_fstrjoin(&shell_str, &new_line, 1, 1);
 		prompt_lines = prompt_lines->next;
 		newline_tmp = "\n";
-		if (prompt_lines)
-		{
-			shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0);
-			if (!shell_str)
-				exit(-1);
-		}
+		shell_str = ft_fstrjoin(&shell_str, &newline_tmp, 1, 0);
 	}
 	return (shell_str);
 }

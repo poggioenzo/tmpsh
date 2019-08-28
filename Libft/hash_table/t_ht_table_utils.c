@@ -63,6 +63,7 @@ int					free_hash_table(t_ht_table **hash_table, int status)
 void				ht_new_table(t_ht_table **hash_table, int seed, int size)
 {
 	*hash_table = (t_ht_table *)ft_memalloc(sizeof(t_ht_table));
+	(*hash_table)->count = 0;
 	(*hash_table)->size = size;
 	(*hash_table)->seed = seed;
 	(*hash_table)->iter_index = 0;

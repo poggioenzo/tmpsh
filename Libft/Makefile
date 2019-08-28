@@ -75,6 +75,7 @@ SRCS = ft_atoi.c \
 	   ft_isprint.c \
 	   ft_isspace.c \
 	   ft_istrcmp.c \
+	   digitstr.c \
 	   ft_itoa.c \
 	   ft_lltoa.c \
 	   ft_itoabase.c \
@@ -111,6 +112,7 @@ SRCS = ft_atoi.c \
 	   ft_array_remove.c \
 	   ft_array_extend.c \
 	   ft_array_in.c \
+	   in.c \
 	   ft_duparray.c \
 	   ft_strclear.c \
 	   ft_strset.c \
@@ -174,9 +176,7 @@ SRCS = ft_atoi.c \
 	   create_tab.c \
 	   find_index.c \
 	   ft_arraylen.c \
-	   free_manager.c \
 	   digitstr.c\
-	   free_type1.c \
 	   garbage_alloc.c \
 	   $(SRCS_PRINTF) \
 	   $(SRCS_HASH_TABLE) \

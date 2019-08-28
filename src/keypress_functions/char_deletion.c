@@ -10,7 +10,7 @@
 ** deleted string to the upper line.
 */
 
-static void	join_end_of_line(t_char *prev_chars, t_char *cursor_chars, \
+static void		join_end_of_line(t_char *prev_chars, t_char *cursor_chars, \
 		t_cursor *cursor)
 {
 	t_char	*last_cursor_lock;
@@ -63,7 +63,7 @@ static void		delete_line(t_line *shell_repr, int position, t_cursor *cursor)
 ** try to delete the current line.
 */
 
-static int			del_pos_char(t_char **char_lst, t_cursor *cursor)
+static int		del_pos_char(t_char **char_lst, t_cursor *cursor)
 {
 	t_char	*prev_char;
 	t_char	*curr_char;
@@ -98,7 +98,7 @@ static int			del_pos_char(t_char **char_lst, t_cursor *cursor)
 
 void			delete_char(t_line *shell_repr, t_cursor *cursor)
 {
-	int status;
+	int		status;
 	t_line	*cursor_line;
 
 	cursor_line = get_cursor_line(shell_repr, cursor);

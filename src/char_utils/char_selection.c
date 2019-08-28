@@ -8,7 +8,7 @@
 ** NULL otherwise.
 */
 
-t_char	*get_unlocked_char(t_char *char_lst)
+t_char		*get_unlocked_char(t_char *char_lst)
 {
 	while (char_lst && char_lst->lock == TRUE)
 		char_lst = char_lst->next;
@@ -31,7 +31,7 @@ void		get_last_lock(t_char *char_lst, t_char **last_lock)
 /*
 ** get_last_char:
 **
-** Return the last t_char list which is unlocked, 
+** Return the last t_char list which is unlocked,
 ** set to NULL **last_char if all is locked.
 */
 
@@ -49,10 +49,9 @@ void		get_last_char(t_char *char_lst, t_char **last_char)
 */
 
 void		search_prev_char(t_char *char_lst, t_char **prev_char,\
-			   	t_char *from)
+				t_char *from)
 {
 	*prev_char = char_lst;
 	while ((*prev_char)->next != from)
 		*prev_char = (*prev_char)->next;
 }
-

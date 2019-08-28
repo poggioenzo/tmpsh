@@ -13,20 +13,6 @@
 
 static void	fill_tests_functions(void)
 {
-	/* pylst tests */
-	ADD_TEST(simple_chare_pylst);
-	ADD_TEST(simple_int_pylst);
-	ADD_TEST(multitype_pylst);
-	ADD_TEST(len_pylst_test);
-	ADD_TEST(index_pylst_test);
-	ADD_TEST(join_pylst_test);
-	ADD_TEST(slice_pylst_test);
-	ADD_TEST(replace_negativ_pylst_test);
-	ADD_TEST(replace_pylst_test);
-	ADD_TEST(del_portion_pylst_test);
-	ADD_TEST(del_negativ_portion_test);
-	ADD_TEST(del_after_pylst_test);
-
 
 	/* Hash table tests */
 	ADD_TEST(hash_creation);
@@ -73,6 +59,23 @@ static void	fill_tests_functions(void)
 
 	/* Grammar tests */
 	ADD_TEST(grammar_test);
+
+	/* pylst tests */
+	ADD_TEST(simple_chare_pylst);
+	ADD_TEST(simple_int_pylst);
+	ADD_TEST(multitype_pylst);
+	ADD_TEST(len_pylst_test);
+	ADD_TEST(index_pylst_test);
+	ADD_TEST(join_pylst_test);
+	ADD_TEST(slice_pylst_test);
+	ADD_TEST(replace_negativ_pylst_test);
+	ADD_TEST(replace_pylst_test);
+	ADD_TEST(del_portion_pylst_test);
+	ADD_TEST(del_negativ_portion_test);
+	ADD_TEST(del_after_pylst_test);
+	ADD_TEST(update_pylst_test);
+
+
 }
 
 /*
