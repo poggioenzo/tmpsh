@@ -69,11 +69,9 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 		manage_termios(remove_term);
 		executor(init_ast(tagstoken));
 		manage_termios(restore_term);
-		shell_preconfig(shell_repr, cursor);
-		//MUST FREE TAGSTOKEN
-		return (false);
 	}
-	ft_dprintf(2, "tmpsh: sytax error near %s\n", tagstoken->token_error);
+	else
+		ft_dprintf(2, "tmpsh: sytax error near %s\n", tagstoken->token_error);
 	shell_preconfig(shell_repr, cursor);
 	//MUST FREE TAGSTOKEN
 	return (false);
