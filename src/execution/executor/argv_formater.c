@@ -1,5 +1,6 @@
 #include "tmpsh.h"
 #include "libft.h"
+#include "tagstokens.h"
 
 /*
 ** prev_is_stmt:
@@ -46,7 +47,7 @@ static void		join_stmt(t_acb *branch)
 					NO_COPY_BUT_FREE, _chare);
 			del_portion_pylst(&tagstok->tags, index, index + 1);
 			del_portion_pylst(&tagstok->tokens, index, index + 1);
-			//update_length_tagstokens(tagstok);
+			update_length_tagstokens(tagstok);
 			index--;
 		}
 		index++;

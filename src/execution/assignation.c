@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "tmpsh.h"
 #include "variables.h"
+#include "tagstokens.h"
 
 /*
 ** fill_assignation:
@@ -47,7 +48,7 @@ static void		delete_variables(t_tagstokens *tagstok, t_pylst *assignations)
 	{
 		del_portion_pylst(&tagstok->tags, 0, nbr_assignations * 3);
 		del_portion_pylst(&tagstok->tokens, 0, nbr_assignations * 3);
-		//update_length(tagstok);
+		update_length_tagstokens(tagstok);
 	}
 }
 

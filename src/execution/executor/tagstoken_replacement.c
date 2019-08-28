@@ -1,5 +1,6 @@
 #include "tmpsh.h"
 #include "libft.h"
+#include "tagstokens.h"
 
 /*
 ** replace_redirection:
@@ -79,7 +80,7 @@ void	replace_cmdsubst1(char *content, t_tagstokens *tagstokens, int index)
 	get_final_fields(content, &final_tokens, &statements);
 	replace_pylst(&tagstokens->tokens, final_tokens, index, index + 1);
 	replace_pylst(&tagstokens->tags, statements, index, index + 1);
-	//update_length(tagstokens);
+	update_length_tagstokens(tagstokens);
 }
 
 /*
