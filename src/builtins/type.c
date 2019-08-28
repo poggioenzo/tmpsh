@@ -50,11 +50,11 @@ int				built_type(char **argv, NOT_USE(char **environ))
 	while (*argv)
 	{
 		if ((used_elem = search_value(g_hash, *argv)))
-			ft_printf("%s\n", used_elem);
-		if ((used_elem = search_value(g_alias, *argv)))
+			ft_printf("%s\n", ((t_hash_exec *)used_elem)->exec_file);
+		else if ((used_elem = search_value(g_alias, *argv)))
 			ft_printf("%s is aliased to '%s'\n", *argv, used_elem);
 		else if ((search_value(g_builtins, *argv)))
-			ft_printf("%s is a shell builtin\n");
+			ft_printf("%s is a shell builtin\n", *argv);
 		else if ((used_elem = get_execname(*argv)))
 			ft_printf("%s\n", used_elem);
 		else
@@ -62,6 +62,7 @@ int				built_type(char **argv, NOT_USE(char **environ))
 			ft_printf("type: %s: not found\n", *argv);
 			status = 1;
 		}
+		argv++;
 	}
 	return (status);
 }

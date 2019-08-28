@@ -36,7 +36,7 @@ static int		display_hash(void)
 		ft_dprintf(2, "hash: hash table empty\n");
 		return (1);
 	}
-	ft_printf("hits		command\n");
+	ft_printf("hits    command\n");
 	while (ht_iter(g_hash, &cmd, (void **)&cache))
 		ft_printf("%4.4d	%s\n", cache->count, cache->exec_file);
 	return (0);
@@ -58,7 +58,7 @@ static int		hash_options(char **argv)
 	int		argc;
 
 	argc = ft_arraylen(argv);
-	if (ft_start_with(*argv, "-"))
+	if (argc > 0 && ft_start_with(*argv, "-"))
 	{
 		if (!(ft_strequ(argv[0], "-r") || ft_strequ(argv[0], "-p")))
 		{
