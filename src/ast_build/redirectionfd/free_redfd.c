@@ -26,3 +26,8 @@ void free_redfd(t_redirection_fd **self)
 		ft_memdel((void **)self);
 	}
 }
+
+void free_redfd_type(void *redfd)
+{
+	free_redfd((t_redirection_fd **) redfd);
+}

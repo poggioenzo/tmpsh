@@ -62,7 +62,7 @@ void			check_redirection_acb(t_acb *self)
 			push_pylst(&self->redirectionfd,
 					init_redfd(
 					copy_tagstokens(self->tagstokens, previous, previous + 1),
-						tag, src), 0, _ptr);
+						tag, src), -1, _redfd);
 			lentags = del_tgtk_red(self->tagstokens, lentags, previous, src);
 		}
 		else if (!ft_strequ(tag, "SPACES"))

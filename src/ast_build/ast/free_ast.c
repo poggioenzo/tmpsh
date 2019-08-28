@@ -12,6 +12,7 @@
 /* ************************************************************************** */
 
 #include "ast.h"
+#include "acb.h"
 
 // typedef struct
 // {
@@ -33,4 +34,9 @@ void	free_ast(t_ast **self)
 			ft_strdel(&(*self)->command);
 		ft_memdel((void **)self);
 	}
+}
+
+void free_ast_type(void *ast)
+{
+	free_ast((t_ast **) ast);
 }

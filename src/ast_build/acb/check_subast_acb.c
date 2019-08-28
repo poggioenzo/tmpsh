@@ -58,7 +58,7 @@ void			check_subast_acb(t_acb *self)
 			push_pylst(&self->subcmd_type, tag, 0, _ptr);
 			i = skip_openning_tagstokens(self->tagstokens, i, NULL) - 1;
 			push_pylst(&self->subast, init_ast(
-						copy_tagstokens(self->tagstokens, begin, i)), 0, _ptr);
+					copy_tagstokens(self->tagstokens, begin, i)), -1, _ast);
 			replace_subast(self->tagstokens, begin - 1, i + 1, \
 					len_pylst(self->subast) - 1);
 			i = begin - 1;

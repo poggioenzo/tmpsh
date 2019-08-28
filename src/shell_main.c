@@ -38,8 +38,8 @@ int		main(int argc, char **argv)//char **environ)
 	// ft_printf("%s\n", "LOL");
 	ft_printf("%s\n", str_ast(ast));
 	// ft_printf("%s\n", "LOL");
-	free_ast(ast);
-	free_tagstokens(&tgtk, TRUE);
+	free_ast(&ast);
+	// free_tagstokens(&tgtk, TRUE);
 	return (0);
 }
 

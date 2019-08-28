@@ -35,3 +35,8 @@ void	free_acb(t_acb **self)
 		ft_memdel((void **)self);
 	}
 }
+
+void free_acb_type(void *acb)
+{
+	free_acb((t_acb **) acb);
+}
