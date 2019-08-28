@@ -102,7 +102,6 @@ int			built_cd(char **argv, NOT_USE(char **environ))
 	is_p = options && *(char *)vindex_pylst(options, -1) == 'P';
 	if (!(new_dir = find_newdir(argv[0], is_p)))
 		return (1);
-	ft_dprintf(fd_debug, "is_p : %d %s\n", is_p, new_dir);
 	status = change_directory(new_dir, is_p);
 	free_pylst(&options, 0);
 	return (status);
