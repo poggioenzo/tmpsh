@@ -77,11 +77,9 @@ char		*add_user(void)
 char		*add_cwd(void)
 {
 	char	*home;
-	char	*cwd_tmp;
 	char	*cwd;
 	int		len_home;
 
-	cwd_tmp = getcwd(NULL, 0);
 	cwd = ft_strdup(g_shell_dir);
 	home = getenv("HOME");
 	if (home && cwd && ft_start_with(cwd, home))
