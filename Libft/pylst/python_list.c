@@ -606,7 +606,7 @@ int in_pylst_chare(char *str, t_pylst *pylst)
   int ret;
 
   ret = 0;
-  while (pylst_iter(pylst, (void **)&value))
+  while (iter_pylst(pylst, (void **)&value))
   {
     if (value && ft_strequ(str, value))
     {

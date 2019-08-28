@@ -42,11 +42,11 @@ char	*str_acb(t_acb *self)
 	str = free_join(str, RED" __", FALSE);
 	str = free_join(str, self->tag_end ? self->tag_end : "", FALSE);
 	str = free_join(str, "__ ", FALSE);
-	while (pylst_iter(self->redirectionfd, (void**)&red_value))
+	while (iter_pylst(self->redirectionfd, (void**)&red_value))
 		str = free_join(str, red_value->print, FALSE);
 	str = free_join(str, WHITE, FALSE);
 	str = free_join(str, "\n", FALSE);
-	while (pylst_iter(self->subast, (void **)&value))
+	while (iter_pylst(self->subast, (void **)&value))
 		str_subast = free_join(str_subast, str_ast(value), FALSE);
 	str_subast = split_shift(&str_subast);
 	str = free_join(str, str_subast, TRUE);

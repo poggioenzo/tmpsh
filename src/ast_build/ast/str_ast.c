@@ -38,7 +38,7 @@ char	*str_ast(t_ast *self)
 	str = free_join(str, self->type ? self->type : "NONE", FALSE);
 	str = free_join(str, "\n  ", FALSE);
 	str = free_join(str, WHITE, FALSE);
-	while (pylst_iter(self->list_branch, (void **)&value))
+	while (iter_pylst(self->list_branch, (void **)&value))
 		string_acb = free_join(string_acb, str_acb(value), TRUE);
 	string_acb = split_shift(&string_acb);
 	str = free_join(str, string_acb, TRUE);

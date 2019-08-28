@@ -128,7 +128,7 @@ void	variables_config(t_pylst *variables, t_bool only_env)
 	char		*value;
 
 	operation = NULL;
-	while (pylst_iter(variables, &operation))
+	while (iter_pylst(variables, &operation))
 	{
 		key = index_pylst(operation, 0);
 		mode = index_pylst(operation, 1);

@@ -32,7 +32,7 @@ int	ops_begin_with(char *pattern, t_pylst *leaf_op)
 
 	ret = FALSE;
 	i = ft_strlen(pattern);
-	while (pylst_iter(leaf_op, (void **)&leaf))
+	while (iter_pylst(leaf_op, (void **)&leaf))
 		if (ft_strnequ(pattern, leaf, i))
 		{
 			ret = TRUE;

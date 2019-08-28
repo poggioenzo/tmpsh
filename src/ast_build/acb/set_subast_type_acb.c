@@ -30,7 +30,7 @@ void	set_subast_type_acb(t_acb *self)
 	int		i;
 
 	i = 0;
-	while (pylst_iter(self->subcmd_type, (void**)&value))
+	while (iter_pylst(self->subcmd_type, (void**)&value))
 	{
 		current = get_value_pylst(self->subast, i++);
 		current->type = value;
