@@ -54,26 +54,43 @@ void	remove_globals(void)
 
 }
 
-int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
+//int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
+int		main(int argc, char **argv, NOT_USE(char **environ))
 {
 	int status;
 	setup_globals(environ);
 	// setup_variables_elements(environ);
+	char	*grammar_abs;
+	char	*grammar_file = "/pyshell/grammar/grammar.txt";
+	char	*cwd;
+	t_tagstokens *tgtk;
+	t_ast *ast;
 
-	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
-	if (argc == 1)
-		prompt_loop();
-	remove_globals();
+	if (argc != 2)
+	{
+		ft_printf("Usage:"PURPLE" ./tmpsh 'command'\n"WHITE);
+		return (64);
+	}
+	tgtk = NULL;
+	setup_shell_freefct();
+	cwd = getcwd(NULL, 0);
+	grammar_abs = ft_strjoin(cwd, grammar_file);
+	free(cwd);
+	grammar_init(grammar_abs);
+	FREE(grammar_abs);
+	input_init_tagstokens(&tgtk, argv[1]);
+	// print_tagstokens(tgtk);
+	ast = init_ast(tgtk);
+	ft_printf("%s\n", str_ast(ast));
+	free_ast(&ast);
+	free_tagstokens(&tgtk, TRUE);
 	return ((status=0));
+
+	// fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
+	// if (argc == 1)
+	// 	prompt_loop();
+	// remove_globals();
+	// return ((status=0));
 
 
 }
-
-/*
-** ft_printf("%d\n", find_prev_ind_token(tgtk, 3));
-** ft_printf("%s\n", find_prev_token(tgtk, 3, FALSE));
-** ft_printf("%s\n", find_prev_token(tgtk, 3, TRUE));
-** ft_printf("%d\n", find_next_ind_token(tgtk, 3));
-** ft_printf("%s\n", find_next_token(tgtk, 3, FALSE));
-** ft_printf("%s\n", find_next_token(tgtk, 3, TRUE));
-*/
