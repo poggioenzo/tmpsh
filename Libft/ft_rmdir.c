@@ -40,8 +40,6 @@ static char		*format_file(char *basedir, char *filename)
 	if (basedir[dirlen - 1] == '/')
 		return (ft_strjoin(basedir, filename));
 	formatted = ft_strnew(dirlen + 1 + ft_strlen(filename));
-	if (!formatted)
-		return (NULL);
 	ft_strcpy(formatted, basedir);
 	formatted[dirlen] = '/';
 	ft_strcpy(formatted + dirlen + 1, filename);
@@ -60,11 +58,7 @@ static int		delete_dir(char *dirname, int recursiv)
 		return (-1);
 	while ((file_buf = readdir(directory)))
 	{
-		if (!(new_filename = format_file(dirname, file_buf->d_name)))
-		{
-			FREE(directory);
-			return (-1);
-		}
+		new_filename = format_file(dirname, file_buf->d_name);
 		if (check_upper_dir(dirname, file_buf->d_name) == 0)
 			ft_rmdir(new_filename, recursiv);
 		FREE(new_filename);

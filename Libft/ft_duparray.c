@@ -33,11 +33,6 @@ char		**ft_duparray(char **array)
 	while (*array)
 	{
 		duplicate[index] = ft_strdup(*array++);
-		if (duplicate[index] == NULL)
-		{
-			free_str_array(&array, 0);
-			return (NULL);
-		}
 		index++;
 	}
 	duplicate[index] = NULL;

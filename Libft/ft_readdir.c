@@ -31,8 +31,7 @@ static int		is_link(char **filename)
 	{
 		if (readlink(*filename, buff, PATH_MAX) == -1)
 			return (-1);
-		if (!(directory = dirname(*filename)))
-			return (-1);
+		directory = dirname(*filename);
 		buff_ptr = buff;
 		*filename = ft_filejoin(&buff_ptr, &directory, 0, 1);
 	}

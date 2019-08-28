@@ -17,8 +17,6 @@ char	*ft_strndup(const char *src, size_t n)
 {
 	char	*dest;
 
-	if ((dest = (char *)ft_memalloc(sizeof(char) * (ft_strnlen(src, n) + 1))))
-		return (ft_strncpy(dest, src, n));
-	else
-		return (dest);
+	dest = (char *)ft_memalloc(sizeof(char) * (ft_strnlen(src, n) + 1));
+	return (ft_strncpy(dest, src, n));
 }
