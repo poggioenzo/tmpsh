@@ -9,7 +9,6 @@
 #include "ast.h"
 #include "tagstokens.h"
 
-
 #include "termios_setter.h"
 
 /*
