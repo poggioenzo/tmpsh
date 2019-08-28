@@ -75,7 +75,7 @@ void				add_job(t_pylst **job_branches)
 	new_job = job_init(job_branches);
 	push_pylst(&g_jobs->list_jobs, new_job, NO_COPY_BUT_FREE, _ptr); //Use _job as type
 	sort_pylst(&g_jobs->list_jobs, sort_jobs);
-	ft_printf("[%d] %s\n", new_job->number, new_job->pgid);
+	ft_printf("[%d] %d\n", new_job->number, new_job->pgid);
 }
 
 /*
