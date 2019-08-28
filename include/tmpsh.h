@@ -187,7 +187,6 @@ typedef struct
 	int			link_fd;
 	pid_t		pid;
 	char		*command;
-	char		*print;
 	t_bool		complete;
 }			t_ast;
 

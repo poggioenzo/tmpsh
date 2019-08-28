@@ -31,8 +31,6 @@ void	free_ast(t_ast **self)
 		free_pylst(&(*self)->list_branch, 42);
 		if ((*self)->command)
 			ft_strdel(&(*self)->command);
-		if ((*self)->print)
-			ft_strdel(&(*self)->print);
 		ft_memdel((void **)self);
 	}
 }

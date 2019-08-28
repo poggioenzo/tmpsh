@@ -31,6 +31,7 @@ char	*str_acb(t_acb *self)
 	char	*str;
 	char	*str_subast;
 	t_ast	*value;
+	t_redirection_fd	*red_value;
 
 	str = ft_strnew(0);
 	str_subast = ft_strnew(0);
@@ -41,8 +42,8 @@ char	*str_acb(t_acb *self)
 	str = free_join(str, RED" __", FALSE);
 	str = free_join(str, self->tag_end ? self->tag_end : "", FALSE);
 	str = free_join(str, "__ ", FALSE);
-	while (pylst_iter(self->redirectionfd, (void**)&value))
-		str = free_join(str, value->print, FALSE);
+	while (pylst_iter(self->redirectionfd, (void**)&red_value))
+		str = free_join(str, red_value->print, FALSE);
 	str = free_join(str, WHITE, FALSE);
 	str = free_join(str, "\n", FALSE);
 	while (pylst_iter(self->subast, (void **)&value))

@@ -23,7 +23,6 @@ t_ast	*init_ast(t_tagstokens *tgtk)
 	self->link_fd = 0;
 	self->pid = -1;
 	self->command = str_command_tagstokens(tgtk);
-	self->print = NULL;
 	self->complete = FALSE;
 	split_branch_ast(self, tgtk);
 	update_length_tagstokens(tgtk);
