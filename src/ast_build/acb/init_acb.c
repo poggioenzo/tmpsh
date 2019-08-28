@@ -21,8 +21,7 @@ t_acb	*init_acb(t_tagstokens *tgtk, char *begin_andor, char *tag_end)
 	self->tagstokens = tgtk;
 	self->begin_andor = begin_andor;
 	self->tag_end = "";
-	if (in_pylst_chare(tag_end, search_value(
-					g_grammar->grammar, "ABS_TERMINATOR")))
+	if (in_grammar(tag_end, "ABS_TERMINATOR"))
 		self->tag_end = tag_end;
 	self->stdin = -1;
 	self->stdout = -1;
