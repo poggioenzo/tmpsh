@@ -76,7 +76,6 @@ static char			*parse_cdpath(char *pathname)
 		new_dir = ft_filejoin(split_folders + index++, &pathname, false, false);
 		if (allowed_access(new_dir, false))
 			break ;
-		ft_strdel(&new_dir);
 		tmp = "./";
 		new_dir = ft_filejoin(&tmp, &new_dir, false, true);
 		if (allowed_access(new_dir, false))
@@ -117,7 +116,7 @@ char				*find_newdir(char *argument, int p_opt)
 		new_dir = argument;
 	if (*new_dir != '/' && !p_opt)
 		new_dir = ft_filejoin(&g_shell_dir, &new_dir, false, true);
-	if (p_opt)
+	if (!p_opt)
 		canonicalize(new_dir);
 	return (new_dir);
 }

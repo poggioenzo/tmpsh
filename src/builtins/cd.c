@@ -24,7 +24,7 @@ static int	check_option(t_pylst *options)
 		return (true);
 	while (iter_pylst(options, (void **)&select_option))
 	{
-		if (!(ft_strequ(select_option, "L") || ft_strequ(select_option, "P")))
+		if (!in(select_option, "L", "P", NULL))
 		{
 			ft_dprintf(2, "cd: invalid option %s\n", select_option);
 			return (free_pylst(&options, false));
@@ -99,9 +99,10 @@ int			built_cd(char **argv, NOT_USE(char **environ))
 	}
 	if (check_option(options) == false)
 		return (1);
-	is_p = options && *(char *)index_pylst(options, -1)->value == 'P';
+	is_p = options && *(char *)vindex_pylst(options, -1) == 'P';
 	if (!(new_dir = find_newdir(argv[0], is_p)))
 		return (1);
+	ft_dprintf(fd_debug, "is_p : %d %s\n", is_p, new_dir);
 	status = change_directory(new_dir, is_p);
 	free_pylst(&options, 0);
 	return (status);
