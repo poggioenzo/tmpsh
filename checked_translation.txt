@@ -8,8 +8,6 @@ TO DO:
 
 
 - Segfault if I do the following sequence : Up for history + CTRL_C + up for history
-- echo nothing > test | cat $(echo test test) && cd .. ; top & jobs && cd - ; { var=TEST_VAR ; cat <(cat $var) $(cat
-<(echo test))}; (echo FINAL : $var)  ==> the last branch do not run properly
 
 - For CMDSUBST1 replacement, is split with "\n\t " enough ?
 - Remove or change malloc protection

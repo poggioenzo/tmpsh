@@ -47,6 +47,7 @@ t_bool		perform_command_as_subast(t_acb *branch)
 				setup_redirection(branch);
 				run_ast(subast);
 				branch->pid = -1;
+				branch->status = g_last_status;
 				save_std_fd(restore);
 			}
 			else
