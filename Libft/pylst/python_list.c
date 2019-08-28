@@ -560,7 +560,7 @@ void		*pop_pylst(t_pylst **pylst, int index)
 	expect_node->ctype = _ptr;
 	expect_node->size = 0;
 	pop_value = expect_node->value;
-	remove_pylst(pylst, expect_node);
+	remove_pylst(pylst, pop_value);
 	return (pop_value);
 }
 
