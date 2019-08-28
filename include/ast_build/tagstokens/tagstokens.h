@@ -29,6 +29,7 @@
 # include "tokenizer.h"
 # include "shiftreduce.h"
 # include "utils.h"
+# include "ttm.h"
 
 /*
 ** Local methodes includes.

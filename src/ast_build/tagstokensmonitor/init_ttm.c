@@ -14,7 +14,17 @@
 ** - (type) value : descibe output.
 */
 
-int init_ttm(void)
+void init_ttm(t_tagstokens *tagstokens)
 {
-	return (0);
+	t_tags_tokens_monitor *self;
+
+	self = (t_tags_tokens_monitor*)ft_memalloc(sizeof(t_tags_tokens_monitor));
+	self->tt = tagstokens;
+	self->i = -1;
+	self->begin_cmd = TRUE;
+	push_pylst(&self->opened, " ", 0, _ptr);
+	check_ttm(self);
+	free_pylst(self->heredocs_keys);
+	free_pylst(self->opened);
+	ft_memdel(&self);
 }
