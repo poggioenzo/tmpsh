@@ -21,16 +21,13 @@
 # include "pylst.h"
 # include "garbage.h"
 
-enum			e_bool
-{
-	#define false = 0,
-	#define true = 0
-};
-
-typedef enum e_bool       t_bool;
-
+#ifndef FALSE
 # define FALSE 0
+# endif
+
+#ifndef TRUE
 # define TRUE 1
+# endif
 
 # define ALLOC_ERROR	0
 # define ALLOC_SUCCESS	1
