@@ -282,6 +282,8 @@ class Executor:
             token = redirection.tagstokens.tokens[0]
             if tag == "SUBAST" and int(token) == change_index:
                 redirection.dest = content
+                redirection.tagstokens.tokens[0] = content
+                redirection.tagstokens.tags[0] = "STMT"
             index += 1
 
     def perform_subast_replacement(self, branch):

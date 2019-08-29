@@ -41,7 +41,6 @@ def prepare_heredoc(redirection):
     redirection.source = 0
     redirection.dest = here_pipe[0]
     if redirection.type == "TRIPLEHEREDOC":
-        print(redirection.tagstokens)
         content = redirection.tagstokens.tokens[0] + "\n"
     else:
         content = join_cmd(redirection.heredoc_ast.list_branch)
