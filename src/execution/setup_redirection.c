@@ -64,6 +64,9 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 	setup_pipe_fd(here_pipe);
 	redirection->source = 0;
 	redirection->dest = here_pipe;
+	if (ft_strequ(redirection->type, "TRIPLEHEREDOC"))
+		content = ft_strjoin(redirection->tagstokens->tokens->value, "\n");
+	else
 	content = join_cmd(redirection->heredoc_ast->list_branch);
 	write(here_pipe[1], content, ft_strlen(content));
 	ft_strdel(&content);

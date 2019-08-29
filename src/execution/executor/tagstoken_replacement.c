@@ -23,6 +23,9 @@ static void		replace_redirection(t_acb *branch, int change_index, char *content)
 		{
 			ft_memdel(&redirection->dest);
 			redirection->dest = content;
+			update_pylst(redirection->tagstokens->tags, 0, "STMT", 0, _ptr);
+			update_pylst(redirection->tagstokens->tokens, 0, content, \
+					NO_COPY_BUT_FREE, _chare);
 		}
 	}
 }
