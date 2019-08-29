@@ -46,7 +46,7 @@ static void		bg_action(t_job *job)
 	{
 		first_branch->running = true;
 		kill(-job->pgid, SIGCONT);
-		ft_printf("[%s] %s\n", job->number, job->command);
+		ft_printf("[%d] %s\n", job->number, job->command);
 	}
 }
 
