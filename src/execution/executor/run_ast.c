@@ -112,6 +112,7 @@ void			run_ast(t_ast *ast)
 		close_subast_pipe(branch);
 		analyse_branch_result(branch, &job_list);
 	}
+	//Free ast
 }
 
 void		executor(t_ast *ast)

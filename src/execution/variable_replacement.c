@@ -37,7 +37,8 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 /*
 ** replace_tild:
 **
-**
+** Whenever a STMT is found, check if it start with a '~', and if it the
+** case perform the tild subsitution, if possible.
 */
 
 static void		replace_tild(t_tagstokens *tagstok, int index)
