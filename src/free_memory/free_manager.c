@@ -1,5 +1,8 @@
 #include "libft.h"
 #include "freeing.h"
+#include "acb.h"
+#include "ast.h"
+#include "redirectionfd.h"
 
 /*
 ** setup_freefct:
@@ -18,4 +21,7 @@ void		setup_freefct(void)
 	g_free_fct[_hash_table] = free_hash_table_type;
 	g_free_fct[_job] = free_job_type;
 	g_free_fct[_hash_exec] = free_hash_exec_type;
+	g_free_fct[_acb] = free_acb_type;
+	g_free_fct[_ast] = free_ast_type;
+	g_free_fct[_redfd] = free_redfd_type;
 }

@@ -50,21 +50,6 @@ void			free_charee(void *array_ptr)
 }
 
 /*
-** free_inte:
-**
-** Free an int * array.
-*/
-
-void			free_inte(void *array_ptr)
-{
-	int		**real_array;
-
-	real_array = (int **)array_ptr;
-	FREE(*real_array);
-	*real_array = NULL;
-}
-
-/*
 ** free_pylst:
 **
 ** Free a chained list of t_pylst.
