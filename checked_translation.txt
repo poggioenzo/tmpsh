@@ -2,6 +2,7 @@ TO DO:
 
 - Ctrl + C can crash with waitpid (undefined)
 - Check all builtins
+- Assignation is checked after command start. (see enzo tagging)
 
 - For CMDSUBST1 replacement, is split with "\n\t " enough ?
 - Check if we allow leave shell with background jobs ? Check free in this case
