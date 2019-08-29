@@ -44,7 +44,7 @@ t_job		*job_init(t_pylst **job_branches)
 
 	new_job = (t_job *)ft_memalloc(sizeof(t_job));
 	new_job->branches = *job_branches;
-	*job_branches = NULL;// Check how job have top be copied !!!
+	*job_branches = NULL;
 	new_job->number = create_job_index();
 	last_branch = vindex_pylst(new_job->branches, -1);
 	new_job->pgid = last_branch->pgid;

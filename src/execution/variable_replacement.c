@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "variables.h"
 #include "heredoc_apply.h"
+#include "replace_home.h"
 
 /*
 ** variable_replacement.c
@@ -34,6 +35,25 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 }
 
 /*
+** replace_tild:
+**
+**
+*/
+
+static void		replace_tild(t_tagstokens *tagstok, int index)
+{
+	char	*token;
+	char	*new_token;
+
+	token = vindex_pylst(tagstok->tokens, index);
+	if (token[0] != '~')
+		return ;
+	if (!(new_token = replace_home(token)))
+		return ;
+	update_pylst(tagstok->tokens, index, new_token, NO_COPY_BUT_FREE, _chare);
+}
+
+/*
 ** replace_variable:
 **
 ** @branch: Branch where variable have to be replaced.
@@ -57,6 +77,8 @@ void			replace_variable(t_acb *branch)
 		tag = vindex_pylst(branch->tagstokens->tags, index);
 		if (ft_strequ(tag, "VAR"))
 			tagstoken_variable_swap(branch->tagstokens, index);
+		else if (ft_strequ(tag, "STMT"))
+			replace_tild(branch->tagstokens, index);
 		else if (ft_strequ(tag, "SUBAST"))
 		{
 			subast = vindex_pylst(branch->subast, index_subast);

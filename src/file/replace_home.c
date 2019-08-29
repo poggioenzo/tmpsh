@@ -43,18 +43,18 @@ char		*specific_user_home(char *filename)
 	len = 0;
 	while (filename[len] && filename[len] != '/')
 		len++;
-	if (!(username = ft_strsub(filename, 0, len)))
-		exit(-1);
+	username = ft_strsub(filename, 0, len);
 	user_home = getuser_home(username, 0);
 	FREE(username);
-	ft_strmove(filename, filename + len);
+	if (user_home)
+		ft_strmove(filename, filename + len);
 	return (user_home);
 }
 
 /*
 ** replace_home:
 **
-** Replace in a filename the '~' (tilde) part if needed.
+** Replace in a token the '~' (tilde) part if needed.
 ** Check if the tild need to be replaced by a specific user or
 ** if we user the home of the process owner. If no tild are present
 ** or if two of them are present at the start, avoid replacement.
@@ -62,29 +62,29 @@ char		*specific_user_home(char *filename)
 ** WARNING : allocated the a new string without freeing the old one.
 **
 ** return value:
-** - A new allocated filename with the tild replaced.
+** - A new allocated token with the tild replaced.
 ** - NULL if there is a probleme to get a user home,
 **   or if tild is followed by a number.
 */
 
-char		*replace_home(char *filename)
+char		*replace_home(char *token)
 {
 	char		*new_filename;
 	char		*user_home;
 
-	if (!ft_start_with(filename, "~") || ft_start_with(filename, "~~"))
-		new_filename = ft_strdup(filename);
+	if (!ft_start_with(token, "~") || ft_start_with(token, "~~"))
+		new_filename = ft_strdup(token);
 	else
 	{
 		user_home = NULL;
-		if (ft_isalpha(filename[1]))
-			user_home = specific_user_home(filename + 1);
-		else if (filename[1] == '\0' || filename[1] == '/')
+		if (ft_isalpha(token[1]))
+			user_home = specific_user_home(token + 1);
+		else if (token[1] == '\0' || token[1] == '/')
 			user_home = getuser_home(NULL, getuid());
 		if (!user_home)
 			return (NULL);
-		filename = filename + 1;
-		new_filename = ft_fstrjoin(&user_home, &filename, 1, 0);
+		token = token + 1;
+		new_filename = ft_fstrjoin(&user_home, &token, 1, 0);
 	}
 	if (!new_filename)
 		exit(-1);
