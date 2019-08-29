@@ -76,8 +76,7 @@ static void		export_assignation(char *argument)
 	*value++ = '\0';
 	if (ft_strlen(variable) > 0)
 	{
-		if (ft_getvar(variable))
-			ft_unsetvar(variable);
+		ft_unsetvar(variable);
 		ft_setenv(variable, value);
 	}
 }
@@ -98,7 +97,8 @@ static void		export_var(char *variable)
 	value = ft_getvar(variable);
 	if (!value)
 		value = "";
-	ft_setvar(variable, value);
+	ft_setenv(variable, value);
+	ft_unsetvar(variable);
 }
 
 /*

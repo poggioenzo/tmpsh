@@ -22,9 +22,12 @@ static void		fill_assignation(t_pylst **assignations, char *key, \
 	t_pylst		*operation;
 
 	operation = NULL;
-	push_pylst(&operation, key, 0, _chare);
-	push_pylst(&operation, method, 0, _chare);
-	push_pylst(&operation, value, 0, _chare);
+	key = ft_strdup(key);
+	method = ft_strdup(method);
+	value = ft_strdup(value);
+	push_pylst(&operation, key, NO_COPY_BUT_FREE, _chare);
+	push_pylst(&operation, method, NO_COPY_BUT_FREE, _chare);
+	push_pylst(&operation, value, NO_COPY_BUT_FREE, _chare);
 	push_pylst(assignations, operation, NO_COPY_BUT_FREE, _pylst);
 }
 
