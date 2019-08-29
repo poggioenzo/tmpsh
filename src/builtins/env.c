@@ -1,7 +1,7 @@
 #include "tmpsh.h"
 #include "libft.h"
 #include "environ_utils.h"
-#include "path_check.h"
+#include "exec_file.h"
 #include <sys/wait.h>
 
 /*
@@ -52,7 +52,7 @@ static char			*find_execfile(char **args)
 	index = 0;
 	while (args[index] && ft_strchr(args[index], '='))
 		index++;
-	return (args[index] ? get_exec_file(args[index]) : NULL);
+	return (args[index] ? get_execname(args[index]) : NULL);
 }
 
 /*

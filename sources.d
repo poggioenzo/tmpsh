@@ -163,7 +163,6 @@ FILE_DIR = file/
 FILE_SRCS := replace_home.c \
 			 file_utils.c \
 			 replace_home.c \
-			 path_check.c \
 
 FILE_SRCS := $(addprefix $(FILE_DIR), $(FILE_SRCS))
 
