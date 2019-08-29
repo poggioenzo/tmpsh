@@ -11,12 +11,10 @@
 ** and assign them to stdin/stdout of related branches.
 */
 
-void		setup_branch_pipe(t_ast *ast, int index, t_acb *branch)
+void		setup_branch_pipe(t_acb *branch, t_acb *next_branch)
 {
-	t_acb	*next_branch;
 	int		new_pipe[2];
 
-	next_branch = (t_acb *)vindex_pylst(ast->list_branch, index + 1);
 	setup_pipe_fd(new_pipe);
 	next_branch->stdin = new_pipe[0];
 	branch->stdout = new_pipe[1];
@@ -52,12 +50,10 @@ void		close_subast_pipe(t_acb *branch)
 ** see the behavior to apply.
 */
 
-t_bool		check_background(t_pylst *list_branch, int index)
+t_bool		check_background(t_acb *branch, t_pylst *list_branch)
 {
-	t_acb	*branch;
 	t_acb	*next_branch;
 
-	branch = vindex_pylst(list_branch, index);
 	if (branch->background == true)
 		return (true);
 	else if (ft_strequ(branch->tag_end, "BACKGROUND_JOBS"))
@@ -69,9 +65,9 @@ t_bool		check_background(t_pylst *list_branch, int index)
 		return (false);
 	else if (ft_strequ(branch->tag_end, "PIPE"))
 	{
-		next_branch = vindex_pylst(list_branch, index + 1);
+		next_branch = vindex_pylst(list_branch, 0);
 		next_branch->pgid = branch->pgid;
-		branch->background = check_background(list_branch, index + 1);
+		branch->background = check_background(next_branch, list_branch->next);
 		return (branch->background);
 	}
 	return (false);

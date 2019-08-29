@@ -89,39 +89,39 @@ static void		analyse_branch_result(t_acb *branch, t_pylst **job_list)
 void			run_ast(t_ast *ast)
 {
 	t_pylst	*job_list;
-	int		index;
-	int		nbr_branch;
 	t_acb	*branch;
 
-	index = 0;
-	nbr_branch = len_pylst(ast->list_branch);
 	job_list = NULL;
-	while (index < nbr_branch)
+	while (ast->list_branch)
 	{
-		branch = vindex_pylst(ast->list_branch, index);
-		push_pylst(&job_list, branch, 0, _ptr); //Need to use branch ??
+		branch = pop_pylst(&ast->list_branch, 0);
+		push_pylst(&job_list, branch, NO_COPY_BUT_FREE, _acb);
 		replace_variable(branch);
 		if (check_andor(branch) == false)
 		{
-			index++;
 			free_pylst(&job_list, 0);
 			continue ;
 		}
 		perform_subast_replacement(branch);
 		branch->pgid = ((t_acb *)job_list->value)->pgid;
-		check_background(ast->list_branch, index);
+		check_background(branch, ast->list_branch);
 		if (ft_strequ(branch->tag_end, "PIPE"))
-			setup_branch_pipe(ast, index, branch);
+			setup_branch_pipe(branch, ast->list_branch->value);
 		if (perform_command_as_subast(branch) == false)
 			exec_command(branch);
 		close_subast_pipe(branch);
 		analyse_branch_result(branch, &job_list);
-		index++;
 	}
 }
 
 void		executor(t_ast *ast)
 {
+	t_acb		*branch;
+
+	ft_dprintf(fd_debug, str_ast(ast));
+	branch = ast->list_branch->value;
+	ft_dprintf(fd_debug, str_acb(branch));
+	ft_dprintf(fd_debug, str_tagstokens(branch->tagstokens));
 	wait_zombie();
 	run_ast(ast);
 }
