@@ -45,7 +45,6 @@ enum			e_ctype
 	_ptr = 0,
 	_chare,
 	_charee,
-	_inte,
 	_pylst,
 	_hash_table,
 	_ast,
