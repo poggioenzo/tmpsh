@@ -24,7 +24,6 @@ int		built_exit(char **args, NOT_USE(char **env))
 		value = ft_atoi(args[0]);
 	else
 		value = 0;
-	
 	ft_printf("%s", g_caps->reset_cursor);
 	exit(value);
 }
