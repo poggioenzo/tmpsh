@@ -14,6 +14,7 @@
 #include "libft.h"
 #include "builtins.h"
 
+#include "level_increment.h"
 
 //To remove
 #include "termios_setter.h"
@@ -37,6 +38,7 @@ void	setup_globals(char **environ)
 	ht_new_table(&g_hash, 47, 50);
 	init_backgroundjobs();
 	init_tcsettings();
+	set_shlvl();
 }
 
 void	remove_globals(void)

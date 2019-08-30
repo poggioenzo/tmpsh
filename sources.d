@@ -89,6 +89,7 @@ CONFIGURATION_SRCS :=  screen_size.c \
 					   t_caps_utils.c \
 					   termios_setter.c \
 					   reset_signals.c \
+                       level_increment.c \
                        $(VARIABLES_SRCS) \
 					   $(PROMPT_CONF)
 
