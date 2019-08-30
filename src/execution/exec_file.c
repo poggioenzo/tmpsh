@@ -2,6 +2,22 @@
 #include "tmpsh.h"
 #include "variables.h"
 #include "hash.h"
+#include <sys/stat.h>
+
+/*
+** is_directory:
+**
+** Check if the given filename is a directory.
+*/
+
+int is_directory(const char *path)
+{
+	struct stat statbuf;
+
+	if (stat(path, &statbuf) != 0)
+		return (0);
+	return (S_ISDIR(statbuf.st_mode));
+}
 
 /*
 ** check_rights:
@@ -13,18 +29,19 @@
 
 static char		*check_rights(char *cmd)
 {
+	char	*err_msg;
+
+	err_msg = NULL;
 	if (access(cmd, F_OK) == -1)
+		err_msg = "tmpsh: No such file or directory : %s\n";
+	else if (is_directory(cmd))
+		err_msg = "tmpsh: %s: is a directory\n";
+	else if (access(cmd, X_OK) == -1 || access(cmd, R_OK) == -1)
+		err_msg = "tmpsh: permission denied: %s\n";
+	if (err_msg)
 	{
-		ft_dprintf(STDERR_FILENO, \
-				"tmpsh: No such file or directory : %s\n", cmd);
+		ft_dprintf(STDERR_FILENO, err_msg, cmd);
 		ft_strdel(&cmd);
-		return (NULL);
-	}
-	if (access(cmd, X_OK) == -1 || access(cmd, R_OK) == -1)
-	{
-		ft_dprintf(STDERR_FILENO, "tmpsh: permission denied: %s\n", cmd);
-		ft_strdel(&cmd);
-		return (NULL);
 	}
 	return (cmd);
 }
