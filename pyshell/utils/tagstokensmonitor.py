@@ -7,6 +7,7 @@ import utils.key as k
 def strncmp(s1, s2, n):
     return s1 == s2[:n]
 
+
 class TagsTokensMonitor():
     """docstring for TagsTokensMonitor."""
 
@@ -44,7 +45,8 @@ class TagsTokensMonitor():
         while self.next_tag_token():
             self.op_selector()
 
-    def op_selector(self):
+    def op_selector(self, skip=False):
+        print(self.tag, self.begin_cmd)
         if self.tt.valid:
             if self.tag == 'STMT':
                 self.check_aliases()
@@ -68,6 +70,11 @@ class TagsTokensMonitor():
                 self.in_redirection()
             elif self.opened[-1] == self.tag:
                 self.opened.pop(-1)
+
+            if skip or (self.begin_cmd and self.tag == 'SPACES'):
+                pass
+            else:
+                self.begin_cmd = False
 
     def is_newline(self):
         # should be improved or factorize
@@ -101,13 +108,21 @@ class TagsTokensMonitor():
 
     def check_aliases(self):
         result_alias = ''
-        if self.begin_cmd and (self.token in gv.ALIAS and
-                               self.token not in gv.PASSED_ALIAS):
+        assignation = self.i + 1 < self.tt.length and self.tt.find_next_token(
+            self.i + 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
+        if not assignation and self.begin_cmd and (self.token in gv.ALIAS and
+                                                   self.token not in
+                                                   gv.PASSED_ALIAS):
             result_alias = gv.ALIAS[self.token]
             self.begin_cmd = result_alias[-1:].isspace()
             gv.PASSED_ALIAS.append(self.token)
             self.tt.replace_alias(result_alias, self.i)
             if self.begin_cmd:
+                self.reset()
+        elif assignation:
+            if not self.begin_cmd:
+                self.tt.tags[self.i + 1] = 'STMT'
+            else:
                 self.reset()
 
     def is_braceparam(self):
@@ -200,11 +215,15 @@ class TagsTokensMonitor():
             ret = self.next_tag_token()
             if self.tag == 'SPACES':
                 ret = self.next_tag_token()
-            if ret and not (self.tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']
-                            or self.tag in gv.GRAMMAR.grammar['REDIRECTION']
-                            or self.tag in ['END_BRACE', 'END_BRACKET']):
+            end = (self.tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']
+                   or self.tag in gv.GRAMMAR.grammar['REDIRECTION']
+                   or self.tag in ['END_BRACE', 'END_BRACKET'])
+            if ret and not end:
                 self.tt.valid = False
                 self.tt.token_error = self.token
+            elif ret and end:
+                print("QWERTYUIOP")
+                self.reset()
         else:
             end = self.tt.skip_openning_tags(self.i) - 1
             self.tt.tags[self.i] = 'STMT'

@@ -1,4 +1,4 @@
-#include "is_abs_terminator_ttm.h"
+#include "ttm.h"
 
 
 /*
