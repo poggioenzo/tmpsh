@@ -38,7 +38,9 @@ static char		*retrieve_content(t_ast *subast)
 		content = get_quote_content(subast);
 	else if (ft_strequ(subast->type, "CMDSUBST1"))
 	{
-		content = fd_readfile(subast->link_fd);
+		if (!(content = fd_readfile(subast->link_fd)))
+			content = ft_strdup("");
+		ft_dprintf(fd_debug, "content : |%s|\n", content);
 		waitpid(subast->pid, 0, WUNTRACED);
 		rstrip(content);
 	}
