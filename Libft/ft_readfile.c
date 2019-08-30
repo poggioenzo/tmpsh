@@ -15,7 +15,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-static int			file_size(char *filename)
+static int		file_size(char *filename)
 {
 	struct stat		inode;
 
@@ -24,7 +24,7 @@ static int			file_size(char *filename)
 	return (inode.st_size);
 }
 
-char	*readfile(char *filename)
+char			*readfile(char *filename)
 {
 	int		len;
 	char	*content;
@@ -42,7 +42,7 @@ char	*readfile(char *filename)
 	return (content);
 }
 
-char	*fd_readfile(int fd)
+char			*fd_readfile(int fd)
 {
 	char	*content;
 	int		readed;

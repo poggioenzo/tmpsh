@@ -38,7 +38,7 @@ static int		bg_fg_map_argument(char **argv, char *caller, \
 		if (is_job_id(*argv))
 		{
 			job_id = ft_atoi((*argv) + 1);
-			if (!(job = get_job(job_id)));
+			if (!(job = get_job(job_id)))
 			{
 				ft_dprintf(2, "%s: No such job '%s'\n", caller, *argv);
 				return (1);

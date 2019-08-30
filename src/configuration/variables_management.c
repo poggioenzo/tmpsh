@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "environ_utils.h"
 #include "local_variables.h"
+#include "tagstokens.h"
 
 void	setup_variables_elements(char **environ)
 {
@@ -28,7 +29,7 @@ void	update_var(char *variable, char *value, char *type, t_bool only_env)
 	{
 		saved_var = ft_getvar(variable);
 		if (ft_strequ(type, "CONCATENATION"))
-			value = ft_strjoin(saved_var ?: "", value);
+			value = ft_strjoin(saved_var ? saved_var : "", value);
 		else
 			value = ft_strdup(value);
 		insert_value(g_variables, variable, value, _ptr);
@@ -50,7 +51,7 @@ char	*retrieve_variable(char *variable)
 		tmp_var = ft_getenv(variable);
 		if (!tmp_var)
 			tmp_var = ft_getvar(variable);
-		variable_str = ft_strdup(tmp_var?: "");
+		variable_str = ft_strdup(tmp_var ? tmp_var : "");
 	}
 	return (variable_str);
 }
@@ -86,7 +87,7 @@ static void		delete_variables(t_tagstokens *tagstok, t_pylst *assignations)
 	{
 		del_portion_pylst(&tagstok->tags, 0, nbr_assignations * 3);
 		del_portion_pylst(&tagstok->tokens, 0, nbr_assignations * 3);
-		//update_length(tagstok);
+		update_length_tagstokens(tagstok);
 	}
 }
 
@@ -148,7 +149,6 @@ void	tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 	variable = retrieve_variable(token + 1);
 	pylst_replace(tagstok->tokens, index, variable, NO_COPY_BUT_FREE, _chare);
 	pylst_replace(tagstok->tags, index, tag, 0, _ptr);
-
 }
 
 

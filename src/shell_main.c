@@ -7,7 +7,6 @@
 #include "job_control.h"
 #include "foreground.h"
 
-#include "setup_shell_freefct.h"
 #include "tagstokens.h"
 #include "grammar_init.h"
 #include "ast.h"
