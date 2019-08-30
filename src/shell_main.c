@@ -19,6 +19,7 @@
 //To remove
 #include "termios_setter.h"
 int		g_last_status = 0;
+pid_t		g_last_pid = 0;
 
 void	setup_globals(char **environ)
 {

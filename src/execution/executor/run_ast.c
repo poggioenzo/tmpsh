@@ -60,6 +60,8 @@ static void		analyse_branch_result(t_acb *branch, t_pylst **job_list)
 	if (ft_strequ(branch->tag_end, "BACKGROUND_JOBS"))
 	{
 		g_last_status = 0;
+		g_last_pid = branch->pid;
+		ft_dprintf(fd_debug, "store %d\n", g_last_pid);
 		add_job(job_list);
 	}
 	else if (!ft_strequ(branch->tag_end, "PIPE"))
@@ -117,7 +119,7 @@ void			run_ast(t_ast *ast)
 
 void		executor(t_ast *ast)
 {
-	t_acb		*branch;
+//	t_acb		*branch;
 
 //	ft_dprintf(fd_debug, str_ast(ast));
 //	branch = ast->list_branch->value;

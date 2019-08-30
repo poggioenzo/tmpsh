@@ -14,6 +14,7 @@ extern t_ht_table	*g_builtins;
 extern char			*g_shell_dir;
 extern t_background_job		*g_jobs;
 extern int	g_last_status;
+extern pid_t	g_last_pid;
 
 extern t_grammar	*g_grammar;
 
