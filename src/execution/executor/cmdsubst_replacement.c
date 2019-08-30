@@ -40,7 +40,6 @@ static char		*retrieve_content(t_ast *subast)
 	{
 		if (!(content = fd_readfile(subast->link_fd)))
 			content = ft_strdup("");
-		ft_dprintf(fd_debug, "content : |%s|\n", content);
 		waitpid(subast->pid, 0, WUNTRACED);
 		rstrip(content);
 	}
