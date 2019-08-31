@@ -3,6 +3,14 @@
 #include "tagstokens.h"
 #include "check_syntax_tagstokens.h"
 
+int			free_heredocs(t_heredocs **self, int status)
+{
+	ft_strdel(&(*self)->key);
+	free_tagstokens(&(*self)->tagstokens, status);
+	ft_memdel((void **)self);
+	return (status);
+}
+
 void	init_heredocs(t_heredocs **self, char *key, int len_key, t_bool minus)
 {
 	*self = ft_memalloc(sizeof(t_heredocs));
