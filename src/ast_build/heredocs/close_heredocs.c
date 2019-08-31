@@ -1,4 +1,4 @@
-#include "close_heredocs.h"
+#include "heredocs.h"
 
 
 /*
@@ -14,7 +14,12 @@
 ** - (type) value : descibe output.
 */
 
-int close_heredocs(void)
+void	close_heredocs(t_heredocs *self)
 {
-	return (0);
+	//self->tagstokens = copytt(self, 0, -self->len_key);//Seem to not exist
+	self->tagstokens->not_heredocs = false;
+	if (self->minus)
+		striplines(self);
+	check_syntax_tagstokens(self->tagstokens); //Check if check_stack in python is check_syntax_tagstokens
+	self->closed = true;
 }

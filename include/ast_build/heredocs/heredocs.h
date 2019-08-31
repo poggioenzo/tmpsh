@@ -2,10 +2,29 @@
 # define HEREDOCS_H
 
 /*
-** The last line of this file should be "#endif".
-** If not update header by project_manager.py (pm) fails.
+** General includes.
 */
 
-int heredocs(void);
+# include "tmpsh.h"
+# include "libft.h"
+# include "globals.h"
+
+/*
+** Utils for tagstokens.
+*/
+
+# include "tagstokens.h"
+
+/*
+** Local methodes includes.
+*/
+
+# include "add_tags_tokens_heredocs.h"
+# include "check_stack_heredocs.h"
+# include "close_heredocs.h"
+# include "free_heredocs.h"
+# include "init_heredocs.h"
+# include "str_heredocs.h"
+# include "striplines_heredocs.h"
 
 #endif

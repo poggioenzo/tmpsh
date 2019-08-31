@@ -1,4 +1,4 @@
-#include "free_heredocs.h"
+#include "heredocs.h"
 
 
 /*
@@ -14,7 +14,10 @@
 ** - (type) value : descibe output.
 */
 
-int free_heredocs(void)
+int			free_heredocs(t_heredocs **self, int status)
 {
-	return (0);
+	ft_strdel(&(*self)->key);
+	free_tagstokens(&(*self)->tagstokens, status);
+	ft_memdel((void **)self);
+	return (status);
 }

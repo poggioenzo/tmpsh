@@ -1,4 +1,4 @@
-#include "add_tags_tokens_heredocs.h"
+#include "heredocs.h"
 
 
 /*
@@ -14,7 +14,24 @@
 ** - (type) value : descibe output.
 */
 
-int add_tags_tokens_heredocs(void)
+void	add_tags_tokens_heredocs(t_heredocs *self, char *tag, char *token)
 {
-	return (0);
+	char	*tmp_tag;
+
+	if (self->quoted)
+		tag = "STMT";
+	else if (!self->in_cmdsubst)
+	{
+		if ((tmp_tag = search_value(g_grammar->dquotes_opening_tags, tag)))
+		{
+			self->in_cmdsubst = true;
+			push_pylst(&self->stack, tmp_tag, 0, _ptr);
+		}
+		else
+			tag = in(tag, "VAR", "STMT", "SPACES", "NEW_LINE", NULL) ?\
+				  tag : "STMT";
+	}
+	else
+		check_stack(self, tag);
+	append_tagstokens(tag, token);
 }

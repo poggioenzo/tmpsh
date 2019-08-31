@@ -1,4 +1,4 @@
-#include "libft.h"
+#include "utils.h"
 
 char	*get_key(char *key, char *tag, char *token, t_bool minus)
 {
@@ -22,8 +22,6 @@ int		quoted_gold_key(char *gold_key)
 			in(gold_key[len_key - 1], "\"", "'", NULL));
 }
 
-// Check if the key have to be allocated or if
-//we can just perform change on the string.
 void	modify_gold_key(char *gold_key)
 {
 	if (quoted_gold_key(gold_key))

@@ -283,6 +283,22 @@ UTILS_SRCS :=	split_shift.c\
 UTILS_SRCS := $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
 
 
+HEREDOCS_DIR = heredeocs/
+
+HEREDOCS_SRCS :=	add_tags_tokens_heredocs.c\
+					check_stack_heredocs.c\
+					close_heredocs.c\
+					free_heredocs.c\
+					init_heredocs.c\
+					str_heredocs.c\
+					striplines_heredocs.c\
+
+
+HEREDOCS_SRCS := $(addprefix $(HEREDOCS_DIR), $(HEREDOCS_SRCS))
+
+
+
+
 FREE_DIR = free_memory/
 
 FREE_SRCS := free_manager.c \

@@ -15,5 +15,6 @@
 
 # include "split_shift.h"
 # include "in_hash_g_grammar.h"
+# include "key.h"
 
 #endif
