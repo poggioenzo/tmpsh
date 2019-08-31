@@ -255,6 +255,25 @@ REDIRECTIONFD_SRCS :=	get_heredoc_redfd.c\
 
 REDIRECTIONFD_SRCS := $(addprefix $(REDIRECTIONFD_DIR), $(REDIRECTIONFD_SRCS))
 
+TAGS_TOKENS_MONITOR_DIR = tagstokensmonitor/
+
+TAGS_TOKENS_MONITOR_SRCS := check_alias_ttm.c \
+                            check_ttm.c \
+                            in_command_sh_ttm.c \
+                            init_ttm.c \
+                            is_abs_terminator_ttm.c \
+                            is_braceparam_ttm.c \
+                            is_heredocs_ttm.c \
+                            is_newline_ttm.c \
+                            is_quote_ttm.c \
+                            is_redirection_ttm.c \
+                            is_sub_process_ttm.c \
+                            next_ttm.c \
+                            op_selector_ttm.c reset_ttm.c \
+
+TAGS_TOKENS_MONITOR_SRCS := $(addprefix $(TAGS_TOKENS_MONITOR_DIR), \
+        $(TAGS_TOKENS_MONITOR_SRCS))
+
 
 UTILS_DIR = utils/
 
@@ -286,6 +305,7 @@ AST_BUILD_SRCS := $(GRAMMAR_SRCS) \
 						$(ACB_SRCS) \
 						$(REDIRECTIONFD_SRCS) \
 						$(UTILS_SRCS) \
+                        $(TAGS_TOKENS_MONITOR_SRCS) \
 
 AST_BUILD_SRCS := $(addprefix $(AST_BUILD_DIR), $(AST_BUILD_SRCS)) \
 
