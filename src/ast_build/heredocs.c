@@ -6,8 +6,8 @@
 void	init_heredocs(t_heredocs **self, char *key, int len_key, t_bool minus)
 {
 	*self = ft_memalloc(sizeof(t_heredocs));
-	(*self)->key = key;
-	//(*self)->quoted = quoted_gold_key; Function not found.
+	(*self)->key = ft_strdup(key);
+	(*self)->quoted = quoted_gold_key(key);
 	(*self)->len_key = len_key;
 	(*self)->minus = minus;
 	(*self)->closed = false;
@@ -64,7 +64,7 @@ void	add_tags_tokens(t_heredocs *self, char *tag, char *token)
 	}
 	else
 		check_stack(self, tag);
-	//add_tagstoken(tag, token); How to append to tagstokens.
+	append_tagstokens(tag, token);
 }
 
 void	striplines(t_heredocs *self)
