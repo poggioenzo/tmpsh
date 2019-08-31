@@ -1,5 +1,5 @@
-#ifndef SPLIT_SHIFT_H
-# define SPLIT_SHIFT_H
+#ifndef UTILS_KEY_H
+# define UTILS_KEY_H
 
 void	modify_gold_key(char *gold_key);
 int		quoted_gold_key(char *gold_key);
