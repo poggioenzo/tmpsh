@@ -24,7 +24,15 @@
 ** - (t_redirection_fd) self : the actual redirection structure.
 */
 
-int	get_heredoc_redfd(void)
+int	get_heredoc_redfd(t_redirection_fd *self)
 {
+	t_tagstokens	*tagstokens;
+
+	if (len_pylst(g_heredocs) > 0)
+	{
+		tagstokens = ((t_heredocs*)vindex_pylst(g_heredocs, -1))->tagstokens;
+		pop_pylst(g_heredocs, -1);
+		self->heredoc_ast = init_ast(tagstokens);
+	}
 	return (0);
 }
