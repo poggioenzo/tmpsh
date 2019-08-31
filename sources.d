@@ -286,6 +286,7 @@ AST_BUILD_SRCS := $(GRAMMAR_SRCS) \
 						$(ACB_SRCS) \
 						$(REDIRECTIONFD_SRCS) \
 						$(UTILS_SRCS) \
+						heredocs.c \
 
 AST_BUILD_SRCS := $(addprefix $(AST_BUILD_DIR), $(AST_BUILD_SRCS)) \
 

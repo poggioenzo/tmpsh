@@ -247,6 +247,18 @@ typedef struct
 	t_pylst			*opened;
 }	t_tags_tokens_monitor;
 
+typedef struct
+{
+	char			*key;
+	void			*quoted;//Check type
+	int				len_key;
+	t_bool			minus;
+	t_bool			closed;
+	t_tagstokens	*tagstokens;
+	t_pylst			*stack;
+	t_bool			in_cmdsubst;
+}		t_heredocs;
+
 /*
 ** Background jobs
 */
