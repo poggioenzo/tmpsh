@@ -321,7 +321,8 @@ AST_BUILD_SRCS := $(GRAMMAR_SRCS) \
 						$(ACB_SRCS) \
 						$(REDIRECTIONFD_SRCS) \
 						$(UTILS_SRCS) \
-                        $(TAGS_TOKENS_MONITOR_SRCS) \
+						$(TAGS_TOKENS_MONITOR_SRCS) \
+						$(HEREDOCS_SRCS)\
 
 AST_BUILD_SRCS := $(addprefix $(AST_BUILD_DIR), $(AST_BUILD_SRCS)) \
 
