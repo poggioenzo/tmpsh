@@ -11,6 +11,7 @@
 #include "tagstokens.h"
 #include "grammar_init.h"
 #include "ast.h"
+#include "file_runner.h"
 
 #include "libft.h"
 #include "builtins.h"
@@ -62,7 +63,7 @@ void	exit_termios(void)
 	manage_termios(remove_term);
 }
 
-int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
+int		main(int argc, char **argv, char **environ)
 {
 	int status;
 	setup_globals(environ);
@@ -72,6 +73,8 @@ int		main(NOT_USE(int argc), NOT_USE(char **argv), NOT_USE(char **environ))
 	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	if (argc == 1)
 		prompt_loop();
+	else
+		run_shell_files(argv + 1);
 	remove_globals();
 	return ((status=0));
 }
