@@ -5,8 +5,6 @@ TO DO:
 - Assignation is checked after command start. (see enzo tagging)
 - Check escaping char with echo ("\n\t\\" etc.)
 
-- Check for empty assignation.
- 
 - For CMDSUBST1 replacement, is split with "\n\t " enough ?
 - Check if we allow leave shell with background jobs ? Check free in this case
 -------------------------------
