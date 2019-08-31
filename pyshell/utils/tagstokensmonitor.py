@@ -45,8 +45,7 @@ class TagsTokensMonitor():
         while self.next_tag_token():
             self.op_selector()
 
-    def op_selector(self, skip=False):
-        print(self.tag, self.begin_cmd)
+    def op_selector(self):
         if self.tt.valid:
             if self.tag == 'STMT':
                 self.begin_cmd = self.check_aliases()
