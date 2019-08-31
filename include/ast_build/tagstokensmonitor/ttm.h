@@ -23,5 +23,6 @@
 */
 
 # include "init_ttm.h"
+# include "reset_ttm.h"
 
 #endif
