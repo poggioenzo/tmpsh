@@ -14,6 +14,17 @@
 ** - (type) value : descibe output.
 */
 
+static int		search_end(char *tag)
+{
+	t_pylst		*tmp_operand;
+
+	if (in_grammar(tag, "ABS_TERMINATOR"))
+		return (1);
+	if (in_grammar(tag, "REDIRECTION"))
+		return (1);
+	return (in(tag, "END_BRACE", "END_BRACKET", NULL));
+}
+
 void	in_command_sh(t_tags_tokens_monitor *self)
 {
 	int		end;
@@ -36,9 +47,9 @@ void	in_command_sh(t_tags_tokens_monitor *self)
 	}
 	else
 	{
-		end = skip_openning_tagstokens(self, self->i, NULL) - 1;
-		update_pylst(self->tt-tags, self->i, "STMT", 0, _ptr);
-		if (end < self->tt->length)
+		end = skip_openning_tagstokens(self->tt, self->i, NULL) - 1;
+		update_pylst(self->tt->tags, self->i, "STMT", 0, _ptr);
+		if (end < (int)self->tt->length)
 			update_pylst(self->tt->tags, end, "STMT", 0, _ptr);
 	}
 }

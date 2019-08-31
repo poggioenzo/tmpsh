@@ -51,6 +51,8 @@ void is_heredocs_ttm(t_tags_tokens_monitor *self)
 	t_pylst *list_tok;
 	int j;
 
+	minus = ft_strequ(self->tag, "HEREDOCMINUS");
+	not_end = true;
 	if (ft_strequ(self->tag, "SPACES"))
 		not_end = next_ttm(self, false);
 	if (not_end)

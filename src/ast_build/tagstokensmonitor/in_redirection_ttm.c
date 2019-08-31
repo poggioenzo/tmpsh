@@ -15,18 +15,6 @@
 */
 
 
-static int		search_end(char *tag)
-{
-	t_pylst		*tmp_operand;
-
-	if (in_grammar(tag, "ABS_TERMINATOR"))
-		return (1);
-	if (in_grammar(tag, "REDIRECTION"))
-		return (1);
-	return (in(tag, "END_BRACE", "END_BRACKET", NULL));
-}
-
-
 
 void	in_redirection_ttm(t_tags_tokens_monitor *self)
 {
