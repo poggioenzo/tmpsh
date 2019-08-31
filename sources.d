@@ -279,6 +279,7 @@ UTILS_DIR = utils/
 
 UTILS_SRCS :=	split_shift.c\
 				in_hash_g_grammar.c\
+				key.c\
 
 UTILS_SRCS := $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
 
