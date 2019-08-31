@@ -14,7 +14,20 @@
 ** - (type) value : descibe output.
 */
 
-int is_braceparam_ttm(void)
+void	is_braceparam(t_tags_tokens_monitor *self)
 {
-	return (0);
+	t_bool	not_end;
+	char	*stmt_tag;
+
+	not_end = next_ttm(self, false);
+	stmt_tag = self->tag;
+	not_end = not_end && next_tag_token(self, false);
+	if (!ft_strequ(stmt_tag, "STMT") || !ft_strequ(self->tag, "END_BRACE"))
+	{
+		if (not_end)
+		{
+			self->tt->valid = false;
+			self->tt->token_error = "bad substitution";
+		}
+	}
 }

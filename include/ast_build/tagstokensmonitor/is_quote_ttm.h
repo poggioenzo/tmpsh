@@ -6,6 +6,6 @@
 ** If not update header by project_manager.py (pm) fails.
 */
 
-int is_quote_ttm(void);
+void	is_quote(t_tags_tokens_monitor *self);
 
 #endif

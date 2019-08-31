@@ -33,7 +33,7 @@
 # include "is_newline_ttm.h"
 # include "is_quote_ttm.h"
 # include "is_redirection_ttm.h"
-# include "is_sub_process_ttm.h"
+# include "in_sub_process_ttm.h"
 # include "next_ttm.h"
 # include "op_selector_ttm.h"
 # include "check_alias_ttm.h"

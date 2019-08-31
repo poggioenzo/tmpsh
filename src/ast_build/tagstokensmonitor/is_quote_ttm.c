@@ -14,7 +14,19 @@
 ** - (type) value : descibe output.
 */
 
-int is_quote_ttm(void)
+void	is_quote(t_tags_tokens_monitor *self)
 {
-	return (0);
+	t_bool		inquote;
+
+	inquote = true;
+	while (inquote && next_tag_token(self, false))
+	{
+		if (ft_strequ(self->tag, "QUOTE"))
+		{
+			update_pylst(self->tt->tags, self->i, "END_QUOTE", 0, _ptr);
+			inquote = false;
+		}
+		else
+			update_pylst(self->tt->tags, self->i, "STMT", 0, _ptr);
+	}
 }

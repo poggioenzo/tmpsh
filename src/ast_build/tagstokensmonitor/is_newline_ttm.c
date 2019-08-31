@@ -29,12 +29,13 @@ static t_heredocs *get_heredoc(t_pylst *list_param, char *gold_key)
 	return (heredoc);
 }
 
-static t_bool full_heredoc(t_heredocs *heredoc, char *gold_key,
-							t_bool not_end, t_bool minus)
+static t_bool full_heredoc(t_tags_tokens_monitor *self, t_heredocs *heredoc,
+							char *gold_key, t_bool minus)
 {
 	char *key;
 
 	key = ft_strnew(0);
+	not_end = next_tag_token(self, true);
 	while (not_end)
 	{
 		if (ft_strequ(key, gold_key))
@@ -49,6 +50,7 @@ static t_bool full_heredoc(t_heredocs *heredoc, char *gold_key,
 			ft_strdel(&key);
 			key = ft_strnew(0);
 		}
+		not_end = next_ttm(self, false);
 	}
 	return (ft_strdel_out(&key, not_end));
 }
@@ -69,9 +71,8 @@ void is_newline_ttm(t_tags_tokens_monitor *self)
 	{
 		minus = vindex(list_param ,2);
 		heredoc = get_heredoc(list_param, gold_key);
-		not_end = next_tag_token(self, true);
-		push_pylst(&g_heredocs, heredoc, 0, _ptr); // todo free_heredocs methode
-		full_heredoc(heredoc, gold_key, not_end, minus);
+		push_pylst(&g_heredocs, heredoc, 0, _ptr);
+		not_end = full_heredoc(self, heredoc, gold_key, minus);
 		free_pylst(list_param);
 	}
 }
