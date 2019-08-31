@@ -6,6 +6,6 @@
 ** If not update header by project_manager.py (pm) fails.
 */
 
-int reset_ttm(void);
+void reset_ttm(t_tags_tokens_monitor *self);
 
 #endif

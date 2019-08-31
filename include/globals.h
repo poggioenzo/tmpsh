@@ -17,6 +17,8 @@ extern int	g_last_status;
 
 extern t_grammar	*g_grammar;
 
-struct termios	g_tcsettings;
+extern t_pylst      *g_passed_alias;
+
+struct termios      g_tcsettings;
 
 #endif
