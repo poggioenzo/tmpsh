@@ -6,6 +6,6 @@
 ** If not update header by project_manager.py (pm) fails.
 */
 
-int is_heredocs_ttm(void);
+void is_heredocs_ttm(t_tags_tokens_monitor *self);
 
 #endif
