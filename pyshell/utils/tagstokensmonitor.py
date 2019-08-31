@@ -49,7 +49,7 @@ class TagsTokensMonitor():
         print(self.tag, self.begin_cmd)
         if self.tt.valid:
             if self.tag == 'STMT':
-                self.check_aliases()
+                self.begin_cmd = self.check_aliases()
             elif self.tag == 'BRACEPARAM':
                 self.is_braceparam()
             elif self.tag == 'DQUOTES':
@@ -70,11 +70,6 @@ class TagsTokensMonitor():
                 self.in_redirection()
             elif self.opened[-1] == self.tag:
                 self.opened.pop(-1)
-
-            if skip or (self.begin_cmd and self.tag == 'SPACES'):
-                pass
-            else:
-                self.begin_cmd = False
 
     def is_newline(self):
         # should be improved or factorize
@@ -119,11 +114,15 @@ class TagsTokensMonitor():
             self.tt.replace_alias(result_alias, self.i)
             if self.begin_cmd:
                 self.reset()
+                return True
         elif assignation:
+
             if not self.begin_cmd:
                 self.tt.tags[self.i + 1] = 'STMT'
             else:
-                self.reset()
+                return True
+        return self.i - 1 > 0 and self.tt.find_prev_token(
+            self.i - 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
 
     def is_braceparam(self):
         not_end = self.next_tag_token()
@@ -222,7 +221,6 @@ class TagsTokensMonitor():
                 self.tt.valid = False
                 self.tt.token_error = self.token
             elif ret and end:
-                print("QWERTYUIOP")
                 self.reset()
         else:
             end = self.tt.skip_openning_tags(self.i) - 1
