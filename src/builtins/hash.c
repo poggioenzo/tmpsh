@@ -94,7 +94,7 @@ static int		add_new_command(char **argv)
 	new_path = argv[1];
 	command = argv[2];
 	cache = hash_exec_init(new_path);
-	insert_value(g_hash, command, cache, _ptr); //Need to use _t_hash_exec
+	insert_value(g_hash, command, cache, _hash_exec);
 	return (0);
 }
 

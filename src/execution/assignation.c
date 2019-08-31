@@ -24,11 +24,38 @@ static void		fill_assignation(t_pylst **assignations, char *key, \
 	operation = NULL;
 	key = ft_strdup(key);
 	method = ft_strdup(method);
-	value = ft_strdup(value);
+	value = ft_strdup(value ? value : "");
 	push_pylst(&operation, key, NO_COPY_BUT_FREE, _chare);
 	push_pylst(&operation, method, NO_COPY_BUT_FREE, _chare);
 	push_pylst(&operation, value, NO_COPY_BUT_FREE, _chare);
 	push_pylst(assignations, operation, NO_COPY_BUT_FREE, _pylst);
+}
+
+/*
+** count_assignation_size:
+**
+** Retrieve the number of tokens which compose the assignation.
+** Check if there is space at the left and right of the
+** ASSIGNATION_EQUAL or CONCATENATION symbol.
+** Check also if there is a SPACES token after the assignation's value,
+** remove it if it the case.
+*/
+
+static int		count_assignation_size(t_tagstokens *tagstoks)
+{
+	int		size;
+	char	*tmp_tag;
+
+	tmp_tag = vindex_pylst(tagstoks->tags, 1);
+	size = 2 + ft_strequ(tmp_tag, "SPACES");
+	tmp_tag = vindex_pylst(tagstoks->tags, size);
+	if (tmp_tag)
+	{
+		size += 1 + ft_strequ(tmp_tag, "SPACES");
+		tmp_tag = vindex_pylst(tagstoks->tags, size);
+		size += tmp_tag && ft_strequ(tmp_tag, "SPACES");
+	}
+	return (size);
 }
 
 /*
@@ -45,12 +72,14 @@ static void		fill_assignation(t_pylst **assignations, char *key, \
 static void		delete_variables(t_tagstokens *tagstok, t_pylst *assignations)
 {
 	int		nbr_assignations;
+	int		nbr_token;
 
 	nbr_assignations = len_pylst(assignations);
-	if (nbr_assignations > 0)
+	while (nbr_assignations--)
 	{
-		del_portion_pylst(&tagstok->tags, 0, nbr_assignations * 3);
-		del_portion_pylst(&tagstok->tokens, 0, nbr_assignations * 3);
+		nbr_token = count_assignation_size(tagstok);
+		del_portion_pylst(&tagstok->tags, 0, nbr_token);
+		del_portion_pylst(&tagstok->tokens, 0, nbr_token);
 		update_length_tagstokens(tagstok);
 	}
 }
@@ -74,6 +103,7 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 	char			*last_stmt;
 	size_t			index;
 	char			*tag;
+	char			*next_tag;
 
 	index = 0;
 	assignation_list = NULL;
@@ -85,7 +115,8 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 			last_stmt = vindex_pylst(branch->tagstokens->tokens, index);
 		else if (in(tag, "CONCATENATION", "ASSIGNATION_EQUAL", NULL))
 		{
-			index += 1;
+			next_tag = vindex_pylst(branch->tagstokens->tags, index + 1);
+			index += 1 + ft_strequ(next_tag, "SPACES");
 			fill_assignation(&assignation_list, last_stmt, tag,\
 				vindex_pylst(branch->tagstokens->tokens, index));
 			last_stmt = NULL;
@@ -102,7 +133,8 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 ** @assignations: List tuple who contain all assignations
 ** @only_env: Specify if variable are only set to the environnement.
 **
-** Facility to set up a list of assignations, storing each given value.
+** Facility to set up a list of assignations, storing each given value
+** in local or environnement variable.
 */
 
 void			variables_config(t_pylst *assignations, t_bool only_env)

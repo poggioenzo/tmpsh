@@ -76,6 +76,8 @@ char	*retrieve_variable(char *variable)
 		return (ft_itoa(g_last_status));
 	else if (ft_strequ(variable, "$"))
 		return (ft_itoa(getpid()));
+	else if (ft_strequ(variable, "!"))
+		return (ft_itoa(g_last_pid));
 	value = ft_getenv(variable);
 	if (!value)
 		value = ft_getvar(variable);

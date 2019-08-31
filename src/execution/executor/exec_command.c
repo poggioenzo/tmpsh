@@ -123,10 +123,8 @@ void			exec_command(t_acb *branch)
 	{
 		close_branch_stdfd(branch);
 		if (len_pylst(variables) >= 1)
-		{
 			variables_config(variables, false);
-			branch->status = 0;
-		}
+		branch->status = 0;
 	}
 	else
 		branch->pid = child_execution(branch, cmd_args, variables);

@@ -8,7 +8,6 @@ COMMON_SRCS := char_concatenation.c \
 			   display.c \
 			   t_cursor_utils.c \
 			   prompt_loop.c\
-			   setup_shell_freefct.c
 
 COMMON_SRCS := $(addprefix $(SOURCES_DIR), $(COMMON_SRCS)) \
 			   $(MAIN_FILE)
@@ -90,6 +89,7 @@ CONFIGURATION_SRCS :=  screen_size.c \
 					   t_caps_utils.c \
 					   termios_setter.c \
 					   reset_signals.c \
+                       level_increment.c \
                        $(VARIABLES_SRCS) \
 					   $(PROMPT_CONF)
 

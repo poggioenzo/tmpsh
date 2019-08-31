@@ -81,8 +81,16 @@ void	replace_cmdsubst1(char *content, t_tagstokens *tagstokens, int index)
 	final_tokens = NULL;
 	statements = NULL;
 	get_final_fields(content, &final_tokens, &statements);
-	replace_pylst(&tagstokens->tokens, final_tokens, index, index + 1);
-	replace_pylst(&tagstokens->tags, statements, index, index + 1);
+	if (final_tokens)
+	{
+		replace_pylst(&tagstokens->tokens, final_tokens, index, index + 1);
+		replace_pylst(&tagstokens->tags, statements, index, index + 1);
+	}
+	else
+	{
+		update_pylst(tagstokens->tokens, index, "", 0, _ptr);
+		update_pylst(tagstokens->tags, index, "STMT", 0, _ptr);
+	}
 	update_length_tagstokens(tagstokens);
 }
 
