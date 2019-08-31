@@ -116,7 +116,6 @@ class TagsTokensMonitor():
                 self.reset()
                 return True
         elif assignation:
-
             if not self.begin_cmd:
                 self.tt.tags[self.i + 1] = 'STMT'
             else:
