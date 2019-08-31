@@ -16,6 +16,6 @@
 
 void check_ttm(t_tags_tokens_monitor *self)
 {
-	while (next_ttm(self))
+	while (next_ttm(self, false))
 		op_selector_ttm(self);
 }
