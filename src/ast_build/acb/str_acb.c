@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 19:35:53 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 19:36:05 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/08/31 16:35:12 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -28,9 +28,9 @@
 
 char	*str_acb(t_acb *self)
 {
-	char	*str;
-	char	*str_subast;
-	t_ast	*value;
+	char				*str;
+	char				*str_subast;
+	t_ast				*value;
 	t_redirection_fd	*red_value;
 
 	str = ft_strnew(0);
