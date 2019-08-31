@@ -1,6 +1,5 @@
 #include "ttm.h"
 
-
 /*
 ** init_ttm:
 **
@@ -24,7 +23,7 @@ void init_ttm(t_tagstokens *tagstokens)
 	self->begin_cmd = TRUE;
 	push_pylst(&self->opened, " ", 0, _ptr);
 	check_ttm(self);
-	free_pylst(self->heredocs_keys);
-	free_pylst(self->opened);
-	ft_memdel(&self);
+	free_pylst(&self->heredocs_keys, 0);
+	free_pylst(&self->opened, 0);
+	ft_memdel((void **)&self);
 }

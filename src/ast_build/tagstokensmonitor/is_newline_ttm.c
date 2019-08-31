@@ -20,11 +20,11 @@ static t_heredocs *get_heredoc(t_pylst *list_param, char *gold_key)
 	t_heredocs *heredoc;
 	char *tmp;
 
-	tmp = vindex(self->list_param ,0);
+	tmp = vindex_pylst(list_param ,0);
 	init_heredocs(&heredoc,
 				  tmp,
-				  vindex(self->list_param ,0),
-				  vindex(self->list_param ,2));
+				  vindex_pylst(list_param ,0),
+				  vindex_pylst(list_param ,2));
 	gold_key = quoted_gold_key(tmp);
 	return (heredoc);
 }
@@ -67,7 +67,7 @@ void is_newline_ttm(t_tags_tokens_monitor *self)
 	while (self->heredocs_keys &&
 			(list_param = pop_pylst(&self->heredocs_keys, 0)) && not_end)
 	{
-		minus = vindex(list_param ,2);
+		minus = vindex_pylst(list_param ,2);
 		heredoc = get_heredoc(list_param, gold_key);
 		not_end = next_tag_token(self, true);
 		push_pylst(&g_heredocs, heredoc, 0, _ptr); // todo free_heredocs methode

@@ -28,6 +28,7 @@ static char *transform_end_tag(char *tag)
 		tag = "END_QUOTE";
 	if (ft_strequ(tag, "DQUOTES"))
 		tag = "END_DQUOTES";
+	return (tag);
 }
 
 
@@ -47,12 +48,11 @@ void is_heredocs_ttm(t_tags_tokens_monitor *self)
 {
 	t_bool minus;
 	t_bool not_end;
-	t_pylst *heredoc_param;
 	t_pylst *list_tok;
 	int j;
 
 	if (ft_strequ(self->tag, "SPACES"))
-		not_end = next_ttm(self);
+		not_end = next_ttm(self, false);
 	if (not_end)
 	{
 		if (search_value(g_grammar->opening_tags, self->tag))
@@ -61,10 +61,10 @@ void is_heredocs_ttm(t_tags_tokens_monitor *self)
 										get_end_tag(self->tag));
 			list_tok = slice_pylst(self->tt->tokens, self->i, j);
 			self->i = j - 1;
-			transform_end_tag(self->tag);
+			self->tag = transform_end_tag(self->tag);
 			append_to_heredocs_keys(self, join_pylst(list_tok, ""),
 												 len_pylst(list_tok), minus);
-			free_pylst(list_tok, 42);
+			free_pylst(&list_tok, 42);
 		}
 		else
 			append_to_heredocs_keys(self, self->token, 1, minus);
