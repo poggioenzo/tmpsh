@@ -14,7 +14,8 @@
 ** - (type) value : descibe output.
 */
 
-int check_ttm(void)
+void check_ttm(t_tags_tokens_monitor *self)
 {
-	return (0);
+	while (next_ttm(self))
+		op_selector_ttm(self);
 }
