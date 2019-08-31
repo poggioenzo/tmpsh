@@ -16,7 +16,7 @@ int				manage_termios(enum e_term_action action)
 	struct termios			term;
 	static struct termios	initial_config;
 	static struct termios	shell_config;
-	int			fd_term;
+	int						fd_term;
 
 	fd_term = open("/dev/tty", O_RDONLY);
 	if (action == setup_term)

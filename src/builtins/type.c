@@ -9,10 +9,17 @@
 ** Display an error message if there is any option.
 */
 
-static int		error_options(t_pylst *options)
+static int		error_options(char **argv)
 {
-	ft_dprintf(2, "type: invalid option: %s\n", options->value);
-	return (free_pylst(&options, 1));
+	t_pylst		*options;
+
+	options = argparser(argv);
+	if (len_pylst(options) > 0)
+	{
+		ft_dprintf(2, "type: invalid option: %s\n", options->value);
+		return (free_pylst(&options, true));
+	}
+	return (false);
 }
 
 /*
@@ -40,12 +47,10 @@ static int		error_options(t_pylst *options)
 int				built_type(char **argv, NOT_USE(char **environ))
 {
 	char	*used_elem;
-	t_pylst	*options;
 	int		status;
 
-	options = argparser(argv);
-	if (len_pylst(options) > 0)
-		return (error_options(options));
+	if (error_options(argv) == true)
+		return (1);
 	status = 0;
 	while (*argv)
 	{

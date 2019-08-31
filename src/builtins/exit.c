@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "tmpsh.h"
+#include <fcntl.h>
 
 /*
 ** built_exit:
@@ -13,6 +14,7 @@ int		built_exit(char **args, NOT_USE(char **env))
 {
 	int		argc;
 	int		value;
+	int		term;
 
 	argc = ft_arraylen(args);
 	if (argc > 2)
@@ -24,6 +26,8 @@ int		built_exit(char **args, NOT_USE(char **env))
 		value = ft_atoi(args[0]);
 	else
 		value = 0;
-	ft_printf("%s", g_caps->reset_cursor);
+	term = open("/dev/tty", O_WRONLY);
+	ft_dprintf(term, "%s", g_caps->reset_cursor);
+	close(term);
 	exit(value);
 }
