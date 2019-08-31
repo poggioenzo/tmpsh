@@ -14,7 +14,18 @@
 ** - (type) value : descibe output.
 */
 
-int next_ttm(void)
+t_bool next_ttm(t_tags_tokens_monitor *self, t_bool clear)
 {
-	return (0);
+	t_bool ret;
+
+	self->i++;
+	ret = self->i < self->tt->length
+	if (ret)
+	{
+		self->tag = vindex_pylst(self->tt->tags, self->i);
+		self->tag = vindex_pylst(self->tt->tags, self->i);
+		if (clear)
+			self->i = delitems_tagstokens(self->tt, self->i, self->i + 1, i-1);
+	}
+	return (ret);
 }
