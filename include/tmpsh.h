@@ -250,7 +250,7 @@ typedef struct
 typedef struct
 {
 	char			*key;
-	void			*quoted;//Check type
+	int				quoted;//Check type
 	int				len_key;
 	t_bool			minus;
 	t_bool			closed;
