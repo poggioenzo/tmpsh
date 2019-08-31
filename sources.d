@@ -284,7 +284,7 @@ UTILS_SRCS :=	split_shift.c\
 UTILS_SRCS := $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
 
 
-HEREDOCS_DIR = heredeocs/
+HEREDOCS_DIR = heredocs/
 
 HEREDOCS_SRCS :=	add_tags_tokens_heredocs.c\
 					check_stack_heredocs.c\
