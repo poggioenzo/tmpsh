@@ -24,13 +24,12 @@ static int		end_escape(char *last_token)
 static int		check_incomplete(void)
 {
 	t_heredocs	*heredoc;
+	t_bool		ret;
 
-	while (iter_pylst(g_heredocs, (void **)&heredoc))
-	{
-		if (!(heredoc->closed && !heredoc->tagstokens->incomplete))
-			return (false);
-	}
-	return (true);
+	ret = false;
+	while (iter_pylst(g_heredocs, (void **)&heredoc) && !ret)
+		ret |= !(heredoc->closed && !heredoc->tagstokens->incomplete);
+	return (ret);
 }
 
 static int		check_validity(void)
@@ -71,7 +70,7 @@ t_tagstokens	*check_syntax_tagstokens(t_tagstokens *self)
 	}
 	if (len_pylst(g_heredocs) > 0 && self->not_heredocs)
 	{
-		self->incomplete |= !check_incomplete();
+		self->incomplete |= check_incomplete();
 		self->valid &= check_validity();
 	}
 	clear_stack_tagstokens(self);
