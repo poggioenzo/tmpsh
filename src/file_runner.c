@@ -5,6 +5,13 @@
 #include "termios_setter.h"
 #include "ast.h"
 
+/*
+** run_file:
+**
+** Create and run an AST from a file.
+** Check if the given AST is correct before launching it.
+*/
+
 static int		run_file(char *filename)
 {
 	char			*content;
@@ -25,6 +32,13 @@ static int		run_file(char *filename)
 		ft_dprintf(2, "tmpsh: sytax error near %s\n", tagstoks->token_error);
 	return (0);
 }
+
+/*
+** run_shell_files:
+**
+** Go through each file of argv and execute them one
+** by one.
+*/
 
 void	run_shell_files(char **files)
 {
