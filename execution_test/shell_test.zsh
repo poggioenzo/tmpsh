@@ -14,10 +14,10 @@ SHELL_NAME="tmpsh"
 
 if [ $# -eq 0 ]
 then
-    SCRIPT_DIR=$(pwd)/scripts
+    SCRIPTS=$(pwd)/scripts
 elif [ $# -eq 1 ]
 then
-    SCRIPT_DIR=$(pwd)/$1
+    SCRIPTS=$(pwd)/$1
 else
     echo "$0: Too much arguments." >&2
     exit 1
@@ -30,28 +30,43 @@ GREEN="\033[0;1;32m"
 RED="\033[0;1;31m"
 RESET="\033[0;m"
 
-run_tests()
+file_test()
 {
     local display_name
 
 	cd $SHELL_DIR
 	
-	echo "${YELLOW}< Your output | bash output >${RESET}\n"
-
-	#for filename in $SCRIPTS
-    for filename in $(find ${SCRIPT_DIR} -type f | grep -Ev ".*.sw[pno]")
-	do
-        display_name=$(basename $filename)
-		echo "${YELLOW}Test for ${display_name}:${RESET}"
-		diff <(./${SHELL_NAME} $filename 2>&1) <(bash $filename 2>&1)
-		if [ $? -eq 0 ]
-		then
-			echo "${GREEN}Sucess.${RESET}"
-		else
-			echo "${RED}Failure.${RESET}"
-		fi
-	done
+    display_name=$(basename $1)
+    echo "${YELLOW}Test for ${display_name}:${RESET}"
+    diff <(./${SHELL_NAME} $1 2>&1) <(bash $1 2>&1)
+    if [ $? -eq 0 ]
+    then
+        echo "${GREEN}Sucess.${RESET}"
+    else
+        echo "${RED}Failure.${RESET}"
+    fi
 	cd -
 }
 
-run_tests
+folder_test()
+{
+    local display_name
+
+	#for filename in $SCRIPTS
+    for filename in $(find ${SCRIPTS} -type f | grep -Ev ".*.sw[pno]")
+	do
+        file_test $filename
+	done
+}
+
+if [ -d "$SCRIPTS" ]
+then
+	echo "${YELLOW}< Your output | bash output >${RESET}\n"
+    folder_test
+elif [ -f "$SCRIPTS" ]
+then
+	echo "${YELLOW}< Your output | bash output >${RESET}\n"
+    file_test $SCRIPTS
+else
+    echo "$0: $1 is not an allowed file type." >&2
+fi
