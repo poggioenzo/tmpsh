@@ -78,4 +78,5 @@ void is_newline_ttm(t_tags_tokens_monitor *self)
 		not_end = full_heredoc(self, heredoc, gold_key, minus);
 		free_pylst(&list_param, 42);
 	}
+	reset_ttm(self);
 }
