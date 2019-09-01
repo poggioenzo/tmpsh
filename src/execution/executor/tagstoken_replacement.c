@@ -56,7 +56,7 @@ void			replace_subast(t_acb *branch, int change_index, char *content, \
 		token = vindex_pylst(tagstok->tokens, index);
 		if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
 		{
-			if (ft_strequ("CMDSUBST1", type_ast))
+			if (in(type_ast, "CMDSUBST1", "BRACEPARAM", NULL))
 				substitution_insert(content, branch->tagstokens, index);
 			else
 			{
