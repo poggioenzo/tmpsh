@@ -25,9 +25,21 @@ To see any builtin's option, see the commentary above the function definition.
 
 #### Operators
 
-| ; | | | && | || | & | = | += | \ | " | ' |
-|---|---|----|----|---|---|----|---|---|---|
-
+| Symbol | Name          |
+|--------|---------------|
+| ;      | semi-column   |
+| |      | pipe          |
+| &&     | and           |
+| ||     | or            |
+| &      | ampersand     |
+| =      | equal         |
+| +=     | concatenation |
+| \      | escape        |
+| "      | double-quote  |
+| '      | single-quote  |
+| ()     | Subshell      |
+| {}     | Braces        |
+  
 #### Redirections
 
 __*Generic format*__ : [n]redir-opertor word
