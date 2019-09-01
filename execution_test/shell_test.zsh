@@ -7,9 +7,16 @@ SHELL_NAME="tmpsh"
 
 #Files to test
 
-SCRIPT_DIR=scripts
-
-SCRIPTS=$(find $(pwd)/${SCRIPT_DIR} -type f)
+if [ $# -eq 0 ]
+then
+    SCRIPT_DIR=$(pwd)/scripts
+elif [ $# -eq 1 ]
+then
+    SCRIPT_DIR=$(pwd)/$1
+else
+    echo "$0: Too much arguments." >&2
+    exit 1
+fi
 
 #Color for display
 
@@ -26,13 +33,11 @@ run_tests()
 	
 	echo "${YELLOW}< Your output | bash output >${RESET}\n"
 
-	for filename in "$SCRIPTS"
+	#for filename in $SCRIPTS
+    for filename in $(find ${SCRIPT_DIR} -type f | grep -Ev ".*.sw[pno]")
 	do
-        echo LOOP
-        echo "|$filename|"
-        echo END
         display_name=$(basename $filename)
-		echo "${GREEN}Test for ${display_name}:${RESET}"
+		echo "${YELLOW}Test for ${display_name}:${RESET}"
 		diff <(./${SHELL_NAME} $filename) <(bash $filename)
 		if [ $? -eq 0 ]
 		then
