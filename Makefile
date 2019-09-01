@@ -58,6 +58,8 @@ proper:fclean
 
 re: fclean all
 
+rep: proper all
+
 $(LIB): get_lib
 
 get_lib:

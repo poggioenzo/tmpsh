@@ -7,6 +7,7 @@ import utils.key as k
 def strncmp(s1, s2, n):
     return s1 == s2[:n]
 
+
 class TagsTokensMonitor():
     """docstring for TagsTokensMonitor."""
 
@@ -47,7 +48,7 @@ class TagsTokensMonitor():
     def op_selector(self):
         if self.tt.valid:
             if self.tag == 'STMT':
-                self.check_aliases()
+                self.begin_cmd = self.check_aliases()
             elif self.tag == 'BRACEPARAM':
                 self.is_braceparam()
             elif self.tag == 'DQUOTES':
@@ -101,14 +102,25 @@ class TagsTokensMonitor():
 
     def check_aliases(self):
         result_alias = ''
-        if self.begin_cmd and (self.token in gv.ALIAS and
-                               self.token not in gv.PASSED_ALIAS):
+        assignation = self.i + 1 < self.tt.length and self.tt.find_next_token(
+            self.i + 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
+        if not assignation and self.begin_cmd and (self.token in gv.ALIAS and
+                                                   self.token not in
+                                                   gv.PASSED_ALIAS):
             result_alias = gv.ALIAS[self.token]
             self.begin_cmd = result_alias[-1:].isspace()
             gv.PASSED_ALIAS.append(self.token)
             self.tt.replace_alias(result_alias, self.i)
             if self.begin_cmd:
                 self.reset()
+                return True
+        elif assignation:
+            if not self.begin_cmd:
+                self.tt.tags[self.i + 1] = 'STMT'
+            else:
+                return True
+        return self.i - 1 > 0 and self.tt.find_prev_token(
+            self.i - 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
 
     def is_braceparam(self):
         not_end = self.next_tag_token()
@@ -200,11 +212,14 @@ class TagsTokensMonitor():
             ret = self.next_tag_token()
             if self.tag == 'SPACES':
                 ret = self.next_tag_token()
-            if ret and not (self.tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']
-                            or self.tag in gv.GRAMMAR.grammar['REDIRECTION']
-                            or self.tag in ['END_BRACE', 'END_BRACKET']):
+            end = (self.tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']
+                   or self.tag in gv.GRAMMAR.grammar['REDIRECTION']
+                   or self.tag in ['END_BRACE', 'END_BRACKET'])
+            if ret and not end:
                 self.tt.valid = False
                 self.tt.token_error = self.token
+            elif ret and end:
+                self.reset()
         else:
             end = self.tt.skip_openning_tags(self.i) - 1
             self.tt.tags[self.i] = 'STMT'

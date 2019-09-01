@@ -18,6 +18,6 @@ char *str_tagstokens(t_tagstokens *self);
 void print_tagstokens(t_tagstokens *self);
 
 // move to libft
-char	*free_join(char *to_free, char *static_char, t_bool delete);
+
 
 #endif

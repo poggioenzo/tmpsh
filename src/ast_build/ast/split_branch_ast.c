@@ -34,8 +34,7 @@ void		split_branch_ast(t_ast *self, t_tagstokens *tgtk)
 		tag = (i < tgtk->length) ? vindex_pylst(tgtk->tags, i) : "";
 		if (search_value(g_grammar->opening_tags, tag))
 			i = skip_openning_tagstokens(tgtk, i, "\0") - 1;
-		else if (in_pylst_chare(tag,\
-					search_value(g_grammar->grammar, "ABS_TERMINATOR"))
+		else if (in_grammar(tag, "ABS_TERMINATOR")
 				|| (i == tgtk->length && begin != i))
 		{
 			push_pylst(&self->list_branch,

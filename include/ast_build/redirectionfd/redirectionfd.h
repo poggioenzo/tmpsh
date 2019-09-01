@@ -14,6 +14,7 @@
 */
 
 # include "tagstokens.h"
+# include "utils.h"
 
 /*
 ** Local methodes includes.

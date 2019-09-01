@@ -21,9 +21,7 @@ static	char	*get_source_acb(t_tagstokens *tgtk, size_t lentags, char *tag)
 	if (lentags > 0
 			&& digitstr(find_prev_token(tgtk, lentags - 1, TRUE))
 			&& !ft_strequ(find_prev_token(tgtk, lentags - 1, FALSE), "SUBAST")
-			&& !ft_strequ(tag, "HEREDOC")
-			&& !ft_strequ(tag, "TRIPLEHEREDOC")
-			&& !ft_strequ(tag, "HEREDOCMINUS"))
+			&& !in(tag, "HEREDOC", "TRIPLEHEREDOC", "HEREDOCMINUS", NULL))
 		source = ft_strdup(find_prev_token(tgtk, lentags - 1, TRUE));
 	return (source);
 }
@@ -55,8 +53,7 @@ void			check_redirection_acb(t_acb *self)
 	while (--lentags >= 0)
 	{
 		tag = vindex_pylst(self->tagstokens->tags, lentags);
-		if (in_pylst_chare(tag,\
-					search_value(g_grammar->grammar, "REDIRECTION")))
+		if (in_grammar(tag, "REDIRECTION"))
 		{
 			src = get_source_acb(self->tagstokens, lentags, tag);
 			push_pylst(&self->redirectionfd,
