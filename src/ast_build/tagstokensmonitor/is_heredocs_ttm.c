@@ -37,6 +37,7 @@ static void append_to_heredocs_keys(t_tags_tokens_monitor *self, char *key,
 {
 	t_pylst *list_param;
 
+	list_param = NULL;
 	push_pylst(&list_param, key, (ft_strlen(key) + 1) * sizeof(char), _chare);
 	push_pylst(&list_param, &len, sizeof(int), _ptr);
 	push_pylst(&list_param, &minus, sizeof(int), _ptr);
@@ -53,10 +54,8 @@ void is_heredocs_ttm(t_tags_tokens_monitor *self)
 
 	minus = ft_strequ(self->tag, "HEREDOCMINUS");
 	not_end = next_ttm(self, false);
-	ft_printf("%s %s\n", self->tag, self->token);
 	if (ft_strequ(self->tag, "SPACES"))
 		not_end = next_ttm(self, false);
-	ft_printf("%s %s\n", self->tag, self->token);
 	if (not_end)
 	{
 		if (search_value(g_grammar->opening_tags, self->tag))
