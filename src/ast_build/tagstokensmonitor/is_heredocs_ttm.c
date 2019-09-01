@@ -38,8 +38,8 @@ static void append_to_heredocs_keys(t_tags_tokens_monitor *self, char *key,
 	t_pylst *list_param;
 
 	push_pylst(&list_param, key, (ft_strlen(key) + 1) * sizeof(char), _chare);
-	push_pylst(&list_param, &len, sizeof(int), _inte);
-	push_pylst(&list_param, &minus, sizeof(int), _inte);
+	push_pylst(&list_param, &len, sizeof(int), _ptr);
+	push_pylst(&list_param, &minus, sizeof(int), _ptr);
 	push_pylst(&self->heredocs_keys, list_param, 0, _ptr);
 }
 
