@@ -17,5 +17,5 @@
 void reset_ttm(t_tags_tokens_monitor *self)
 {
 	self->begin_cmd = TRUE;
-	free_pylst(&g_passed_alias);
+	free_pylst(&g_passed_alias, 42);
 }

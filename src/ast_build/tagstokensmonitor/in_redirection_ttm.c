@@ -25,7 +25,7 @@ void	in_redirection_ttm(t_tags_tokens_monitor *self)
 		not_end = next_ttm(self, false);
 	if (not_end)
 	{
-		op_selector(self);
+		op_selector_ttm(self);
 		self->begin_cmd = true;
 	}
 	else

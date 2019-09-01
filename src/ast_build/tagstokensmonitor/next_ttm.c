@@ -19,13 +19,13 @@ t_bool next_ttm(t_tags_tokens_monitor *self, t_bool clear)
 	t_bool ret;
 
 	self->i++;
-	ret = self->i < self->tt->length
+	ret = self->i < (int)self->tt->length;
 	if (ret)
 	{
 		self->tag = vindex_pylst(self->tt->tags, self->i);
 		self->tag = vindex_pylst(self->tt->tags, self->i);
 		if (clear)
-			self->i = delitems_tagstokens(self->tt, self->i, self->i + 1, i-1);
+			self->i = delitems_tagstokens(self->tt, self->i, self->i + 1, self->i - 1);
 	}
 	return (ret);
 }

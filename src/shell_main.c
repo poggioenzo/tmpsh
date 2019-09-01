@@ -16,6 +16,8 @@
 #include "builtins.h"
 
 int		g_last_status;
+t_pylst 	*g_heredocs;
+t_pylst 	*g_passed_alias;
 
 void	setup_globals(char **environ)
 {
@@ -23,6 +25,8 @@ void	setup_globals(char **environ)
 	char	*cwd;
 
 	setup_freefct();
+	g_heredocs = NULL;
+	g_passed_alias = NULL;
 	grammar_file = "/pyshell/grammar/grammar.txt";
 	cwd = getcwd(NULL, 0);
 	g_shell_dir = ft_strdup(cwd);

@@ -20,18 +20,18 @@ void	is_dquotes_ttm(t_tags_tokens_monitor *self)
 	char	*update_str;
 
 	indquote = true;
-	push_pylst(self->opened, "DQUOTES", 0, _ptr);
+	push_pylst(&self->opened, "DQUOTES", 0, _ptr);
 	while (indquote && next_ttm(self, false))
 	{
 		if (ft_strequ(self->tag, "DQUOTES") && \
 				ft_strequ(vindex_pylst(self->opened, -1), "DQUOTES"))
 		{
-			pop_pylst(self->opened);
+			pop_pylst(&self->opened, -1);
 			update_pylst(self->tt->tags, self->i, "END_DQUOTES", 0, _ptr);
 			indquote = false;
 		}
 		else if (search_value(g_grammar->dquotes_opening_tags, self->tag))
-			op_selector(self);
+			op_selector_ttm(self);
 		else
 		{
 			if (!ft_strequ(vindex_pylst(self->tt->tags, self->i), "VAR"))

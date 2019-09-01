@@ -266,6 +266,7 @@ TAGS_TOKENS_MONITOR_SRCS := check_alias_ttm.c \
                             is_heredocs_ttm.c \
                             is_newline_ttm.c \
                             is_quote_ttm.c \
+							is_dquotes_ttm.c \
                             in_redirection_ttm.c \
                             in_sub_process_ttm.c \
                             next_ttm.c \

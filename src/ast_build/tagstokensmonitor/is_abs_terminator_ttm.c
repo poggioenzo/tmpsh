@@ -14,7 +14,7 @@
 ** - (type) value : descibe output.
 */
 
-void	is_abs_terminator(t_tags_tokens_monitor *self)
+void	is_abs_terminator_ttm(t_tags_tokens_monitor *self)
 {
 	reset_ttm(self);
 }

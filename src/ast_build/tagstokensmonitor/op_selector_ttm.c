@@ -23,7 +23,7 @@ void op_selector_ttm(t_tags_tokens_monitor *self)
 		else if (ft_strequ(self->tag, "BRACEPARAM"))
 			is_braceparam_ttm(self);
 		else if (ft_strequ(self->tag, "DQUOTES"))
-			is_dquote_ttm(self);
+			is_dquotes_ttm(self);
 		else if (ft_strequ(self->tag, "QUOTE"))
 			is_quote_ttm(self);
 		else if (ft_strequ(self->tag, "NEW_LINE"))

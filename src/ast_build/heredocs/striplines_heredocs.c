@@ -1,4 +1,4 @@
-#include "striplines_heredocs.h"
+#include "heredocs.h"
 
 
 /*

@@ -32,6 +32,6 @@ void	add_tags_tokens_heredocs(t_heredocs *self, char *tag, char *token)
 				  tag : "STMT";
 	}
 	else
-		check_stack(self, tag);
-	append_tagstokens(tag, token);
+		check_stack_heredocs(self, tag);
+	append_tagstokens(self->tagstokens, tag, token);
 }

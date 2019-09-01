@@ -10,20 +10,24 @@ char	*get_key(char *key, char *tag, char *token, t_bool minus)
 			return (ft_strdup(""));
 		}
 	}
-	return (ft_freejoin(key, token));
+	return (free_join(key, token, false));
 }
 
 int		quoted_gold_key(char *gold_key)
 {
-	char	last_char;
+	int len_key;
 
-	last_char = gold_key[ft_strlen(gold_key) - 1];
-	return (in(gold_key[0], "\"", "'", NULL) && \
-			in(gold_key[len_key - 1], "\"", "'", NULL));
+	len_key = ft_strlen(gold_key);
+	return ((gold_key[0] == '\"' || gold_key[0] == '\'')
+			&& (gold_key[len_key - 1] == '\"'
+			|| gold_key[len_key - 1] == '\''));
 }
 
 void	modify_gold_key(char *gold_key)
 {
+	int len_key;
+
+	len_key = ft_strlen(gold_key);
 	if (quoted_gold_key(gold_key))
 	{
 		gold_key[len_key - 1] = '\0';
