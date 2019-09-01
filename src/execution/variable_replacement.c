@@ -3,6 +3,7 @@
 #include "variables.h"
 #include "heredoc_apply.h"
 #include "replace_home.h"
+#include "substitution_insert.h"
 
 /*
 ** variable_replacement.c
@@ -30,8 +31,8 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 
 	token = vindex_pylst(tagstok->tokens, index);
 	variable = retrieve_variable(token + 1); //Verify allocation
-	update_pylst(tagstok->tokens, index, variable, NO_COPY_BUT_FREE, _chare);
-	update_pylst(tagstok->tags, index, "STMT", 0, _ptr);
+	substitution_insert(variable, tagstok, index);
+	ft_strdel(&variable);
 }
 
 /*

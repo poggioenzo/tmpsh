@@ -154,6 +154,7 @@ EXECUTION_SRCS := fd_management.c \
                   heredoc_apply.c \
                   redirection_opener.c \
                   setup_redirection.c \
+				  substitution_insert.c \
 				  $(JOBCONTROL_SRCS) \
 				  $(EXECUTION_SRCS) \
 

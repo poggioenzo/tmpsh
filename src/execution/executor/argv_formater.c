@@ -63,7 +63,6 @@ static void		join_stmt(t_acb *branch)
 static char		**convert_command(t_pylst *command)
 {
 	char	**cmd_array;
-	char	*value;
 	int		index;
 
 	cmd_array = ft_memalloc(sizeof(char *) * (len_pylst(command) + 1));
