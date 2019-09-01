@@ -2,7 +2,12 @@
 
 #Directory and name of the shell
 
-SHELL_DIR="/Users/simrossi/Documents/tmpsh"
+if [ "$USER" = epoggio ]
+then
+	SHELL_DIR=~/git/tmpsh
+else if [ "$USER" = simrossi ]
+	SHELL_DIR=~/Documents/tmpsh
+fi
 SHELL_NAME="tmpsh"
 
 #Files to test
