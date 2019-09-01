@@ -31,13 +31,13 @@ char	*check_rights(char *executable)
 {
 	if (access(executable, F_OK) == -1)
 	{
-		print_error("tmpsh: No such file or directory : ", executable);
+		print_error(NAME_SH" No such file or directory : ", executable);
 		FREE(executable);
 		return (NULL);
 	}
 	if (access(executable, X_OK) == -1 || access(executable, R_OK) == -1)
 	{
-		print_error("tmpsh: permission denied: ", executable);
+		print_error(NAME_SH" permission denied: ", executable);
 		FREE(executable);
 		return (NULL);
 	}
@@ -114,6 +114,6 @@ char	*get_execname(char *cmd)
 	}
 	if ((exec_file = find_exec(cmd)))
 		return (check_rights(exec_file));
-	print_error("tmpsh: command not found: ", cmd);
+	print_error(NAME_SH" command not found: ", cmd);
 	return (NULL);
 }

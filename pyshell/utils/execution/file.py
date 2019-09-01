@@ -25,7 +25,7 @@ def check_rights(cmd):
     Check permission + file existence.
     """
     if os.access(cmd, os.F_OK) == False:
-        print("tmpsh: No such file or directory : {}".format(cmd), file=sys.stderr)
+        print(NAME_SH" No such file or directory : {}".format(cmd), file=sys.stderr)
         return None
     if os.access(cmd, os.X_OK) is False or os.access(cmd, os.R_OK) is False:
         print("zsh: permission denied: {}".format(cmd), file=sys.stderr)
@@ -53,5 +53,5 @@ def get_execname(cmd):
             gv.HASH[cmd] = HashExec(execname)
             gv.HASH[cmd].count += 1
             return check_rights(execname)
-    print("tmpsh: command not found: {}".format(cmd), file=sys.stderr)
+    print(NAME_SH" command not found: {}".format(cmd), file=sys.stderr)
     return None
