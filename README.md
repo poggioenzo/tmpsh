@@ -42,7 +42,7 @@ To see any builtin's option, see the commentary above the function definition.
   
 #### Redirections
 
-__*Generic format*__ : [n]redir-opertor word
+__*Generic format*__ : [n]<redir-opertor> <word>
 
 - `[n]>word` : redirect output
 - `[n]<word` : redirect input
