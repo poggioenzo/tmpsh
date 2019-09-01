@@ -43,7 +43,7 @@ run_tests()
 	do
         display_name=$(basename $filename)
 		echo "${YELLOW}Test for ${display_name}:${RESET}"
-		diff <(./${SHELL_NAME} $filename) <(bash $filename)
+		diff <(./${SHELL_NAME} $filename 2>&1) <(bash $filename 2>&1)
 		if [ $? -eq 0 ]
 		then
 			echo "${GREEN}Sucess.${RESET}"
