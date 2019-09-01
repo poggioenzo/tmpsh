@@ -28,9 +28,9 @@ To see any builtin's option, see the commentary above the function definition.
 | Symbol | Name          |
 |--------|---------------|
 | ;      | semi-column   |
-| |      | pipe          |
+| \|     | pipe          |
 | &&     | and           |
-| ||     | or            |
+| \|\|   | or            |
 | &      | ampersand     |
 | =      | equal         |
 | +=     | concatenation |
