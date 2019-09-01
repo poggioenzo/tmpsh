@@ -19,9 +19,9 @@
 ** Use when a data type should not be freed.
 */
 
-void			no_free(void *ptr)
+void			free_ptr(void *ptr)
 {
-	UNUSED(ptr);
+	ft_memdel((void **)ptr);
 }
 
 /*

@@ -68,10 +68,9 @@ static char		**convert_command(t_pylst *command)
 
 	cmd_array = ft_memalloc(sizeof(char *) * (len_pylst(command) + 1));
 	index = 0;
-	while (iter_pylst(command, (void **)&value))
-		cmd_array[index++] = value;
+	while (command)
+		cmd_array[index++] = pop_pylst(&command, 0);
 	cmd_array[index] = NULL;
-	free_pylst(&command, 0);
 	return (cmd_array);
 }
 
@@ -97,7 +96,7 @@ char			**extract_cmd(t_acb *branch)
 		if (ft_strequ(tag, "STMT"))
 		{
 			token = vindex_pylst(branch->tagstokens->tokens, index);
-			push_pylst(&command, token, ft_strlen(token) + 1, _ptr);
+			push_pylst(&command, token, ft_strlen(token) + 1, _chare);
 		}
 		index++;
 	}

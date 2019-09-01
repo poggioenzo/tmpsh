@@ -13,7 +13,7 @@
 
 void		setup_freefct(void)
 {
-	g_free_fct[_ptr] = no_free;
+	g_free_fct[_ptr] = free_ptr;
 	g_free_fct[_chare] = free_chare;
 	g_free_fct[_charee] = free_charee;
 	g_free_fct[_pylst] = free_pylst_type;
