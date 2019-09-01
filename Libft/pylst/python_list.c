@@ -549,14 +549,12 @@ void		sort_pylst(t_pylst **pylst, int (*cmp)(t_pylst *, t_pylst *))
 
 void		*pop_pylst(t_pylst **pylst, int index)
 {
-	t_pylst		*expect_node;
 	void		*pop_value;
+	int			gold_index;
 
-	expect_node = index_pylst(*pylst, index);
-	expect_node->ctype = _ptr;
-	expect_node->size = 0;
-	pop_value = expect_node->value;
-	remove_pylst(pylst, pop_value);
+	gold_index = convert_neg_index(*pylst, index);
+	pop_value = vindex_pylst(*pylst, gold_index);
+	del_portion_pylst(pylst, gold_index, gold_index + 1);
 	return (pop_value);
 }
 
@@ -606,7 +604,7 @@ char	*str_chare_pylst(t_pylst *pylst)
 	char *cara;
 
 	if (!pylst)
-		return ft_strdup("[]");
+		return ft_strdup("[]\n");
 	cara = "['";
 	str = join_pylst(pylst, "', '");
 	str = ft_fstrjoin(&cara, &str, FALSE, TRUE);
@@ -634,9 +632,6 @@ void	print_pylst_chare(t_pylst *pylst)
   }
   ft_printf(str_chare_pylst(pylst));
 }
-
-
-
 
 
 void	reverse_pylst(t_pylst **pylst)
