@@ -549,11 +549,14 @@ void		sort_pylst(t_pylst **pylst, int (*cmp)(t_pylst *, t_pylst *))
 
 void		*pop_pylst(t_pylst **pylst, int index)
 {
-	void		*pop_value;
+	t_pylst		*pop_node;
 	int			gold_index;
+	void		*pop_value;
 
 	gold_index = convert_neg_index(*pylst, index);
-	pop_value = vindex_pylst(*pylst, gold_index);
+	pop_node = index_pylst(*pylst, gold_index);
+	pop_value = pop_node->value;
+	pop_node->size = 0;
 	del_portion_pylst(pylst, gold_index, gold_index + 1);
 	return (pop_value);
 }
