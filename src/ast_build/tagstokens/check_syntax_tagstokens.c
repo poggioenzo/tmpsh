@@ -45,10 +45,24 @@ static int		check_validity(void)
 	return (true);
 }
 
+static void remove_escape_stmt(t_tagstokens *self)
+{
+	char *tag;
+	char *token;
+
+	while (iter_tagstokens(self, &token, &tag))
+	{
+		if (ft_strequ(tag, "STMT") && ft_strlen(token) > 1 && token[0] == '\\')
+			ft_strcpy(token, token + 1);
+	}
+}
+
+
+
 t_tagstokens	*check_syntax_tagstokens(t_tagstokens *self)
 {
 	init_ttm(self);
-
+	remove_escape_stmt(self);
 	if (self->valid)
 	{
 		tagstokens_shiftreduce(self);
