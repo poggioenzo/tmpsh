@@ -33,7 +33,7 @@ void	clear_stack_tagstokens(t_tagstokens *self)
 	to_delete = (int *)ft_memalloc((len_pylst(self->stack) + 1) * sizeof(int));
 	while (iter_pylst(self->stack, (void **)&str))
 	{
-		if (ft_strequ(str, "CMD") || ft_strequ(str, "COMMAND_SH"))
+		if (in(str, "CMD", "COMMAND_SH", NULL))
 			to_delete[n++] = i;
 		i++;
 	}

@@ -1,24 +1,17 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   free_acb.c                                       .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/08/31 16:33:32 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/08/31 16:34:30 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
 #include "acb.h"
-
-// typedef struct
-// {
-// 	t_tagstokens	*tagstokens;
-// 	char			*begin_andor; <- dont free grammar ptr
-// 	char			*tag_end; <- dont free grammar ptr
-// 	t_pylst			*subast;
-// 	t_pylst			*subcmd_type;
-// 	t_pylst			*redirectionfd;
-// 	char			*command;
-// 	char			*print;
-// 	int				stdin;
-// 	int				stdout;
-// 	t_bool			background;
-// 	int				status;
-// 	pid_t			pid;
-// 	pid_t			pgid;
-// 	t_bool			complete;
-// }			t_acb;
 
 void	free_acb(t_acb **self)
 {
@@ -36,7 +29,7 @@ void	free_acb(t_acb **self)
 	}
 }
 
-void free_acb_type(void *acb)
+void	free_acb_type(void *acb)
 {
-	free_acb((t_acb **) acb);
+	free_acb((t_acb **)acb);
 }

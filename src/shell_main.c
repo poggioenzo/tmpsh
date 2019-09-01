@@ -15,12 +15,18 @@
 #include "libft.h"
 #include "builtins.h"
 
+
 #include "level_increment.h"
 
 //To remove
 #include "termios_setter.h"
 int		g_last_status = 0;
 pid_t		g_last_pid = 0;
+t_pylst 	*g_heredocs;
+t_pylst 	*g_passed_alias;
+
+
+
 
 void	setup_globals(char **environ)
 {
@@ -28,6 +34,8 @@ void	setup_globals(char **environ)
 	char	*cwd;
 
 	setup_freefct();
+	g_heredocs = NULL;
+	g_passed_alias = NULL;
 	grammar_file = "/pyshell/grammar/grammar.txt";
 	cwd = getcwd(NULL, 0);
 	g_shell_dir = ft_strdup(cwd);

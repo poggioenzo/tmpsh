@@ -122,6 +122,7 @@ SRCS = ft_atoi.c \
 	   ft_strequ.c \
 	   ft_striter.c \
 	   ft_striteri.c \
+	   free_join.c \
 	   ft_strjoin.c \
 	   ft_fstrjoin.c \
 	   ft_strlcat.c \

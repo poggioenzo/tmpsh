@@ -255,12 +255,50 @@ REDIRECTIONFD_SRCS :=	get_heredoc_redfd.c\
 
 REDIRECTIONFD_SRCS := $(addprefix $(REDIRECTIONFD_DIR), $(REDIRECTIONFD_SRCS))
 
+TAGS_TOKENS_MONITOR_DIR = tagstokensmonitor/
+
+TAGS_TOKENS_MONITOR_SRCS := check_alias_ttm.c \
+                            check_ttm.c \
+                            in_command_sh_ttm.c \
+                            init_ttm.c \
+                            is_abs_terminator_ttm.c \
+                            is_braceparam_ttm.c \
+                            is_heredocs_ttm.c \
+                            is_newline_ttm.c \
+                            is_quote_ttm.c \
+							is_dquotes_ttm.c \
+                            in_redirection_ttm.c \
+                            in_sub_process_ttm.c \
+                            next_ttm.c \
+                            op_selector_ttm.c reset_ttm.c \
+
+TAGS_TOKENS_MONITOR_SRCS := $(addprefix $(TAGS_TOKENS_MONITOR_DIR), \
+        $(TAGS_TOKENS_MONITOR_SRCS))
+
 
 UTILS_DIR = utils/
 
 UTILS_SRCS :=	split_shift.c\
+				in_hash_g_grammar.c\
+				key.c\
 
 UTILS_SRCS := $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
+
+
+HEREDOCS_DIR = heredocs/
+
+HEREDOCS_SRCS :=	add_tags_tokens_heredocs.c\
+					check_stack_heredocs.c\
+					close_heredocs.c\
+					free_heredocs.c\
+					init_heredocs.c\
+					str_heredocs.c\
+					striplines_heredocs.c\
+
+
+HEREDOCS_SRCS := $(addprefix $(HEREDOCS_DIR), $(HEREDOCS_SRCS))
+
+
 
 
 FREE_DIR = free_memory/
@@ -277,16 +315,18 @@ AST_DIR = ast_build/
 
 AST_BUILD_DIR = ast_build/
 
-AST_BUILD_SRCS := $(GRAMMAR_SRCS) \
-						$(TOKENIZER_SRCS) \
-						$(TAGSTOKENS_SRCS) \
-						$(SHIFTREDUCE_SRCS) \
-						$(AST_SRCS) \
-						$(ACB_SRCS) \
-						$(REDIRECTIONFD_SRCS) \
+AST_BUILD_SRCS := $(GRAMMAR_SRCS)\
+						$(TOKENIZER_SRCS)\
+						$(TAGSTOKENS_SRCS)\
+						$(SHIFTREDUCE_SRCS)\
+						$(AST_SRCS)\
+						$(ACB_SRCS)\
+						$(REDIRECTIONFD_SRCS)\
 						$(UTILS_SRCS) \
+						$(TAGS_TOKENS_MONITOR_SRCS)\
+						$(HEREDOCS_SRCS)\
 
-AST_BUILD_SRCS := $(addprefix $(AST_BUILD_DIR), $(AST_BUILD_SRCS)) \
+AST_BUILD_SRCS := $(addprefix $(AST_BUILD_DIR), $(AST_BUILD_SRCS))
 
 SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(CHAR_UTILS)) \

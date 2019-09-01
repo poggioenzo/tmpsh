@@ -279,6 +279,7 @@ char			*ft_filejoin(char **directory, char **filename, int free_dir, \
 							int free_file);
 int				ft_isfolder(char *filename);
 
+
 /*
 ** func add for ls (by Enzo)
 */
@@ -286,5 +287,7 @@ int				find_index(char *str, char c);
 char			**create_tab(int size);
 
 int             digitstr(char *str);
+char	*free_join(char *to_free, char *static_char, int delete);
+
 
 #endif

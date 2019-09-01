@@ -62,17 +62,6 @@ static	void		fill_tags_tokens(t_tagstokens *self, char *str,\
 	str[i] = 0;
 }
 
-char				*free_join(char *to_free, char *static_char, t_bool delete)
-{
-	char *str;
-
-	str = ft_strjoin(to_free, static_char);
-	ft_strdel(&to_free);
-	if (delete)
-		ft_strdel(&static_char);
-	return (str);
-}
-
 /*
 ** str_tagstokens:
 **

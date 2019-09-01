@@ -63,6 +63,18 @@ static void		get_final_fields(char *content, t_pylst **final_tokens, \
 	ft_memdel((void **)&tokens_list);
 }
 
+int		prev_is_assignation(t_tagstokens *tagstokens, int index)
+{
+	char	*prev_tag;
+
+	if (index < 2)
+		return (false);
+	prev_tag = vindex_pylst(tagstokens->tags, index - 1);
+	if (ft_strequ(prev_tag, "SPACES"))
+		prev_tag = vindex_pylst(tagstokens->tags, index - 2);
+	return (in(prev_tag, "ASSIGNATION_EQUAL", "CONCATENATION", NULL));
+}
+
 /*
 ** replace_cmdsubst1:
 **
@@ -80,7 +92,8 @@ void	replace_cmdsubst1(char *content, t_tagstokens *tagstokens, int index)
 
 	final_tokens = NULL;
 	statements = NULL;
-	get_final_fields(content, &final_tokens, &statements);
+	if (!prev_is_assignation(tagstokens, index))
+		get_final_fields(content, &final_tokens, &statements);
 	if (final_tokens)
 	{
 		replace_pylst(&tagstokens->tokens, final_tokens, index, index + 1);
@@ -88,7 +101,7 @@ void	replace_cmdsubst1(char *content, t_tagstokens *tagstokens, int index)
 	}
 	else
 	{
-		update_pylst(tagstokens->tokens, index, "", 0, _ptr);
+		update_pylst(tagstokens->tokens, index, content, NO_COPY_BUT_FREE, _chare);
 		update_pylst(tagstokens->tags, index, "STMT", 0, _ptr);
 	}
 	update_length_tagstokens(tagstokens);
