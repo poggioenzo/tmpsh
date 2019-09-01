@@ -33,11 +33,11 @@ static char		*check_rights(char *cmd)
 
 	err_msg = NULL;
 	if (access(cmd, F_OK) == -1)
-		err_msg = "tmpsh: No such file or directory : %s\n";
+		err_msg = NAME_SH" No such file or directory : %s\n";
 	else if (is_directory(cmd))
-		err_msg = "tmpsh: %s: is a directory\n";
+		err_msg = NAME_SH" %s: is a directory\n";
 	else if (access(cmd, X_OK) == -1 || access(cmd, R_OK) == -1)
-		err_msg = "tmpsh: permission denied: %s\n";
+		err_msg = NAME_SH" permission denied: %s\n";
 	if (err_msg)
 	{
 		ft_dprintf(STDERR_FILENO, err_msg, cmd);
@@ -83,7 +83,7 @@ char	*parse_path(char *command)
 		ft_strdel(&execname);
 	}
 	free_str_array(&folders, 0);
-	ft_dprintf(STDERR_FILENO, "tmpsh: command not found: %s\n", command);
+	ft_dprintf(STDERR_FILENO, NAME_SH" command not found: %s\n", command);
 	return (NULL);
 }
 

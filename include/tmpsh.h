@@ -21,6 +21,8 @@
 #  define UNUSED(variable)	(void) variable
 # endif
 
+# define NAME_SH "bash:"
+
 # include "styles.h"
 
 # define DF ft_printf(PURPLE"%s\n"WHITE, __func__)

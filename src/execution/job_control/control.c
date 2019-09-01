@@ -142,7 +142,7 @@ void					relaunch(int job_id)
 
 	if (is_running(job_id) == finish)
 	{
-		ft_printf("tmpsh: fg: job has terminated\n");
+		ft_printf(NAME_SH" fg: job has terminated\n");
 		remove_bg(job_id);
 		return ;
 	}

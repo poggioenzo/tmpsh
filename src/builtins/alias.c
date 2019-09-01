@@ -67,7 +67,7 @@ static int			set_alias(char *argument)
 	value = equal + 1;
 	if (ft_strlen(alias) == 0)
 	{
-		ft_dprintf(2, "tmpsh: alias: no alias name\n");
+		ft_dprintf(2, NAME_SH" alias: no alias name\n");
 		return (1);
 	}
 	value = ft_strdup(value);

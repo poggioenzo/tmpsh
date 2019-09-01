@@ -51,7 +51,7 @@ void			open_redirection_file(t_redirection_fd *redirection)
 			redirection->dest = &fd;
 		else
 		{
-			ft_dprintf(STDERR_FILENO, "tmpsh: permission denied: %s\n", \
+			ft_dprintf(STDERR_FILENO, NAME_SH" permission denied: %s\n", \
 					redirection->dest);
 			redirection->error = true;
 		}
