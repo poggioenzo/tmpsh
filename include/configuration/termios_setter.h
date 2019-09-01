@@ -5,9 +5,9 @@
 
 enum e_term_action
 {
-	remove_term = 0,
-	setup_term,
-	restore_term,
+	remove_config = 0,
+	save_config,
+	shell_config,
 };
 
 int				manage_termios(enum e_term_action action);

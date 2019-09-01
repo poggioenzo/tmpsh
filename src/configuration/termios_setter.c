@@ -13,24 +13,22 @@
 
 int				manage_termios(enum e_term_action action)
 {
-	struct termios			term;
-	static struct termios	initial_config;
-	static struct termios	shell_config;
+	static struct termios	initial_termios;
+	static struct termios	shell_termios;
 	int						fd_term;
 
 	fd_term = open("/dev/tty", O_RDONLY);
-	if (action == setup_term)
+	if (action == save_config)
 	{
-		tcgetattr(fd_term, &term);
-		tcgetattr(fd_term, &initial_config);
-		term.c_lflag &= ~(ICANON);
-		term.c_lflag &= ~(ECHO);
-		shell_config = term;
-		tcsetattr(fd_term, 0, &shell_config);
+		tcgetattr(fd_term, &initial_termios);
+		tcgetattr(fd_term, &shell_termios);
+		shell_termios.c_lflag &= ~(ICANON);
+		shell_termios.c_lflag &= ~(ECHO);
 	}
-	else if (action == restore_term)
-		tcsetattr(fd_term, 0, &shell_config);
-	else if (action == remove_term)
-		tcsetattr(fd_term, 0, &initial_config);
+	else if (action == shell_config)
+		tcsetattr(fd_term, 0, &shell_termios);
+	else if (action == remove_config)
+		tcsetattr(fd_term, 0, &initial_termios);
+	close(fd_term);
 	return (1);
 }

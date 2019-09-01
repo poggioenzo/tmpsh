@@ -32,6 +32,7 @@ void	setup_globals(char **environ)
 	cwd = getcwd(NULL, 0);
 	g_shell_dir = ft_strdup(cwd);
 	free(cwd);
+	manage_termios(save_config);
 	grammar_file = ft_strjoin(g_shell_dir, grammar_file);
 	grammar_init(grammar_file);
 	setup_builtins();
@@ -62,7 +63,7 @@ void	remove_globals(void)
 
 void	exit_termios(void)
 {
-	manage_termios(remove_term);
+	manage_termios(remove_config);
 }
 
 int		main(int argc, char **argv, char **environ)

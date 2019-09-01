@@ -57,7 +57,7 @@ void			prompt_loop(void)
 	t_cursor	*cursor;
 	t_line		*shell_repr;
 
-	manage_termios(setup_term);
+	manage_termios(shell_config);
 	history_store(CREATE, NULL);
 	shell_preconfig(&shell_repr, &cursor);
 	while (1)

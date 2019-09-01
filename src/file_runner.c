@@ -3,6 +3,7 @@
 #include "tagstokens.h"
 #include "run_ast.h"
 #include "termios_setter.h"
+#include "ast.h"
 
 static int		run_file(char *filename)
 {
@@ -12,17 +13,13 @@ static int		run_file(char *filename)
 	if(!(content = readfile(filename)))
 		return (ft_dprintf(2, "tmpsh: Error with %s\n", filename));
 	tagstoks = NULL;
-	ft_printf("content : |%s|\n", content);
-	ft_printf("content : |%p|\n", content);
 	input_init_tagstokens(&tagstoks, content);
-	ft_printf("ptr: %p\n", tagstoks);
 	if (tagstoks->incomplete)
 		return (ft_dprintf(2, "tmpsh: Error with %s\n", filename));
 	if (tagstoks->valid && !tagstoks->incomplete)
 	{
-		manage_termios(remove_term);
 		executor(init_ast(tagstoks));
-		manage_termios(restore_term);
+		manage_termios(remove_config);
 	}
 	else
 		ft_dprintf(2, "tmpsh: sytax error near %s\n", tagstoks->token_error);
@@ -31,6 +28,7 @@ static int		run_file(char *filename)
 
 void	run_shell_files(char **files)
 {
+	g_jobs->allow_background = false;
 	while (*files)
 		run_file(*files++);
 }

@@ -8,6 +8,7 @@ COMMON_SRCS := char_concatenation.c \
 			   display.c \
 			   t_cursor_utils.c \
 			   prompt_loop.c\
+               file_runner.c \
 
 COMMON_SRCS := $(addprefix $(SOURCES_DIR), $(COMMON_SRCS)) \
 			   $(MAIN_FILE)

@@ -67,9 +67,9 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	if (tagstoken->valid && !tagstoken->incomplete)
 	{
 		register_command(shell_content);
-		manage_termios(remove_term);
+		manage_termios(remove_config);
 		executor(init_ast(tagstoken));
-		manage_termios(restore_term);
+		manage_termios(shell_config);
 	}
 	else
 		ft_dprintf(2, "tmpsh: sytax error near %s\n", tagstoken->token_error);
