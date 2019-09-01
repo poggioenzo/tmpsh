@@ -83,10 +83,14 @@ int		main(int argc, char **argv, NOT_USE(char **environ))
 	grammar_init(grammar_abs);
 	FREE(grammar_abs);
 	input_init_tagstokens(&tgtk, argv[1]);
-	// print_tagstokens(tgtk);
-	ast = init_ast(tgtk);
-	ft_printf("%s\n", str_ast(ast));
-	free_ast(&ast);
+	print_tagstokens(tgtk);
+	if (tgtk && tgtk->valid && !tgtk->incomplete)
+	{
+		ft_printf("\n\n");
+		ast = init_ast(tgtk);
+		ft_printf("%s\n", str_ast(ast));
+		free_ast(&ast);
+	}
 	free_tagstokens(&tgtk, TRUE);
 	return ((status=0));
 

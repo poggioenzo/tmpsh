@@ -52,9 +52,11 @@ void is_heredocs_ttm(t_tags_tokens_monitor *self)
 	int j;
 
 	minus = ft_strequ(self->tag, "HEREDOCMINUS");
-	not_end = true;
+	not_end = next_ttm(self, false);
+	ft_printf("%s %s\n", self->tag, self->token);
 	if (ft_strequ(self->tag, "SPACES"))
 		not_end = next_ttm(self, false);
+	ft_printf("%s %s\n", self->tag, self->token);
 	if (not_end)
 	{
 		if (search_value(g_grammar->opening_tags, self->tag))

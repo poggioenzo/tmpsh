@@ -23,7 +23,7 @@ t_bool next_ttm(t_tags_tokens_monitor *self, t_bool clear)
 	if (ret)
 	{
 		self->tag = vindex_pylst(self->tt->tags, self->i);
-		self->tag = vindex_pylst(self->tt->tags, self->i);
+		self->token = vindex_pylst(self->tt->tokens, self->i);
 		if (clear)
 			self->i = delitems_tagstokens(self->tt, self->i, self->i + 1, self->i - 1);
 	}

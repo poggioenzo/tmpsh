@@ -23,8 +23,8 @@ t_bool		check_aliases_ttm(t_tags_tokens_monitor *self)
 	assignation = self->i + 1 < (int)self->tt->length && \
 				  in(find_next_token(self->tt, self->i + 1, false), \
 						  "ASSIGNATION_EQUAL", "CONCATENATION", NULL);
-	if (!assignation && self->begin_cmd && \
-			(search_value(g_alias, self->token) && \
+	if (!assignation && self->begin_cmd && self->token\
+			&& (search_value(g_alias, self->token) && \
 			 !in_pylst_chare(self->token, g_passed_alias)))
 	{
 		result_alias = search_value(g_alias, self->token);

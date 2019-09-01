@@ -47,7 +47,9 @@ static int		check_validity(void)
 
 t_tagstokens	*check_syntax_tagstokens(t_tagstokens *self)
 {
+	print_pylst_chare(self->tokens);
 	init_ttm(self);
+
 	if (self->valid)
 	{
 		tagstokens_shiftreduce(self);

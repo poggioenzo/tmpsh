@@ -52,7 +52,7 @@ static t_bool full_heredoc(t_tags_tokens_monitor *self, t_heredocs *heredoc,
 			ft_strdel(&key);
 			key = ft_strnew(0);
 		}
-		not_end = next_ttm(self, false);
+		not_end = next_ttm(self, true);
 	}
 	return (ft_strdel_out(&key, not_end));
 }
