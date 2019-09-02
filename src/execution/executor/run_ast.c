@@ -120,7 +120,7 @@ void		executor(t_ast *ast)
 {
 //	t_acb		*branch;
 
-//	ft_dprintf(fd_debug, str_ast(ast));
+//	ft_printf(str_ast(ast));
 //	branch = ast->list_branch->value;
 //	ft_dprintf(fd_debug, str_acb(branch));
 //	ft_dprintf(fd_debug, str_tagstokens(branch->tagstokens));

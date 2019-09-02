@@ -81,6 +81,7 @@ VARIABLES_DIR = variables/
 VARIABLES_SRCS := environ_utils.c \
                   environ_setup.c \
                   local_variables.c \
+				  replace_home.c \
                   variables_management.c \
 
 VARIABLES_SRCS := $(addprefix $(VARIABLES_DIR), $(VARIABLES_SRCS))
@@ -163,14 +164,6 @@ EXECUTION_SRCS := fd_management.c \
 				  $(EXECUTION_SRCS) \
 
 EXECUTION_SRCS := $(addprefix $(EXECUTION_DIR), $(EXECUTION_SRCS))
-
-FILE_DIR = file/
-
-FILE_SRCS := replace_home.c \
-			 file_utils.c \
-			 replace_home.c \
-
-FILE_SRCS := $(addprefix $(FILE_DIR), $(FILE_SRCS))
 
 GRAMMAR_DIR = grammar/
 
@@ -339,7 +332,6 @@ SOURCES += $(COMMON_SRCS) \
 		   $(addprefix $(SOURCES_DIR), $(LINE_UTILS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(KEYPRESS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(CONFIGURATION_SRCS)) \
-		   $(addprefix $(SOURCES_DIR), $(FILE_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(BUILTINS_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(EXECUTION_SRCS)) \
 		   $(addprefix $(SOURCES_DIR), $(AST_BUILD_SRCS)) \
