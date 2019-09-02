@@ -4,8 +4,8 @@
 #include "heredoc_apply.h"
 #include "replace_home.h"
 #include "substitution_insert.h"
+#include "variable_replacement.h"
 #include "tagstokens.h"
-void			replace_variable(t_acb *branch);
 
 /*
 ** variable_replacement.c
