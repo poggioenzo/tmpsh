@@ -41,7 +41,7 @@ INCLUDES_LIST += $(LIB_INCLUDES)
 all: get_lib $(NAME)
 
 $(NAME): $(OBJS) $(LIB)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^  Libft/libft.a -o $@
+	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^ -o $@
 
 clean:
 	#Use clean rule of lib if the called command is also clean, skip otherwise
