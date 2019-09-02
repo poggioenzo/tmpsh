@@ -48,6 +48,8 @@ void	pylst_clean(t_pylst *pylst);
 /*
 ** Manipulation lists
 */
+int		convert_index(t_pylst *pylst, int index);
+t_pylst		*precedence_pylst(t_pylst *pylst, int index);
 
 t_pylst		*pylst_shacpy(t_pylst *pylst);
 t_pylst		*pylst_deepcpy(t_pylst *pylst);
@@ -61,7 +63,7 @@ t_pylst		*slice_pylst(t_pylst *pylst, int from, int to);
 
 
 char		*join_pylst(t_pylst *pylst, char *substr);
-void		pylst_extend(t_pylst **start, t_pylst *end, int deep_cpy);
+void		extend_pylst(t_pylst **start, t_pylst *end, int deep_cpy);
 void		del_portion_pylst(t_pylst **pylst, int from, int to);
 void		del_after_pylst(t_pylst **pylst, int index);
 void		replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to);

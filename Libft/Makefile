@@ -56,11 +56,35 @@ SRCS_HASH_TABLE := hash_alveol.c \
 				   hash_function.c \
 				   hash_table.c \
 				   t_ht_table_utils.c \
+				   hash_iter.c \
+				   hash_search.c \
 
 SRCS_HASH_TABLE := $(addprefix hash_table/, $(SRCS_HASH_TABLE))
 
-SRCS_PYLST := python_list.c \
+SRCS_PYLST := reverse_pylst.c \
 			  free_pylst.c \
+			  push_pylst.c \
+			  convert_index.c \
+			  index_pylst.c \
+			  slice_pylst.c \
+			  copy_pylst.c \
+			  len_pylst.c \
+			  extend_pylst.c \
+			  join_pylst.c \
+			  precedence_pylst.c \
+			  del_portion_pylst.c \
+			  del_after_pylst.c \
+			  replace_pylst.c \
+			  iter_pylst.c \
+			  remove_pylst.c \
+			  strremove_pylst.c \
+			  update_pylst.c \
+			  sort_pylst.c \
+			  pop_pylst.c \
+			  in_pylst_chare.c \
+			  str_in_pylst.c \
+			  str_chare_pylst.c \
+			  print_pylst_chare.c \
 
 SRCS_PYLST := $(addprefix pylst/, $(SRCS_PYLST))
 
