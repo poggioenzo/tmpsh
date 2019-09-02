@@ -1,4 +1,0 @@
-cat << EOF
-je suis un herdoc 
-EOF
-
