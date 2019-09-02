@@ -22,6 +22,35 @@ static char		*get_quote_content(t_ast *subast)
 }
 
 /*
+** get_cmdsubst_content:
+**
+** Use for retrieve the substitution content of CMDSUBST[123].
+** Read the command substituion pipe or format the process substitution pipe.
+*/
+
+char			*get_cmdsubst_content(t_ast *subast)
+{
+	char	*content;
+	char	*tmp_str;
+
+	content = NULL;
+	if (ft_strequ(subast->type, "CMDSUBST1"))
+	{
+		if (!(content = fd_readfile(subast->link_fd)))
+			content = ft_strdup("");
+		waitpid(subast->pid, 0, WUNTRACED);
+		rstrip(content);
+	}
+	else if (in(subast->type, "CMDSUBST2", "CMDSUBST3", NULL))
+	{
+		tmp_str = ft_itoa(subast->link_fd);
+		content = ft_strjoin("/dev/fd/", tmp_str);
+		ft_strdel(&tmp_str);
+	}
+	return (content);
+}
+
+/*
 ** retrieve_content:
 **
 ** For the given subast, format the content of the substitution
@@ -36,22 +65,12 @@ static char		*retrieve_content(t_ast *subast)
 	content = NULL;
 	if (ft_strequ(subast->type, "QUOTE"))
 		content = get_quote_content(subast);
-	else if (ft_strequ(subast->type, "CMDSUBST1"))
-	{
-		if (!(content = fd_readfile(subast->link_fd)))
-			content = ft_strdup("");
-		waitpid(subast->pid, 0, WUNTRACED);
-		rstrip(content);
-	}
-	else if (in(subast->type, "CMDSUBST2", "CMDSUBST3", NULL))
-	{
-		tmp_str = ft_itoa(subast->link_fd);
-		content = ft_strjoin("/dev/fd/", tmp_str);
-		ft_strdel(&tmp_str);
-	}
+	else if ((content = get_cmdsubst_content(subast)))
+		return (content);
 	else if (ft_strequ(subast->type, "BRACEPARAM"))
 	{
-		tmp_str = ((t_acb *)subast->list_branch->value)->tagstokens->tokens->value;
+		tmp_str = \
+			((t_acb *)subast->list_branch->value)->tagstokens->tokens->value;
 		content = retrieve_variable(tmp_str);
 	}
 	else if (ft_strequ(subast->type, "DQUOTES"))

@@ -10,7 +10,7 @@
 ** to him.
 */
 
-static int			create_job_index(void)
+static int		create_job_index(void)
 {
 	int		index;
 	int		nbr_jobs;
@@ -54,7 +54,8 @@ static char		*concat_job_command(t_pylst *job_branches)
 		{
 			tmp = " ";
 			command = ft_fstrjoin(&command, &tmp, true, false);
-			tmp = ((t_pylst *)search_value(g_grammar->grammar, branch->tag_end))->value;
+			tmp = ((t_pylst *)search_value(g_grammar->grammar, \
+						branch->tag_end))->value;
 			command = ft_fstrjoin(&command, &tmp, true, false);
 			if (job_branches->next)
 			{
@@ -73,7 +74,7 @@ static char		*concat_job_command(t_pylst *job_branches)
 ** Allocate a single t_job and setup his attributes.
 */
 
-t_job		*job_init(t_pylst **job_branches)
+t_job			*job_init(t_pylst **job_branches)
 {
 	t_job	*new_job;
 	t_acb	*last_branch;
@@ -84,6 +85,6 @@ t_job		*job_init(t_pylst **job_branches)
 	new_job->number = create_job_index();
 	last_branch = vindex_pylst(new_job->branches, -1);
 	new_job->pgid = last_branch->pgid;
-	new_job->command = concat_job_command(new_job->branches);//Need to get good command
+	new_job->command = concat_job_command(new_job->branches);
 	return (new_job);
 }

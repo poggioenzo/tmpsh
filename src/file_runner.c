@@ -50,7 +50,7 @@ static int		run_file(char *filename)
 	if (!check_rights(filename))
 		return (1);
 	file_fd = open(filename, O_RDONLY);
-	if(!(content = fd_readfile(file_fd)))
+	if (!(content = fd_readfile(file_fd)))
 		return (ft_dprintf(2, NAME_SH" Error with %s\n", filename));
 	tagstoks = NULL;
 	input_init_tagstokens(&tagstoks, content);
@@ -73,7 +73,7 @@ static int		run_file(char *filename)
 ** by one.
 */
 
-void	run_shell_files(char **files)
+void			run_shell_files(char **files)
 {
 	g_jobs->allow_background = false;
 	while (*files)

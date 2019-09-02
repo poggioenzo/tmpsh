@@ -81,7 +81,7 @@ static char		**convert_command(t_pylst *command)
 
 char			**extract_cmd(t_acb *branch)
 {
-	size_t			index;
+	size_t		index;
 	t_pylst		*command;
 	char		*tag;
 	char		*token;

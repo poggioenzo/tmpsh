@@ -9,7 +9,7 @@
 ** inside a tagstokens.
 */
 
-static void		get_final_fields(char *content, t_pylst **final_tokens, \
+static void	get_final_fields(char *content, t_pylst **final_tokens, \
 		t_pylst **statements)
 {
 	char		**tokens_list;
@@ -43,7 +43,7 @@ static void		get_final_fields(char *content, t_pylst **final_tokens, \
 ** SPACES token.
 */
 
-static int		prev_is_assignation(t_tagstokens *tagstokens, int index)
+static int	prev_is_assignation(t_tagstokens *tagstokens, int index)
 {
 	char	*prev_tag;
 
@@ -65,7 +65,8 @@ static int		prev_is_assignation(t_tagstokens *tagstokens, int index)
 ** insert only one STMT token.
 */
 
-void	substitution_insert(char *content, t_tagstokens *tagstokens, int index)
+void		substitution_insert(char *content, t_tagstokens *tagstokens, \
+		int index)
 {
 	t_pylst		*final_tokens;
 	t_pylst		*statements;
