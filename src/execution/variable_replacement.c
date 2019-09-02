@@ -4,6 +4,8 @@
 #include "heredoc_apply.h"
 #include "replace_home.h"
 #include "substitution_insert.h"
+#include "tagstokens.h"
+void			replace_variable(t_acb *branch);
 
 /*
 ** variable_replacement.c
@@ -56,32 +58,30 @@ static void		replace_tild(t_tagstokens *tagstok, int index)
 }
 
 /*
-** replace_variable:
+** update_tagstokens:
 **
-** @branch: Branch where variable have to be replaced.
-**
-** Replace each variable inside a branch->tagstokens with
-** the associated value.
+** From a single tagstokens, go through each tokens and try to replace
+** VAR tag.
+** Check also if STMT tags contain have some tild to replace.
 */
 
-void			replace_variable(t_acb *branch)
+void		update_tagstokens(t_tagstokens *tagstokens, t_acb *branch)
 {
-	size_t		index;
-	int			index_subast;
-	char		*tag;
-	t_ast		*subast;
+	size_t	index;
+	int		index_subast;
+	char	*tag;
+	t_ast	*subast;
 
-	heredoc_apply(branch->redirectionfd, replace_variable);
 	index = 0;
 	index_subast = 0;
-	while (index < branch->tagstokens->length)
+	while (index < tagstokens->length)
 	{
-		tag = vindex_pylst(branch->tagstokens->tags, index);
+		tag = vindex_pylst(tagstokens->tags, index);
 		if (ft_strequ(tag, "VAR"))
-			tagstoken_variable_swap(branch->tagstokens, index);
+			tagstoken_variable_swap(tagstokens, index);
 		else if (ft_strequ(tag, "STMT"))
-			replace_tild(branch->tagstokens, index);
-		else if (ft_strequ(tag, "SUBAST"))
+			replace_tild(tagstokens, index);
+		else if (branch && ft_strequ(tag, "SUBAST"))
 		{
 			subast = vindex_pylst(branch->subast, index_subast);
 			if (ft_strequ(subast->type, "DQUOTES"))
@@ -90,4 +90,31 @@ void			replace_variable(t_acb *branch)
 		}
 		index++;
 	}
+}
+
+/*
+** replace_variable:
+**
+** @branch: Branch where variable have to be replaced.
+**
+** Replace each variable inside a branch. Replace variable
+** in the branch's tagstokens, and in redirections of the
+** branch.
+*/
+
+void			replace_variable(t_acb *branch)
+{
+	t_redirection_fd	*redirection;
+
+	heredoc_apply(branch->redirectionfd, replace_variable);
+	while (iter_pylst(branch->redirectionfd, (void **)&redirection))
+	{
+		if (!in(redirection->type, "HEREDOCMINUS", "TRIPLEHEREDOC", NULL))
+		{
+			update_tagstokens(redirection->tagstokens, NULL);
+			redirection->dest = vindex_pylst(redirection->tagstokens->tokens, \
+					redirection->tagstokens->length - 1);
+		}
+	}
+	update_tagstokens(branch->tagstokens, branch);
 }
