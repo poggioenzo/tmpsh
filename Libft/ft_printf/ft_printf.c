@@ -65,8 +65,7 @@ int		ft_parse_printf(char *format, va_list args, t_fct_manager *manager, \
 			return (free_prt_opt(&curr_optn, -1));
 		if (opt_res == 0)
 		{
-			write(fd, format++, 1);
-		       	printed++;
+			write(fd, format++, 1) && printed++;
 			continue ;
 		}
 		if (curr_optn->category != 3)
