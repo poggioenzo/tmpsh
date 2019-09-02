@@ -42,7 +42,7 @@ void			open_redirection_file(t_redirection_fd *redirection)
 		if (access(redirection->dest, F_OK) == -1)
 			flags |= O_CREAT;
 		if (ft_strequ(redirection->type, "TRUNC"))
-			flags |= O_WRONLY;
+			flags |= O_WRONLY | O_TRUNC;
 		else if (ft_strequ(redirection->type, "APPEND"))
 			flags |= O_WRONLY | O_APPEND;
 		else if (ft_strequ(redirection->type, "READ_FROM"))
