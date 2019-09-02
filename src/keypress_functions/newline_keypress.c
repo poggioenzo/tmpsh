@@ -55,7 +55,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	shell_content = render_shell_content(*shell_repr);
 	input_init_tagstokens(&tagstoken, shell_content);
 	//Need to remove shell_content properly
-	print_tagstokens(tagstoken);
+	// print_tagstokens(tagstoken);
 	if (tagstoken->incomplete)
 	{
 		add_new_line(*shell_repr, tagstoken, *cursor);
