@@ -109,7 +109,8 @@ static void	insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
 ** Insert a value in the selected table, according to a key.
 */
 
-void			insert_value(t_ht_table *table, char *key, void *value, int ctype)
+void			insert_value(t_ht_table *table, char *key, \
+		void *value, int ctype)
 {
 	int			hash;
 	t_ht_alveol	**alveol;

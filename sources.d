@@ -3,7 +3,9 @@ MAIN_FILE = src/shell_main.c
 SOURCES_DIR = src/
 
 COMMON_SRCS := char_concatenation.c \
+			   concatenation_utils.c \
 			   cursor_dependent_selection.c \
+			   cursor_dependent_selection_utils.c \
 			   debug.c \
 			   display.c \
 			   t_cursor_utils.c \
@@ -42,7 +44,8 @@ LINE_UTILS_SRCS := t_line_allocation.c \
 
 LINE_UTILS_SRCS := $(addprefix $(LINE_UTILS_DIR), $(LINE_UTILS_SRCS))
 
-CLIPBOARD_UTILS := cut_functions.c
+CLIPBOARD_UTILS := cut_functions.c \
+				   cut_utils.c \
 
 CLIPBOARD_UTILS := $(addprefix clipboard_utils/, $(CLIPBOARD_UTILS))
 
@@ -123,6 +126,7 @@ BUILTINS_SRCS := $(addprefix $(BUILTINS_DIR), $(BUILTINS_SRCS))
 JOBCONTROL_DIR = job_control/
 
 JOBCONTROL_SRCS := backgroundjobs.c \
+				   jobs_management.c \
 				   control.c \
 				   job.c \
 

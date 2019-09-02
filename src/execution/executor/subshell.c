@@ -30,4 +30,3 @@ pid_t	run_subshell(t_acb *branch, t_ast *subast)
 		close(branch->stdout);
 	return (pid);
 }
-

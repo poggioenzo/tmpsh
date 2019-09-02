@@ -10,7 +10,7 @@
 ** Check if the given filename is a directory.
 */
 
-int is_directory(const char *path)
+int				is_directory(const char *path)
 {
 	struct stat statbuf;
 
@@ -57,13 +57,12 @@ static char		*check_rights(char *cmd)
 **			- NULL otherwise.
 */
 
-char	*parse_path(char *command)
+char			*parse_path(char *command)
 {
-	char	**folders;
-	int		index;
-	char	*execname;
+	char		**folders;
+	int			index;
+	char		*execname;
 	t_hash_exec	*cache;
-
 
 	if (!ft_getenv("PATH"))
 		return (NULL);
@@ -74,8 +73,8 @@ char	*parse_path(char *command)
 		execname = ft_filejoin(folders + index++, &command, false, false);
 		if (access(execname, F_OK) != -1)
 		{
-			cache = hash_exec_init(execname); //Control duplication
-			insert_value(g_hash, command, cache, _ptr);//Use _t_hash_exec
+			cache = hash_exec_init(execname); // Control execname
+			insert_value(g_hash, command, cache, _hash_exec);
 			cache->count++;
 			free_str_array(&folders, 0);
 			return (check_rights(execname));

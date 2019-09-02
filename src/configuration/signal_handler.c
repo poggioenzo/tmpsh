@@ -16,12 +16,13 @@
 ** to keep a single empty line who will wait for commands.
 */
 
-static void		shell_interupt(NOT_USE(int status))
+static void		shell_interupt(int status)
 {
 	t_line		*shell_repr;
 	t_cursor	*cursor;
 	pid_t		tpgid;
 
+	UNUSED(status);
 	ft_strcpy(g_last_char, "");
 	tpgid = get_tpgid();
 	while (waitpid(-tpgid, NULL, WNOHANG) != -1)
@@ -43,11 +44,12 @@ static void		shell_interupt(NOT_USE(int status))
 ** Print a last time the shell to show it without the cursor.
 */
 
-static void		shell_background(NOT_USE(int status))
+static void		shell_background(int status)
 {
 	t_line		*shell_repr;
 	t_cursor	fake_cursor;
 
+	UNUSED(status);
 	manage_shell_repr(GET, &shell_repr, NULL);
 	fake_cursor = (t_cursor){.row = -1, .column = -1};
 	display_shell(shell_repr, &fake_cursor, FALSE);
@@ -63,11 +65,12 @@ static void		shell_background(NOT_USE(int status))
 ** Restore the prompt and the termios whenever SIGCONT is received.
 */
 
-static void		shell_continue(NOT_USE(int status))
+static void		shell_continue(int status)
 {
 	t_line		*shell_repr;
 	t_cursor	*cursor;
 
+	UNUSED(status);
 	manage_shell_repr(GET, &shell_repr, &cursor);
 	manage_termios(save_config);
 	manage_termios(shell_config);
@@ -82,11 +85,12 @@ static void		shell_continue(NOT_USE(int status))
 ** Display again the shell whenever SIGWINCH is received.
 */
 
-static void		shell_reshape(NOT_USE(int status))
+static void		shell_reshape(int status)
 {
 	t_line		*shell_repr;
 	t_cursor	*cursor;
 
+	UNUSED(status);
 	manage_shell_repr(GET, &shell_repr, &cursor);
 	display_shell(shell_repr, cursor, FALSE);
 }

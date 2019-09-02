@@ -9,7 +9,8 @@
 ** search if the replacement can be done inside a redirection element.
 */
 
-static void		replace_redirection(t_acb *branch, int change_index, char *content)
+static void		replace_redirection(t_acb *branch, int change_index, \
+		char *content)
 {
 	char				*tag;
 	char				*token;
@@ -30,7 +31,6 @@ static void		replace_redirection(t_acb *branch, int change_index, char *content)
 	}
 }
 
-
 /*
 ** replace_subast:
 **
@@ -43,9 +43,9 @@ static void		replace_redirection(t_acb *branch, int change_index, char *content)
 void			replace_subast(t_acb *branch, int change_index, char *content, \
 		char *type_ast)
 {
-	size_t		index;
-	char	*tag;
-	char	*token;
+	size_t			index;
+	char			*tag;
+	char			*token;
 	t_tagstokens	*tagstok;
 
 	index = 0;
@@ -60,8 +60,7 @@ void			replace_subast(t_acb *branch, int change_index, char *content, \
 				substitution_insert(content, branch->tagstokens, index);
 			else
 			{
-				update_pylst(tagstok->tokens, index, content, \
-						NO_COPY_BUT_FREE, _chare);
+				update_pylst(tagstok->tokens, index, content, -1, _chare);
 				update_pylst(tagstok->tags, index, "STMT", 0, _chare);
 			}
 			return ;

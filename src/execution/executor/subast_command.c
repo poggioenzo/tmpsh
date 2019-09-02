@@ -18,6 +18,17 @@ static int		is_bg_or_pipe(t_acb *branch)
 	return (in(branch->tag_end, "BACKGROUND_JOBS", "PIPE", NULL));
 }
 
+static void		run_cursh(t_acb *branch, t_ast *subast)
+{
+	save_std_fd(save);
+	replace_std_fd(branch->stdin, branch->stdout);
+	setup_redirection(branch);
+	run_ast(subast);
+	branch->pid = -1;
+	branch->status = g_last_status;
+	save_std_fd(restore);
+}
+
 /*
 ** perform_command_as_subast:
 **
@@ -27,7 +38,7 @@ static int		is_bg_or_pipe(t_acb *branch)
 ** stdin/stdout/stderr to prevent change during execution.
 */
 
-t_bool		perform_command_as_subast(t_acb *branch)
+t_bool			perform_command_as_subast(t_acb *branch)
 {
 	int		index;
 	int		nbr_subast;
@@ -41,15 +52,7 @@ t_bool		perform_command_as_subast(t_acb *branch)
 		if (in(subast->type, "CURSH", "SUBSH", NULL))
 		{
 			if (ft_strequ(subast->type, "CURSH") && !is_bg_or_pipe(branch))
-			{
-				save_std_fd(save);
-				replace_std_fd(branch->stdin, branch->stdout);
-				setup_redirection(branch);
-				run_ast(subast);
-				branch->pid = -1;
-				branch->status = g_last_status;
-				save_std_fd(restore);
-			}
+				run_cursh(branch, subast);
 			else
 			{
 				branch->pid = run_subshell(branch, subast);

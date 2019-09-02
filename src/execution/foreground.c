@@ -57,7 +57,7 @@ int		get_tpgid(void)
 ** and store it in g_tcsettings.
 */
 
-void		init_tcsettings(void)
+void	init_tcsettings(void)
 {
 	int		term_fd;
 

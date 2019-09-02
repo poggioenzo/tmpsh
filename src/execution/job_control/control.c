@@ -94,6 +94,12 @@ static enum e_waitstate	wait_subast(t_acb *job_branch, int mode)
 ** Will care about wait each child process only a single time, to avoid zombie.
 */
 
+static enum e_waitstate	return_running(t_acb *branch)
+{
+	branch->running = false;
+	return (running);
+}
+
 enum e_waitstate		analyse_job_status(t_pylst *job_branches, int mode)
 {
 	int		index;
@@ -115,10 +121,7 @@ enum e_waitstate		analyse_job_status(t_pylst *job_branches, int mode)
 			return (running);
 		branch->status = status[0];
 		if (status[1] == running)
-		{
-			branch->running = false;
-			return (running);
-		}
+			return (return_running(branch));
 		branch->complete = true;
 		index--;
 	}
@@ -160,31 +163,4 @@ void					relaunch(int job_id)
 		ft_printf("[%d] + Suspended.\n", job_id);
 	set_foreground(getpgrp());
 	restore_tcattr();
-}
-
-/*
-** wait_zombie:
-**
-** Called before giving back the prompt to the user.
-** Check if some jobs are done and remove them from the current joblist.
-*/
-
-void				wait_zombie(void)
-{
-	t_pylst		*list_jobs;
-	t_pylst		*next_list_jobs;
-	t_job		*job;
-
-	list_jobs = g_jobs->list_jobs;
-	while (list_jobs)
-	{
-		job = (t_job *)list_jobs->value;
-		next_list_jobs = list_jobs->next;
-		if (is_running(job->number) == finish)
-		{
-			ft_printf("[%d] + Done %s\n", job->number, job->command);
-			remove_bg(job->number);
-		}
-		list_jobs = next_list_jobs;
-	}
 }
