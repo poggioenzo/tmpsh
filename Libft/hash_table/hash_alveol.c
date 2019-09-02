@@ -75,8 +75,8 @@ static void		create_alveol(const char *key, void *value, \
 ** of the chained list. Update an alveol if the key alreay exist.
 */
 
-static void	insert_in_alveol(t_ht_alveol **alveol, char *key, void *value,\
-		int ctype)
+static void		insert_in_alveol(t_ht_alveol **alveol, char *key, \
+		void *value, int ctype)
 {
 	t_ht_alveol	*tmp_alveol;
 
