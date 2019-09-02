@@ -82,11 +82,9 @@ t_bool		check_background(t_acb *branch, t_pylst *list_branch)
 
 t_bool		check_andor(t_acb *branch)
 {
-	if (ft_strequ(branch->begin_andor, ""))
-		return (true);
-	if (ft_strequ(branch->begin_andor, "CMDAND") && g_last_status == 0)
-		return (true);
-	else if (ft_strequ(branch->begin_andor, "CMDOR") && g_last_status != 0)
-		return (true);
-	return (false);
+	if (ft_strequ(branch->begin_andor, "CMDAND") && g_last_status != 0)
+		return (false);
+	else if (ft_strequ(branch->begin_andor, "CMDOR") && g_last_status == 0)
+		return (false);
+	return (true);
 }
