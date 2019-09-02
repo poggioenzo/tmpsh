@@ -4,7 +4,6 @@
 # include <termios.h>
 # include "styles.h"
 
-
 extern char	**g_environ;
 extern t_ht_table	*g_variables;
 extern t_ht_table	*g_alias;
@@ -18,9 +17,9 @@ extern pid_t	g_last_pid;
 
 extern t_grammar	*g_grammar;
 
-extern t_pylst      *g_passed_alias;
-extern t_pylst      *g_heredocs;
+extern t_pylst		*g_passed_alias;
+extern t_pylst		*g_heredocs;
 
-struct termios      g_tcsettings;
+struct termios		g_tcsettings;
 
 #endif

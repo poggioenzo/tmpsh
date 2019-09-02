@@ -83,7 +83,6 @@
 # define BKI_CYAN        "\033[106m"
 # define BKI_WHITE        "\033[107m"
 
-
 /*
 **      True/False Macro
 */

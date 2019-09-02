@@ -3,7 +3,7 @@
 
 # include "tmpsh.h"
 
-enum deletion {del_line, deletion_succeed};
+enum	e_deletion {del_line, deletion_succeed};
 
 void		delete_char(t_line *shell_repr, t_cursor *cursor);
 

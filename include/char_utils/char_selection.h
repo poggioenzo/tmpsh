@@ -3,7 +3,6 @@
 
 # include "tmpsh.h"
 
-
 t_char		*get_unlocked_char(t_char *char_lst);
 void		get_last_lock(t_char *char_lst, t_char **last_lock);
 void		get_last_char(t_char *char_lst, t_char **last_char);

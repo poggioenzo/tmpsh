@@ -1,9 +1,9 @@
-#ifndef TERMIOS_SETTER
-# define TERMIOS_SETTER
+#ifndef TERMIOS_SETTER_H
+# define TERMIOS_SETTER_H
 
 # include <termios.h>
 
-enum e_term_action
+enum	e_term_action
 {
 	remove_config = 0,
 	save_config,
