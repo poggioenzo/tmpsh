@@ -36,4 +36,3 @@ t_pylst		*pylst_shacpy(t_pylst *pylst)
 	}
 	return (shallow_cpy);
 }
-

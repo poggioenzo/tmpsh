@@ -18,4 +18,3 @@ int		convert_index(t_pylst *pylst, int index)
 	}
 	return (index);
 }
-

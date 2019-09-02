@@ -31,7 +31,7 @@ static void		alloc_pylst_node(t_pylst **py_node, void *value, int size, \
 ** Copy the given value if a size is given.
 */
 
-void		push_pylst(t_pylst **pylst, void *value, int size, int ctype)
+void			push_pylst(t_pylst **pylst, void *value, int size, int ctype)
 {
 	if (!*pylst)
 		alloc_pylst_node(pylst, value, size, ctype);

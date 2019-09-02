@@ -24,7 +24,7 @@ static int		is_value_allocated(t_pylst *py_node)
 ** Free a single t_pylst node and set his pointer to NULL.
 */
 
-int		free_pylst_node(t_pylst **py_node, int status)
+int				free_pylst_node(t_pylst **py_node, int status)
 {
 	t_free_fct	free_fct;
 
@@ -47,7 +47,7 @@ int		free_pylst_node(t_pylst **py_node, int status)
 ** Set his pointer to NULL and return the status value.
 */
 
-int		free_pylst(t_pylst **pylst, int status)
+int				free_pylst(t_pylst **pylst, int status)
 {
 	t_pylst		*curr_node;
 	t_pylst		*next_node;
@@ -69,7 +69,7 @@ int		free_pylst(t_pylst **pylst, int status)
 ** @node: single to clean the value.
 */
 
-void	pylst_clean_node(t_pylst *node)
+void			pylst_clean_node(t_pylst *node)
 {
 	if (is_value_allocated(node))
 		g_free_fct[node->ctype](&node->value);
@@ -85,7 +85,7 @@ void	pylst_clean_node(t_pylst *node)
 ** function
 */
 
-void	pylst_clean(t_pylst *pylst)
+void			pylst_clean(t_pylst *pylst)
 {
 	while (pylst)
 	{

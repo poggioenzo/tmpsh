@@ -11,20 +11,20 @@
 ** ! If str is founded pylst->iter_item is set to NULL !
 */
 
-int in_pylst_chare(char *str, t_pylst *pylst)
+int		in_pylst_chare(char *str, t_pylst *pylst)
 {
-  char  *value;
-  int ret;
+	char		*value;
+	int			ret;
 
-  ret = 0;
-  while (iter_pylst(pylst, (void **)&value))
-  {
-    if (value && ft_strequ(str, value))
-    {
-      ret = 1;
-      pylst->iter_item = NULL;
-      break ;
-    }
-  }
-  return (ret);
+	ret = 0;
+	while (iter_pylst(pylst, (void **)&value))
+	{
+		if (value && ft_strequ(str, value))
+		{
+			ret = 1;
+			pylst->iter_item = NULL;
+			break ;
+		}
+	}
+	return (ret);
 }

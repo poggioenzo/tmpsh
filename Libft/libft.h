@@ -21,12 +21,12 @@
 # include "pylst.h"
 # include "garbage.h"
 
-#ifndef FALSE
-# define FALSE 0
+# ifndef FALSE
+#  define FALSE 0
 # endif
 
-#ifndef TRUE
-# define TRUE 1
+# ifndef TRUE
+#  define TRUE 1
 # endif
 
 # define ALLOC_ERROR	0
@@ -61,11 +61,11 @@ enum			e_ctype
 ** Global variable who will contain all freeing function for each data type.
 */
 
-typedef void (*t_free_fct)(void *);
+typedef void	(*t_free_fct)(void *);
 
 t_free_fct		g_free_fct[size];
 
-void		setup_freefct(void);
+void			setup_freefct(void);
 
 /*
 ** PRINTF FUNCTIONS
@@ -279,15 +279,13 @@ char			*ft_filejoin(char **directory, char **filename, int free_dir, \
 							int free_file);
 int				ft_isfolder(char *filename);
 
-
 /*
 ** func add for ls (by Enzo)
 */
 int				find_index(char *str, char c);
 char			**create_tab(int size);
 
-int             digitstr(char *str);
-char	*free_join(char *to_free, char *static_char, int delete);
-
+int				digitstr(char *str);
+char			*free_join(char *to_free, char *static_char, int delete);
 
 #endif

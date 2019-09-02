@@ -17,9 +17,9 @@
 
 void	update_pylst(t_pylst *pylst, int index, ...)
 {
-	va_list		args;
-	void		*value;
-	int			size;
+	va_list			args;
+	void			*value;
+	int				size;
 	enum e_ctype	ctype;
 
 	va_start(args, index);

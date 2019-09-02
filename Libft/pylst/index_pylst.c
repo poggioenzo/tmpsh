@@ -29,4 +29,3 @@ void		*vindex_pylst(t_pylst *pylst, int index)
 	expect_node = index_pylst(pylst, index);
 	return (expect_node ? expect_node->value : NULL);
 }
-

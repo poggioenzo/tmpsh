@@ -29,4 +29,3 @@ void		remove_pylst(t_pylst **pylst, void *value)
 		prev->next = curr->next;
 	free_pylst_node(&curr, 0);
 }
-

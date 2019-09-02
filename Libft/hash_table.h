@@ -46,12 +46,12 @@ int					free_alveol(t_ht_alveol **alveol, int status);
 int					free_alveol_list(t_ht_alveol **alveol, int status);
 int					hash_function(const char *string, int seed, int size);
 
-int				ht_iter(t_ht_table *table, char **key, void **value);
+int					ht_iter(t_ht_table *table, char **key, void **value);
 
-void	empty_ht(t_ht_table *table);
+void				empty_ht(t_ht_table *table);
 /*
 ** Debug functions.
 */
 
-void	show_tab(t_ht_table *table);
+void				show_tab(t_ht_table *table);
 #endif

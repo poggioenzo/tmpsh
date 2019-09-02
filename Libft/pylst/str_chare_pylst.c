@@ -16,7 +16,7 @@ char	*str_chare_pylst(t_pylst *pylst)
 	char *cara;
 
 	if (!pylst)
-		return ft_strdup("[]\n");
+		return (ft_strdup("[]\n"));
 	cara = "['";
 	str = join_pylst(pylst, "', '");
 	str = ft_fstrjoin(&cara, &str, FALSE, TRUE);
@@ -24,4 +24,3 @@ char	*str_chare_pylst(t_pylst *pylst)
 	str = ft_fstrjoin(&str, &cara, TRUE, FALSE);
 	return (str);
 }
-
