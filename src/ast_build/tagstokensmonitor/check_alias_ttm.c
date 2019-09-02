@@ -16,9 +16,19 @@
 
 static t_bool get_assgt(t_tags_tokens_monitor *self, int up, int down, t_bool isdown)
 {
-	return ( up > down &&
-			in(find_prev_token(self->tt, isdown ? down : up, false), \
+	if (isdown)
+	{
+		return (up > down
+				&& in(find_next_token(self->tt, down , false), \
 				"ASSIGNATION_EQUAL", "CONCATENATION", NULL));
+	}
+	else
+	{
+		return (up > down
+				&& in(find_prev_token(self->tt, up, false), \
+				"ASSIGNATION_EQUAL", "CONCATENATION", NULL));
+	}
+	return (true);
 }
 
 t_bool		check_aliases_ttm(t_tags_tokens_monitor *self)
@@ -28,16 +38,18 @@ t_bool		check_aliases_ttm(t_tags_tokens_monitor *self)
 
 	ret_alias = "";
 	assignation = get_assgt(self, (int)self->tt->length, self->i + 1, true);
+	print_pylst_chare(g_passed_alias);
 	if (!assignation && self->begin_cmd && self->token\
 			&& (search_value(g_alias, self->token) && \
 			 !in_pylst_chare(self->token, g_passed_alias)))
 	{
 		ret_alias = search_value(g_alias, self->token);
 		self->begin_cmd = ft_isspace(ret_alias[ft_strlen(ret_alias) - 1]);
+		// ft_printf(self->begin_cmd ? YELLOW"True\n"WHITE: PURPLE"False\n"WHITE);
 		push_pylst(&g_passed_alias, self->token, 0, _ptr); // Check memory.
 		replace_alias_tagstokens(self->tt, ret_alias, self->i);
 		if (self->begin_cmd)
-			reset_ttm_out(self, true);
+			return (reset_ttm_out(self, true));
 	}
 	else if (assignation)
 	{

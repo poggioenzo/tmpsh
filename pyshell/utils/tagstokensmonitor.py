@@ -26,7 +26,9 @@ class TagsTokensMonitor():
 
     def reset(self):
         self.begin_cmd = True
-        gv.PASSED_ALIAS = []
+        if not gv.REPLACE:
+            gv.PASSED_ALIAS = []
+        gv.PREVIOUS_PASSED_ALIAS = gv.PASSED_ALIAS
 
     def next_tag_token(self, clear=False):
         self.i += 1
@@ -100,16 +102,23 @@ class TagsTokensMonitor():
             self.heredocs_keys.pop(0)
             key = ''
 
+    def check_aliases_token(self):
+        ret = True
+        ret &= self.token in gv.ALIAS
+        ret &= self.token not in gv.PASSED_ALIAS
+        if ret:
+            gv.PASSED_ALIAS.append(self.token)
+            ret &= self.token not in gv.PREVIOUS_PASSED_ALIAS
+        print(self.token, ret)
+        return (ret)
+
     def check_aliases(self):
         result_alias = ''
         assignation = self.i + 1 < self.tt.length and self.tt.find_next_token(
             self.i + 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
-        if not assignation and self.begin_cmd and (self.token in gv.ALIAS and
-                                                   self.token not in
-                                                   gv.PASSED_ALIAS):
+        if not assignation and self.begin_cmd and self.check_aliases_token():
             result_alias = gv.ALIAS[self.token]
             self.begin_cmd = result_alias[-1:].isspace()
-            gv.PASSED_ALIAS.append(self.token)
             self.tt.replace_alias(result_alias, self.i)
             if self.begin_cmd:
                 self.reset()

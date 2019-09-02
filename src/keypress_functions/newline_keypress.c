@@ -53,7 +53,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	char			*shell_content;
 
 	shell_content = render_shell_content(*shell_repr);
-	free_pylst(&g_passed_alias, 0);
+	// free_pylst(&g_passed_alias, 0);
 	input_init_tagstokens(&tagstoken, shell_content);
 	//Need to remove shell_content properly
 	// print_tagstokens(tagstoken);

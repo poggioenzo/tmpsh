@@ -16,6 +16,7 @@
 
 void op_selector_ttm(t_tags_tokens_monitor *self)
 {
+	ft_printf("tag: %s | tok: %s | %s\n", self->tag, self->token, (self->begin_cmd ? GREEN"True"WHITE: RED"False"WHITE));
 	if (self->tt->valid)
 	{
 		if (ft_strequ(self->tag, "STMT"))

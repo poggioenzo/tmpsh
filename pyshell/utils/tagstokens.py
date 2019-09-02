@@ -95,7 +95,9 @@ class TagsTokens():
         return i
 
     def replace_alias(self, alias_inputs, i):
+        gv.REPLACE = True
         tt_alias = TagsTokens().init_with_input(alias_inputs).check_syntax()
+        gv.REPLACE = False
         self.tokens = self.tokens[:i] + tt_alias.tokens + self.tokens[i + 1:]
         self.tags = self.tags[:i] + tt_alias.tags + self.tags[i + 1:]
         self.valid = tt_alias.valid
