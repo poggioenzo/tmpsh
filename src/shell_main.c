@@ -100,10 +100,12 @@ int		main(int argc, char **argv, char **environ)
 	// setup_variables_elements(environ);
 	atexit(exit_termios);
 
-	source_rc();
 	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	if (argc == 1)
+	{
+		source_rc();
 		prompt_loop();
+	}
 	else
 		run_shell_files(argv + 1);
 	remove_globals();
