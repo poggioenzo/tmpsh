@@ -24,6 +24,7 @@ int		g_last_status = 0;
 pid_t		g_last_pid = 0;
 t_pylst 	*g_heredocs;
 t_pylst 	*g_passed_alias;
+char		g_last_char[5];
 
 
 

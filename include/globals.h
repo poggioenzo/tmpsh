@@ -4,6 +4,9 @@
 # include <termios.h>
 # include "styles.h"
 
+extern char		g_last_char[5];
+extern t_caps		*g_caps;
+
 extern char	**g_environ;
 extern t_ht_table	*g_variables;
 extern t_ht_table	*g_alias;

@@ -1,5 +1,5 @@
-#ifndef TAGSTOKENSMONITOR_H
-# define TAGSTOKENSMONITOR_H
+#ifndef TTM_H
+# define TTM_H
 
 /*
 ** General includes.
@@ -16,7 +16,6 @@
 # include "tagstokens.h"
 # include "utils.h"
 # include "heredocs.h"
-
 
 /*
 ** Local methodes includes.

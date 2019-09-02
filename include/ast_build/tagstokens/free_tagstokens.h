@@ -1,5 +1,5 @@
-#ifndef FREE_TAGSTOKENS
-# define FREE_TAGSTOKENS
+#ifndef FREE_TAGSTOKENS_H
+# define FREE_TAGSTOKENS_H
 
 int free_tagstokens(t_tagstokens **self, int status);
 

@@ -11,6 +11,8 @@
 ** attribute of our structure.
 */
 
+t_caps	*g_caps;
+
 void		alloc_capabilities_struct(t_caps **capabilities)
 {
 	if (tgetent(ft_getenv("TERM"), NULL) == -1)

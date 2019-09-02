@@ -1,24 +1,11 @@
-/* ************************************************************************** */
-/*                                                          LE - /            */
-/*                                                              /             */
-/*   tmpsh.h                                          .::    .:/ .      .::   */
-/*                                                 +:+:+   +:    +:  +:+:+    */
-/*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
-/*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2019/03/19 14:40:22 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/16 20:30:55 by simrossi    ###    #+. /#+    ###.fr     */
-/*                                                         /                  */
-/*                                                        /                   */
-/* ************************************************************************** */
-
 #ifndef TMPSH_H
 # define TMPSH_H
 
-# include <string.h>
+# include <unistd.h>
 # include "libft.h"
 # ifndef UNUSED_VAR
 #  define UNUSED_VAR
-#  define UNUSED(variable)	(void) variable
+#  define UNUSED(variable) (void) variable
 # endif
 
 # define NAME_SH "bash:"
@@ -38,33 +25,14 @@
 # endif
 
 /*
-** Useful structs prototype from libft
-*/
-typedef struct s_pylst	t_pylst;
-typedef struct s_ht_table	t_ht_table;
-typedef signed int			pid_t;
-
-
-enum	e_newline {leave_check = 2, invalid_syntax, not_nested};
-
-typedef struct s_operand	t_operand;
-
-struct s_operand
-{
-	char		open_char;
-	int			type:6;
-	t_operand	*next;
-};
-
-/*
-** Cursor structure
+** Cursor structur
 */
 
 typedef	struct
 {
 	short	row;
 	short	column;
-}		t_cursor;
+}			t_cursor;
 
 /*
 ** t_char and t_line : structures to represent the shell.
@@ -72,7 +40,7 @@ typedef	struct
 
 typedef struct s_char	t_char;
 
-struct	s_char
+struct		s_char
 {
 	char		letter;
 	short		lock:2;
@@ -89,12 +57,13 @@ struct		s_line
 	t_line		*next;
 };
 
-
 /*
 ** structure to store termcap capabilities
 */
 
-typedef struct	s_caps
+typedef struct s_caps	t_caps;
+
+struct		s_caps
 {
 	char	*clear;
 	char	*video;
@@ -107,31 +76,18 @@ typedef struct	s_caps
 	char	*start_line;
 	char	*move_up;
 	char	*move_down;
-}				t_caps;
-
-t_caps		*g_caps;
-char		g_last_char[5];
-
-enum	malloc_fail
-{
-	MALLOC_FAIL = -1,
-	MALLOC_ERROR = 0,
-	MALLOC_SUCCESS = 1
 };
 
+# undef false
+# undef true
+# undef stdout
+# undef stdin
 
-// typedef int	t_bool;
-
-#undef false
-#undef true
-#undef stdout
-#undef stdin
 typedef enum
 {
 	false = 0,
 	true = 1,
 }	t_bool;
-
 
 # define TRUE		1
 # define FALSE		0
@@ -152,9 +108,7 @@ typedef enum
 
 typedef struct s_hist	t_hist;
 
-# define STORED		0b1
-
-struct s_hist
+struct		s_hist
 {
 	char	*line;
 	short	is_tmp;
@@ -166,9 +120,11 @@ struct s_hist
 ** Grammar struct
 */
 
-typedef struct
+typedef struct s_grammar	t_grammar;
+
+struct		s_grammar
 {
-	char *path;
+	char		*path;
 	t_ht_table	*grammar;
 	t_ht_table	*reverse;
 	t_pylst		*reverse_list;
@@ -178,13 +134,14 @@ typedef struct
 	t_ht_table	*dquotes_opening_tags;
 	int			maxlen_leaf_op;
 	t_pylst		*leaf_op;
-}		t_grammar;
+};
 
 /*
 ** Structs for the AbstractSyntaxTree
 */
 
-typedef struct
+typedef struct s_tagstokens		t_tagstokens;
+struct		s_tagstokens
 {
 	t_pylst		*tokens;
 	t_pylst		*tags;
@@ -193,11 +150,12 @@ typedef struct
 	t_bool		valid;
 	t_bool		incomplete;
 	t_bool		not_heredocs;
-	size_t			length;
+	size_t		length;
 	int			iter;
-}			t_tagstokens;
+};
 
-typedef struct
+typedef struct s_ast	t_ast;
+struct		s_ast
 {
 	t_pylst		*list_branch;
 	char		*type;
@@ -205,9 +163,10 @@ typedef struct
 	pid_t		pid;
 	char		*command;
 	t_bool		complete;
-}			t_ast;
+};
 
-typedef struct
+typedef struct s_acb	t_acb;
+struct		s_acb
 {
 	t_tagstokens	*tagstokens;
 	char			*begin_andor;
@@ -225,9 +184,10 @@ typedef struct
 	pid_t			pgid;
 	t_bool			complete;
 	t_bool			running;
-}			t_acb;
+};
 
-typedef struct
+typedef struct s_redirection_fd		t_redirection_fd;
+struct		s_redirection_fd
 {
 	t_tagstokens	*tagstokens;
 	char			*type;
@@ -237,9 +197,10 @@ typedef struct
 	t_ast			*heredoc_ast;
 	t_bool			close;
 	t_bool			error;
-}		t_redirection_fd;
+};
 
-typedef struct
+typedef struct s_tags_tokens_monitor	t_tags_tokens_monitor;
+struct		s_tags_tokens_monitor
 {
 	t_tagstokens	*tt;
 	int				i;
@@ -248,9 +209,10 @@ typedef struct
 	t_bool			begin_cmd;
 	t_pylst			*heredocs_keys;
 	t_pylst			*opened;
-}	t_tags_tokens_monitor;
+};
 
-typedef struct
+typedef struct s_heredocs	t_heredocs;
+struct		s_heredocs
 {
 	char			*key;
 	int				quoted;//Check type
@@ -260,7 +222,7 @@ typedef struct
 	t_tagstokens	*tagstokens;
 	t_pylst			*stack;
 	t_bool			in_cmdsubst;
-}		t_heredocs;
+};
 
 /*
 ** Background jobs
@@ -272,33 +234,36 @@ enum	e_waitstate
 	running = 1,
 };
 
-typedef struct
+typedef struct s_job	t_job;
+struct		s_job
 {
 	t_pylst			*branches;
 	int				number;
 	pid_t			pgid;
 	char			*command;
-}	t_job;
+};
 
-typedef struct
+typedef struct s_background_job		t_background_job;
+struct		s_background_job
 {
 	t_pylst		*list_jobs;
 	t_bool		allow_background;
-}	t_background_job;
+};
 
-typedef struct
+typedef struct s_hash_exec	t_hash_exec;
+struct		s_hash_exec
 {
 	char	*exec_file;
 	int		count;
-}	t_hash_exec;
+};
 
 /*
 ** Debug functions
 */
 
 void		DEBUG_print_line(t_line *shell_lines, int fd);
-int		fd_debug;
-void	show_history(t_hist *history);
+int			fd_debug;
+void		show_history(t_hist *history);
 void		DEBUG_cursor(t_cursor *cursor, int fd);
 
 # include "debug.h"
