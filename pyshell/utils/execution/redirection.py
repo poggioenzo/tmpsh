@@ -19,7 +19,7 @@ def open_redirection_file(redirection):
             fd = os.open(redirection.dest, flags, 0o666)
             redirection.dest = fd
         except PermissionError:
-            print(NAME_SH" permission denied: {}".format(redirection.dest), file=sys.stderr)
+            print("tmpsh: permission denied: {}".format(redirection.dest), file=sys.stderr)
             redirection.error = True
     else:
         redirection.dest = int(redirection.dest) if redirection.dest.isdigit() else None

@@ -159,7 +159,7 @@ class BackgroundJobs:
         Keep it in the background job list if it's suspended.
         """
         if self.is_running(job_id) == WaitState.FINISH:
-            print(NAME_SH" fg: job has terminated")
+            print("tmpsh: fg: job has terminated")
             self.remove(job_id)
             return
         job = self.get_job(job_id)
