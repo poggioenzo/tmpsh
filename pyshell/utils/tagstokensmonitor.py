@@ -13,13 +13,14 @@ class TagsTokensMonitor():
 
     def __init__(self, tt):
         self.tt = tt
+        self.separated_tt= []
         self.i = -1
         self.tag = ''
         self.token = ''
         self.begin_cmd = True
         self.heredocs_keys = []
         self.opened = ['']
-        self.check()
+        self.splitcheck()
 
     def get_tagstokens(self):
         return self.tt
@@ -28,7 +29,7 @@ class TagsTokensMonitor():
         self.begin_cmd = True
         if not gv.REPLACE:
             gv.PASSED_ALIAS = []
-        gv.PREVIOUS_PASSED_ALIAS = gv.PASSED_ALIAS
+        # gv.PREVIOUS_PASSED_ALIAS = gv.PASSED_ALIAS
 
     def next_tag_token(self, clear=False):
         self.i += 1
@@ -42,6 +43,34 @@ class TagsTokensMonitor():
                 self.tt.update_length()
                 self.i -= 1
         return ret
+
+    def splitcheck(self):
+        true_tt = self.tt
+        i = 0
+        j = 0
+        tag = ""
+        while i < self.tt.length:
+            tag = self.tt.tags[i]
+            if tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
+                i += 1
+                print(self.tt.copytt(j, i))
+                self.separated_tt.append(self.tt.copytt(j, i))
+                j = i
+            i += 1
+        self.separated_tt.append(self.tt.copytt(j, i))
+        true_tt.tokens = []
+        true_tt.tags = []
+        true_tt.update_length()
+        for elt in self.separated_tt:
+            self.tt = elt
+            self.check()
+            i = 0
+            while i < self.tt.length:
+                token, tag = self.tt[i]
+                true_tt.append(tag, token)
+                i += 1
+        self.tt = true_tt
+        print(true_tt)
 
     def check(self):
         while self.next_tag_token():
@@ -106,10 +135,8 @@ class TagsTokensMonitor():
         ret = True
         ret &= self.token in gv.ALIAS
         ret &= self.token not in gv.PASSED_ALIAS
-        if ret:
-            gv.PASSED_ALIAS.append(self.token)
-            ret &= self.token not in gv.PREVIOUS_PASSED_ALIAS
-        print(self.token, ret)
+        ret &= gv.MAXIMAL_DEPTH_ITER < gv.MAXIMAL_DEPTH_LIMIT
+
         return (ret)
 
     def check_aliases(self):
