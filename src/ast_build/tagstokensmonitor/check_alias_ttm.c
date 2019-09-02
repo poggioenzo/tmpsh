@@ -26,8 +26,13 @@ t_bool		check_aliases_ttm(t_tags_tokens_monitor *self)
 	char	*ret_alias;
 	t_bool	assignation;
 
+<<<<<<< HEAD
 	ret_alias = "";
 	assignation = get_assgt(self, (int)self->tt->length, self->i + 1, true);
+=======
+	result_alias = "";
+	assignation = get_assgt(self, (int)self->tt->length, self->i + 1, false);
+>>>>>>> 148ae13a7a9bd07be3d204a53d82901e70cc524f
 	if (!assignation && self->begin_cmd && self->token\
 			&& (search_value(g_alias, self->token) && \
 			 !in_pylst_chare(self->token, g_passed_alias)))

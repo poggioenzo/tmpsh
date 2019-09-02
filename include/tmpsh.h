@@ -22,6 +22,7 @@
 # endif
 
 # define NAME_SH "bash:"
+# define RC_FILE ".tmpshrc"
 
 # include "styles.h"
 

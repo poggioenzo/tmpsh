@@ -4,6 +4,7 @@
 #include "clipboard.h"
 #include "libft.h"
 #include "t_char_insert.h"
+#include "cut_utils.h"
 
 /*
 ** line_cut:
@@ -99,10 +100,7 @@ void		cut_prev_word(t_line *shell_repr, t_cursor *cursor)
 	while (tmp_char && tmp_char->position <= cursor->column)
 	{
 		if (in_word == FALSE && !ft_isspace(tmp_char->letter))
-		{
-			in_word = TRUE;
-			last_word = tmp_char;
-		}
+			store_word(tmp_char, &last_word, &in_word);
 		else if (in_word == TRUE && ft_isspace(tmp_char->letter))
 			in_word = FALSE;
 		tmp_char = tmp_char->next;

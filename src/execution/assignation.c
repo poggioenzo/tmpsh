@@ -69,7 +69,7 @@ static int		count_assignation_size(t_tagstokens *tagstoks)
 ** Assuming that all assignation are at the begining of the branch.
 */
 
-static void		delete_variables(t_tagstokens *tagstok, t_pylst *assignations)
+static t_pylst	*delete_variables(t_tagstokens *tagstok, t_pylst *assignations)
 {
 	int		nbr_assignations;
 	int		nbr_token;
@@ -82,6 +82,7 @@ static void		delete_variables(t_tagstokens *tagstok, t_pylst *assignations)
 		del_portion_pylst(&tagstok->tokens, 0, nbr_token);
 		update_length_tagstokens(tagstok);
 	}
+	return (assignations);
 }
 
 /*
@@ -123,8 +124,7 @@ t_pylst			*retrieve_assignation(t_acb *branch)
 		}
 		index++;
 	}
-	delete_variables(branch->tagstokens, assignation_list);
-	return (assignation_list);
+	return (delete_variables(branch->tagstokens, assignation_list));
 }
 
 /*

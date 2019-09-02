@@ -74,6 +74,24 @@ void	exit_termios(void)
 	manage_termios(remove_config);
 }
 
+void	source_rc(void)
+{
+	char	*filename;
+	char	*home;
+
+	if ((home = ft_getenv("HOME")))
+	{
+		filename = RC_FILE;
+		filename = ft_filejoin(&home, &filename, false, false);
+	}
+	else
+		filename = ft_strdup(RC_FILE);
+	g_jobs->allow_background = false;
+	run_file(filename);
+	ft_strdel(&filename);
+	g_jobs->allow_background = true;
+}
+
 int		main(int argc, char **argv, char **environ)
 {
 	int status;
@@ -81,6 +99,7 @@ int		main(int argc, char **argv, char **environ)
 	// setup_variables_elements(environ);
 	atexit(exit_termios);
 
+	source_rc();
 	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	if (argc == 1)
 		prompt_loop();

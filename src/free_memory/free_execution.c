@@ -7,8 +7,7 @@ void		free_job_type(void *job_ptr)
 
 	destroy_job = (t_job **)job_ptr;
 	free_pylst(&(*destroy_job)->branches, 0);
-	//Check if I concat the command from each branch
-	//ft_strdel(&(*destroy_job)->command);
+	ft_strdel(&(*destroy_job)->command);
 	ft_memdel(&job_ptr);
 }
 

@@ -31,7 +31,7 @@ int			rewrite_history(t_hist *history)
 		history = history->next;
 	}
 	close(hist_fd);
-	return (SUCCESS); // DEPEND OF OPEN
+	return (SUCCESS);
 }
 
 /*

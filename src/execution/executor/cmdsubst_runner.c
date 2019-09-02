@@ -14,7 +14,7 @@
 ** Create pipe for a cmdsubt and store them in a pylst.
 */
 
-static t_pylst		*prepare_cmdsubst_pipe(void)
+static t_pylst	*prepare_cmdsubst_pipe(void)
 {
 	int		pipe_fd[2];
 	t_pylst	*pipe_lst;
@@ -26,6 +26,12 @@ static t_pylst		*prepare_cmdsubst_pipe(void)
 	return (pipe_lst);
 }
 
+/*
+** clean_popper:
+**
+** Layer of pop function to get, freeing and return a int value.
+*/
+
 static int		clean_popper(int *value)
 {
 	int		int_value;
@@ -33,6 +39,27 @@ static int		clean_popper(int *value)
 	int_value = *value;
 	ft_memdel((void **)&value);
 	return (int_value);
+}
+
+/*
+** setup_stdput:
+**
+** Prepare stdin and stdout for CMDSUBST[123].
+*/
+
+static void		setup_stdput(t_ast *subast, t_pylst *pipe_fd)
+{
+	int		stdin;
+	int		stdout;
+
+	stdin = -1;
+	stdout = -1;
+	if (ft_strequ(subast->type, "CMDSUBT2"))
+		stdin = clean_popper(pop_pylst(&pipe_fd, 0));
+	else if (in(subast->type, "CMDSUBST1", "CMDSUBST3", NULL))
+		stdout = clean_popper(pop_pylst(&pipe_fd, 1));
+	replace_std_fd(stdin, stdout);
+	close(clean_popper(pop_pylst(&pipe_fd, 0)));
 }
 
 /*
@@ -48,8 +75,6 @@ static void		run_cmdsubst(t_ast *subast)
 {
 	t_pylst	*pipe_fd;
 	pid_t	pid;
-	int		stdin;
-	int		stdout;
 
 	pipe_fd = prepare_cmdsubst_pipe();
 	pid = fork_prepare(getpgrp(), false);
@@ -58,14 +83,7 @@ static void		run_cmdsubst(t_ast *subast)
 		clear();
 		g_jobs->allow_background = false;
 		change_sigmask(SIGTSTP, SIG_BLOCK);
-		stdin = -1;
-		stdout = -1;
-		if (ft_strequ(subast->type, "CMDSUBST2"))
-			stdin = clean_popper(pop_pylst(&pipe_fd, 0));
-		else if (in(subast->type, "CMDSUBST1", "CMDSUBST3", NULL))
-			stdout = clean_popper(pop_pylst(&pipe_fd, 1));
-		replace_std_fd(stdin, stdout);
-		close(clean_popper(pop_pylst(&pipe_fd, 0)));
+		setup_stdput(subast, pipe_fd);
 		run_ast(subast);
 		exit(g_last_status);
 	}
@@ -87,7 +105,7 @@ static void		run_cmdsubst(t_ast *subast)
 ** Do not wait any of those subprocess.
 */
 
-void	prepare_cmd_subst(t_acb *branch)
+void			prepare_cmd_subst(t_acb *branch)
 {
 	t_ast	*subast;
 

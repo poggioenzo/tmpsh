@@ -30,7 +30,7 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 	char	*token;
 
 	token = vindex_pylst(tagstok->tokens, index);
-	variable = retrieve_variable(token + 1); //Verify allocation
+	variable = retrieve_variable(token + 1);
 	substitution_insert(variable, tagstok, index);
 	ft_strdel(&variable);
 }
@@ -67,9 +67,9 @@ static void		replace_tild(t_tagstokens *tagstok, int index)
 void			replace_variable(t_acb *branch)
 {
 	size_t		index;
-	int		index_subast;
-	char	*tag;
-	t_ast	*subast;
+	int			index_subast;
+	char		*tag;
+	t_ast		*subast;
 
 	heredoc_apply(branch->redirectionfd, replace_variable);
 	index = 0;
