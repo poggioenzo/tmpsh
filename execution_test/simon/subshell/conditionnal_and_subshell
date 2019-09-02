@@ -1,0 +1,2 @@
+(echo ok |mv; echo end) && (echo file)
+(echo ok && mv || echo final) && (echo please ; ls -qsazwx ) && echo Nice

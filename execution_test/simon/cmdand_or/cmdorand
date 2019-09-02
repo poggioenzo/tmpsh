@@ -1,0 +1,2 @@
+mv && echo ok && echo Nop ||     ls;
+ls ||echo Theremi ||    top||   true&& mv && echo noend ||echo Pipe|    cat

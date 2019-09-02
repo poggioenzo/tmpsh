@@ -1,0 +1,1 @@
+(((echo The content |tee | cat); echo end) && echo NoHop|(false ; echo deep nest; echo double output)| (cat | (tee); echo ENDD) ;echo Realend)

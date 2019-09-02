@@ -1,0 +1,3 @@
+ls && ls -wxz && echo Fail to && ls -abcdef ||echo RUNN ;
+true ||   false ||       echo Ok && echo Long | cat | tee | cat ||echo random || echo Noend && echo TheEnd
+ls azertyuiop && echo No Output ||echo Yes Output | ls -zqui | cat && echo ok

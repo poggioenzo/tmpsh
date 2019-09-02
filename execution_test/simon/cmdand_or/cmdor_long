@@ -1,0 +1,1 @@
+ls ||   echo ok ||cat ; mv ||    ls -zwx ||       echo Test   success

@@ -1,0 +1,1 @@
+echo ok && ls; false && echo None

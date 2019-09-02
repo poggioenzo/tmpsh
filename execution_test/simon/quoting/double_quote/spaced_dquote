@@ -1,0 +1,2 @@
+echo "     a     long    | cat   quote  " | cat && "echo" "   the" | cat | tee
+ls "   "   "       "  "nothing"

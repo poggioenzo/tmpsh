@@ -1,0 +1,2 @@
+1 - Set only the first CMDAND, CMDOR as begin operator
+2 - Chaining single quote is giving 2 subast containing a single quote

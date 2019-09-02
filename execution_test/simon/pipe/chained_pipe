@@ -1,0 +1,2 @@
+echo ok | cat | cat | echo end | cat;
+echo NoEnd | echo final | tee

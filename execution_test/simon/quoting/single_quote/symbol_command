@@ -1,0 +1,2 @@
+ls '&&'|| echo ok
+'echo' '    the ;'    ' &&content ' '|   output   '

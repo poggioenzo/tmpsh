@@ -1,0 +1,2 @@
+mv || (echo subshell ; echo subshell) || (echo Random) ;
+ls || (echo first ; (echo second && echo ok)) || ((echo Random) | cat) && (echo This one || echo ok && (mv ||ls))

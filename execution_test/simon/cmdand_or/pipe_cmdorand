@@ -1,0 +1,1 @@
+echo ok |ls -zaewxc && echo No |  tee |   echo Random;echo ok && mv |echo ok || false && echo true |   cat || echo false | cat

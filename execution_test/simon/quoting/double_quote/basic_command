@@ -1,0 +1,2 @@
+"ls" "quoted"
+echo "the  content" with   " quote"

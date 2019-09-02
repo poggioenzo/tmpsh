@@ -1,0 +1,2 @@
+(echo No | cat |tee; echo end)
+(ls | cat; ls; echo end | ls)

@@ -1,0 +1,2 @@
+echo ok | sleep 1 | echo END | cat
+ls | echo ok
