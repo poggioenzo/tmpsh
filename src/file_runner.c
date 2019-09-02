@@ -5,34 +5,8 @@
 #include "termios_setter.h"
 #include "ast.h"
 #include "exec_file.h"
+#include "file_rights.h"
 #include <fcntl.h>
-
-/*
-** check_rights:
-**
-** When the shell research exepected executable, check
-** if it's possible to run the given file.
-** Check permission + file existence.
-*/
-
-static t_bool	check_rights(char *cmd)
-{
-	char	*err_msg;
-
-	err_msg = NULL;
-	if (access(cmd, F_OK) == -1)
-		err_msg = NAME_SH" No such file or directory : %s\n";
-	else if (is_directory(cmd))
-		err_msg = NAME_SH" %s: is a directory\n";
-	else if (access(cmd, R_OK) == -1 || access(cmd, R_OK) == -1)
-		err_msg = NAME_SH" permission denied: %s\n";
-	if (err_msg)
-	{
-		ft_dprintf(STDERR_FILENO, err_msg, cmd);
-		return (false);
-	}
-	return (true);
-}
 
 /*
 ** run_file:
@@ -47,7 +21,7 @@ int				run_file(char *filename)
 	t_tagstokens	*tagstoks;
 	int				file_fd;
 
-	if (!check_rights(filename))
+	if (!check_rights(filename, F_OK | R_OK, false, true))
 		return (1);
 	file_fd = open(filename, O_RDONLY);
 	if (!(content = fd_readfile(file_fd)))

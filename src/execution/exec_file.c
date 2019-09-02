@@ -2,49 +2,7 @@
 #include "tmpsh.h"
 #include "variables.h"
 #include "hash.h"
-#include <sys/stat.h>
-
-/*
-** is_directory:
-**
-** Check if the given filename is a directory.
-*/
-
-int				is_directory(const char *path)
-{
-	struct stat statbuf;
-
-	if (stat(path, &statbuf) != 0)
-		return (0);
-	return (S_ISDIR(statbuf.st_mode));
-}
-
-/*
-** check_rights:
-**
-** When the shell research exepected executable, check
-** if it's possible to run the given file.
-** Check permission + file existence.
-*/
-
-static char		*check_rights(char *cmd)
-{
-	char	*err_msg;
-
-	err_msg = NULL;
-	if (access(cmd, F_OK) == -1)
-		err_msg = NAME_SH" No such file or directory : %s\n";
-	else if (is_directory(cmd))
-		err_msg = NAME_SH" %s: is a directory\n";
-	else if (access(cmd, X_OK) == -1 || access(cmd, R_OK) == -1)
-		err_msg = NAME_SH" permission denied: %s\n";
-	if (err_msg)
-	{
-		ft_dprintf(STDERR_FILENO, err_msg, cmd);
-		ft_strdel(&cmd);
-	}
-	return (cmd);
-}
+#include "file_rights.h"
 
 /*
 ** parse_path:
@@ -77,7 +35,7 @@ char			*parse_path(char *command)
 			insert_value(g_hash, command, cache, _hash_exec);
 			cache->count++;
 			free_str_array(&folders, 0);
-			return (check_rights(execname));
+			return (check_rights(execname, X_OK | R_OK, true, true));
 		}
 		ft_strdel(&execname);
 	}
@@ -107,6 +65,7 @@ char			*get_execname(char *command)
 	else if (search_value(g_builtins, command))
 		return (ft_strdup(command));
 	else if (ft_strchr(command, '/'))
-		return (check_rights(ft_strdup(command)));
+		return (check_rights(ft_strdup(command), \
+					F_OK | X_OK | R_OK, true, true));
 	return (parse_path(command));
 }
