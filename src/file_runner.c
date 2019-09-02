@@ -41,7 +41,7 @@ static t_bool	check_rights(char *cmd)
 ** Check if the given AST is correct before launching it.
 */
 
-int		run_file(char *filename)
+int				run_file(char *filename)
 {
 	char			*content;
 	t_tagstokens	*tagstoks;

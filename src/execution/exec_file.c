@@ -73,7 +73,7 @@ char			*parse_path(char *command)
 		execname = ft_filejoin(folders + index++, &command, false, false);
 		if (access(execname, F_OK) != -1)
 		{
-			cache = hash_exec_init(execname); // Control execname
+			cache = hash_exec_init(execname);
 			insert_value(g_hash, command, cache, _hash_exec);
 			cache->count++;
 			free_str_array(&folders, 0);

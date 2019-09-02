@@ -13,7 +13,7 @@
 **		   - Job with a job->number corresponding to job_id
 */
 
-t_job			*get_job(int job_id)
+t_job				*get_job(int job_id)
 {
 	t_pylst	*list_jobs;
 	t_job	*job;
