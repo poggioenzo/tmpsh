@@ -9,9 +9,11 @@ import sys
 
 import utils.execution.foreground as fg
 
+
 def dprint(string, *args, **kwargs):
-    #Small debug function to print with DEBUG filestream
+    # Small debug function to print with DEBUG filestream
     print(string, *args, file=DEBUG, **kwargs, flush=True)
+
 
 class WaitState(enum.Enum):
     FINISH = 0
@@ -20,6 +22,7 @@ class WaitState(enum.Enum):
 ##################################################################
 ##     Functions to wait and analyse child + some job control   ##
 ##################################################################
+
 
 def waitpid_layer(pid, mode):
     """
@@ -39,6 +42,7 @@ def waitpid_layer(pid, mode):
         status = os.WEXITSTATUS(return_status)
         return (status, WaitState.FINISH)
 
+
 def wait_subast(job_branch, mode):
     """
     Wait each subast of the current branch if
@@ -56,7 +60,6 @@ def wait_subast(job_branch, mode):
                 subast.complete = True
         index += 1
     return WaitState.FINISH
-
 
 
 def analyse_job_status(job_branches, mode=os.WUNTRACED):
@@ -82,6 +85,7 @@ def analyse_job_status(job_branches, mode=os.WUNTRACED):
         index -= 1
     return WaitState.FINISH
 
+
 class Job:
     def __init__(self, job_branches, job_number):
         self.branches = job_branches.copy()
@@ -102,7 +106,7 @@ class Job:
 
     @classmethod
     def sort_jobs(cls, job_list):
-        sort_fct = lambda job : job.number
+        def sort_fct(job): return job.number
         job_list.sort(key=sort_fct)
 
 
@@ -124,11 +128,11 @@ class BackgroundJobs:
 
     def is_running(self, job_id):
         """
-        Check if any process in the job is still running or if it's 
+        Check if any process in the job is still running or if it's
         already finish.
         """
         job = self.get_job(job_id)
-        return analyse_job_status(job.branches, mode=os.WNOHANG|os.WUNTRACED)
+        return analyse_job_status(job.branches, mode=os.WNOHANG | os.WUNTRACED)
 
     def remove(self, job_id):
         nbr_jobs = len(self.list_jobs)
@@ -159,7 +163,7 @@ class BackgroundJobs:
         Keep it in the background job list if it's suspended.
         """
         if self.is_running(job_id) == WaitState.FINISH:
-            print(NAME_SH" fg: job has terminated")
+            print("tmpsh: fg: job has terminated")
             self.remove(job_id)
             return
         job = self.get_job(job_id)

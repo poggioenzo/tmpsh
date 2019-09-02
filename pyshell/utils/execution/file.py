@@ -5,6 +5,7 @@ import sys
 from utils.builtins.hash import HashExec
 import utils.global_var as gv
 
+
 def read_fd(fd):
     """
     Read the entire content from a given filedescriptor.
@@ -18,6 +19,7 @@ def read_fd(fd):
         text += content
     return text
 
+
 def check_rights(cmd):
     """
     When the shell research exepected executable, check
@@ -25,12 +27,13 @@ def check_rights(cmd):
     Check permission + file existence.
     """
     if os.access(cmd, os.F_OK) == False:
-        print(NAME_SH" No such file or directory : {}".format(cmd), file=sys.stderr)
+        print("tmpsh: No such file or directory : {}".format(cmd), file=sys.stderr)
         return None
     if os.access(cmd, os.X_OK) is False or os.access(cmd, os.R_OK) is False:
         print("zsh: permission denied: {}".format(cmd), file=sys.stderr)
         return None
     return cmd
+
 
 def get_execname(cmd):
     """
@@ -53,5 +56,5 @@ def get_execname(cmd):
             gv.HASH[cmd] = HashExec(execname)
             gv.HASH[cmd].count += 1
             return check_rights(execname)
-    print(NAME_SH" command not found: {}".format(cmd), file=sys.stderr)
+    print("tmpsh: command not found: {}".format(cmd), file=sys.stderr)
     return None
