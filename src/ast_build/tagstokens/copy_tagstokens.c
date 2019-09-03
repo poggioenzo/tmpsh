@@ -30,7 +30,11 @@ t_tagstokens	*copy_tagstokens(t_tagstokens *self, int from, int to)
 
 	init_tagstokens(&copy, NULL, NULL);
 	if (from == to)
-		to++;
+	{
+		push_pylst(&copy->tokens, "", sizeof(char), _chare);
+		push_pylst(&copy->tags, "STMT", 0, _ptr);
+		return (copy);
+	}
 	copy->tokens = slice_pylst(self->tokens, from, to);
 	copy->tags = slice_pylst(self->tags, from, to);
 	update_length_tagstokens(copy);
