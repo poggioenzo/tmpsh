@@ -45,7 +45,6 @@ t_bool		check_aliases_ttm(t_tags_tokens_monitor *self)
 	{
 		ret_alias = search_value(g_alias, self->token);
 		self->begin_cmd = ft_isspace(ret_alias[ft_strlen(ret_alias) - 1]);
-		// ft_printf(self->begin_cmd ? YELLOW"True\n"WHITE: PURPLE"False\n"WHITE);
 		push_pylst(&g_passed_alias, self->token, 0, _ptr); // Check memory.
 		replace_alias_tagstokens(self->tt, ret_alias, self->i);
 		if (self->begin_cmd)
