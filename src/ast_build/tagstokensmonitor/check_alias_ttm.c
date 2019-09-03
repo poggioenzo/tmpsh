@@ -1,25 +1,25 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   check_alias_ttm.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:13:35 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:15:28 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "ttm.h"
 
-
-/*
-** check_alias_ttm:
-**
-** description:
-** describe what you function do.
-**
-** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
-*/
-
-static t_bool get_assgt(t_tags_tokens_monitor *self, int up, int down, t_bool isdown)
+static t_bool	get_assgt(t_tags_tokens_monitor *self, int up,
+						int down, t_bool isdown)
 {
 	if (isdown)
 	{
 		return (up > down
-				&& in(find_next_token(self->tt, down , false), \
+				&& in(find_next_token(self->tt, down, false), \
 				"ASSIGNATION_EQUAL", "CONCATENATION", NULL));
 	}
 	else
@@ -31,9 +31,9 @@ static t_bool get_assgt(t_tags_tokens_monitor *self, int up, int down, t_bool is
 	return (true);
 }
 
-static t_bool check_aliases_token(t_tags_tokens_monitor *self)
+static t_bool	check_aliases_token(t_tags_tokens_monitor *self)
 {
-	t_bool ret;
+	t_bool	ret;
 
 	ret = self->token ? true : false;
 	ret &= ret && search_value(g_alias, self->token);
@@ -43,11 +43,11 @@ static t_bool check_aliases_token(t_tags_tokens_monitor *self)
 	return (ret);
 }
 
-static t_bool cond_aliasing(t_tags_tokens_monitor *self, t_bool assignation)
+static t_bool	cond_aliasing(t_tags_tokens_monitor *self, t_bool assignation)
 {
-	t_bool ret;
-	t_bool is_alias;
-	t_bool is_alias_token;
+	t_bool	ret;
+	t_bool	is_alias;
+	t_bool	is_alias_token;
 
 	ret = !(assignation);
 	is_alias_token = check_aliases_token(self);
@@ -57,7 +57,22 @@ static t_bool cond_aliasing(t_tags_tokens_monitor *self, t_bool assignation)
 	return (ret);
 }
 
-t_bool		check_aliases_ttm(t_tags_tokens_monitor *self)
+/*
+** check_aliases_ttm:
+**
+** description:
+** Check aliases in depth of other tagstokens and assignations.
+** Predict future alias index with g_aliasindepth.
+** Return boolean value to set begin_cmd in op_selector_ttm.
+**
+** parameter:
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
+**
+** return value:
+** - (t_bool) : value of the next step begin_cmd.
+*/
+
+t_bool			check_aliases_ttm(t_tags_tokens_monitor *self)
 {
 	t_bool	assignation;
 

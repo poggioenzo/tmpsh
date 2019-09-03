@@ -1,19 +1,30 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   init_ttm.c                                       .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:17:53 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:18:04 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "ttm.h"
 
 /*
 ** init_ttm:
 **
 ** description:
-** describe what you function do.
+** Instanciate a tagstokensmonitor then check its tagstokens then kill himself.
+** Such a suicide.
 **
 ** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
+** - (t_tagstokens*) tagstokens : tagstokens to monitoring.
 */
 
-void init_ttm(t_tagstokens *tagstokens)
+void	init_ttm(t_tagstokens *tagstokens)
 {
 	t_tags_tokens_monitor *self;
 

@@ -1,17 +1,26 @@
-#include "ttm.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   is_braceparam_ttm.c                              .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:18:38 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:18:42 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "ttm.h"
 
 /*
 ** is_braceparam_ttm:
 **
 ** description:
-** describe what you function do.
+** Check the STMT inside braceparam. Not ok STMT create bad substitution error.
 **
 ** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 */
 
 void	is_braceparam_ttm(t_tags_tokens_monitor *self)

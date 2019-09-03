@@ -1,18 +1,17 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   in_command_sh_ttm.c                              .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:15:56 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:16:35 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "ttm.h"
-
-
-/*
-** in_command_sh_ttm:
-**
-** description:
-** describe what you function do.
-**
-** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
-*/
 
 static int		search_end(char *tag)
 {
@@ -23,7 +22,18 @@ static int		search_end(char *tag)
 	return (in(tag, "END_BRACE", "END_BRACKET", NULL));
 }
 
-void	in_command_sh_ttm(t_tags_tokens_monitor *self)
+/*
+** in_command_sh_ttm:
+**
+** description:
+** If the command it's at the beginning check validity for CURSH or SUBSH.
+** Else it's replace COMMAND_SH grand child symbol by STMT.
+**
+** parameter:
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
+*/
+
+void			in_command_sh_ttm(t_tags_tokens_monitor *self)
 {
 	int		end;
 	int		ret;
@@ -41,7 +51,7 @@ void	in_command_sh_ttm(t_tags_tokens_monitor *self)
 			self->tt->token_error = self->token;
 		}
 		else if (ret && end)
-			reset_ttm(self); // SHould be an other function name
+			reset_ttm(self);
 	}
 	else
 	{

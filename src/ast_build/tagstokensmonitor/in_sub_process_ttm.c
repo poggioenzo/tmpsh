@@ -1,17 +1,26 @@
-#include "ttm.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   in_sub_process_ttm.c                             .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:17:26 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:17:32 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "ttm.h"
 
 /*
 ** is_sub_process_ttm:
 **
 ** description:
-** describe what you function do.
+** Check if any subprocess is well closed.
 **
 ** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 */
 
 void	in_sub_process_ttm(t_tags_tokens_monitor *self)

@@ -1,17 +1,26 @@
-#include "ttm.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   is_quote_ttm.c                                   .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:32:36 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:32:47 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "ttm.h"
 
 /*
 ** is_quote_ttm:
 **
 ** description:
-** describe what you function do.
+** Until QUOTE is closed transform all tags in STMT.
 **
 ** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 */
 
 void	is_quote_ttm(t_tags_tokens_monitor *self)

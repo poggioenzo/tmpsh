@@ -1,17 +1,27 @@
-#include "ttm.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   is_dquotes_ttm.c                                 .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:18:52 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:18:57 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "ttm.h"
 
 /*
 ** is_dquotes_ttm:
 **
 ** description:
-** describe what you function do.
+** Until DQUOTES is closed will transform all tags in STMT.
+** Except for special tags inside dquotes_opening_tags.
 **
 ** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 */
 
 void	is_dquotes_ttm(t_tags_tokens_monitor *self)

@@ -1,20 +1,20 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   free_redfd.c                                     .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 21:53:22 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 21:53:58 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
 #include "redirectionfd.h"
 #include "ast.h"
 
-// typedef struct
-// {
-// 	t_tagstokens	*tagstokens;
-// 	char			*type; <-- don't free grammar ptr
-// 	int				source;
-// 	char			*dest;
-// 	char			*print;
-// 	t_bool			close;
-// 	t_bool			error;
-// 	t_ast			*heredoc_ast;
-// }				t_redirection_fd;
-
-void free_redfd(t_redirection_fd **self)
+void	free_redfd(t_redirection_fd **self)
 {
 	if (self && *self)
 	{
@@ -27,7 +27,7 @@ void free_redfd(t_redirection_fd **self)
 	}
 }
 
-void free_redfd_type(void *redfd)
+void	free_redfd_type(void *redfd)
 {
-	free_redfd((t_redirection_fd **) redfd);
+	free_redfd((t_redirection_fd **)redfd);
 }
