@@ -13,19 +13,6 @@
 
 #include "ttm.h"
 
-/*
-** check_alias_ttm:
-**
-** description:
-** describe what you function do.
-**
-** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
-*/
-
 static t_bool	get_assgt(t_tags_tokens_monitor *self, int up,
 						int down, t_bool isdown)
 {
@@ -69,6 +56,19 @@ static t_bool	cond_aliasing(t_tags_tokens_monitor *self, t_bool assignation)
 	ret &= is_alias;
 	return (ret);
 }
+
+/*
+** check_alias_ttm:
+**
+** description:
+** describe what you function do.
+**
+** parameter:
+** - (type) name : what is this param?
+**
+** return value:
+** - (type) value : descibe output.
+*/
 
 t_bool			check_aliases_ttm(t_tags_tokens_monitor *self)
 {

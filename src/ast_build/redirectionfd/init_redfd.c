@@ -49,7 +49,7 @@ t_redirection_fd	*init_redfd(t_tagstokens *tgtk, char *type,\
 	self->error = FALSE;
 	if ((ft_strequ(self->type, "HEREDOCMINUS") \
 				|| ft_strequ(self->type, "HEREDOC")))
-		get_heredoc_ast(self);
+		;//get_heredoc_ast(self);
 	self->print = str_redfd(self);
 	return (self);
 }

@@ -6,25 +6,12 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:19:28 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 22:26:09 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/09/03 23:33:08 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ttm.h"
-
-/*
-** is_heredocs_ttm:
-**
-** description:
-** describe what you function do.
-**
-** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
-*/
 
 static char		*get_end_tag(char *tag)
 {
@@ -54,12 +41,39 @@ static void		append_to_heredocs_keys(t_tags_tokens_monitor *self, char *key,
 	push_pylst(&self->heredocs_keys, list_param, 0, _ptr);
 }
 
+static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
+											t_bool minus)
+{
+	t_pylst	*list_tok;
+	int		j;
+
+	j = skip_openning_tagstokens(self->tt, self->i,
+								get_end_tag(self->tag));
+	list_tok = slice_pylst(self->tt->tokens, self->i, j);
+	self->i = j - 1;
+	self->tag = transform_end_tag(self->tag);
+	append_to_heredocs_keys(self, join_pylst(list_tok, ""),
+			len_pylst(list_tok), minus);
+	free_pylst(&list_tok, 42);
+}
+
+/*
+** is_heredocs_ttm:
+**
+** description:
+** describe what you function do.
+**
+** parameter:
+** - (t_tags_tokens_monitor) self : what is this param?
+**
+** return value:
+** - (type) value : descibe output.
+*/
+
 void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 {
 	t_bool	minus;
 	t_bool	not_end;
-	t_pylst	*list_tok;
-	int		j;
 
 	minus = ft_strequ(self->tag, "HEREDOCMINUS");
 	not_end = next_ttm(self, false);
@@ -68,16 +82,7 @@ void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 	if (not_end)
 	{
 		if (search_value(g_grammar->opening_tags, self->tag))
-		{
-			j = skip_openning_tagstokens(self->tt, self->i,
-										get_end_tag(self->tag));
-			list_tok = slice_pylst(self->tt->tokens, self->i, j);
-			self->i = j - 1;
-			self->tag = transform_end_tag(self->tag);
-			append_to_heredocs_keys(self, join_pylst(list_tok, ""),
-					len_pylst(list_tok), minus);
-			free_pylst(&list_tok, 42);
-		}
+			append_to_heredocs_composed_keys(self, minus);
 		else
 			append_to_heredocs_keys(self, self->token, 1, minus);
 	}
