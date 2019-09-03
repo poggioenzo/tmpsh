@@ -1,6 +1,6 @@
 
 
-# tmpsh
+# Tmpsh - Total Mastering Professional Shell (or Temporary Shell, as you want.)
 tmpsh is a project of creating shell. 42 school project.
 
 ### Builtins
