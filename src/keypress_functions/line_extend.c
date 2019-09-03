@@ -15,8 +15,7 @@ void		lower_str(char *str)
 {
 	while (*str)
 	{
-		if (*str >= 'A' && *str <= 'Z')
-			*str -= 'A' + 'a';
+		*str = ft_tolower(*str);
 		str++;
 	}
 }
