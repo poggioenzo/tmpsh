@@ -17,7 +17,7 @@
 ** check_ttm:
 **
 ** description:
-** describe what you function do.
+** While the next tag and token are valid we send it to op_selector dispatcher.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.

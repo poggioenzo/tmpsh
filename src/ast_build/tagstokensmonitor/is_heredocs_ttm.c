@@ -61,7 +61,8 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
 ** is_heredocs_ttm:
 **
 ** description:
-** describe what you function do.
+** Push to self->heredocs_keys all information to do correctly the future
+** incoming heredoc inside the global g_heredoc.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.

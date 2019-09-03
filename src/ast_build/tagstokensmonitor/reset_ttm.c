@@ -17,7 +17,7 @@
 ** reset_ttm:
 **
 ** description:
-** describe what you function do.
+** Reset g_passed_alias and begin_cmd.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
@@ -28,6 +28,18 @@ void	reset_ttm(t_tags_tokens_monitor *self)
 	self->begin_cmd = TRUE;
 	free_pylst(&g_passed_alias, 42);
 }
+
+/*
+** reset_ttm_out:
+**
+** description:
+** Reset g_passed_alias and begin_cmd then return the out status.
+** Yes this is a norm compliant and convenient function.
+**
+** parameter:
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
+** - (int) out : returned status.
+*/
 
 int		reset_ttm_out(t_tags_tokens_monitor *self, int out)
 {

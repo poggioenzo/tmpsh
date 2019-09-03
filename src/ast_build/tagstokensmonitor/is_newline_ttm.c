@@ -13,16 +13,6 @@
 
 #include "ttm.h"
 
-/*
-** is_newline_ttm:
-**
-** description:
-** describe what you function do.
-**
-** parameter:
-** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
-*/
-
 static t_heredocs	*get_heredoc(t_pylst *list_param, char *gold_key)
 {
 	t_heredocs	*heredoc;
@@ -64,6 +54,16 @@ static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 	}
 	return (ft_strdel_out(&key, not_end));
 }
+
+/*
+** is_newline_ttm:
+**
+** description:
+** After newline create all presente heredoc and insert then in g_heredocs.
+**
+** parameter:
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
+*/
 
 void				is_newline_ttm(t_tags_tokens_monitor *self)
 {

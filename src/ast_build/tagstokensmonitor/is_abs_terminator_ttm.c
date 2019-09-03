@@ -17,7 +17,8 @@
 ** is_abs_terminator_ttm:
 **
 ** description:
-** describe what you function do.
+** Maybe in the dispatcher we can put reset_ttm directly lol.
+** If it's an abstact terminator do a reset.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.

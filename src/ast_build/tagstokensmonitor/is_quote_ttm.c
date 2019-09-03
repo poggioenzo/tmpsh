@@ -17,7 +17,7 @@
 ** is_quote_ttm:
 **
 ** description:
-** describe what you function do.
+** Until QUOTE is closed transform all tags in STMT.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.

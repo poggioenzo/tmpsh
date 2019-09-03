@@ -17,10 +17,12 @@
 ** next_ttm:
 **
 ** description:
-** describe what you function do.
+** Set new tag and token in function of the present index and length.
+** If clear param is true remove tag and token of the tagstokens.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
+** - (t_bool*) clear : boolean to remove element.
 */
 
 t_bool	next_ttm(t_tags_tokens_monitor *self, t_bool clear)

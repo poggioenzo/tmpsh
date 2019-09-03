@@ -17,7 +17,7 @@
 ** is_braceparam_ttm:
 **
 ** description:
-** describe what you function do.
+** Check the STMT inside braceparam. Not ok STMT create bad substitution error.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.

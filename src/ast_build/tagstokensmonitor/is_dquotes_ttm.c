@@ -17,7 +17,8 @@
 ** is_dquotes_ttm:
 **
 ** description:
-** describe what you function do.
+** Until DQUOTES is closed will transform all tags in STMT.
+** Except for special tags inside dquotes_opening_tags.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.

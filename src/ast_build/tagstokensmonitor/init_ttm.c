@@ -17,10 +17,11 @@
 ** init_ttm:
 **
 ** description:
-** describe what you function do.
+** Instanciate a tagstokensmonitor then check its tagstokens then kill himself.
+** Such a suicide.
 **
 ** parameter:
-** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
+** - (t_tagstokens*) tagstokens : tagstokens to monitoring.
 */
 
 void	init_ttm(t_tagstokens *tagstokens)

@@ -17,7 +17,7 @@
 ** is_sub_process_ttm:
 **
 ** description:
-** describe what you function do.
+** Check if any subprocess is well closed.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.

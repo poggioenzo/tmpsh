@@ -17,7 +17,7 @@
 ** op_selector_ttm:
 **
 ** description:
-** describe what you function do.
+** Dispatcher in function of the operator tag or the STMT tag.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.

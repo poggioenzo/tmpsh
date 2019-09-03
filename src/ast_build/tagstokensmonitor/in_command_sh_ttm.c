@@ -13,19 +13,6 @@
 
 #include "ttm.h"
 
-/*
-** in_command_sh_ttm:
-**
-** description:
-** describe what you function do.
-**
-** parameter:
-** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
-**
-** return value:
-** - (type) value : descibe output.
-*/
-
 static int		search_end(char *tag)
 {
 	if (in_grammar(tag, "ABS_TERMINATOR"))
@@ -34,6 +21,17 @@ static int		search_end(char *tag)
 		return (1);
 	return (in(tag, "END_BRACE", "END_BRACKET", NULL));
 }
+
+/*
+** in_command_sh_ttm:
+**
+** description:
+** If the command it's at the beginning check validity for CURSH or SUBSH.
+** Else it's replace COMMAND_SH grand child symbol by STMT.
+**
+** parameter:
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
+*/
 
 void			in_command_sh_ttm(t_tags_tokens_monitor *self)
 {

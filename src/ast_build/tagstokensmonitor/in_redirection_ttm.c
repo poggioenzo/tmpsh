@@ -17,13 +17,11 @@
 ** is_redirection_ttm:
 **
 ** description:
-** describe what you function do.
+** Check if every tokens after a redirection (except HEREDOC[S|MINUS])
+** is alright.
 **
 ** parameter:
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
-**
-** return value:
-** - (type) value : descibe output.
 */
 
 void	in_redirection_ttm(t_tags_tokens_monitor *self)
