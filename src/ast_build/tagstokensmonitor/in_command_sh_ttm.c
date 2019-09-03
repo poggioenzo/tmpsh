@@ -20,7 +20,7 @@
 ** describe what you function do.
 **
 ** parameter:
-** - (type) name : what is this param?
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 **
 ** return value:
 ** - (type) value : descibe output.

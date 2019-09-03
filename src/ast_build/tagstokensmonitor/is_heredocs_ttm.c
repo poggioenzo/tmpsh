@@ -64,10 +64,7 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
 ** describe what you function do.
 **
 ** parameter:
-** - (t_tags_tokens_monitor) self : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 */
 
 void			is_heredocs_ttm(t_tags_tokens_monitor *self)

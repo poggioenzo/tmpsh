@@ -20,10 +20,7 @@
 ** describe what you function do.
 **
 ** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 */
 
 static t_heredocs	*get_heredoc(t_pylst *list_param, char *gold_key)

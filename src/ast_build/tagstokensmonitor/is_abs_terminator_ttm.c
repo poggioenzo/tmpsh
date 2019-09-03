@@ -20,10 +20,7 @@
 ** describe what you function do.
 **
 ** parameter:
-** - (type) name : what is this param?
-**
-** return value:
-** - (type) value : descibe output.
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 */
 
 void	is_abs_terminator_ttm(t_tags_tokens_monitor *self)

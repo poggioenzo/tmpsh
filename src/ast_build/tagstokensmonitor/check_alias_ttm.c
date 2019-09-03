@@ -58,16 +58,18 @@ static t_bool	cond_aliasing(t_tags_tokens_monitor *self, t_bool assignation)
 }
 
 /*
-** check_alias_ttm:
+** check_aliases_ttm:
 **
 ** description:
-** describe what you function do.
+** Check aliases in depth of other tagstokens and assignations.
+** Predict future alias index with g_aliasindepth.
+** Return boolean value to set begin_cmd in op_selector_ttm.
 **
 ** parameter:
-** - (type) name : what is this param?
+** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 **
 ** return value:
-** - (type) value : descibe output.
+** - (t_bool) : value of the next step begin_cmd.
 */
 
 t_bool			check_aliases_ttm(t_tags_tokens_monitor *self)
