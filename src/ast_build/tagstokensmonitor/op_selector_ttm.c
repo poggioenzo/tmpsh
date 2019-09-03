@@ -1,5 +1,17 @@
-#include "ttm.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   op_selector_ttm.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:33:52 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:34:11 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "ttm.h"
 
 /*
 ** op_selector_ttm:
@@ -14,7 +26,7 @@
 ** - (type) value : descibe output.
 */
 
-void op_selector_ttm(t_tags_tokens_monitor *self)
+void	op_selector_ttm(t_tags_tokens_monitor *self)
 {
 	if (self->tt->valid)
 	{

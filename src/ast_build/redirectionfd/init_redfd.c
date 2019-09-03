@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 19:51:18 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 19:53:01 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/09/03 21:52:44 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -49,7 +49,7 @@ t_redirection_fd	*init_redfd(t_tagstokens *tgtk, char *type,\
 	self->error = FALSE;
 	if ((ft_strequ(self->type, "HEREDOCMINUS") \
 				|| ft_strequ(self->type, "HEREDOC")))
-		;// get_heredoc_ast(self);
+		get_heredoc_ast(self);
 	self->print = str_redfd(self);
 	return (self);
 }

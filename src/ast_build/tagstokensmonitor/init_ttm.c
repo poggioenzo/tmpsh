@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   init_ttm.c                                       .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:17:53 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:18:04 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "ttm.h"
 
 /*
@@ -13,7 +26,7 @@
 ** - (type) value : descibe output.
 */
 
-void init_ttm(t_tagstokens *tagstokens)
+void	init_ttm(t_tagstokens *tagstokens)
 {
 	t_tags_tokens_monitor *self;
 

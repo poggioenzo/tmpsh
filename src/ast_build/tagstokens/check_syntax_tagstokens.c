@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:12:36 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 20:14:15 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/09/03 21:50:53 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -44,7 +44,7 @@ static int		check_validity(void)
 	return (true);
 }
 
-static void remove_escape_stmt(t_tagstokens *self)
+static void		remove_escape_stmt(t_tagstokens *self)
 {
 	char *tag;
 	char *token;
@@ -55,8 +55,6 @@ static void remove_escape_stmt(t_tagstokens *self)
 			ft_strcpy(token, token + 1);
 	}
 }
-
-
 
 t_tagstokens	*check_syntax_tagstokens(t_tagstokens *self)
 {

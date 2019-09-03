@@ -1,5 +1,17 @@
-#include "ttm.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   is_newline_ttm.c                                 .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:27:14 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:32:22 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "ttm.h"
 
 /*
 ** is_newline_ttm:
@@ -14,27 +26,26 @@
 ** - (type) value : descibe output.
 */
 
-
-static t_heredocs *get_heredoc(t_pylst *list_param, char *gold_key)
+static t_heredocs	*get_heredoc(t_pylst *list_param, char *gold_key)
 {
-	t_heredocs *heredoc;
-	char *tmp;
+	t_heredocs	*heredoc;
+	char		*tmp;
 
-	tmp = (char *)vindex_pylst(list_param ,0);
+	tmp = (char *)vindex_pylst(list_param, 0);
 	init_heredocs(&heredoc,
-				  tmp,
-				  *((int *)vindex_pylst(list_param ,1)),
-				  *((int *)vindex_pylst(list_param ,2)));
+					tmp,
+					*((int *)vindex_pylst(list_param, 1)),
+					*((int *)vindex_pylst(list_param, 2)));
 	modify_gold_key(tmp);
 	gold_key = tmp;
 	return (heredoc);
 }
 
-static t_bool full_heredoc(t_tags_tokens_monitor *self, t_heredocs *heredoc,
-							char *gold_key, t_bool minus)
+static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
+							t_heredocs *heredoc, char *gold_key, t_bool minus)
 {
-	char *key;
-	t_bool not_end;
+	char	*key;
+	t_bool	not_end;
 
 	key = ft_strnew(0);
 	not_end = next_ttm(self, true);
@@ -57,13 +68,13 @@ static t_bool full_heredoc(t_tags_tokens_monitor *self, t_heredocs *heredoc,
 	return (ft_strdel_out(&key, not_end));
 }
 
-void is_newline_ttm(t_tags_tokens_monitor *self)
+void				is_newline_ttm(t_tags_tokens_monitor *self)
 {
-	t_pylst *list_param;
-	char *gold_key;
-	t_heredocs *heredoc;
-	t_bool not_end;
-	t_bool minus;
+	t_pylst		*list_param;
+	char		*gold_key;
+	t_heredocs	*heredoc;
+	t_bool		not_end;
+	t_bool		minus;
 
 	list_param = NULL;
 	not_end = true;
@@ -72,7 +83,7 @@ void is_newline_ttm(t_tags_tokens_monitor *self)
 	while (self->heredocs_keys &&
 			(list_param = pop_pylst(&self->heredocs_keys, 0)) && not_end)
 	{
-		minus = *((int *)vindex_pylst(list_param ,2));
+		minus = *((int *)vindex_pylst(list_param, 2));
 		heredoc = get_heredoc(list_param, gold_key);
 		push_pylst(&g_heredocs, heredoc, 0, _ptr);
 		not_end = full_heredoc(self, heredoc, gold_key, minus);

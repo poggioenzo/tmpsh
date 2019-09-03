@@ -1,5 +1,17 @@
-#include "ttm.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   next_ttm.c                                       .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:32:57 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:33:44 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "ttm.h"
 
 /*
 ** next_ttm:
@@ -14,9 +26,9 @@
 ** - (type) value : descibe output.
 */
 
-t_bool next_ttm(t_tags_tokens_monitor *self, t_bool clear)
+t_bool	next_ttm(t_tags_tokens_monitor *self, t_bool clear)
 {
-	t_bool ret;
+	t_bool	ret;
 
 	self->i++;
 	ret = self->i < (int)self->tt->length;
@@ -25,7 +37,8 @@ t_bool next_ttm(t_tags_tokens_monitor *self, t_bool clear)
 		self->tag = vindex_pylst(self->tt->tags, self->i);
 		self->token = vindex_pylst(self->tt->tokens, self->i);
 		if (clear)
-			self->i = delitems_tagstokens(self->tt, self->i, self->i + 1, self->i - 1);
+			self->i = delitems_tagstokens(self->tt, self->i,
+											self->i + 1, self->i - 1);
 	}
 	return (ret);
 }

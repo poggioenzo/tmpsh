@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:20:46 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 20:23:03 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/09/03 21:51:28 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,7 +38,7 @@ t_bool			replace_alias_tagstokens(t_tagstokens *self,
 {
 	t_bool			ret;
 	t_tagstokens	*tt_alias;
-	char 			*alias_result;
+	char			*alias_result;
 
 	alias_result = search_value(g_alias, alias_key);
 	ret = ft_isspace(alias_result[ft_strlen(alias_result) - 1]);

@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   grammar_init.c                                   .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 21:47:08 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 21:48:38 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "tmpsh.h"
 #include "libft.h"
 #include "grammar_print.h"
@@ -61,5 +74,4 @@ void			grammar_init(char *path)
 	get_grammar_from_path();
 	get_reverse_grammar();
 	shell_grammar_init();
-	// show_grammar_global();
 }

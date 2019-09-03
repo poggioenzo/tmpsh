@@ -1,5 +1,17 @@
-#include "heredocs.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   str_heredocs.c                                   .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:06:38 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:07:13 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "heredocs.h"
 
 /*
 ** str_heredocs:
@@ -19,7 +31,7 @@ static char	*quick_join(char *s1, char *s2, t_bool free_s1, t_bool free_s2)
 	return (ft_fstrjoin(&s1, &s2, free_s1, free_s2));
 }
 
-char	*str_heredocs(t_heredocs *self)
+char		*str_heredocs(t_heredocs *self)
 {
 	char	*str;
 	char	*bool_str;

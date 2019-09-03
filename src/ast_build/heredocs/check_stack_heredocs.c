@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   check_stack_heredocs.c                           .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 21:57:28 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:04:27 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "heredocs.h"
 
 /*
@@ -22,8 +35,7 @@ void	check_stack_heredocs(t_heredocs *self, char *tag)
 	if (ft_strequ(tag, last_stack))
 	{
 		pop_pylst(&self->stack, -1);
-		if (len_pylst(self->stack) == 0)
-			self->in_cmdsubst = false;
+		self->in_cmdsubst = !len_pylst(self->stack) ? false : self->in_cmdsubst;
 	}
 	else if (ft_strequ(tag, "QUOTE") && !ft_strequ(last_stack, "DQUOTES"))
 		push_pylst(&self->stack, tag, 0, _ptr);

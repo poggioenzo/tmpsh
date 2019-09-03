@@ -1,5 +1,17 @@
-#include "ttm.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   is_heredocs_ttm.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:19:28 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:26:09 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "ttm.h"
 
 /*
 ** is_heredocs_ttm:
@@ -14,15 +26,14 @@
 ** - (type) value : descibe output.
 */
 
-static char *get_end_tag(char *tag)
+static char		*get_end_tag(char *tag)
 {
 	if (in_grammar(tag, "QUOTES"))
 		return (tag);
 	return ("NEW_LINE");
 }
 
-
-static char *transform_end_tag(char *tag)
+static char		*transform_end_tag(char *tag)
 {
 	if (ft_strequ(tag, "QUOTE"))
 		tag = "END_QUOTE";
@@ -31,9 +42,8 @@ static char *transform_end_tag(char *tag)
 	return (tag);
 }
 
-
-static void append_to_heredocs_keys(t_tags_tokens_monitor *self, char *key,
-									int len , t_bool minus)
+static void		append_to_heredocs_keys(t_tags_tokens_monitor *self, char *key,
+									int len, t_bool minus)
 {
 	t_pylst *list_param;
 
@@ -44,13 +54,12 @@ static void append_to_heredocs_keys(t_tags_tokens_monitor *self, char *key,
 	push_pylst(&self->heredocs_keys, list_param, 0, _ptr);
 }
 
-
-void is_heredocs_ttm(t_tags_tokens_monitor *self)
+void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 {
-	t_bool minus;
-	t_bool not_end;
-	t_pylst *list_tok;
-	int j;
+	t_bool	minus;
+	t_bool	not_end;
+	t_pylst	*list_tok;
+	int		j;
 
 	minus = ft_strequ(self->tag, "HEREDOCMINUS");
 	not_end = next_ttm(self, false);
@@ -66,7 +75,7 @@ void is_heredocs_ttm(t_tags_tokens_monitor *self)
 			self->i = j - 1;
 			self->tag = transform_end_tag(self->tag);
 			append_to_heredocs_keys(self, join_pylst(list_tok, ""),
-												 len_pylst(list_tok), minus);
+					len_pylst(list_tok), minus);
 			free_pylst(&list_tok, 42);
 		}
 		else

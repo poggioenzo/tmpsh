@@ -1,5 +1,17 @@
-#include "heredocs.h"
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   striplines_heredocs.c                            .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2019/09/03 22:08:54 by epoggio      #+#   ##    ##    #+#       */
+/*   Updated: 2019/09/03 22:09:59 by epoggio     ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
 
+#include "heredocs.h"
 
 /*
 ** striplines_heredocs:
@@ -14,26 +26,17 @@
 ** - (type) value : descibe output.
 */
 
-//
-// def replace_first_tab(tok):
-//     i = 0
-//     len_tok = len(tok)
-//     while i < len_tok and ord(tok[i]) == 9:
-//         i += 1
-//     return tok[:i]
-
-
-static char *replace_first_tab(char *tok)
+static char		*replace_first_tab(char *tok)
 {
-	char *str;
+	char	*str;
+
 	str = ft_strdup(tok + ft_strcspn(tok, "\t"));
 	return (str);
 }
 
-
-void	striplines_heredocs(t_heredocs *self)
+void			striplines_heredocs(t_heredocs *self)
 {
-	size_t		index;
+	size_t	index;
 	t_bool	new_line;
 	char	*tag;
 	char	*token;
@@ -48,7 +51,7 @@ void	striplines_heredocs(t_heredocs *self)
 			new_line = true;
 		else if (ft_strequ(tag, "SPACES") && new_line)
 		{
-			token=replace_first_tab(token);
+			token = replace_first_tab(token);
 			update_pylst(self->tagstokens->tokens, index, \
 					(token),
 					ft_strlen(token) + 1 * sizeof(char), _chare);
