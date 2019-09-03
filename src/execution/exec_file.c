@@ -35,7 +35,7 @@ char			*parse_path(char *command)
 			insert_value(g_hash, command, cache, _hash_exec);
 			cache->count++;
 			free_str_array(&folders, 0);
-			return (check_rights(execname, X_OK | R_OK, true, true));
+			return (check_rights(execname, X | R, true, true));
 		}
 		ft_strdel(&execname);
 	}
@@ -68,6 +68,6 @@ char			*get_execname(char *command)
 		return (ft_strdup(command));
 	else if (ft_strchr(command, '/'))
 		return (check_rights(ft_strdup(command), \
-					F_OK | X_OK | R_OK, true, true));
+					F | X | R, true, true));
 	return (parse_path(command));
 }

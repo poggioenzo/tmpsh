@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "tmpsh.h"
+#include "file_rights.h"
 
 #include <sys/stat.h>
 
@@ -22,7 +23,7 @@ int				is_directory(const char *path)
 ** check_rights:
 **
 ** @filename : file to check.
-** @opts: Use [F_OK | R_OK | X_OK | W_OK]
+** @opts: Use [F | R | X | W]
 ** @free: indicate if filename have to be free
 ** @print_error: true if an error output is expected.
 **
@@ -37,15 +38,15 @@ char	*check_rights(char *filename, int opts, t_bool free, \
 	char	*error;
 
 	error = NULL;
-	if ((opts & F_OK) && access(filename, F_OK) == -1)
+	if ((opts & F) && access(filename, F_OK) == -1)
 		error = NAME_SH" No such file or directory : %s\n";
 	else if (avoid_folder && is_directory(filename))
 		error = NAME_SH" %s is a directory\n";
-	else if ((opts & X_OK) && access(filename, X_OK) == -1)
+	else if ((opts & X) && access(filename, X_OK) == -1)
 		error = NAME_SH" Permission denied : %s\n";
-	else if ((opts & R_OK) && access(filename, R_OK) == -1)
+	else if ((opts & R) && access(filename, R_OK) == -1)
 		error = NAME_SH" Permission denied : %s\n";
-	else if ((opts & W_OK) && access(filename, W_OK) == -1)
+	else if ((opts & W) && access(filename, W_OK) == -1)
 		error = NAME_SH" Permission denied : %s\n";
 	if (error)
 	{

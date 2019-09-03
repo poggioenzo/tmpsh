@@ -17,6 +17,7 @@
 
 
 #include "level_increment.h"
+#include "file_rights.h"
 
 //To remove
 #include "termios_setter.h"
@@ -44,6 +45,8 @@ void	setup_globals(char **environ)
 	free(cwd);
 	manage_termios(save_config);
 	grammar_file = ft_strjoin(g_shell_dir, grammar_file);
+	if (!check_rights(grammar_file, F | R, false, true))
+		exit(-1);
 	grammar_init(grammar_file);
 	setup_builtins();
 	setup_variables_elements(environ);

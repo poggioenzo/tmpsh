@@ -21,7 +21,7 @@ int				run_file(char *filename)
 	t_tagstokens	*tagstoks;
 	int				file_fd;
 
-	if (!check_rights(filename, F_OK | R_OK, false, true))
+	if (!check_rights(filename, F | R, false, true))
 		return (1);
 	file_fd = open(filename, O_RDONLY);
 	if (!(content = fd_readfile(file_fd)))
