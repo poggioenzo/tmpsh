@@ -57,6 +57,8 @@ char			*get_execname(char *command)
 {
 	t_hash_exec		*cache;
 
+	if (ft_strlen(command) == 0)
+		return (NULL);
 	if ((cache = search_value(g_hash, command)))
 	{
 		cache->count++;
