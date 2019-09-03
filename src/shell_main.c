@@ -23,9 +23,9 @@
 int			g_last_status = 0;
 pid_t		g_last_pid = 0;
 t_pylst 	*g_heredocs;
-t_pylst 	*g_passed_alias;
-t_pylst 	*g_actual_alias;
-int			g_aliasindepth = 0;
+t_pylst 	*g_passed_alias; //please resset me every command
+t_pylst 	*g_actual_alias; //please resset me every command
+int			g_aliasindepth = 0; //please resset me every command
 char		g_last_char[5];
 
 
