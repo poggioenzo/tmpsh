@@ -13,9 +13,9 @@
 
 #include "ast.h"
 
-static	int	update_begin(int i, char *and_or_begin)
+static	int	update_begin(int i, char **and_or_begin)
 {
-	and_or_begin = "";
+	*and_or_begin = "";
 	return (i + 1);
 }
 
@@ -40,7 +40,7 @@ void		split_branch_ast(t_ast *self, t_tagstokens *tgtk)
 			push_pylst(&self->list_branch,
 				init_acb(copy_tagstokens(tgtk, begin, i), and_or_begin, tag),
 					-1, _acb);
-			begin = update_begin(i, and_or_begin);
+			begin = update_begin(i, &and_or_begin);
 		}
 		if (!(++i) || ft_strequ(tag, "CMDAND") || ft_strequ(tag, "CMDOR"))
 			and_or_begin = tag;
