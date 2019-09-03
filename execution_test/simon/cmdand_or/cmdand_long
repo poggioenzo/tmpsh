@@ -1,1 +1,1 @@
-mv && echo file && echo end ; ls && echo nop && top && echo Nop
+mv && echo file && echo end ; ls && echo nop && ls && echo Nop
