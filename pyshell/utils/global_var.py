@@ -10,26 +10,23 @@ ALIAS = {'all': 'ls -l\t', 'gall': 'all -G -1', 'ball': '$(gall)',
          'recursion2': 'recursion3',
          'loop1': 'loop2',
          'loop2': 'loop3',
-         'loop3': 'loop1',
+         'loop3': 'loop4',
+         'loop4': 'echo ok && loop2',
          'dit': 'echo ',
          'bonjour': 'salut connard',
-         'redit': 'echo je me repete; '}
+         'redit': 'echo je me repete; dit'}
 
 ENVIRON = os.environ.copy()
 PASSED_ALIAS = []
 ACTUAL_ALIAS = []
-
+ALIASINDEPTH = 0
 
 LOCAL_VAR = {}
 LAST_STATUS = 0
-MAXIMAL_DEPTH_LIMIT = 10
-MAXIMAL_DEPTH_ITER = 0
-
 
 DONTPRINT = True
 
 HEREDOCS = []
-
 
 JOBS = None
 HASH = {}

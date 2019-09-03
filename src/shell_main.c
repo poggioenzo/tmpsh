@@ -21,9 +21,11 @@
 //To remove
 #include "termios_setter.h"
 int		g_last_status = 0;
+int		g_aliasindepth = 0;
 pid_t		g_last_pid = 0;
 t_pylst 	*g_heredocs;
 t_pylst 	*g_passed_alias;
+t_pylst 	*g_actual_alias;
 
 
 
@@ -36,6 +38,7 @@ void	setup_globals(char **environ)
 	setup_freefct();
 	g_heredocs = NULL;
 	g_passed_alias = NULL;
+	g_actual_alias = NULL;
 	grammar_file = "/pyshell/grammar/grammar.txt";
 	cwd = getcwd(NULL, 0);
 	g_shell_dir = ft_strdup(cwd);

@@ -94,12 +94,20 @@ class TagsTokens():
             i += 1
         return i
 
-    def replace_alias(self, alias_inputs, i):
-        tt_alias = TagsTokens().init_with_input(alias_inputs).check_syntax()
+    def replace_alias(self, alias_key, i):
+        alias_result = gv.ALIAS[alias_key]
+        ret = alias_result[-1:].isspace()
+        if alias_key in gv.ACTUAL_ALIAS:
+            ret = False
+            alias_result = alias_key
+        gv.ACTUAL_ALIAS.append(alias_key)
+        tt_alias = TagsTokens().init_with_input(alias_result).check_syntax()
+        gv.ALIASINDEPTH = tt_alias.length + i + 1
         self.tokens = self.tokens[:i] + tt_alias.tokens + self.tokens[i + 1:]
         self.tags = self.tags[:i] + tt_alias.tags + self.tags[i + 1:]
         self.valid = tt_alias.valid
         self.update_length()
+        return ret
 
     def find_prev_ind_token(self, i):
         if self.tags[i] == 'SPACES' and i - 1 >= 0:

@@ -42,34 +42,6 @@ class TagsTokensMonitor():
                 self.i -= 1
         return ret
 
-    # def splitcheck(self):
-    #     true_tt = self.tt
-    #     i = 0
-    #     j = 0
-    #     tag = ""
-    #     while i < self.tt.length:
-    #         tag = self.tt.tags[i]
-    #         if tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
-    #             i += 1
-    #             print(self.tt.copytt(j, i))
-    #             self.separated_tt.append(self.tt.copytt(j, i))
-    #             j = i
-    #         i += 1
-    #     self.separated_tt.append(self.tt.copytt(j, i))
-    #     true_tt.tokens = []
-    #     true_tt.tags = []
-    #     true_tt.update_length()
-    #     for elt in self.separated_tt:
-    #         self.tt = elt
-    #         self.check()
-    #         i = 0
-    #         while i < self.tt.length:
-    #             token, tag = self.tt[i]
-    #             true_tt.append(tag, token)
-    #             i += 1
-    #     self.tt = true_tt
-    #     print(true_tt)
-
     def check(self):
         while self.next_tag_token():
             self.op_selector()
@@ -100,7 +72,6 @@ class TagsTokensMonitor():
                 self.opened.pop(-1)
 
     def is_newline(self):
-        # should be improved or factorize
         import utils.heredocs as hd
 
         tuple_key_len = []
@@ -133,28 +104,26 @@ class TagsTokensMonitor():
         ret = True
         ret &= self.token in gv.ALIAS
         ret &= self.token not in gv.PASSED_ALIAS
+        if ret:
+            gv.PASSED_ALIAS.append(self.token)
+        return (ret)
+
+    def cond(self, assignation):
+        ret = not assignation
+        is_alias = self.begin_cmd and self.check_aliases_token()
+        is_alias |= self.i == gv.ALIASINDEPTH and self.check_aliases_token()
+        ret &= is_alias
         return (ret)
 
     def check_aliases(self):
-        def list_remove_all(lst, to_remove):
-            list_to_remove = []
-            for i, x in enumerate(lst):
-                if x == to_remove:
-                    list_to_remove.append(i)
-            for i in list_to_remove:
-                lst.pop(i)
-
-        result_alias = ''
         assignation = self.i + 1 < self.tt.length and self.tt.find_next_token(
             self.i + 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
-        if not assignation and self.begin_cmd and self.check_aliases_token():
-            result_alias = gv.ALIAS[self.token]
-            self.begin_cmd = result_alias[-1:].isspace()
-            if gv.ACTUAL_ALIAS == []:
-                self.begin_cmd = self.tt.replace_alias(result_alias, self.i)
-                list_remove_all(gv.ACTUAL_ALIAS, self.token)
+        if self.cond(assignation):
+            if self.token not in gv.ACTUAL_ALIAS:
+                self.begin_cmd = self.tt.replace_alias(self.token, self.i)
+                gv.ACTUAL_ALIAS.remove(self.token)
             else:
-                self.begin_cmd = self.tt.replace_alias(result_alias, self.i)
+                self.begin_cmd = self.tt.replace_alias(self.token, self.i)
             if self.begin_cmd:
                 self.reset()
                 return True
@@ -162,6 +131,7 @@ class TagsTokensMonitor():
             if not self.begin_cmd:
                 self.tt.tags[self.i + 1] = 'STMT'
             else:
+                gv.ALIASINDEPTH = self.i + 2
                 return True
         return self.i - 1 > 0 and self.tt.find_prev_token(
             self.i - 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]

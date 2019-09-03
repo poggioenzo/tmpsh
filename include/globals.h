@@ -19,6 +19,8 @@ extern pid_t	g_last_pid;
 extern t_grammar	*g_grammar;
 
 extern t_pylst      *g_passed_alias;
+extern t_pylst      *g_actual_alias;
+extern int          g_aliasindepth;
 extern t_pylst      *g_heredocs;
 
 struct termios      g_tcsettings;
