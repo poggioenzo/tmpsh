@@ -1,0 +1,7 @@
+var="a content string"
+
+cat $var "a file"
+
+var+="    nothing to ad""bro "
+
+echo $var

@@ -1,0 +1,4 @@
+var=
+Yolo+=
+
+cat $var $Yolo ERROR_FILE_OUTPUT

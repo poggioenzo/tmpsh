@@ -1,0 +1,7 @@
+var=Blue
+random=None
+
+green+=$var$random
+green+=$green
+
+echo $green
