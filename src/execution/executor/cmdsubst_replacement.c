@@ -6,6 +6,7 @@
 #include "variables.h"
 #include "cmdsubst_replacement.h"
 #include "cmdsubst_runner.h"
+#include "join_stmt.h"
 
 /*
 ** get_quote_content:
@@ -104,4 +105,5 @@ void			perform_subast_replacement(t_acb *branch)
 			replace_subast(branch, index, content, subast->type);
 		index++;
 	}
+	join_stmt(branch);
 }

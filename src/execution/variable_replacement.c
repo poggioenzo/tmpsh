@@ -6,6 +6,7 @@
 #include "substitution_insert.h"
 #include "variable_replacement.h"
 #include "tagstokens.h"
+#include "join_stmt.h"
 
 /*
 ** variable_replacement.c
@@ -117,4 +118,5 @@ void			replace_variable(t_acb *branch)
 		}
 	}
 	update_tagstokens(branch->tagstokens, branch);
+	join_stmt(branch);
 }

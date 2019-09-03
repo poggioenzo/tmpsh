@@ -161,6 +161,7 @@ EXECUTION_SRCS := fd_management.c \
                   redirection_opener.c \
                   setup_redirection.c \
 				  substitution_insert.c \
+                  join_stmt.c \
 				  $(JOBCONTROL_SRCS) \
 				  $(EXECUTION_SRCS) \
 
