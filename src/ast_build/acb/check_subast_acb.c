@@ -13,18 +13,6 @@
 
 #include "acb.h"
 
-/*
-** check_subast_acb:
-**
-** description:
-** Check if there is subast in command. If it's the case create an new
-** ast to ge deepth branch. Do some modification on the tagstokens of the
-** branch.
-**
-** parameter:
-** - (t_acb *) self : Actual abstract command branch.
-*/
-
 static	void	replace_subast(t_tagstokens *tgtk, size_t begin,
 		size_t end, int number)
 {
@@ -41,6 +29,18 @@ static	void	replace_subast(t_tagstokens *tgtk, size_t begin,
 	replace_pylst(&tgtk->tokens, token, begin, end);
 	update_length_tagstokens(tgtk);
 }
+
+/*
+** check_subast_acb:
+**
+** description:
+** Check if there is subast in command. If it's the case create an new
+** ast to ge deepth branch. Do some modification on the tagstokens of the
+** branch.
+**
+** parameter:
+** - (t_acb *) self : Actual abstract command branch.
+*/
 
 void			check_subast_acb(t_acb *self)
 {
