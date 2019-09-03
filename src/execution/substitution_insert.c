@@ -50,6 +50,8 @@ static int	prev_is_assignation(t_tagstokens *tagstokens, int index)
 	if (index < 2)
 		return (false);
 	prev_tag = vindex_pylst(tagstokens->tags, index - 1);
+	if (in(prev_tag, "STMT", "SUBAST", NULL))
+		return (prev_is_assignation(tagstokens, index - 1));
 	if (ft_strequ(prev_tag, "SPACES"))
 		prev_tag = vindex_pylst(tagstokens->tags, index - 2);
 	return (in(prev_tag, "ASSIGNATION_EQUAL", "CONCATENATION", NULL));

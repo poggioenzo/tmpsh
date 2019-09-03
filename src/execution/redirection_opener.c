@@ -38,6 +38,7 @@ void			open_redirection_file(t_redirection_fd *redirection)
 
 	if (in(redirection->type, "TRUNC", "APPEND", "READ_FROM", NULL))
 	{
+		redirection->dest = join_pylst(redirection->tagstokens->tokens, "");
 		flags = 0;
 		if (access(redirection->dest, F_OK) == -1)
 			flags |= O_CREAT;
@@ -48,7 +49,10 @@ void			open_redirection_file(t_redirection_fd *redirection)
 		else if (ft_strequ(redirection->type, "READ_FROM"))
 			flags |= O_RDONLY;
 		if ((fd = open(redirection->dest, flags, 0666)) != -1)
+		{
+			ft_strdel((char **)&redirection->dest);
 			redirection->dest = &fd;
+		}
 		else
 		{
 			ft_dprintf(STDERR_FILENO, NAME_SH" permission denied: %s\n", \
