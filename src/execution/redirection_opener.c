@@ -3,6 +3,7 @@
 #include "libft.h"
 #include "tmpsh.h"
 #include "fd_management.h"
+#include "file_rights.h"
 
 /*
 ** convert_dest:
@@ -25,6 +26,41 @@ static void		convert_dest(t_redirection_fd *redirection)
 }
 
 /*
+** get_options:
+**
+** Retrieve the appropriate open's flags according to the
+** redirection type.
+** Retrieve also the expected rights on the file to use
+** with check_rigths.
+*/
+
+static void		get_options(char *filename, char *type, int *flags, int *rights)
+{
+	*flags = 0;
+	*rights = 0;
+	if (ft_strequ(type, "TRUNC"))
+	{
+		*flags |= O_WRONLY | O_TRUNC;
+		*rights = W;
+	}
+	else if (ft_strequ(type, "APPEND"))
+	{
+		*flags |= O_WRONLY | O_APPEND;
+		*rights = W;
+	}
+	else if (ft_strequ(type, "READ_FROM"))
+	{
+		*flags |= O_RDONLY;
+		*rights = R;
+	}
+	if (access(filename, F_OK) == -1)
+	{
+		*flags |= O_CREAT;
+		*rights = -1;
+	}
+}
+
+/*
 ** open_redirection_file:
 **
 ** For a given redirection, open the destination file with
@@ -35,30 +71,22 @@ void			open_redirection_file(t_redirection_fd *redirection)
 {
 	int		fd;
 	int		flags;
+	int		rights;
 
 	if (in(redirection->type, "TRUNC", "APPEND", "READ_FROM", NULL))
 	{
 		redirection->dest = join_pylst(redirection->tagstokens->tokens, "");
-		flags = 0;
-		if (access(redirection->dest, F_OK) == -1)
-			flags |= O_CREAT;
-		if (ft_strequ(redirection->type, "TRUNC"))
-			flags |= O_WRONLY | O_TRUNC;
-		else if (ft_strequ(redirection->type, "APPEND"))
-			flags |= O_WRONLY | O_APPEND;
-		else if (ft_strequ(redirection->type, "READ_FROM"))
-			flags |= O_RDONLY;
-		if ((fd = open(redirection->dest, flags, 0666)) != -1)
+		get_options(redirection->dest, redirection->type, &flags, &rights);
+		if (rights == -1 || check_rights(redirection->dest, rights, false, true))
 		{
-			ft_strdel((char **)&redirection->dest);
-			redirection->dest = &fd;
+			if ((fd = open(redirection->dest, flags, 0666)) != -1)
+			{
+				ft_strdel((char **)&redirection->dest);
+				redirection->dest = &fd;
+				return ;
+			}
 		}
-		else
-		{
-			ft_dprintf(STDERR_FILENO, NAME_SH" permission denied: %s\n", \
-					redirection->dest);
-			redirection->error = true;
-		}
+		redirection->error = true;
 	}
 	else
 		convert_dest(redirection);

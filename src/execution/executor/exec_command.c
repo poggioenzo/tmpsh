@@ -34,7 +34,8 @@ static int		run_builtin(t_acb *branch, char **cmd_args, t_pylst *variables)
 	builtin = search_value(g_builtins, cmd_args[0]);
 	save_std_fd(save);
 	replace_std_fd(branch->stdin, branch->stdout);
-	setup_redirection(branch);
+	if (setup_redirection(branch) == false)
+		return (1);
 	status = builtin(cmd_args + 1, g_environ);
 	save_std_fd(restore);
 	if (saved_environ)
@@ -89,7 +90,8 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	{
 		reset_signals();
 		replace_std_fd(branch->stdin, branch->stdout);
-		setup_redirection(branch);
+		if (setup_redirection(branch) == false)
+			exit(1);
 		variables_config(variables, true);
 		if (!executable)
 			exit(127);

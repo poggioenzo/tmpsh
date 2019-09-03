@@ -16,7 +16,8 @@ pid_t	run_subshell(t_acb *branch, t_ast *subast)
 	pid = fork_prepare(branch->pgid, branch->background);
 	if (pid == 0)
 	{
-		setup_redirection(branch);
+		if (setup_redirection(branch) == false)
+			exit(1);
 		reset_signals();
 		clear();
 		g_jobs->allow_background = false;

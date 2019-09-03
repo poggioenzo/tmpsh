@@ -82,7 +82,7 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 ** Prepare the destination before applying dup2.
 */
 
-void			setup_redirection(t_acb *branch)
+t_bool			setup_redirection(t_acb *branch)
 {
 	t_redirection_fd	*redirection;
 
@@ -99,5 +99,8 @@ void			setup_redirection(t_acb *branch)
 			if (redirection->close)
 				close(redirection->source);
 		}
+		else
+			return (false);
 	}
+	return (true);
 }

@@ -24,10 +24,14 @@ static void		run_cursh(t_acb *branch, t_ast *subast)
 {
 	save_std_fd(save);
 	replace_std_fd(branch->stdin, branch->stdout);
-	setup_redirection(branch);
-	run_ast(subast);
 	branch->pid = -1;
-	branch->status = g_last_status;
+	if (setup_redirection(branch))
+	{
+		run_ast(subast);
+		branch->status = g_last_status;
+	}
+	else
+		branch->status = 1;
 	save_std_fd(restore);
 }
 
