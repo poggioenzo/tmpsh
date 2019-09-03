@@ -33,8 +33,6 @@ t_line	*create_ref_shell(char *str);
 #define SHOW_ERROR	1
 #define TEST_FUNCTION	2
 
-#define RED		"\033[0;1;31m"
-#define GREEN	"\033[0;1;32m"
 #define RESET	"\033[0m"
 
 #define VALID_TEST		display('.', GREEN)
