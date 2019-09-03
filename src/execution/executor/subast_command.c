@@ -15,6 +15,8 @@
 
 static int		is_bg_or_pipe(t_acb *branch)
 {
+	if (branch->pgid != 0)
+		return (1);
 	return (in(branch->tag_end, "BACKGROUND_JOBS", "PIPE", NULL));
 }
 
