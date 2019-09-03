@@ -80,11 +80,14 @@ t_bool		check_background(t_acb *branch, t_pylst *list_branch)
 ** the expect sequence of commands and the current last status.
 */
 
-t_bool		check_andor(t_acb *branch)
+t_bool		check_andor(t_pylst *job_branches)
 {
-	if (ft_strequ(branch->begin_andor, "CMDAND") && g_last_status != 0)
+	t_acb	*first_branch;
+
+	first_branch = job_branches->value;
+	if (ft_strequ(first_branch->begin_andor, "CMDAND") && g_last_status != 0)
 		return (false);
-	else if (ft_strequ(branch->begin_andor, "CMDOR") && g_last_status == 0)
+	else if (ft_strequ(first_branch->begin_andor, "CMDOR") && g_last_status == 0)
 		return (false);
 	return (true);
 }

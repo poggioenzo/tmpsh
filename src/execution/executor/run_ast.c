@@ -98,9 +98,10 @@ void			run_ast(t_ast *ast)
 		branch = pop_pylst(&ast->list_branch, 0);
 		push_pylst(&job_list, branch, NO_COPY_BUT_FREE, _acb);
 		replace_variable(branch);
-		if (check_andor(branch) == false)
+		if (check_andor(job_list) == false)
 		{
-			free_pylst(&job_list, 0);
+			if (!ft_strequ(branch->tag_end, "PIPE"))
+				free_pylst(&job_list, 0);
 			continue ;
 		}
 		perform_subast_replacement(branch);
