@@ -1,0 +1,5 @@
+test_value=' a long var '
+bis_var='   N   o   N  '
+random_var=$test_value$(ls)$test_value
+random_bis=$test_value$(ls)$None${bis_var} printenv random_bis
+echo $random_var

@@ -1,0 +1,6 @@
+echo TheFile > NoneFile
+echo Middle output
+cat NoneFile
+
+echo I > NoneFile && echo avoid && cat NoneFile
+rm NoneFile

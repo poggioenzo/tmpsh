@@ -5,3 +5,6 @@ cat $var "a file"
 var+="    nothing to ad""bro "
 
 echo $var
+
+second_var=Joke
+second_var=Here$var && echo $second_var

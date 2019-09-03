@@ -1,0 +1,6 @@
+var=equal
+
+cat ${var} ${empty_value}
+
+NoVar=${var}$var${var}
+echo ${NoVar}

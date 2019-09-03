@@ -1,0 +1,4 @@
+echo        Append >> file && echo avoid echo ; cat file
+echo Append >> file && cat file
+rm file
+

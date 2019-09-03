@@ -1,0 +1,19 @@
+echo OK > file > rm > NO > what >> judge
+
+echo Ok file
+cat OK && rm OK
+
+echo file file
+cat file && rm file
+
+echo rm file
+cat rm && rm rm
+
+echo NO file
+cat NO && rm NO
+
+echo what file
+cat what && rm what
+
+echo judge file
+cat judge && rm judge
