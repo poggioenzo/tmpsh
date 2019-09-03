@@ -73,7 +73,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 		manage_termios(shell_config);
 	}
 	else
-		ft_dprintf(2, NAME_SH" sytax error near %s\n", tagstoken->token_error);
+		ft_dprintf(2, NAME_SH" syntax error near %s\n", tagstoken->token_error);
 	shell_preconfig(shell_repr, cursor);
 	//MUST FREE TAGSTOKEN
 	return (false);

@@ -37,7 +37,7 @@ int				run_file(char *filename)
 		manage_termios(remove_config);
 	}
 	else
-		ft_dprintf(2, NAME_SH" sytax error near %s\n", tagstoks->token_error);
+		ft_dprintf(2, NAME_SH" syntax error near %s\n", tagstoks->token_error);
 	return (0);
 }
 
