@@ -1,0 +1,1 @@
+{ echo THE | tee ; echo end ; } | { cat; echo Random content |echo ls ; } | { { cat ; echo end; } | echo death; }

@@ -1,0 +1,1 @@
+{ { echo ok; } ; echo end ; { ls |echo ok | cat ;}; }

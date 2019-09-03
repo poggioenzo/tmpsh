@@ -1,0 +1,4 @@
+{ echo ok | cat | tee; echo end; }
+{ echo the content; mv | echo end; } | { cat; }
+{ echo the content; mv | echo end; } | { echo destroy; }
+
