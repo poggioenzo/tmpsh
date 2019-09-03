@@ -9,7 +9,7 @@ ALIAS = {'all': 'ls -l\t', 'gall': 'all -G -1', 'ball': '$(gall)',
          'recursion1': 'recursion2',
          'recursion2': 'recursion3',
          'loop1': 'loop2',
-         'loop2': 'echo ok; loop3',
+         'loop2': 'loop3',
          'loop3': 'loop1',
          'dit': 'echo ',
          'bonjour': 'salut connard',
@@ -17,9 +17,7 @@ ALIAS = {'all': 'ls -l\t', 'gall': 'all -G -1', 'ball': '$(gall)',
 
 ENVIRON = os.environ.copy()
 PASSED_ALIAS = []
-PREVIOUS_PASSED_ALIAS = []
-STILL_ALIASING = True
-REPLACE = False
+ACTUAL_ALIAS = []
 
 
 LOCAL_VAR = {}

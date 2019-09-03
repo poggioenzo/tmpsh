@@ -13,23 +13,21 @@ class TagsTokensMonitor():
 
     def __init__(self, tt):
         self.tt = tt
-        self.separated_tt= []
+        self.separated_tt = []
         self.i = -1
         self.tag = ''
         self.token = ''
         self.begin_cmd = True
         self.heredocs_keys = []
         self.opened = ['']
-        self.splitcheck()
+        self.check()
 
     def get_tagstokens(self):
         return self.tt
 
     def reset(self):
         self.begin_cmd = True
-        if not gv.REPLACE:
-            gv.PASSED_ALIAS = []
-        # gv.PREVIOUS_PASSED_ALIAS = gv.PASSED_ALIAS
+        gv.PASSED_ALIAS = []
 
     def next_tag_token(self, clear=False):
         self.i += 1
@@ -44,33 +42,33 @@ class TagsTokensMonitor():
                 self.i -= 1
         return ret
 
-    def splitcheck(self):
-        true_tt = self.tt
-        i = 0
-        j = 0
-        tag = ""
-        while i < self.tt.length:
-            tag = self.tt.tags[i]
-            if tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
-                i += 1
-                print(self.tt.copytt(j, i))
-                self.separated_tt.append(self.tt.copytt(j, i))
-                j = i
-            i += 1
-        self.separated_tt.append(self.tt.copytt(j, i))
-        true_tt.tokens = []
-        true_tt.tags = []
-        true_tt.update_length()
-        for elt in self.separated_tt:
-            self.tt = elt
-            self.check()
-            i = 0
-            while i < self.tt.length:
-                token, tag = self.tt[i]
-                true_tt.append(tag, token)
-                i += 1
-        self.tt = true_tt
-        print(true_tt)
+    # def splitcheck(self):
+    #     true_tt = self.tt
+    #     i = 0
+    #     j = 0
+    #     tag = ""
+    #     while i < self.tt.length:
+    #         tag = self.tt.tags[i]
+    #         if tag in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
+    #             i += 1
+    #             print(self.tt.copytt(j, i))
+    #             self.separated_tt.append(self.tt.copytt(j, i))
+    #             j = i
+    #         i += 1
+    #     self.separated_tt.append(self.tt.copytt(j, i))
+    #     true_tt.tokens = []
+    #     true_tt.tags = []
+    #     true_tt.update_length()
+    #     for elt in self.separated_tt:
+    #         self.tt = elt
+    #         self.check()
+    #         i = 0
+    #         while i < self.tt.length:
+    #             token, tag = self.tt[i]
+    #             true_tt.append(tag, token)
+    #             i += 1
+    #     self.tt = true_tt
+    #     print(true_tt)
 
     def check(self):
         while self.next_tag_token():
@@ -135,18 +133,28 @@ class TagsTokensMonitor():
         ret = True
         ret &= self.token in gv.ALIAS
         ret &= self.token not in gv.PASSED_ALIAS
-        ret &= gv.MAXIMAL_DEPTH_ITER < gv.MAXIMAL_DEPTH_LIMIT
-
         return (ret)
 
     def check_aliases(self):
+        def list_remove_all(lst, to_remove):
+            list_to_remove = []
+            for i, x in enumerate(lst):
+                if x == to_remove:
+                    list_to_remove.append(i)
+            for i in list_to_remove:
+                lst.pop(i)
+
         result_alias = ''
         assignation = self.i + 1 < self.tt.length and self.tt.find_next_token(
             self.i + 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
         if not assignation and self.begin_cmd and self.check_aliases_token():
             result_alias = gv.ALIAS[self.token]
             self.begin_cmd = result_alias[-1:].isspace()
-            self.tt.replace_alias(result_alias, self.i)
+            if gv.ACTUAL_ALIAS == []:
+                self.begin_cmd = self.tt.replace_alias(result_alias, self.i)
+                list_remove_all(gv.ACTUAL_ALIAS, self.token)
+            else:
+                self.begin_cmd = self.tt.replace_alias(result_alias, self.i)
             if self.begin_cmd:
                 self.reset()
                 return True
