@@ -14,28 +14,67 @@
 ** - (type) value : descibe output.
 */
 
+static t_bool get_assgt(t_tags_tokens_monitor *self, int up, int down, t_bool isdown)
+{
+	if (isdown)
+	{
+		return (up > down
+				&& in(find_next_token(self->tt, down , false), \
+				"ASSIGNATION_EQUAL", "CONCATENATION", NULL));
+	}
+	else
+	{
+		return (up > down
+				&& in(find_prev_token(self->tt, up, false), \
+				"ASSIGNATION_EQUAL", "CONCATENATION", NULL));
+	}
+	return (true);
+}
+
+static t_bool check_aliases_token(t_tags_tokens_monitor *self)
+{
+	t_bool ret;
+
+	ret = self->token ? true : false;
+	ret &= ret && search_value(g_alias, self->token);
+	ret &= ret && !in_pylst_chare(self->token, g_passed_alias);
+	if (ret)
+		push_pylst(&g_passed_alias, self->token, 0, _ptr);
+	return (ret);
+}
+
+static t_bool cond_aliasing(t_tags_tokens_monitor *self, t_bool assignation)
+{
+	t_bool ret;
+	t_bool is_alias;
+	t_bool is_alias_token;
+
+	ret = !(assignation);
+	is_alias_token = check_aliases_token(self);
+	is_alias = self->begin_cmd && is_alias_token;
+	is_alias |= self->i == g_aliasindepth && is_alias_token;
+	ret &= is_alias;
+	return (ret);
+}
+
 t_bool		check_aliases_ttm(t_tags_tokens_monitor *self)
 {
-	char	*result_alias;
 	t_bool	assignation;
 
-	result_alias = "";
-	assignation = self->i + 1 < (int)self->tt->length && \
-				  in(find_next_token(self->tt, self->i + 1, false), \
-						  "ASSIGNATION_EQUAL", "CONCATENATION", NULL);
-	if (!assignation && self->begin_cmd && self->token\
-			&& (search_value(g_alias, self->token) && \
-			 !in_pylst_chare(self->token, g_passed_alias)))
+	assignation = get_assgt(self, (int)self->tt->length, self->i + 1, true);
+	if (cond_aliasing(self, assignation))
 	{
-		result_alias = search_value(g_alias, self->token);
-		self->begin_cmd = ft_isspace(result_alias[ft_strlen(result_alias) - 1]);
-		push_pylst(&g_passed_alias, self->token, 0, _ptr); // Check memory.
-		replace_alias_tagstokens(self->tt, result_alias, self->i);
-		if (self->begin_cmd)
+		if (!in_pylst_chare(self->token, g_actual_alias))
 		{
-			reset_ttm(self);
-			return (true);
+			self->begin_cmd = replace_alias_tagstokens(
+				self->tt, self->token, self->i);
+			strremove_pylst(&g_actual_alias, self->token);
 		}
+		else
+			self->begin_cmd = replace_alias_tagstokens(
+				self->tt, self->token, self->i);
+		if (self->begin_cmd)
+			return (reset_ttm_out(self, true));
 	}
 	else if (assignation)
 	{
@@ -44,7 +83,5 @@ t_bool		check_aliases_ttm(t_tags_tokens_monitor *self)
 		else
 			return (true);
 	}
-	return (self->i - 1 > 0 &&
-			in(find_prev_token(self->tt, self->i - 1, false), \
-				"ASSIGNATION_EQUAL", "CONCATENATION", NULL));
+	return (get_assgt(self, self->i - 1, 0, false));
 }

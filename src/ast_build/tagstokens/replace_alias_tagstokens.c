@@ -33,15 +33,27 @@ static	void	insert_alias(t_pylst **here, t_pylst *alias,
 ** at the index i with a deepcopy and tags with a shallowcopy.
 */
 
-void			replace_alias_tagstokens(t_tagstokens *self,
-										char *alias_input, size_t i)
+t_bool			replace_alias_tagstokens(t_tagstokens *self,
+										char *alias_key, size_t i)
 {
+	t_bool			ret;
 	t_tagstokens	*tt_alias;
+	char 			*alias_result;
 
-	input_init_tagstokens(&tt_alias, alias_input);
+	alias_result = search_value(g_alias, alias_key);
+	ret = ft_isspace(alias_result[ft_strlen(alias_result) - 1]);
+	if (in_pylst_chare(alias_key, g_actual_alias))
+	{
+		ret = false;
+		alias_result = alias_key;
+	}
+	push_pylst(&g_actual_alias, alias_key, 0, _ptr);
+	input_init_tagstokens(&tt_alias, alias_result);
+	g_aliasindepth = tt_alias->length + i + 1;
 	insert_alias(&self->tokens, tt_alias->tokens, i, TRUE);
 	insert_alias(&self->tags, tt_alias->tags, i, FALSE);
 	self->valid = tt_alias->valid;
 	update_length_tagstokens(self);
 	free_tagstokens(&tt_alias, TRUE);
+	return (ret);
 }

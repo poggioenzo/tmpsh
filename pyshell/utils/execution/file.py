@@ -5,6 +5,7 @@ import sys
 from utils.builtins.hash import HashExec
 import utils.global_var as gv
 
+
 def read_fd(fd):
     """
     Read the entire content from a given filedescriptor.
@@ -17,6 +18,7 @@ def read_fd(fd):
             break
         text += content
     return text
+
 
 def check_rights(cmd):
     """
@@ -31,6 +33,7 @@ def check_rights(cmd):
         print("tmpsh: permission denied: {}".format(cmd), file=sys.stderr)
         return None
     return cmd
+
 
 def get_execname(cmd):
     """

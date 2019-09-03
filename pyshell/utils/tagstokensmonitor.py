@@ -13,6 +13,7 @@ class TagsTokensMonitor():
 
     def __init__(self, tt):
         self.tt = tt
+        self.separated_tt = []
         self.i = -1
         self.tag = ''
         self.token = ''
@@ -71,7 +72,6 @@ class TagsTokensMonitor():
                 self.opened.pop(-1)
 
     def is_newline(self):
-        # should be improved or factorize
         import utils.heredocs as hd
 
         tuple_key_len = []
@@ -100,17 +100,30 @@ class TagsTokensMonitor():
             self.heredocs_keys.pop(0)
             key = ''
 
+    def check_aliases_token(self):
+        ret = True
+        ret &= self.token in gv.ALIAS
+        ret &= self.token not in gv.PASSED_ALIAS
+        if ret:
+            gv.PASSED_ALIAS.append(self.token)
+        return (ret)
+
+    def cond(self, assignation):
+        ret = not assignation
+        is_alias = self.begin_cmd and self.check_aliases_token()
+        is_alias |= self.i == gv.ALIASINDEPTH and self.check_aliases_token()
+        ret &= is_alias
+        return (ret)
+
     def check_aliases(self):
-        result_alias = ''
         assignation = self.i + 1 < self.tt.length and self.tt.find_next_token(
             self.i + 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
-        if not assignation and self.begin_cmd and (self.token in gv.ALIAS and
-                                                   self.token not in
-                                                   gv.PASSED_ALIAS):
-            result_alias = gv.ALIAS[self.token]
-            self.begin_cmd = result_alias[-1:].isspace()
-            gv.PASSED_ALIAS.append(self.token)
-            self.tt.replace_alias(result_alias, self.i)
+        if self.cond(assignation):
+            if self.token not in gv.ACTUAL_ALIAS:
+                self.begin_cmd = self.tt.replace_alias(self.token, self.i)
+                gv.ACTUAL_ALIAS.remove(self.token)
+            else:
+                self.begin_cmd = self.tt.replace_alias(self.token, self.i)
             if self.begin_cmd:
                 self.reset()
                 return True
@@ -118,6 +131,7 @@ class TagsTokensMonitor():
             if not self.begin_cmd:
                 self.tt.tags[self.i + 1] = 'STMT'
             else:
+                gv.ALIASINDEPTH = self.i + 2
                 return True
         return self.i - 1 > 0 and self.tt.find_prev_token(
             self.i - 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
