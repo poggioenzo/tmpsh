@@ -45,5 +45,5 @@ void	add_tags_tokens_heredocs(t_heredocs *self, char *tag, char *token)
 	}
 	else
 		check_stack_heredocs(self, tag);
-	append_tagstokens(self->tagstokens, tag, token);
+	append_tagstokens(self->tagstokens, token, tag);
 }
