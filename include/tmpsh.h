@@ -8,7 +8,7 @@
 #  define UNUSED(variable) (void) variable
 # endif
 
-# define NAME_SH "bash:"
+# define NAME_SH "tmpsh:"
 # define RC_FILE ".tmpshrc"
 
 # include "styles.h"

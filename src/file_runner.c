@@ -27,8 +27,7 @@ int				run_file(char *filename)
 	if (!(content = fd_readfile(file_fd)))
 		return (ft_dprintf(2, NAME_SH" Error with %s\n", filename));
 	tagstoks = NULL;
-	// free_pylst(&g_passed_alias, 0);
-	input_init_tagstokens(&tagstoks, content);
+	routine_tagstokens(&tagstoks, content);
 	if (tagstoks->incomplete)
 		return (ft_dprintf(2, NAME_SH" Error with %s\n", filename));
 	if (tagstoks->valid && !tagstoks->incomplete)
