@@ -13,9 +13,9 @@
 
 #include "tagstokens.h"
 
-static	void	append_tag(t_pylst *tag_stack, char *tag)
+static	void	append_tag(t_pylst **tag_stack, char *tag)
 {
-	push_pylst(&tag_stack, tag, 0, _ptr);
+	push_pylst(tag_stack, tag, 0, _ptr);
 }
 
 /*
@@ -30,7 +30,7 @@ static	void	append_tag(t_pylst *tag_stack, char *tag)
 
 void			stack_append_tagstokens(t_tagstokens *self, char *tag)
 {
-	append_tag(self->stack, tag);
+	append_tag(&self->stack, tag);
 }
 
 /*
@@ -45,7 +45,7 @@ void			stack_append_tagstokens(t_tagstokens *self, char *tag)
 
 void			append_tag_tagstokens(t_tagstokens *self, char *tag)
 {
-	append_tag(self->tags, tag);
+	append_tag(&self->tags, tag);
 }
 
 /*
