@@ -51,7 +51,8 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
 								get_end_tag(self->tag));
 	list_tok = slice_pylst(self->tt->tokens, self->i, j);
 	self->i = j - 1;
-	self->tag = transform_end_tag(self->tag);
+	update_pylst(self->tt->tags, self->i,
+						transform_end_tag(self->tag), 0, _ptr);
 	append_to_heredocs_keys(self, join_pylst(list_tok, ""),
 			len_pylst(list_tok), minus);
 	free_pylst(&list_tok, 42);
