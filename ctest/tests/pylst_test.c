@@ -470,6 +470,7 @@ void	update_pylst_test(void)
 
 	//Simple test change the first node
 	first_var = "New";
+	lst_to_test = NULL;
 	push_pylst(&lst_to_test, "VALUE", 0, _ptr);
 	first_allocsize = sizeof(char) * (ft_strlen(first_var) + 1);
 	update_pylst(lst_to_test, 0, first_var, first_allocsize, _chare);
