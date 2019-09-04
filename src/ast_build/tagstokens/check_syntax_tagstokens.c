@@ -69,7 +69,6 @@ t_tagstokens	*check_syntax_tagstokens(t_tagstokens *self)
 	not_ended = self->length > 0 && end_escape(vindex_pylst(self->tokens, -1));
 	remove_escape_stmt(self);
 	strip_tagstokens(self);
-	printf(RED"\n%s\n"WHITE, str_tagstokens(self));
 	init_ttm(self);
 	if (self->valid)
 	{

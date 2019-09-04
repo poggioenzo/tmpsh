@@ -7,6 +7,4 @@ void routine_tagstokens(t_tagstokens **self, char *shell_content)
     free_pylst(&g_heredocs, 42);
 	g_aliasindepth = 0;
 	input_init_tagstokens(self, shell_content);
-    printf("\n");
-    printf(YELLOW"%s"WHITE, str_tagstokens(*self));
 }
