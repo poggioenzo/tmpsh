@@ -80,10 +80,8 @@ void				is_newline_ttm(t_tags_tokens_monitor *self)
 	while (self->heredocs_keys &&
 			(list_param = pop_pylst(&self->heredocs_keys, 0)) && not_end)
 	{
-
 		minus = *((int *)vindex_pylst(list_param, 2));
 		heredoc = get_heredoc(list_param, &gold_key);
-		ft_printf(str_heredocs(heredoc));
 		push_pylst(&g_heredocs, heredoc, 0, _ptr);
 		not_end = full_heredoc(self, heredoc, gold_key, minus);
 		free_pylst(&list_param, 42);
