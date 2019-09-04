@@ -11,21 +11,30 @@
 
 int			g_last_status = 0;
 pid_t		g_last_pid = 0;
-t_pylst 	*g_heredocs;
-t_pylst 	*g_passed_alias;
-t_pylst 	*g_actual_alias;
+t_pylst 	*g_heredocs = NULL;
+t_pylst 	*g_passed_alias = NULL;
+t_pylst 	*g_actual_alias = NULL;
 int			g_aliasindepth = 0;
 char		g_last_char[5];
+
+t_bool		have_control_tty(void)
+{
+	if (!isatty(STDOUT_FILENO) || !isatty(STDIN_FILENO))
+	{
+		ft_dprintf(2, NAME_SH" Need controlling terminal\n");
+		return (false);
+	}
+	return (true);
+}
 
 void	setup_globals(char **environ)
 {
 	char	*grammar_file;
 	char	*cwd;
 
+	if (have_control_tty() == false)
+		exit(1);
 	setup_freefct();
-	g_heredocs = NULL;
-	g_passed_alias = NULL;
-	g_actual_alias = NULL;
 	grammar_file = "/pyshell/grammar/grammar.txt";
 	cwd = getcwd(NULL, 0);
 	g_shell_dir = ft_strdup(cwd);
