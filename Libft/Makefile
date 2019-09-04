@@ -194,6 +194,8 @@ SRCS = ft_atoi.c \
 	   ft_readfile.c \
 	   ft_readdir.c \
 	   ft_isfolder.c \
+	   int_copy.c \
+	   int_popper.c \
 	   dirname.c \
 	   basename.c \
 	   ft_filejoin.c \

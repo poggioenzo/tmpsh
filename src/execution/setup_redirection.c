@@ -75,7 +75,7 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 	char	*content;
 
 	setup_pipe_fd(here_pipe);
-	redirection->dest = here_pipe;
+	redirection->dest = int_copy(here_pipe[0]);
 	if (ft_strequ(redirection->type, "TRIPLEHEREDOC"))
 		content = ft_strjoin(redirection->tagstokens->tokens->value, "\n");
 	else
@@ -107,7 +107,7 @@ t_bool			setup_redirection(t_acb *branch)
 		if (redirection->error == false)
 		{
 			if (redirection->dest)
-				replace_fd(*(int *)redirection->dest, redirection->source);
+				replace_fd(clean_popper(redirection->dest), redirection->source);
 			if (redirection->close)
 				close(redirection->source);
 		}
