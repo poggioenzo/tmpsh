@@ -1,8 +1,7 @@
 TO DO:
 
 - Ctrl + C can crash with waitpid (undefined)
-- Some crash when moving really weirdly
-- check if file are opened with redirection on mac
+
 - Check escaping char with echo ("\n\t\\" etc.)
 
 - For CMDSUBST1 replacement, is split with "\n\t " enough ?

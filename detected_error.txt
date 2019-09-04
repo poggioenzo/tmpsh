@@ -1,4 +1,5 @@
-0 - Crash with `echo ok | ./tmpsh`
-1 - need to be valid command : `setenv =ls`
-2 - Need SPACES element before = for command like : `ls var =test
+0 - exit | ls should not exit
+1 - `echo test > file && cat < file>>file2` display permission denied
+2 - Some crash when moving really weirdly
+3 - check if file are opened with redirection on mac
 
