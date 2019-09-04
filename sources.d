@@ -204,6 +204,7 @@ TAGSTOKENS_SRCS :=	init_tagstokens.c \
 					clear_stack_tagstokens.c \
 					replace_alias_tagstokens.c \
 					skip_openning_tagstokens.c \
+					routine_tagstokens.c\
 
 
 TAGSTOKENS_SRCS := $(addprefix $(TAGSTOKENS_DIR), $(TAGSTOKENS_SRCS))

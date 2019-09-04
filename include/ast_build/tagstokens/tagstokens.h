@@ -51,5 +51,6 @@
 # include "clear_stack_tagstokens.h"
 # include "replace_alias_tagstokens.h"
 # include "skip_openning_tagstokens.h"
+# include "routine_tagstokens.h"
 
 #endif

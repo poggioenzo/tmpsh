@@ -37,9 +37,9 @@
 int			g_last_status = 0;
 pid_t		g_last_pid = 0;
 t_pylst 	*g_heredocs;
-t_pylst 	*g_passed_alias; //please resset me every command
-t_pylst 	*g_actual_alias; //please resset me every command
-int			g_aliasindepth = 0; //please resset me every command
+t_pylst 	*g_passed_alias;
+t_pylst 	*g_actual_alias;
+int			g_aliasindepth = 0;
 char		g_last_char[5];
 
 
@@ -120,7 +120,7 @@ int		main(int argc, char **argv, char **environ)
 	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	if (argc == 1)
 	{
-//		source_rc();
+		source_rc();
 		prompt_loop();
 	}
 	else
