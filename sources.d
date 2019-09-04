@@ -96,6 +96,7 @@ CONFIGURATION_SRCS :=  screen_size.c \
 					   reset_signals.c \
                        level_increment.c \
 					   file_rights.c \
+					   globals_setup.c \
                        $(VARIABLES_SRCS) \
 					   $(PROMPT_CONF)
 

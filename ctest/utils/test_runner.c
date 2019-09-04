@@ -5,6 +5,7 @@
 
 #include "libft.h"
 #include "test_runner.h"
+#include "globals_setup.h"
 
 
 test_store	*g_tests = NULL;
@@ -54,7 +55,7 @@ char	*prepare_format(void)
 ** if it end due to a kill signal.
 */
 
-int		main(int argc, char **argv)
+int		main(int argc, char **argv, char **environ)
 {
 	pid_t	pid;
 	int		status;
@@ -62,7 +63,7 @@ int		main(int argc, char **argv)
 	char	*printf_format;
 	
 	function_init();
-	setup_freefct();
+	setup_globals(environ);
 	index = 0;
 	printf_format = prepare_format();
 	while (index < total_tests)

@@ -11,51 +11,10 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "tmpsh.h"
-#include "environ_utils.h"
-#include "variable_management.h"
-#include "prompt_loop.h"
-#include <fcntl.h>
+#ifndef GLOBALS_SETUP
+# define GLOBALS_SETUP
 
-#include "tagstokens.h"
-#include "ast.h"
-#include "file_runner.h"
+void	setup_globals(char **environ);
+void	remove_globals(void);
 
-#include "globals_setup.h"
-
-void	source_rc(void)
-{
-	char	*filename;
-	char	*home;
-
-	if ((home = ft_getenv("HOME")))
-	{
-		filename = RC_FILE;
-		filename = ft_filejoin(&home, &filename, false, false);
-	}
-	else
-		filename = ft_strdup(RC_FILE);
-	g_jobs->allow_background = false;
-	run_file(filename);
-	ft_strdel(&filename);
-	g_jobs->allow_background = true;
-}
-
-int		main(int argc, char **argv, char **environ)
-{
-	int status;
-	setup_globals(environ);
-	// setup_variables_elements(environ);
-
-	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
-	if (argc == 1)
-	{
-		source_rc();
-		prompt_loop();
-	}
-	else
-		run_shell_files(argv + 1);
-	remove_globals();
-	return ((status=0));
-}
+#endif
