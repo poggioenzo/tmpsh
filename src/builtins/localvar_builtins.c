@@ -30,7 +30,9 @@ int			built_unset(char **argv, NOT_USE(char **environ))
 {
 	int		index;
 	int		rm_env;
+	int		status;
 
+	status = 0;
 	if (ft_arraylen(argv) == 0)
 	{
 		ft_dprintf(2, "unset: not enough arguments.\n");
@@ -45,10 +47,13 @@ int			built_unset(char **argv, NOT_USE(char **environ))
 		else if (ft_getvar(argv[index]))
 			ft_unsetvar(argv[index]);
 		else
+		{
 			ft_printf("unset: unknow variable: %s\n", argv[index]);
+			status = 1;
+		}
 		index++;
 	}
-	return (0);
+	return (status);
 }
 
 /*
