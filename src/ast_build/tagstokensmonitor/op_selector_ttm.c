@@ -13,6 +13,30 @@
 
 #include "ttm.h"
 
+static t_bool assignation_braceparam(t_tags_tokens_monitor *self)
+{
+	return (ft_strequ(self->tag, "BRACEPARAM")
+			|| in_grammar(self->tag, "ASSIGNATION_SYMBOL"));
+}
+
+static void is_assignation(t_tags_tokens_monitor *self)
+{
+	if (self->i !=0 && !ft_strequ(vindex_pylst(self->tt->tags, self->i), "STMT"))
+	{
+		update_pylst(self->tt->tags, self->i, "STMT", 0, _ptr);
+		self->begin_cmd = false;
+	}
+}
+
+static void braceparam_or_assignation(t_tags_tokens_monitor *self)
+{
+	if (ft_strequ(self->tag, "BRACEPARAM"))
+		is_braceparam_ttm(self);
+	else
+		is_assignation(self);
+	print_tagstokens(self->tt);
+}
+
 /*
 ** op_selector_ttm:
 **
@@ -29,8 +53,8 @@ void	op_selector_ttm(t_tags_tokens_monitor *self)
 	{
 		if (ft_strequ(self->tag, "STMT"))
 			self->begin_cmd = check_aliases_ttm(self);
-		else if (ft_strequ(self->tag, "BRACEPARAM"))
-			is_braceparam_ttm(self);
+		else if (assignation_braceparam(self))
+			braceparam_or_assignation(self);
 		else if (ft_strequ(self->tag, "DQUOTES"))
 			is_dquotes_ttm(self);
 		else if (ft_strequ(self->tag, "QUOTE"))

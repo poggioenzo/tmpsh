@@ -47,11 +47,14 @@ class TagsTokensMonitor():
             self.op_selector()
 
     def op_selector(self):
+        def assignation_braceparam(self):
+            return self.tag == 'BRACEPARAM' or self.tag in gv.GRAMMAR.grammar['ASSIGNATION_SYMBOL']
+
         if self.tt.valid:
             if self.tag == 'STMT':
                 self.begin_cmd = self.check_aliases()
-            elif self.tag == 'BRACEPARAM':
-                self.is_braceparam()
+            elif assignation_braceparam(self):
+                self.braceparam_or_assignation()
             elif self.tag == 'DQUOTES':
                 self.is_dquote()
             elif self.tag == 'QUOTE':
@@ -70,6 +73,17 @@ class TagsTokensMonitor():
                 self.in_redirection()
             elif self.opened[-1] == self.tag:
                 self.opened.pop(-1)
+
+    def braceparam_or_assignation(self):
+        if self.tag == 'BRACEPARAM':
+            self.is_braceparam()
+        else:
+            self.is_assignation()
+
+    def is_assignation(self):
+        if self.i > 0 and self.tt.tags[self.i - 1] != 'STMT':
+            self.tt.tags[self.i] = 'STMT'
+            self.begin_cmd = False
 
     def is_newline(self):
         import utils.heredocs as hd
