@@ -24,7 +24,7 @@ static	void	replace_subast(t_tagstokens *tgtk, size_t begin,
 	token = NULL;
 	str = ft_itoa(number);
 	push_pylst(&tag, "SUBAST", 0, _ptr);
-	push_pylst(&token, str, ft_strlen(str), _chare);
+	push_pylst(&token, str, sizeof(char) * (ft_strlen(str) + 1), _chare);
 	replace_pylst(&tgtk->tags, tag, begin, end);
 	replace_pylst(&tgtk->tokens, token, begin, end);
 	update_length_tagstokens(tgtk);
