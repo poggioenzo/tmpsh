@@ -90,7 +90,8 @@ void			open_redirection_file(t_redirection_fd *redirection)
 	{
 		redirection->dest = join_pylst(redirection->tagstokens->tokens, "");
 		get_options(redirection->dest, redirection->type, &flags, &rights);
-		if (rights == -1 || check_rights(redirection->dest, rights, false, true))
+		if (rights == -1 || \
+				check_rights(redirection->dest, rights, false, true))
 		{
 			if ((fd = open(redirection->dest, flags, 0666)) != -1)
 			{
