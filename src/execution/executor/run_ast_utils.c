@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   determine_bytes.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "tmpsh.h"
 #include "libft.h"
 #include "fd_management.h"
@@ -87,7 +100,7 @@ t_bool		check_andor(t_pylst *job_branches)
 	first_branch = job_branches->value;
 	if (ft_strequ(first_branch->begin_andor, "CMDAND") && g_last_status != 0)
 		return (false);
-	else if (ft_strequ(first_branch->begin_andor, "CMDOR") && g_last_status == 0)
+	else if (ft_strequ(first_branch->begin_andor, "CMDOR") && !g_last_status)
 		return (false);
 	return (true);
 }

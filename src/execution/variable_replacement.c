@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   determine_bytes.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "tmpsh.h"
 #include "libft.h"
 #include "variables.h"
@@ -66,7 +79,7 @@ static void		replace_tild(t_tagstokens *tagstok, int index)
 ** Check also if STMT tags contain have some tild to replace.
 */
 
-void		update_tagstokens(t_tagstokens *tagstokens, t_acb *branch)
+void			update_tagstokens(t_tagstokens *tagstokens, t_acb *branch)
 {
 	size_t	index;
 	int		index_subast;

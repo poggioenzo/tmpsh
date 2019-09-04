@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   determine_bytes.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "tmpsh.h"
 #include "libft.h"
 #include "argv_formater.h"
@@ -85,8 +98,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 		branch->status = run_builtin(branch, argv, variables);
 		return (execution_cleaner(argv, executable, -1));
 	}
-	pid = fork_prepare(branch->pgid, branch->background);
-	if (pid == 0)
+	if ((pid = fork_prepare(branch->pgid, branch->background)) == 0)
 	{
 		reset_signals();
 		replace_std_fd(branch->stdin, branch->stdout);

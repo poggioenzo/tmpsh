@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   determine_bytes.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "tmpsh.h"
 #include "tagstokens.h"
@@ -26,7 +39,7 @@ static int		prev_is_stmt(t_pylst *tags, int index)
 ** If a STMT is following an other STMT, concat them in a single token.
 */
 
-void		join_stmt(t_acb *branch)
+void			join_stmt(t_acb *branch)
 {
 	size_t			index;
 	t_tagstokens	*tagstok;

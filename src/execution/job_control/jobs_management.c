@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   determine_bytes.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "tmpsh.h"
 #include "job_control.h"
 
@@ -85,7 +98,7 @@ void				remove_bg(int job_id)
 ** Check if some jobs are done and remove them from the current joblist.
 */
 
-void					wait_zombie(void)
+void				wait_zombie(void)
 {
 	t_pylst		*list_jobs;
 	t_pylst		*next_list_jobs;

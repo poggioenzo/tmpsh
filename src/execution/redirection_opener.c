@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   determine_bytes.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <fcntl.h>
 #include "libft.h"
@@ -77,7 +90,8 @@ void			open_redirection_file(t_redirection_fd *redirection)
 	{
 		redirection->dest = join_pylst(redirection->tagstokens->tokens, "");
 		get_options(redirection->dest, redirection->type, &flags, &rights);
-		if (rights == -1 || check_rights(redirection->dest, rights, false, true))
+		if (rights == -1 || \
+				check_rights(redirection->dest, rights, false, true))
 		{
 			if ((fd = open(redirection->dest, flags, 0666)) != -1)
 			{
