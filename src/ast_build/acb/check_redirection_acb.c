@@ -20,8 +20,7 @@ static	char	*get_source_acb(t_tagstokens *tgtk, size_t lentags, char *tag)
 	source = NULL;
 	if (lentags > 0
 			&& digitstr(find_prev_token(tgtk, lentags - 1, TRUE))
-			&& !ft_strequ(find_prev_token(tgtk, lentags - 1, FALSE), "SUBAST")
-			&& !in(tag, "HEREDOC", "TRIPLEHEREDOC", "HEREDOCMINUS", NULL))
+			&& !ft_strequ(find_prev_token(tgtk, lentags - 1, FALSE), "SUBAST"))
 		source = ft_strdup(find_prev_token(tgtk, lentags - 1, TRUE));
 	return (source);
 }
