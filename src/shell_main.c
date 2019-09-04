@@ -44,11 +44,7 @@ void	source_rc(void)
 
 int		main(int argc, char **argv, char **environ)
 {
-	int status;
 	setup_globals(environ);
-	// setup_variables_elements(environ);
-
-	fd_debug = open("/dev/ttys003",  O_RDWR | O_TRUNC | O_CREAT, 0777);
 	if (argc == 1)
 	{
 		source_rc();
@@ -57,5 +53,5 @@ int		main(int argc, char **argv, char **environ)
 	else
 		run_shell_files(argv + 1);
 	remove_globals();
-	return ((status=0));
+	return (0);
 }

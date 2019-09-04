@@ -6,7 +6,6 @@ COMMON_SRCS := char_concatenation.c \
 			   concatenation_utils.c \
 			   cursor_dependent_selection.c \
 			   cursor_dependent_selection_utils.c \
-			   debug.c \
 			   display.c \
 			   t_cursor_utils.c \
 			   prompt_loop.c\

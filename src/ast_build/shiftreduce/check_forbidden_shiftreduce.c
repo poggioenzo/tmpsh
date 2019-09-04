@@ -13,7 +13,6 @@
 
 #include "tmpsh.h"
 #include "libft.h"
-#include "globals.h"
 #include "tokenizer_utils.h"
 #include "tagstokens.h"
 

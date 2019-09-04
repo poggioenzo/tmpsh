@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                          LE - /            */
+/*                                                              /             */
+/*   determine_bytes.c                                .::    .:/ .      .::   */
+/*                                                 +:+:+   +:    +:  +:+:+    */
+/*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
+/*                                                 #+#   #+    #+    #+#      */
+/*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*                                                         /                  */
+/*                                                        /                   */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "tmpsh.h"
 #include "file_rights.h"
@@ -11,9 +24,9 @@
 
 int			g_last_status = 0;
 pid_t		g_last_pid = 0;
-t_pylst 	*g_heredocs = NULL;
-t_pylst 	*g_passed_alias = NULL;
-t_pylst 	*g_actual_alias = NULL;
+t_pylst		*g_heredocs = NULL;
+t_pylst		*g_passed_alias = NULL;
+t_pylst		*g_actual_alias = NULL;
 int			g_aliasindepth = 0;
 char		g_last_char[5];
 
@@ -27,7 +40,7 @@ t_bool		have_control_tty(void)
 	return (true);
 }
 
-void	setup_globals(char **environ)
+void		setup_globals(char **environ)
 {
 	char	*grammar_file;
 	char	*cwd;
@@ -53,7 +66,7 @@ void	setup_globals(char **environ)
 	set_shlvl();
 }
 
-void	remove_globals(void)
+void		remove_globals(void)
 {
 	ft_strdel(&g_shell_dir);
 	free_hash_table(&g_variables, 0);
@@ -61,11 +74,7 @@ void	remove_globals(void)
 	free_str_array(&g_environ, 0);
 	free_hash_table(&g_alias, 0);
 	free_hash_table(&g_hash, 0);
-
-
-	//Depend if we allow leaving the programm with or without background jobs.
-	//free_pylst(&g_jobs->list_jobs);
+	free_pylst(&g_jobs->list_jobs, 0);
 	ft_memdel((void **)&g_jobs);
 	free_grammar();
-
 }
