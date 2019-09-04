@@ -66,6 +66,8 @@ void	input_init_tagstokens(t_tagstokens **self, char *input)
 	if (!(input) || ft_strspn(input, g_grammar->spaces) == ft_strlen(input))
 		return ;
 	init_tagstokens(self, NULL, NULL);
+	(*self)->tokens = NULL;
+	(*self)->tags = NULL;
 	tokenize(input, &((*self)->tokens));
 	update_length_tagstokens(*self);
 	get_tag_tagstokens(*self);

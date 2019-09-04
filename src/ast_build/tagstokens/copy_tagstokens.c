@@ -28,6 +28,7 @@ t_tagstokens	*copy_tagstokens(t_tagstokens *self, int from, int to)
 {
 	t_tagstokens *copy;
 
+	copy = NULL;
 	init_tagstokens(&copy, NULL, NULL);
 	if (from == to)
 	{
