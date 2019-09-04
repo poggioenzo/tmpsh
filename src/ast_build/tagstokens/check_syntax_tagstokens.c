@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:12:36 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 21:50:53 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/09/04 16:42:27 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -54,11 +54,11 @@ static void		remove_escape_stmt(t_tagstokens *self)
 	while (iter_tagstokens(self, &token, &tag))
 	{
 		if (ft_strequ(tag, "STMT") && ft_strlen(token) > 1 && token[0] == '\\')
-			{
-				ft_strcpy(token, token + 1);
-				if (ft_strequ(token, "\n"))
-					update_pylst(self->tags, self->iter, "SPACES", 0, _ptr);
-			}
+		{
+			ft_strcpy(token, token + 1);
+			if (ft_strequ(token, "\n"))
+				update_pylst(self->tags, self->iter, "SPACES", 0, _ptr);
+		}
 	}
 }
 
