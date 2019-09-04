@@ -74,22 +74,22 @@ class TagsTokensMonitor():
     def is_newline(self):
         import utils.heredocs as hd
 
-        tuple_key_len = []
+        list_param = []
         key = ''
         heredoc = None
         not_end = True
         minus = False
         self.is_abs_terminator()
         while self.heredocs_keys != [] and not_end:
-            tuple_key_len = self.heredocs_keys[0]
+            list_param = self.heredocs_keys[0]
             heredoc = hd.Heredocs(
-                tuple_key_len[0], tuple_key_len[1], tuple_key_len[2])
-            tuple_key_len[0] = k.modifify_gold_key(tuple_key_len[0])
-            minus = tuple_key_len[2]
+                list_param[0], list_param[1], list_param[2])
+            list_param[0] = k.modifify_gold_key(list_param[0])
+            minus = list_param[2]
             gv.HEREDOCS.append(heredoc)
             not_end = self.next_tag_token(True)
             while not_end:
-                if key == tuple_key_len[0]:
+                if key == list_param[0]:
                     heredoc.close()
                     break
                 heredoc.add_tags_tokens(self.tag, self.token)
