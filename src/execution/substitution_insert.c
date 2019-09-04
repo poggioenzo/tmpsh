@@ -31,7 +31,6 @@ static void	get_final_fields(char *content, t_pylst **final_tokens, \
 	char		*token;
 
 	tokens_list = ft_strsplit(content, "\n\t ");
-	ft_strdel(&content);
 	index = 0;
 	nbr_tokens = ft_arraylen(tokens_list);
 	while (index < nbr_tokens)
