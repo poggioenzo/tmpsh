@@ -13,7 +13,7 @@
 
 #include "acb.h"
 
-static	char	*get_source_acb(t_tagstokens *tgtk, size_t lentags, char *tag)
+static	char	*get_source_acb(t_tagstokens *tgtk, size_t lentags)
 {
 	char	*source;
 
@@ -54,7 +54,7 @@ void			check_redirection_acb(t_acb *self)
 		tag = vindex_pylst(self->tagstokens->tags, lentags);
 		if (in_grammar(tag, "REDIRECTION"))
 		{
-			src = get_source_acb(self->tagstokens, lentags, tag);
+			src = get_source_acb(self->tagstokens, lentags);
 			push_pylst(&self->redirectionfd,
 					init_redfd(
 					copy_tagstokens(self->tagstokens, previous, previous + 1),

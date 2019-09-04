@@ -30,10 +30,16 @@ void	init_heredocs(t_heredocs **self, char *key, int len_key, t_bool minus)
 {
 	*self = ft_memalloc(sizeof(t_heredocs));
 	(*self)->key = ft_strdup(key);
-	(*self)->quoted = quoted_gold_key(key);
-	(*self)->len_key = len_key;
 	(*self)->minus = minus;
+	(*self)->len_key = len_key;
+	(*self)->quoted = quoted_gold_key(key);
+	if ((*self)->quoted)
+	{
+		(*self)->len_key--;
+		(*self)->quoted = !dquoted_gold_key(key);
+	}
 	(*self)->closed = false;
-	init_tagstokens(&(*self)->tagstokens, NULL, NULL);
 	(*self)->in_cmdsubst = false;
+	init_tagstokens(&(*self)->tagstokens, NULL, NULL);
+
 }

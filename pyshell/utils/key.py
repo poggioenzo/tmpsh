@@ -18,3 +18,7 @@ def modifify_gold_key(gold_key):
 
 def quoted_gold_key(gold_key):
     return gold_key[0] in '"\'' and gold_key[-1] in '"\''
+
+
+def dquoted_gold_key(gold_key):
+    return gold_key[0] in '"' and gold_key[-1] in '"'

@@ -22,6 +22,9 @@ class Heredocs():
         self.key = key
         self.quoted = k.quoted_gold_key(key)
         self.len_key = len_key
+        if self.quoted:
+            self.len_key -= 1
+            self.quoted = not k.dquoted_gold_key(key)
         self.minus = minus
         self.closed = False
         self.tagstokens = tt.TagsTokens()
