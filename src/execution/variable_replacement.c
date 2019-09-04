@@ -79,7 +79,7 @@ static void		replace_tild(t_tagstokens *tagstok, int index)
 ** Check also if STMT tags contain have some tild to replace.
 */
 
-void		update_tagstokens(t_tagstokens *tagstokens, t_acb *branch)
+void			update_tagstokens(t_tagstokens *tagstokens, t_acb *branch)
 {
 	size_t	index;
 	int		index_subast;

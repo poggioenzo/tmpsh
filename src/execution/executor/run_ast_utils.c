@@ -100,7 +100,7 @@ t_bool		check_andor(t_pylst *job_branches)
 	first_branch = job_branches->value;
 	if (ft_strequ(first_branch->begin_andor, "CMDAND") && g_last_status != 0)
 		return (false);
-	else if (ft_strequ(first_branch->begin_andor, "CMDOR") && g_last_status == 0)
+	else if (ft_strequ(first_branch->begin_andor, "CMDOR") && !g_last_status)
 		return (false);
 	return (true);
 }

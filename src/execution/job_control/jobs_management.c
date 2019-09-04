@@ -98,7 +98,7 @@ void				remove_bg(int job_id)
 ** Check if some jobs are done and remove them from the current joblist.
 */
 
-void					wait_zombie(void)
+void				wait_zombie(void)
 {
 	t_pylst		*list_jobs;
 	t_pylst		*next_list_jobs;

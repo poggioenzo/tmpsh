@@ -39,7 +39,7 @@ static int		prev_is_stmt(t_pylst *tags, int index)
 ** If a STMT is following an other STMT, concat them in a single token.
 */
 
-void		join_stmt(t_acb *branch)
+void			join_stmt(t_acb *branch)
 {
 	size_t			index;
 	t_tagstokens	*tagstok;

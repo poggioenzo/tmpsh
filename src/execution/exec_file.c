@@ -80,7 +80,6 @@ char			*get_execname(char *command)
 	else if (search_value(g_builtins, command))
 		return (ft_strdup(command));
 	else if (ft_strchr(command, '/'))
-		return (check_rights(ft_strdup(command), \
-					F | X | R, true, true));
+		return (check_rights(ft_strdup(command), F | X | R, true, true));
 	return (parse_path(command));
 }
