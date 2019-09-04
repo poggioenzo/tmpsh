@@ -130,5 +130,5 @@ int					built_env(char **args, NOT_USE(char **environ))
 	}
 	else
 		show_env();
-	return (0);
+	exit(0);
 }
