@@ -11,8 +11,8 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef GLOBALS_SETUP
-# define GLOBALS_SETUP
+#ifndef GLOBALS_SETUP_H
+# define GLOBALS_SETUP_H
 
 void	setup_globals(char **environ);
 void	remove_globals(void);
