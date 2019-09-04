@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:06:08 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 22:06:15 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/09/04 19:18:59 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -41,5 +41,4 @@ void	init_heredocs(t_heredocs **self, char *key, int len_key, t_bool minus)
 	(*self)->closed = false;
 	(*self)->in_cmdsubst = false;
 	init_tagstokens(&(*self)->tagstokens, NULL, NULL);
-
 }
