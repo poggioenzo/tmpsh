@@ -75,7 +75,6 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 	char	*content;
 
 	setup_pipe_fd(here_pipe);
-	redirection->source = 0;
 	redirection->dest = here_pipe;
 	if (ft_strequ(redirection->type, "TRIPLEHEREDOC"))
 		content = ft_strjoin(redirection->tagstokens->tokens->value, "\n");
