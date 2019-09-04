@@ -11,12 +11,10 @@
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef DEBUG_H
-# define DEBUG_H
+#ifndef GLOBALS_SETUP_H
+# define GLOBALS_SETUP_H
 
-# include "tmpsh.h"
-
-void		DEBUG_print_char(t_char *char_lst, int fd);
-void		DEBUG_print_line(t_line *shell_lines, int fd);
+void	setup_globals(char **environ);
+void	remove_globals(void);
 
 #endif

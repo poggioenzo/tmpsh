@@ -15,6 +15,7 @@
 # define TMPSH_H
 
 # include <unistd.h>
+# include <termios.h>
 # include "libft.h"
 # ifndef UNUSED_VAR
 #  define UNUSED_VAR
@@ -228,7 +229,7 @@ typedef struct s_heredocs	t_heredocs;
 struct		s_heredocs
 {
 	char			*key;
-	int				quoted;//Check type
+	int				quoted;
 	int				len_key;
 	t_bool			minus;
 	t_bool			closed;
@@ -270,16 +271,27 @@ struct		s_hash_exec
 	int		count;
 };
 
-/*
-** Debug functions
-*/
+extern char		g_last_char[5];
+extern t_caps		*g_caps;
 
-void		DEBUG_print_line(t_line *shell_lines, int fd);
-int			fd_debug;
-void		show_history(t_hist *history);
-void		DEBUG_cursor(t_cursor *cursor, int fd);
+extern char	**g_environ;
+extern t_ht_table	*g_variables;
+extern t_ht_table	*g_alias;
+extern t_ht_table	*g_hash;
 
-# include "debug.h"
-# include "globals.h"
+extern t_ht_table	*g_builtins;
+extern char			*g_shell_dir;
+extern t_background_job		*g_jobs;
+extern int	g_last_status;
+extern pid_t	g_last_pid;
+
+extern t_grammar	*g_grammar;
+
+extern t_pylst		*g_passed_alias;
+extern t_pylst		*g_actual_alias;
+extern int			g_aliasindepth;
+extern t_pylst		*g_heredocs;
+
+struct termios		g_tcsettings;
 
 #endif

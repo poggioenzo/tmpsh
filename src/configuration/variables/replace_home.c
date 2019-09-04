@@ -34,8 +34,7 @@ char		*getuser_home(char *username, int uid)
 		user_info = getpwuid(uid);
 	if (!user_info)
 		return (NULL);
-	if (!(home_dir = ft_strdup(user_info->pw_dir)))
-		exit(-1);
+	home_dir = ft_strdup(user_info->pw_dir);
 	return (home_dir);
 }
 

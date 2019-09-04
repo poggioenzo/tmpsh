@@ -20,8 +20,6 @@
 #include "cmdsubst_replacement.h"
 #include "subast_command.h"
 #include "exec_command.h"
-
-
 #include "ast.h"
 
 /*
@@ -113,8 +111,7 @@ void			run_ast(t_ast *ast)
 		replace_variable(branch);
 		if (check_andor(job_list) == false)
 		{
-			if (!ft_strequ(branch->tag_end, "PIPE"))
-				free_pylst(&job_list, 0);
+			!ft_strequ(branch->tag_end, "PIPE") ? free_pylst(&job_list, 0) : 0;
 			continue ;
 		}
 		perform_subast_replacement(branch);
@@ -127,17 +124,11 @@ void			run_ast(t_ast *ast)
 		close_subast_pipe(branch);
 		analyse_branch_result(branch, &job_list);
 	}
-	//Free ast
 }
 
-void		executor(t_ast *ast)
+void			executor(t_ast *ast)
 {
-//	t_acb		*branch;
-
-//	ft_printf(str_ast(ast));
-//	branch = ast->list_branch->value;
-//	ft_dprintf(fd_debug, str_acb(branch));
-//	ft_dprintf(fd_debug, str_tagstokens(branch->tagstokens));
 	wait_zombie();
 	run_ast(ast);
+	free_ast(&ast);
 }

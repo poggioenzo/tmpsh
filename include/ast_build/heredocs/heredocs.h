@@ -20,7 +20,6 @@
 
 # include "tmpsh.h"
 # include "libft.h"
-# include "globals.h"
 
 /*
 ** Utils for tagstokens.

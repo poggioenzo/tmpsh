@@ -31,7 +31,7 @@
 ** the history file.
 */
 
-static void		register_command(char *shell_str)
+static void	register_command(char *shell_str)
 {
 	t_hist	*history;
 	char	*shell_cpy;
@@ -53,6 +53,14 @@ static void		register_command(char *shell_str)
 		history_store(STORE, &history);
 }
 
+void		execute_tagstoken(t_tagstokens *tagstokens, char *command)
+{
+	register_command(command);
+	manage_termios(remove_config);
+	executor(init_ast(tagstokens));
+	manage_termios(shell_config);
+}
+
 /*
 ** newline_check:
 **
@@ -67,10 +75,10 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 
 	shell_content = render_shell_content(*shell_repr);
 	routine_tagstokens(&tagstoken, shell_content);
-	//Need to remove shell_content properly
 	if (tagstoken->incomplete)
 	{
 		add_new_line(*shell_repr, tagstoken, *cursor);
+		free_tagstokens(&tagstoken, 0);
 		return (true);
 	}
 	**cursor = (t_cursor){.row = -1, .column = -1};
@@ -78,15 +86,10 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	ft_printf("\n");
 	manage_shell_repr(GO_FREE, NULL, NULL);
 	if (tagstoken->valid && !tagstoken->incomplete)
-	{
-		register_command(shell_content);
-		manage_termios(remove_config);
-		executor(init_ast(tagstoken));
-		manage_termios(shell_config);
-	}
+		execute_tagstoken(tagstoken, shell_content);
 	else
 		ft_dprintf(2, NAME_SH" syntax error near %s\n", tagstoken->token_error);
 	shell_preconfig(shell_repr, cursor);
-	//MUST FREE TAGSTOKEN
+	free_tagstokens(&tagstoken, 0);
 	return (false);
 }

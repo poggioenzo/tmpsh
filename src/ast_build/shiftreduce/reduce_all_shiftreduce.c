@@ -13,7 +13,6 @@
 
 #include "tmpsh.h"
 #include "libft.h"
-#include "globals.h"
 #include "shiftreduce.h"
 
 static	t_pylst		**reduce(t_pylst **stack, int instack)

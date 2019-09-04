@@ -26,7 +26,9 @@
 int				built_unsetenv(char **argv, NOT_USE(char **environ))
 {
 	int		index;
+	int		status;
 
+	status = 0;
 	if (ft_arraylen(argv) == 0)
 	{
 		ft_dprintf(2, "unsetenv: no arguments.\n");
@@ -38,11 +40,14 @@ int				built_unsetenv(char **argv, NOT_USE(char **environ))
 		if (ft_getenv(argv[index]))
 			ft_unsetenv(argv[index]);
 		else
+		{
 			ft_printf("unsetenv: unknow variable: %s\n",\
 					argv[index]);
+			status = 1;
+		}
 		index++;
 	}
-	return (0);
+	return (status);
 }
 
 /*
