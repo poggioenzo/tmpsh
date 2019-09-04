@@ -42,6 +42,7 @@ void	init_tagstokens(t_tagstokens **self, t_pylst *tokens, t_pylst *tags)
 	(*self)->stack = NULL;
 	(*self)->token_error = NULL;
 	(*self)->valid = TRUE;
+	(*self)->not_heredocs = TRUE;
 	(*self)->incomplete = FALSE;
 	(*self)->length = 0;
 	(*self)->iter = -1;

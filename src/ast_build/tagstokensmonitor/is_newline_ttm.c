@@ -13,7 +13,7 @@
 
 #include "ttm.h"
 
-static t_heredocs	*get_heredoc(t_pylst *list_param, char *gold_key)
+static t_heredocs	*get_heredoc(t_pylst *list_param, char **gold_key)
 {
 	t_heredocs	*heredoc;
 	char		*tmp;
@@ -24,7 +24,7 @@ static t_heredocs	*get_heredoc(t_pylst *list_param, char *gold_key)
 					*((int *)vindex_pylst(list_param, 1)),
 					*((int *)vindex_pylst(list_param, 2)));
 	modify_gold_key(tmp);
-	gold_key = tmp;
+	*gold_key = tmp;
 	return (heredoc);
 }
 
@@ -80,8 +80,10 @@ void				is_newline_ttm(t_tags_tokens_monitor *self)
 	while (self->heredocs_keys &&
 			(list_param = pop_pylst(&self->heredocs_keys, 0)) && not_end)
 	{
+
 		minus = *((int *)vindex_pylst(list_param, 2));
-		heredoc = get_heredoc(list_param, gold_key);
+		heredoc = get_heredoc(list_param, &gold_key);
+		ft_printf(str_heredocs(heredoc));
 		push_pylst(&g_heredocs, heredoc, 0, _ptr);
 		not_end = full_heredoc(self, heredoc, gold_key, minus);
 		free_pylst(&list_param, 42);

@@ -1,10 +1,12 @@
 #include "tagstokens.h"
 
-void routine_tagstokens(t_tagstokens **tagstokens, char *shell_content)
+void routine_tagstokens(t_tagstokens **self, char *shell_content)
 {
 	free_pylst(&g_actual_alias, 42);
 	free_pylst(&g_passed_alias, 42);
     free_pylst(&g_heredocs, 42);
 	g_aliasindepth = 0;
-	input_init_tagstokens(tagstokens, shell_content);
+	input_init_tagstokens(self, shell_content);
+    printf("\n");
+    printf(YELLOW"%s"WHITE, str_tagstokens(*self));
 }

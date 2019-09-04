@@ -36,7 +36,7 @@ char		*str_heredocs(t_heredocs *self)
 	char	*str;
 	char	*bool_str;
 
-	str = quick_join("\nHEREDOC", self->key, false, false);
+	str = quick_join("\nHEREDOC ", self->key, false, false);
 	str = quick_join(str, " | closed: ", true, false);
 	bool_str = self->closed ? "True" : "False";
 	str = quick_join(str, bool_str, true, false);

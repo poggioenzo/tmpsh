@@ -15,10 +15,12 @@
 
 static int		end_escape(char *last_token)
 {
-	int		len_token;
+	t_bool	ret;
 
-	len_token = ft_strlen(last_token);
-	return (len_token > 0 && *g_grammar->escape == last_token[len_token - 1]);
+	ret = ft_strlen(last_token) == 2;
+	ret &= last_token[0] == g_grammar->escape[0];
+	ret &= (int)last_token[1] == 10;
+	return (ret);
 }
 
 static int		check_incomplete(void)
@@ -52,18 +54,27 @@ static void		remove_escape_stmt(t_tagstokens *self)
 	while (iter_tagstokens(self, &token, &tag))
 	{
 		if (ft_strequ(tag, "STMT") && ft_strlen(token) > 1 && token[0] == '\\')
-			ft_strcpy(token, token + 1);
+			{
+				ft_strcpy(token, token + 1);
+				if (ft_strequ(token, "\n"))
+					update_pylst(self->tags, self->iter, "SPACES", 0, _ptr);
+			}
 	}
 }
 
 t_tagstokens	*check_syntax_tagstokens(t_tagstokens *self)
 {
-	init_ttm(self);
+	t_bool not_ended;
+
+	not_ended = self->length > 0 && end_escape(vindex_pylst(self->tokens, -1));
 	remove_escape_stmt(self);
+	strip_tagstokens(self);
+	printf(RED"\n%s\n"WHITE, str_tagstokens(self));
+	init_ttm(self);
 	if (self->valid)
 	{
 		tagstokens_shiftreduce(self);
-		if (self->length > 0 && end_escape(vindex_pylst(self->tokens, -1)))
+		if (not_ended)
 			self->incomplete = true;
 	}
 	if (len_pylst(g_heredocs) > 0 && self->not_heredocs)
