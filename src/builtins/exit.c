@@ -30,7 +30,7 @@ int		built_exit(char **args, NOT_USE(char **env))
 	int		term;
 
 	argc = ft_arraylen(args);
-	if (argc > 2)
+	if (argc >= 2)
 	{
 		ft_dprintf(2, "exit: too many arguments\n");
 		return (1);
