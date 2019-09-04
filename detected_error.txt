@@ -1,4 +1,4 @@
-1 - Set only the first CMDAND, CMDOR as begin operator
-2 - Chaining single quote is giving 2 subast containing a single quote
-3 - Crash with `echo ok | ./tmpsh`
-4 - Protect grammar from crash.
+0 - Crash with `echo ok | ./tmpsh`
+1 - need to be valid command : `setenv =ls`
+2 - Need SPACES element before = for command like : `ls var =test
+
