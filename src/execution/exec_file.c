@@ -17,6 +17,13 @@
 #include "hash.h"
 #include "file_rights.h"
 
+
+char			*display_search_error(char *command)
+{
+	ft_dprintf(STDERR_FILENO, NAME_SH" command not found: %s\n", command);
+	return (NULL);
+}
+
 /*
 ** parse_path:
 **
@@ -36,7 +43,7 @@ char			*parse_path(char *command)
 	t_hash_exec	*cache;
 
 	if (!ft_getenv("PATH"))
-		return (NULL);
+		return (display_search_error(command));
 	folders = ft_strsplit(ft_getenv("PATH"), ":");
 	index = 0;
 	while (folders[index])
@@ -52,8 +59,8 @@ char			*parse_path(char *command)
 		}
 		ft_strdel(&execname);
 	}
+	display_search_error(command);
 	free_str_array(&folders, 0);
-	ft_dprintf(STDERR_FILENO, NAME_SH" command not found: %s\n", command);
 	return (NULL);
 }
 
