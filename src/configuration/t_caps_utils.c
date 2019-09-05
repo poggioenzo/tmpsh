@@ -28,7 +28,9 @@ t_caps	*g_caps;
 
 void		alloc_capabilities_struct(t_caps **capabilities)
 {
-	if (tgetent(ft_getenv("TERM"), NULL) == -1)
+	if (!ft_getenv("TERM"))
+		ft_setenv("TERM", "screen");
+	if (tgetent(NULL, ft_getenv("TERM")) == -1)
 		exit(-1);
 	*capabilities = (t_caps *)ft_memalloc(sizeof(t_caps));
 	(*capabilities)->clear = tgetstr("cl", NULL);

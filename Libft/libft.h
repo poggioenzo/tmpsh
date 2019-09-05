@@ -246,6 +246,8 @@ char			*ft_strrev(const char *str);
 
 long long		ft_pow(int nbr, int pow);
 int				ft_abs(int nbr);
+int				*int_copy(int value);
+int				clean_popper(int *value);
 size_t			determine_bytes(wchar_t c);
 size_t			str_byteslen(wchar_t *str);
 void			*ft_wstrdel(wchar_t **wstr);

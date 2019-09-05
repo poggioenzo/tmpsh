@@ -12,35 +12,18 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "tmpsh.h"
-#include <fcntl.h>
 
 /*
-** built_exit:
+** clean_popper:
 **
-** exit - quit the current shell process
-**
-** Synopsis : exit [n]
+** Layer of pop function to get, freeing and return a int value.
 */
 
-int		built_exit(char **args, NOT_USE(char **env))
+int		clean_popper(int *value)
 {
-	int		argc;
-	int		value;
-	int		term;
+	int		int_value;
 
-	argc = ft_arraylen(args);
-	if (argc >= 2)
-	{
-		ft_dprintf(2, "exit: too many arguments\n");
-		return (1);
-	}
-	else if (argc == 1)
-		value = ft_atoi(args[0]);
-	else
-		value = 0;
-	term = open("/dev/tty", O_WRONLY);
-	ft_dprintf(term, "%s", g_caps->reset_cursor);
-	close(term);
-	exit(value);
+	int_value = *value;
+	ft_memdel((void **)&value);
+	return (int_value);
 }

@@ -29,7 +29,7 @@ char				*get_oldpwd(void)
 
 	if (!(oldpwd = ft_getenv("OLDPWD")))
 		ft_dprintf(2, "cd : OLDPWD not set.\n");
-	return (ft_strdup(oldpwd));
+	return (oldpwd ? ft_strdup(oldpwd) : NULL);
 }
 
 /*

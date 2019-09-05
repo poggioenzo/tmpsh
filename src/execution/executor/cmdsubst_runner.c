@@ -39,20 +39,6 @@ static t_pylst	*prepare_cmdsubst_pipe(void)
 	return (pipe_lst);
 }
 
-/*
-** clean_popper:
-**
-** Layer of pop function to get, freeing and return a int value.
-*/
-
-static int		clean_popper(int *value)
-{
-	int		int_value;
-
-	int_value = *value;
-	ft_memdel((void **)&value);
-	return (int_value);
-}
 
 /*
 ** setup_stdput:
