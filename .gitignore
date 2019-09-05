@@ -11,6 +11,7 @@ tmpsh
 .*.swo
 shell_debug
 test_shell
+shell_executable
 
 # Prerequisites
 dependencies/*.d
