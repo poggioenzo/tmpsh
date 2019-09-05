@@ -15,8 +15,8 @@ if __name__ == '__main__':
     else:
         ENTRY = " ".join(sys.argv[1:])
     TAGSTOKENS = TagsTokens().init_with_input(ENTRY).check_syntax()
-    i = 0
-    while i < TAGSTOKENS.length:
-        print([TAGSTOKENS.tags[i], TAGSTOKENS.tokens[i]])
-        i += 1
+    # i = 0
+    # while i < TAGSTOKENS.length:
+    #     print([TAGSTOKENS.tags[i], TAGSTOKENS.tokens[i]])
+    #     i += 1
     print(TAGSTOKENS)
