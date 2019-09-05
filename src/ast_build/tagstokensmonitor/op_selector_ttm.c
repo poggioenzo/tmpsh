@@ -22,7 +22,7 @@ static	t_bool	assignation_braceparam(t_tags_tokens_monitor *self)
 static	void	is_assignation(t_tags_tokens_monitor *self)
 {
 	if (self->i != 0 && !ft_strequ(vindex_pylst(
-					self->tt->tags, self->i), "STMT"))
+					self->tt->tags, self->i - 1), "STMT"))
 	{
 		update_pylst(self->tt->tags, self->i, "STMT", 0, _ptr);
 		self->begin_cmd = false;
@@ -49,6 +49,7 @@ static	void	braceparam_or_assignation(t_tags_tokens_monitor *self)
 
 void			op_selector_ttm(t_tags_tokens_monitor *self)
 {
+	ft_printf(GREEN"%s %s\n"WHITE, self->token, self->tag);
 	if (self->tt->valid)
 	{
 		if (ft_strequ(self->tag, "STMT"))
@@ -74,4 +75,5 @@ void			op_selector_ttm(t_tags_tokens_monitor *self)
 		else if (ft_strequ(self->tag, vindex_pylst(self->opened, -1)))
 			pop_pylst(&self->opened, -1);
 	}
+	ft_printf("%s\n", str_chare_pylst(self->tt->tags));
 }
