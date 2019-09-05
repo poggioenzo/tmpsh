@@ -79,6 +79,29 @@ static int		execution_cleaner(char **argv, char *command, int status)
 	return (free_str_array(&argv, status));
 }
 
+int				prepare_builtin(t_acb *branch, char *executable, \
+		char **argv, t_pylst *variables)
+{
+	pid_t	pid;
+
+	pid = -1;
+	if (in(branch->tag_end, "BACKGROUND_JOBS", "PIPE", NULL))
+	{
+		if ((pid = fork_prepare(branch->pgid, branch->background)) == 0)
+			exit(run_builtin(branch, argv, variables));
+		else
+		{
+			close_branch_stdfd(branch);
+			branch->running = true;
+			free_pylst(&variables, pid);
+			return (execution_cleaner(argv, executable, pid));
+		}
+	}
+	branch->status = run_builtin(branch, argv, variables);
+	return (execution_cleaner(argv, executable, pid));
+}
+
+
 /*
 ** child_execution:
 **
@@ -94,10 +117,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 
 	executable = get_execname(argv[0]);
 	if (executable && !ft_strchr(executable, '/'))
-	{
-		branch->status = run_builtin(branch, argv, variables);
-		return (execution_cleaner(argv, executable, -1));
-	}
+		return (prepare_builtin(branch, executable, argv, variables));
 	if ((pid = fork_prepare(branch->pgid, branch->background)) == 0)
 	{
 		reset_signals();

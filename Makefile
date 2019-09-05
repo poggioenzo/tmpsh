@@ -1,4 +1,5 @@
-NAME = tmpsh
+NAME = shell_executable
+REAL_NAME = tmpsh
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Wno-error=unused-result -g #-fsanitize=address #-pedantic#-Wconversion #  -Wall -Wextra -Werror 
@@ -42,6 +43,7 @@ all: get_lib $(NAME)
 
 $(NAME): $(OBJS) $(LIB)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^ -o $@
+	ln -f -s $@ $(REAL_NAME)
 
 clean:
 	#Use clean rule of lib if the called command is also clean, skip otherwise
@@ -50,7 +52,7 @@ clean:
 
 fclean:clean
 	$(MAKE) -C $(LIBDIR) $@
-	rm -rf $(NAME) shell_debug $(TEST_LIB)
+	rm -rf $(NAME) $(REAL_NAME) shell_debug $(TEST_LIB)
 
 proper:fclean
 	$(MAKE) -C $(LIBDIR) $@

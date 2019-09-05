@@ -49,7 +49,6 @@ static	void	braceparam_or_assignation(t_tags_tokens_monitor *self)
 
 void			op_selector_ttm(t_tags_tokens_monitor *self)
 {
-	ft_printf(GREEN"%s %s\n"WHITE, self->token, self->tag);
 	if (self->tt->valid)
 	{
 		if (ft_strequ(self->tag, "STMT"))
@@ -75,5 +74,4 @@ void			op_selector_ttm(t_tags_tokens_monitor *self)
 		else if (ft_strequ(self->tag, vindex_pylst(self->opened, -1)))
 			pop_pylst(&self->opened, -1);
 	}
-	ft_printf("%s\n", str_chare_pylst(self->tt->tags));
 }
