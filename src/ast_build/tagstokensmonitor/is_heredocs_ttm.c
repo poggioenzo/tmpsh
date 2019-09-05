@@ -78,7 +78,7 @@ void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 	not_end = next_ttm(self, false);
 	if (ft_strequ(self->tag, "SPACES"))
 		not_end = next_ttm(self, false);
-	if (not_end)
+	if (not_end && !in_grammar(self->tag, "ABS_TERMINATOR"))
 	{
 		if (search_value(g_grammar->opening_tags, self->tag))
 			append_to_heredocs_composed_keys(self, minus);

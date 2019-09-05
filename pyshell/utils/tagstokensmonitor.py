@@ -179,7 +179,7 @@ class TagsTokensMonitor():
         list_tok = []
         if self.tag == 'SPACES':
             not_end = self.next_tag_token()
-        if not_end:
+        if not_end and self.tag not in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
             if self.tag in gv.GRAMMAR.opening_tags:
                 j = self.tt.skip_openning_tags(self.i, get_end_tag(self.tag))
                 list_tok = self.tt.tokens[self.i:j]
@@ -262,7 +262,7 @@ class TagsTokensMonitor():
         not_end = self.next_tag_token()
         if self.tag == 'SPACES':
             not_end = self.next_tag_token()
-        if not_end:
+        if not_end and self.tag not in gv.GRAMMAR.grammar['ABS_TERMINATOR']:
             self.op_selector()
             self.begin_cmd = True
         else:
