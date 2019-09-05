@@ -15,7 +15,7 @@
 
 static char		*get_end_tag(char *tag)
 {
-	if (in_grammar(tag, "QUOTES"))
+	if (in(tag, "QUOTE", "DQUOTES", NULL))
 		return (tag);
 	return ("NEW_LINE");
 }
@@ -50,9 +50,10 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
 	j = skip_openning_tagstokens(self->tt, self->i,
 								get_end_tag(self->tag));
 	list_tok = slice_pylst(self->tt->tokens, self->i, j);
-	self->i = j - 1;
+	self->i = j ;
 	update_pylst(self->tt->tags, self->i,
-						transform_end_tag(self->tag), 0, _ptr);
+				transform_end_tag(vindex_pylst(self->tt->tags, self->i))
+				, 0, _ptr);
 	append_to_heredocs_keys(self, join_pylst(list_tok, ""),
 			len_pylst(list_tok), minus);
 	free_pylst(&list_tok, 42);

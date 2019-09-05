@@ -161,7 +161,7 @@ class TagsTokensMonitor():
 
     def is_heredocs(self):
         def get_end_tag(tag):
-            if tag in gv.GRAMMAR.grammar['QUOTES']:
+            if tag in ['QUOTE', 'DQUOTES']:
                 return tag
             return 'NEW_LINE'
 
@@ -184,8 +184,8 @@ class TagsTokensMonitor():
                 j = self.tt.skip_openning_tags(self.i, get_end_tag(self.tag))
                 list_tok = self.tt.tokens[self.i:j]
                 key = [''.join(list_tok), len(list_tok), minus]
-                self.i = j - 1
-                self.tt.tags[self.i] = transform_end_tag(self.tag)
+                self.i = j
+                self.tt.tags[self.i] = transform_end_tag(self.tt.tags[self.i])
             else:
                 key = [self.token, 1, minus]
             self.heredocs_keys.append(key)
