@@ -39,7 +39,6 @@ static t_pylst	*prepare_cmdsubst_pipe(void)
 	return (pipe_lst);
 }
 
-
 /*
 ** setup_stdput:
 **
