@@ -119,6 +119,11 @@ class TagsTokens():
             i -= 1
         return self.tokens[i] if get_token else self.tags[i]
 
+    def find_next_ind_token(self, i):
+        if i + 1 < self.length and self.tags[i] == 'SPACES':
+            i += 1
+        return i
+
     def find_next_token(self, i, get_token=True):
         if i + 1 < self.length and self.tags[i] == 'SPACES':
             i += 1

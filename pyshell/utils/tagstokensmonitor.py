@@ -218,6 +218,10 @@ class TagsTokensMonitor():
                 self.tt.tags[self.i] = 'STMT'
 
     def is_abs_terminator(self):
+        if self.tag in gv.GRAMMAR.grammar['BINARY'] \
+                and self.i + 1 < self.tt.length \
+                and self.tt.find_next_token(self.i + 1, False) == 'NEW_LINE':
+            del self.tt[self.tt.find_next_ind_token(self.i + 1)]
         self.reset()
 
     def in_sub_process(self):

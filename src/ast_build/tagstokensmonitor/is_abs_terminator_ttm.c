@@ -26,5 +26,14 @@
 
 void	is_abs_terminator_ttm(t_tags_tokens_monitor *self)
 {
+	int to_del;
+
+	if (in_grammar(self->tag, "BINARY")
+		&& self->i + 1 < (int)self->tt->length
+		&& ft_strequ(find_next_token(self->tt, self->i + 1, false), "NEW_LINE"))
+	{
+		to_del = find_next_ind_token(self->tt, self->i + 1);
+		delitems_tagstokens(self->tt, to_del, to_del + 1, 42);
+	}
 	reset_ttm(self);
 }
