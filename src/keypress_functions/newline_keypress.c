@@ -55,10 +55,12 @@ static void	register_command(char *shell_str)
 
 void		execute_tagstoken(t_tagstokens *tagstokens, char *command)
 {
+	ft_printf(g_caps->reset_cursor);
 	register_command(command);
 	manage_termios(remove_config);
 	executor(init_ast(tagstokens));
 	manage_termios(shell_config);
+	ft_printf(g_caps->hide_cursor);
 }
 
 /*
