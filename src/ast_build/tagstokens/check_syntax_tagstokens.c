@@ -82,5 +82,10 @@ t_tagstokens	*check_syntax_tagstokens(t_tagstokens *self)
 		self->valid &= check_validity();
 	}
 	clear_stack_tagstokens(self);
+	if (self->token_error && ft_strequ(self->token_error, "\n"))
+	{
+		ft_strdel(&self->token_error);
+		self->token_error = ft_strdup("'\\n'");
+	}
 	return (self);
 }
