@@ -12,6 +12,7 @@ tmpsh
 shell_debug
 test_shell
 shell_executable
+21sh
 
 # Prerequisites
 dependencies/*.d
