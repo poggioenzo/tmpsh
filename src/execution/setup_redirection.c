@@ -107,7 +107,8 @@ t_bool			setup_redirection(t_acb *branch)
 		if (redirection->error == false)
 		{
 			if (redirection->dest)
-				replace_fd(clean_popper(redirection->dest), redirection->source);
+				replace_fd(clean_popper(redirection->dest), \
+						redirection->source);
 			if (redirection->close)
 				close(redirection->source);
 		}

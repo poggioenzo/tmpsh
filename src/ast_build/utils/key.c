@@ -13,7 +13,7 @@
 
 #include "utils.h"
 
-char	*get_key(char *key, char *tag, char *token, t_bool minus)
+char			*get_key(char *key, char *tag, char *token, t_bool minus)
 {
 	if (minus)
 	{
@@ -34,7 +34,7 @@ static int		squoted_gold_key(char *gold_key)
 	return (gold_key[0] == '\'' && gold_key[len_key - 1] == '\'');
 }
 
-int		dquoted_gold_key(char *gold_key)
+int				dquoted_gold_key(char *gold_key)
 {
 	int len_key;
 

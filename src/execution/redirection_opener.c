@@ -100,7 +100,8 @@ void			open_redirection_file(t_redirection_fd *redirection)
 				return ;
 			}
 			else
-				ft_printf(NAME_SH" Permission denied : %s\n", redirection->dest);
+				ft_printf(NAME_SH" Permission denied : %s\n", \
+						redirection->dest);
 		}
 		redirection->error = true;
 	}
