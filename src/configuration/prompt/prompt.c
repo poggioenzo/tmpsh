@@ -26,14 +26,11 @@ static void	insert_field(char **prompt, int index, char *(*data_func)(void))
 	char	*added_elem;
 	char	*second_prompt_part;
 
-	if (!(new_prompt = ft_strsub(*prompt, 0, index)))
-		exit(-1);
+	new_prompt = ft_strsub(*prompt, 0, index);
 	added_elem = data_func();
-	if (!(new_prompt = ft_fstrjoin(&new_prompt, &added_elem, 1, 1)))
-		exit(-1);
+	new_prompt = ft_fstrjoin(&new_prompt, &added_elem, 1, 1);
 	second_prompt_part = (*prompt) + index + 2;
-	if (!(new_prompt = ft_fstrjoin(&new_prompt, &second_prompt_part, 1, 0)))
-		exit(-1);
+	new_prompt = ft_fstrjoin(&new_prompt, &second_prompt_part, 1, 0);
 	ft_strdel(prompt);
 	*prompt = new_prompt;
 }
