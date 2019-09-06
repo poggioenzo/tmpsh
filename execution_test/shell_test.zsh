@@ -8,9 +8,12 @@ then
 else if [ "$USER" = simrossi ]
 	SHELL_DIR=~/Documents/tmpsh
 fi
-SHELL_NAME="tmpsh"
 
-#Files to test
+SHELL_NAME="tmpsh"
+TEST_DIRECTORY=$(pwd)/
+
+#Check depending of the arguments
+#which file or folder have to be used.
 
 if [ $# -eq 0 ]
 then
@@ -30,16 +33,28 @@ GREEN="\033[0;1;32m"
 RED="\033[0;1;31m"
 RESET="\033[0;m"
 
+#Perfom the test of single file, compare the bash output with
+#the given shell.
+#Run the user shell with the given script, and do the same with
+#bash. Compare the result of both output.
+
 file_test()
 {
     local display_name
+    local user_output="${TEST_DIRECTORY}.user_file_output.test"
+    local bash_output="${TEST_DIRECTORY}.bash_file_output.test"
+    local diff_res
 
 	cd $SHELL_DIR
 	
     display_name=$(basename $1)
     echo "${YELLOW}Test for ${display_name}:${RESET}"
-    diff <(./${SHELL_NAME} $1 2>&1) <(bash $1 2>&1)
-    if [ $? -eq 0 ]
+    ./${SHELL_NAME} $1 > $user_output 2>&1 
+    bash $1 > $bash_output 2>&1 
+    diff $user_output $bash_output
+    diff_res=$?
+    rm -f $user_output $bash_output
+    if [ $diff_res -eq 0 ]
     then
         echo "${GREEN}Sucess.${RESET}"
     else
@@ -47,6 +62,8 @@ file_test()
     fi
 	cd -
 }
+
+#Run each file of the given folder.
 
 folder_test()
 {
@@ -59,7 +76,11 @@ folder_test()
 	done
 }
 
+#Depending of user argument, run a single file, or each file
+#of the given folder.
+
 export TEST_42SH=True
+
 if [ -d "$SCRIPTS" ]
 then
 	echo "${YELLOW}< Your output | bash output >${RESET}\n"

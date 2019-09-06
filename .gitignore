@@ -8,6 +8,7 @@ __pycache__/
 
 tmpsh
 .*.swp
+.*.test
 .*.swo
 shell_debug
 test_shell
