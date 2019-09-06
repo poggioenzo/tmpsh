@@ -46,7 +46,6 @@ file_test()
     local diff_res
 
 	cd $SHELL_DIR
-	
     display_name=$(basename $1)
     echo "${YELLOW}Test for ${display_name}:${RESET}"
     ./${SHELL_NAME} $1 > $user_output 2>&1 
@@ -58,7 +57,7 @@ file_test()
     then
         echo "${GREEN}Sucess.${RESET}"
     else
-        echo "${RED}Failure.${RESET}"
+        echo "${RED}Failure on $1.${RESET}"
     fi
 	cd -
 }
