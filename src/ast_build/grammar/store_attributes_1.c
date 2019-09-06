@@ -39,7 +39,7 @@ void		get_reverse_grammar(void)
 	{
 		while (iter_pylst(lst_values, (void **)&value))
 		{
-			insert_value(g_grammar->reverse, value, key, _ptr);
+			insert_value(g_grammar->reverse, value, key, _static);
 			push_pylst(&g_grammar->reverse_list, value, 0, _ptr);
 		}
 	}

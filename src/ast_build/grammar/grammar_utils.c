@@ -61,7 +61,7 @@ void	add_symbol(char *symbol, char *symbol_name)
 				symbol_name);
 		push_pylst(tmp_lst, symbol, 0, _chare);
 	}
-	insert_value(g_grammar->reverse, symbol, symbol_name, _ptr);
+	insert_value(g_grammar->reverse, symbol, symbol_name, _static);
 }
 
 int		containalphanum(char *str)

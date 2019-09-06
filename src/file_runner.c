@@ -42,14 +42,15 @@ int				run_file(char *filename)
 	tagstoks = NULL;
 	routine_tagstokens(&tagstoks, content);
 	if (tagstoks->incomplete)
-		return (ft_dprintf(2, NAME_SH" Error with %s\n", filename));
-	if (tagstoks->valid && !tagstoks->incomplete)
+		ft_dprintf(2, NAME_SH" Error with %s\n", filename);
+	else if (tagstoks->valid && !tagstoks->incomplete)
 	{
 		executor(init_ast(tagstoks));
 		manage_termios(remove_config);
 	}
 	else
 		ft_dprintf(2, NAME_SH" syntax error near %s\n", tagstoks->token_error);
+	free_tagstokens(&tagstoks, 0);
 	return (0);
 }
 

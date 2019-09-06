@@ -53,4 +53,5 @@ void	display_shell(t_line *prompt_lines, t_cursor *cursor, int first_display)
 		clean_lines(displayed_lines, TRUE);
 	displayed_lines = curr_line_size;
 	write(STDOUT_FILENO, shell_repr, shell_len);
+	ft_strdel(&shell_repr);
 }

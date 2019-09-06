@@ -44,10 +44,10 @@ static void		get_dquotes_opening_tags(void)
 
 	if ((tmp_search = search_value(g_grammar->opening_tags, "BRACEPARAM")))
 		insert_value(g_grammar->dquotes_opening_tags, "BRACEPARAM", \
-				tmp_search, _ptr);
+				tmp_search, _static);
 	if ((tmp_search = search_value(g_grammar->opening_tags, "CMDSUBST1")))
 		insert_value(g_grammar->dquotes_opening_tags, "CMDSUBST1", tmp_search, \
-				_ptr);
+				_static);
 }
 
 void			get_opening_tags(void)

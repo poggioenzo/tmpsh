@@ -48,7 +48,6 @@ void			free_grammar(void)
 	free_pylst(&g_grammar->leaf_op, 0);
 	free_hash_table(&g_grammar->dquotes_opening_tags, 0);
 	free_hash_table(&g_grammar->opening_tags, 0);
-	ft_strdel_out(&g_grammar->spaces, 0);
 	free_hash_table(&g_grammar->reverse, 0);
 	free_hash_table(&g_grammar->grammar, 0);
 	ft_strdel(&g_grammar->path);
