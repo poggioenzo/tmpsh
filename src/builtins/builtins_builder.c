@@ -44,4 +44,5 @@ void		setup_builtins(void)
 	insert_value(g_builtins, "jobs", built_jobs, _static);
 	insert_value(g_builtins, "type", built_type, _static);
 	insert_value(g_builtins, "hash", built_hash, _static);
+	insert_value(g_builtins, "pwd", built_pwd, _static);
 }

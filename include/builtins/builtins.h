@@ -30,6 +30,7 @@ int			built_alias(char **argv, char **environ);
 int			built_unalias(char **argv, char **environ);
 int			built_export(char **argv, char **environ);
 int			built_type(char **argv, char **environ);
+int			built_pwd(char **argv, char **environ);
 
 void		setup_builtins(void);
 

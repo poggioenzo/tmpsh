@@ -107,6 +107,7 @@ BUILTINS_SRCS := cd.c \
 				 cd_finder.c \
 				 cd_canon.c \
 				 cd_canon_utils.c \
+                 pwd.c \
 				 env.c \
 				 envvar_builtins.c \
 				 localvar_builtins.c \
