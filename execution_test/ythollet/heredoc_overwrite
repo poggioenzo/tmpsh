@@ -1,0 +1,8 @@
+filename=the_test_file.test
+echo CONTENT > $filename
+
+cat << PLOP < $filename;ls
+HERE BRO
+PLOP
+
+rm $filename

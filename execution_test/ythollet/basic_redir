@@ -1,0 +1,2 @@
+echo "text" > file ; echo middle && < file cat
+rm file

@@ -1,0 +1,2 @@
+echo test >'&2'; rm '&2'
+echo file > '&' && rm '&'
