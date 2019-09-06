@@ -22,6 +22,7 @@
 #include "termios_setter.h"
 #include "clipboard.h"
 #include "signal_handler.h"
+#include "globals_setup.h"
 #include <signal.h>
 
 /*
@@ -107,6 +108,7 @@ void			shell_exit(int status)
 	display_shell(shell_repr, cursor, FALSE);
 	ft_printf("%s\n", g_caps->reset_cursor);
 	shell_cleaner();
+	remove_globals();
 	exit(status);
 }
 
