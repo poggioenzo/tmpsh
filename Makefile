@@ -13,7 +13,8 @@ endif
 
 #according to a given c file, transform it in a hidden file format
 #Exemple : 'my/folder/file.o' will be 'my/folder/.file.o'
-hidden_format = $(shell python -c "file = '$(1)'.split('/');print('/'.join(file[:-1]) + '/.' + file[-1])")
+get_hidden_obj = $(addprefix ., $(notdir $(1)))
+hidden_format = $(addprefix $(dir $(1)), $(call get_hidden_obj, $(1)))
 convert_src = $(strip $(call hidden_format, $(1:%.c=%.o)))
 
 #Transform each %.c source file in the corresponding %.o file in an hidden file format.
