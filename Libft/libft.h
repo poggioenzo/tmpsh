@@ -52,6 +52,7 @@ enum			e_ctype
 	_redfd,
 	_hash_exec,
 	_job,
+	_static,
 	size
 };
 
