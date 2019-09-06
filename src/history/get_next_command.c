@@ -84,8 +84,7 @@ static char	*cut_next_command(char **command_list)
 		cursor_pos++;
 	cursor_pos += 2;
 	len = command_len(cursor_pos);
-	if (!(new_cmd = ft_strsub(cursor_pos, 0, len)))
-		exit(-1);
+	new_cmd = ft_strsub(cursor_pos, 0, len);
 	cursor_pos += len + 1;
 	*command_list = cursor_pos;
 	return (new_cmd);
