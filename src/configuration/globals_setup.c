@@ -46,9 +46,10 @@ void		setup_globals(char **environ)
 	char	*grammar_file;
 	char	*cwd;
 
-	if (have_control_tty() == false)
-		exit(1);
 	setup_freefct();
+	setup_variables_elements(environ);
+	if (!ft_getenv("TEST_42SH") && have_control_tty() == false)
+		exit(1);
 	grammar_file = "/pyshell/grammar/grammar.txt";
 	cwd = getcwd(NULL, 0);
 	g_shell_dir = ft_strdup(cwd);
@@ -59,7 +60,6 @@ void		setup_globals(char **environ)
 		exit(-1);
 	grammar_init(grammar_file);
 	setup_builtins();
-	setup_variables_elements(environ);
 	alloc_capabilities_struct();
 	ht_new_table(&g_alias, 47, 65);
 	ht_new_table(&g_hash, 47, 50);

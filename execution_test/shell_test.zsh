@@ -59,6 +59,7 @@ folder_test()
 	done
 }
 
+export TEST_42SH=True
 if [ -d "$SCRIPTS" ]
 then
 	echo "${YELLOW}< Your output | bash output >${RESET}\n"
