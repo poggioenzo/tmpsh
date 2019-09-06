@@ -34,7 +34,7 @@ static int		remove_all(t_pylst *options)
 		return (0);
 	}
 	error_option = options;
-	while (error_option || ft_strequ(error_option->value, "a"))
+	while (error_option && ft_strequ(error_option->value, "a"))
 		error_option = error_option->next;
 	ft_dprintf(2, "unalias: bad option: %s\n", error_option->value);
 	free_pylst(&options, 0);
