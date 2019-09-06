@@ -41,6 +41,7 @@ int				run_file(char *filename)
 		return (ft_dprintf(2, NAME_SH" Error with %s\n", filename));
 	tagstoks = NULL;
 	routine_tagstokens(&tagstoks, content);
+	ft_strdel(&content);
 	if (tagstoks->incomplete)
 		ft_dprintf(2, NAME_SH" Error with %s\n", filename);
 	else if (tagstoks->valid && !tagstoks->incomplete)

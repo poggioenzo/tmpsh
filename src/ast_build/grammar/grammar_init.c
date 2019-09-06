@@ -50,6 +50,7 @@ void			free_grammar(void)
 	free_hash_table(&g_grammar->opening_tags, 0);
 	free_hash_table(&g_grammar->reverse, 0);
 	free_hash_table(&g_grammar->grammar, 0);
+	free_pylst(&g_grammar->reverse_list, 0);
 	ft_strdel(&g_grammar->path);
 	ft_memdel((void **)&g_grammar);
 }

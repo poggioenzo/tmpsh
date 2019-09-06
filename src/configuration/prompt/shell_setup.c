@@ -73,6 +73,7 @@ static void		insert_prompt_format(t_line *shell_lines, t_cursor *cursor)
 	prompt_format = format_prompt();
 	insert_string(&shell_lines->chars, prompt_format, TRUE);
 	cursor->column += ft_strlen(prompt_format);
+	ft_strdel(&prompt_format);
 }
 
 /*

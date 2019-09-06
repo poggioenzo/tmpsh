@@ -76,5 +76,6 @@ void		remove_globals(void)
 	free_hash_table(&g_hash, 0);
 	free_pylst(&g_jobs->list_jobs, 0);
 	ft_memdel((void **)&g_jobs);
+	ft_memdel((void **)&g_caps);
 	free_grammar();
 }
