@@ -47,10 +47,10 @@ static int		remove_all(t_pylst *options)
 ** unalias - remove alias definition.
 **
 ** Synopsis : unalias alias-name [...]
-**			  unalias -p
+**			  unalias -a
 **
 ** Options:
-** -p : Remove all alias definition.
+** -a : Remove all alias definition.
 */
 
 int				built_unalias(char **argv, NOT_USE(char **environ))
