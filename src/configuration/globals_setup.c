@@ -35,7 +35,8 @@ t_bool		have_control_tty(void)
 {
 	if (!isatty(STDOUT_FILENO) || !isatty(STDIN_FILENO))
 	{
-		ft_dprintf(2, NAME_SH" Need controlling terminal\n");
+		ft_dprintf(2, \
+			NAME_SH" Need controlling terminal, or set TEST_42SH variable.\n");
 		return (false);
 	}
 	return (true);
