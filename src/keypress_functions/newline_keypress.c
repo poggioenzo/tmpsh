@@ -81,6 +81,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	{
 		add_new_line(*shell_repr, tagstoken, *cursor);
 		free_tagstokens(&tagstoken, 0);
+		ft_strdel(&shell_content);
 		return (true);
 	}
 	**cursor = (t_cursor){.row = -1, .column = -1};
@@ -92,6 +93,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 	else
 		ft_dprintf(2, NAME_SH" syntax error near %s\n", tagstoken->token_error);
 	shell_preconfig(shell_repr, cursor);
+	ft_strdel(&shell_content);
 	free_tagstokens(&tagstoken, 0);
 	return (false);
 }

@@ -89,7 +89,6 @@ void			shell_cleaner(void)
 	manage_shell_repr(GO_FREE, NULL, NULL);
 	manage_termios(remove_config);
 	clipboard_store(GO_FREE, NULL);
-	free_capabilities_struct(&g_caps, 0);
 }
 
 /*
@@ -124,7 +123,6 @@ void			shell_preconfig(t_line **shell, t_cursor **cursor)
 {
 	manage_shell_repr(CREATE, shell, cursor);
 	insert_prompt_format(*shell, *cursor);
-	alloc_capabilities_struct(&g_caps);
 	signal_setup();
 	ft_printf(g_caps->hide_cursor);
 	display_shell(*shell, *cursor, TRUE);

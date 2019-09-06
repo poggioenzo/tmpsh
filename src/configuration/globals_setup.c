@@ -20,6 +20,7 @@
 #include "grammar_init.h"
 #include "variables.h"
 #include "job_control.h"
+#include "t_caps_utils.h"
 #include "foreground.h"
 
 int			g_last_status = 0;
@@ -59,6 +60,7 @@ void		setup_globals(char **environ)
 	grammar_init(grammar_file);
 	setup_builtins();
 	setup_variables_elements(environ);
+	alloc_capabilities_struct();
 	ht_new_table(&g_alias, 47, 65);
 	ht_new_table(&g_hash, 47, 50);
 	init_backgroundjobs();

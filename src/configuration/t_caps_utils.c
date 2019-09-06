@@ -26,29 +26,22 @@
 
 t_caps	*g_caps;
 
-void		alloc_capabilities_struct(t_caps **capabilities)
+void		alloc_capabilities_struct(void)
 {
 	if (!ft_getenv("TERM"))
 		ft_setenv("TERM", "screen");
 	if (tgetent(NULL, ft_getenv("TERM")) == -1)
 		exit(-1);
-	*capabilities = (t_caps *)ft_memalloc(sizeof(t_caps));
-	(*capabilities)->clear = tgetstr("cl", NULL);
-	(*capabilities)->video = tgetstr("mr", NULL);
-	(*capabilities)->reset_video = tgetstr("me", NULL);
-	(*capabilities)->hide_cursor = tgetstr("vi", NULL);
-	(*capabilities)->reset_cursor = tgetstr("ve", NULL);
-	(*capabilities)->save_pos = tgetstr("sc", NULL);
-	(*capabilities)->reset_pos = tgetstr("rc", NULL);
-	(*capabilities)->del_line = tgetstr("dl", NULL);
-	(*capabilities)->start_line = tgetstr("cr", NULL);
-	(*capabilities)->move_up = tgetstr("up", NULL);
-	(*capabilities)->move_down = tgetstr("do", NULL);
-}
-
-int			free_capabilities_struct(t_caps **capabilities, int status)
-{
-	FREE(*capabilities);
-	*capabilities = NULL;
-	return (status);
+	g_caps = (t_caps *)ft_memalloc(sizeof(t_caps));
+	g_caps->clear = tgetstr("cl", NULL);
+	g_caps->video = tgetstr("mr", NULL);
+	g_caps->reset_video = tgetstr("me", NULL);
+	g_caps->hide_cursor = tgetstr("vi", NULL);
+	g_caps->reset_cursor = tgetstr("ve", NULL);
+	g_caps->save_pos = tgetstr("sc", NULL);
+	g_caps->reset_pos = tgetstr("rc", NULL);
+	g_caps->del_line = tgetstr("dl", NULL);
+	g_caps->start_line = tgetstr("cr", NULL);
+	g_caps->move_up = tgetstr("up", NULL);
+	g_caps->move_down = tgetstr("do", NULL);
 }

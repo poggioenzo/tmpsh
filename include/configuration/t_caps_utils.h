@@ -16,8 +16,9 @@
 
 # include <term.h>
 # include <stdlib.h>
+# undef set_foreground
 # include "tmpsh.h"
 
-void		alloc_capabilities_struct(t_caps **capabilities);
-int			free_capabilities_struct(t_caps **capabilities, int status);
+void		alloc_capabilities_struct(void);
+
 #endif
