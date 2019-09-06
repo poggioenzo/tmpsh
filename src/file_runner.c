@@ -19,7 +19,37 @@
 #include "ast.h"
 #include "exec_file.h"
 #include "file_rights.h"
+#include "file_runner.h"
 #include <fcntl.h>
+
+
+enum e_tagstoks_state			script_execute(char *script)
+{
+	enum e_tagstoks_state		state;
+	t_tagstokens				*tagstoks;
+
+	g_jobs->allow_background = false;
+	tagstoks = NULL;
+	routine_tagstokens(&tagstoks, script);
+	if (tagstoks->incomplete)
+	{
+		ft_dprintf(2, NAME_SH" incomplete script.\n");
+		state = incomplete_script;
+	}
+	else if (tagstoks->valid && !tagstoks->incomplete)
+	{
+		executor(init_ast(tagstoks));
+		manage_termios(remove_config);
+		state = complete_script;
+	}
+	else
+	{
+		ft_dprintf(2, NAME_SH" syntax error near %s\n", tagstoks->token_error);
+		state = invalid_script;
+	}
+	free_tagstokens(&tagstoks, 0);
+	return (state);
+}
 
 /*
 ** run_file:
@@ -28,31 +58,20 @@
 ** Check if the given AST is correct before launching it.
 */
 
-int				run_file(char *filename)
+enum e_tagstoks_state		run_file(char *filename)
 {
 	char			*content;
-	t_tagstokens	*tagstoks;
 	int				file_fd;
+	enum e_tagstoks_state	state;
 
 	if (!check_rights(filename, F | R, false, true))
 		return (1);
 	file_fd = open(filename, O_RDONLY);
 	if (!(content = fd_readfile(file_fd)))
 		return (ft_dprintf(2, NAME_SH" Error with %s\n", filename));
-	tagstoks = NULL;
-	routine_tagstokens(&tagstoks, content);
+	state = script_execute(content);
 	ft_strdel(&content);
-	if (tagstoks->incomplete)
-		ft_dprintf(2, NAME_SH" Error with %s\n", filename);
-	else if (tagstoks->valid && !tagstoks->incomplete)
-	{
-		executor(init_ast(tagstoks));
-		manage_termios(remove_config);
-	}
-	else
-		ft_dprintf(2, NAME_SH" syntax error near %s\n", tagstoks->token_error);
-	free_tagstokens(&tagstoks, 0);
-	return (0);
+	return (state);
 }
 
 /*
@@ -62,9 +81,15 @@ int				run_file(char *filename)
 ** by one.
 */
 
-void			run_shell_files(char **files)
+int			run_shell_files(char **files)
 {
-	g_jobs->allow_background = false;
+	int		state;
+
+	state = 0;
 	while (*files)
-		run_file(*files++);
+	{
+		if (run_file(*files++) != complete_script)
+			state = 1;
+	}
+	return (state);
 }

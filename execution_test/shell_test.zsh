@@ -78,8 +78,6 @@ folder_test()
 #Depending of user argument, run a single file, or each file
 #of the given folder.
 
-export TEST_42SH=True
-
 if [ -d "$SCRIPTS" ]
 then
 	echo "${YELLOW}< Your output | bash output >${RESET}\n"

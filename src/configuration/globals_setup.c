@@ -31,17 +31,6 @@ t_pylst		*g_actual_alias = NULL;
 int			g_aliasindepth = 0;
 char		g_last_char[5];
 
-t_bool		have_control_tty(void)
-{
-	if (!isatty(STDOUT_FILENO) || !isatty(STDIN_FILENO))
-	{
-		ft_dprintf(2, \
-			NAME_SH" Need controlling terminal, or set TEST_42SH variable.\n");
-		return (false);
-	}
-	return (true);
-}
-
 void		setup_globals(char **environ)
 {
 	char	*grammar_file;
@@ -49,8 +38,6 @@ void		setup_globals(char **environ)
 
 	setup_freefct();
 	setup_variables_elements(environ);
-	if (!ft_getenv("TEST_42SH") && have_control_tty() == false)
-		exit(1);
 	grammar_file = "grammar.txt";
 	cwd = getcwd(NULL, 0);
 	g_shell_dir = ft_strdup(cwd);

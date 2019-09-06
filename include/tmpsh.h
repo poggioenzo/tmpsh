@@ -168,6 +168,13 @@ struct		s_tagstokens
 	int			iter;
 };
 
+enum		e_tagstoks_state
+{
+	incomplete_script,
+	invalid_script,
+	complete_script,
+};
+
 typedef struct s_ast	t_ast;
 struct		s_ast
 {

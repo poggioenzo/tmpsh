@@ -42,16 +42,40 @@ void	source_rc(void)
 	g_jobs->allow_background = true;
 }
 
+int		run_stdin_file(void)
+{
+	char	*fd_content;
+	int		state;
+
+	if (!(fd_content = fd_readfile(0)))
+		return (1);
+	state = script_execute(fd_content);
+	return (state == complete_script ? 0 : 1);
+}
+
 int		main(int argc, char **argv, char **environ)
 {
+	int		status;
+
 	setup_globals(environ);
+	status = 0;
 	if (argc == 1)
 	{
-		source_rc();
-		prompt_loop();
+		if (!isatty(STDIN_FILENO))
+			status = run_stdin_file();
+		else if (isatty(STDOUT_FILENO))
+		{
+			source_rc();
+			prompt_loop();
+		}
+		else
+		{
+			ft_dprintf(2, NAME_SH" no controlling terminal.\n");
+			status = 1;
+		}
 	}
 	else
-		run_shell_files(argv + 1);
+		status = run_shell_files(argv + 1);
 	remove_globals();
-	return (0);
+	return (status);
 }
