@@ -26,5 +26,6 @@ void			free_pylst_type(void *pylst_ptr);
 void			free_hash_table_type(void *table_ptr);
 void			free_hash_exec_type(void *hash_exec);
 void			free_job_type(void *job);
+void			free_static_type(void *static_ptr);
 
 #endif

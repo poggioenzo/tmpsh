@@ -30,5 +30,10 @@ void		free_hash_exec_type(void *hash_exec)
 
 	removed_cache = (t_hash_exec **)hash_exec;
 	ft_strdel(&(*removed_cache)->exec_file);
-	ft_memdel(&hash_exec);
+	ft_memdel((void **)hash_exec);
+}
+
+void		free_static_type(NOT_USE(void *static_ptr))
+{
+	return ;
 }

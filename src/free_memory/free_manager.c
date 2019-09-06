@@ -36,4 +36,5 @@ void		setup_freefct(void)
 	g_free_fct[_acb] = free_acb_type;
 	g_free_fct[_ast] = free_ast_type;
 	g_free_fct[_redfd] = free_redfd_type;
+	g_free_fct[_static] = free_static_type;
 }
