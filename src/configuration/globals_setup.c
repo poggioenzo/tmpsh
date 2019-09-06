@@ -51,12 +51,12 @@ void		setup_globals(char **environ)
 	setup_variables_elements(environ);
 	if (!ft_getenv("TEST_42SH") && have_control_tty() == false)
 		exit(1);
-	grammar_file = "/pyshell/grammar/grammar.txt";
+	grammar_file = "grammar.txt";
 	cwd = getcwd(NULL, 0);
 	g_shell_dir = ft_strdup(cwd);
 	free(cwd);
 	manage_termios(save_config);
-	grammar_file = ft_strjoin(g_shell_dir, grammar_file);
+	grammar_file = ft_filejoin(&g_shell_dir, &grammar_file, false, false);
 	if (!check_rights(grammar_file, F | R, false, true))
 		exit(-1);
 	grammar_init(grammar_file);
