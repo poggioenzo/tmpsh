@@ -1,0 +1,2 @@
+echo tes't $USER te'st
+echo tes"t $USER te"st
