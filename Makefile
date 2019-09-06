@@ -3,7 +3,7 @@ REAL_NAME = tmpsh
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Wno-error=unused-result -O3#-g #-fsanitize=address #-pedantic#-Wconversion #  -Wall -Wextra -Werror 
-CPPFLAGS = $(addprefix -I , $(INCLUDES_LIST))
+CPPFLAGS = $(addprefix -I , $(INCLUDES))
 
 include sources.d
 
@@ -31,14 +31,11 @@ DEPENDENCIES_FOLDER = dependencies/
 
 DEPENDENCIES = $(patsubst $(SOURCES_FOLDER)%.c, $(DEPENDENCIES_FOLDER)%.d, $(SOURCES))
 
-#Remove duplicate directory name, used with $(call ...) function
-select_dir = $(shell python -c "files = '$(1)'; files = set(files.split(' ')); print(' '.join(files).strip())")
 
-INCLUDES = $(patsubst $(SOURCES_FOLDER)%.c, $(INCLUDE_FOLDER)%.h, $(SOURCES))
-INCLUDES_LIST := $(foreach file, $(INCLUDES), $(dir $(file)))
-INCLUDES_LIST := $(call select_dir, $(INCLUDES_LIST))
+#Retrieve all includes file by listing all directories in INCLUDES_FOLDER
+INCLUDES = $(shell find $(INCLUDE_FOLDER:%/=%) -type d)
 
-INCLUDES_LIST += $(LIB_INCLUDES)
+INCLUDES += $(LIB_INCLUDES)
 
 all: get_lib $(NAME)
 
