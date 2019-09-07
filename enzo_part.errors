@@ -1,1 +1,3 @@
 0 - echo test > file && cat < file>>file2 -> READ_FROM of file is getting NULL
+1 - mv 2>&1 > content -> TRUNC_TO_FD 2>&1 is getting a NULL dest
+2 - Heredocs are having 1 as default source
