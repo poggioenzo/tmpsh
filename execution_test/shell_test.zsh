@@ -11,6 +11,8 @@ fi
 
 SHELL_NAME="tmpsh"
 TEST_DIRECTORY=$(pwd)/
+SHELL_EXECUTABLE=${TEST_DIRECTORY}../${SHELL_NAME}
+echo $SHELL_EXECUTABLE
 
 #Check depending of the arguments
 #which file or folder have to be used.
@@ -45,10 +47,9 @@ file_test()
     local bash_output="${TEST_DIRECTORY}.bash_file_output.test"
     local diff_res
 
-	cd $SHELL_DIR
     display_name=$(basename $1)
     echo "${YELLOW}Test for ${display_name}:${RESET}"
-    ./${SHELL_NAME} $1 > $user_output 2>&1 
+    ${SHELL_EXECUTABLE} $1 > $user_output 2>&1 
     bash $1 > $bash_output 2>&1 
     diff $user_output $bash_output
     diff_res=$?
@@ -59,7 +60,6 @@ file_test()
     else
         echo "${RED}Failure on $1.${RESET}"
     fi
-	cd -
 }
 
 #Run each file of the given folder.

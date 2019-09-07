@@ -1,0 +1,6 @@
+cat << THE 2<< STDERR
+file for cat no ?
+THE
+    Read this STDERR ! 
+    (I'm kidding, don't fail please !)
+STDERR

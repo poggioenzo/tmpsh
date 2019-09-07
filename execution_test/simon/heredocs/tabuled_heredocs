@@ -1,0 +1,13 @@
+cat << EOF
+        EOF content
+        ls
+        EOF
+  ok
+EOF
+
+cat <<- EOF
+        EOF content
+        ls
+        EOF
+  ok
+EOF

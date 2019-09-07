@@ -1,0 +1,3 @@
+cat << OK
+content
+OK

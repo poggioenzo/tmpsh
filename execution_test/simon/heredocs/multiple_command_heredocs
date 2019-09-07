@@ -1,0 +1,10 @@
+cat << FILE << YO; echo middle && cat << LAST
+Start the cat
+INSIDE FILE
+FILE
+
+YO HEREDOC ! 
+YO
+For the last cat <3
+LAST
+
