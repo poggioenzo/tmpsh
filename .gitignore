@@ -10,6 +10,7 @@ tmpsh
 .*.swp
 .*.test
 .*.swo
+.*.memcheck
 shell_debug
 test_shell
 shell_executable
