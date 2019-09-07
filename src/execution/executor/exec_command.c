@@ -47,9 +47,10 @@ static int		run_builtin(t_acb *branch, char **cmd_args, t_pylst *variables)
 	builtin = search_value(g_builtins, cmd_args[0]);
 	save_std_fd(save);
 	replace_std_fd(branch->stdin, branch->stdout);
-	if (setup_redirection(branch) == false)
-		return (1);
-	status = builtin(cmd_args + 1, g_environ);
+	if (setup_redirection(branch) == true)
+		status = builtin(cmd_args + 1, g_environ);
+	else
+		status = 1;
 	save_std_fd(restore);
 	if (saved_environ)
 	{
