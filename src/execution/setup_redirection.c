@@ -43,16 +43,10 @@ static char		*join_cmd(t_pylst *list_branch)
 	final_cmd = ft_strnew(0);
 	while (iter_pylst(list_branch, (void **)&branch))
 	{
-		index = 0;
-		while (index < branch->tagstokens->length)
+		while (iter_tagstokens(branch->tagstokens, &token, &tag))
 		{
-			tag = vindex_pylst(branch->tagstokens->tags, index);
 			if (in(tag, "STMT", "SPACES", NULL))
-			{
-				token = vindex_pylst(branch->tagstokens->tokens, index);
 				final_cmd = ft_fstrjoin(&final_cmd, &token, true, false);
-			}
-			index++;
 		}
 		token = "\n";
 		final_cmd = ft_fstrjoin(&final_cmd, &token, true, false);

@@ -42,22 +42,15 @@ static char		**convert_command(t_pylst *command)
 
 char			**extract_cmd(t_acb *branch)
 {
-	size_t		index;
 	t_pylst		*command;
 	char		*tag;
 	char		*token;
 
-	index = 0;
 	command = NULL;
-	while (index < branch->tagstokens->length)
+	while (iter_tagstokens(branch->tagstokens, &token, &tag))
 	{
-		tag = vindex_pylst(branch->tagstokens->tags, index);
 		if (ft_strequ(tag, "STMT"))
-		{
-			token = vindex_pylst(branch->tagstokens->tokens, index);
 			push_pylst(&command, token, ft_strlen(token) + 1, _chare);
-		}
-		index++;
 	}
 	return (convert_command(command));
 }
