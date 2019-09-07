@@ -45,7 +45,7 @@ CPPFLAGS := $(addprefix -I, $(CPPFLAGS))
 all:$(TEST_NAME)
 
 $(TEST_NAME):$(OBJS) $(LIBS)
-	gcc $^ $(CPPFLAGS)  -o $@
+	gcc $^ $(CPPFLAGS) -ltermcap -o $@
 
 clean:
 	rm -rf $(OBJS)
