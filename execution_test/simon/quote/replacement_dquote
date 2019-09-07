@@ -1,0 +1,2 @@
+var=45
+echo "$var && $(ls)"
