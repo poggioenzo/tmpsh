@@ -13,8 +13,37 @@
 
 #include "tagstokens.h"
 
+static void	remove_end_line(char *str)
+{
+	char	*newline;
+
+	if ((newline = ft_strchr(str, '\n')))
+		ft_strcpy(str, newline);
+	else
+		ft_bzero(str, ft_strlen(str));
+
+}
+
+static void	remove_comments(char *str)
+{
+	int		escaped;
+
+	escaped = false;
+	while (*str)
+	{
+		if (*str == '\\' && escaped == false)
+			escaped = true;
+		else if (escaped == true)
+			escaped = false;
+		else if (*str == '#')
+			remove_end_line(str);
+		str++;
+	}
+}
+
 void	routine_tagstokens(t_tagstokens **self, char *shell_content)
 {
+	remove_comments(shell_content);
 	free_pylst(&g_actual_alias, 42);
 	free_pylst(&g_passed_alias, 42);
 	free_pylst(&g_heredocs, 42);
