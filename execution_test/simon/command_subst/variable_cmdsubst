@@ -1,0 +1,4 @@
+echo initialize var...
+var=$(echo "the variable content")
+echo my var is $var
+cat $var

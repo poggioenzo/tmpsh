@@ -1,0 +1,2 @@
+var=$(echo Nop) printenv var && echo Here it\'s "$var"
+
