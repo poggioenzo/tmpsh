@@ -1,4 +1,12 @@
 0 - echo test > file && cat < file>>file2 -> READ_FROM of file is getting NULL
+  ```
+  ~/github/tmpsh $> rm file file2
+  ~/github/tmpsh $> echo test > file && cat < file>>file2
+  ~/github/tmpsh $> cat file file2
+  test
+  test
+  ```
+  solved ??
 1 - mv 2>&1 > content -> TRUNC_TO_FD 2>&1 is getting a NULL dest
   le 1 devient la source du trunc...
   Probleme si 2>&1>truc a qui appartient le 1??
