@@ -1,10 +1,11 @@
 0 - echo test > file && cat < file>>file2 -> READ_FROM of file is getting NULL
 1 - mv 2>&1 > content -> TRUNC_TO_FD 2>&1 is getting a NULL dest
+  le 1 devient la source du trunc...
+  Probleme si 2>&1>truc a qui appartient le 1??
 2 - Heredocs are having 1 as default source
+  Il faut que ca soit quoi ?? 0 ??
 3 - Heredocs seems stripped by default
 4 - A command like this is valid: (related to 3 ?)
 cat 0<<- EOF
     $var
   EOF
-
-
