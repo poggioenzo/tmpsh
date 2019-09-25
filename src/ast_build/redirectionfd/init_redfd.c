@@ -44,11 +44,10 @@ t_redirection_fd	*init_redfd(t_tagstokens *tgtk, char *type,\
 	self->source = ft_atoi(source);
 	self->dest = vindex_pylst(self->tagstokens->tokens,\
 			self->tagstokens->length - 1);
-	self->close = (ft_strequ(self->type, "READ_FROM_FD")\
-	|| ft_strequ(self->type, "TRUNC_TO_FD")) && ft_strequ(self->dest, "-");
+	self->close = (in(self->type, "READ_FROM_FD", "TRUNC_TO_FD", NULL))
+								&& ft_strequ(self->dest, "-");
 	self->error = FALSE;
-	if ((ft_strequ(self->type, "HEREDOCMINUS") \
-				|| ft_strequ(self->type, "HEREDOC")))
+	if (in(self->type, "HEREDOCMINUS", "HEREDOC", NULL))
 		get_heredoc_redfd(self);
 	self->print = str_redfd(self);
 	return (self);
