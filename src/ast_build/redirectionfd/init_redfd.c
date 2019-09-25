@@ -39,8 +39,8 @@ t_redirection_fd	*init_redfd(t_tagstokens *tgtk, char *type,\
 	self->type = type;
 	self->heredoc_ast = NULL;
 	if (!source)
-		source = (ft_strequ(self->type, "READ_FROM_FD")\
-				|| ft_strequ(self->type, "READ_FROM")) ? "0" : "1";
+		source = in(self->type,"READ_FROM_FD", "READ_FROM",
+											"HEREDOCMINUS", "HEREDOC", NULL) ? "0" : "1";
 	self->source = ft_atoi(source);
 	self->dest = vindex_pylst(self->tagstokens->tokens,\
 			self->tagstokens->length - 1);
