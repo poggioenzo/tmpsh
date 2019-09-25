@@ -155,27 +155,38 @@ class ACB():
             i += 1
 
     def check_redirection(self):
+        def get_redirection_key_length(tagstokens, index_red):
+            begin = index_red
+            ret_tagstokens = None
+            tag = None
+            if tagstokens.tags[index_red + 1] == 'SPACES':
+                index_red += 1
+            index_red += 1
+            while index_red < tagstokens.length:
+                tag = tagstokens.tags[index_red]
+                if tag == 'SPACES':
+                    break
+                index_red += 1
+            ret_tagstokens = self.tagstokens.copytt(begin + 1, index_red)
+            del self.tagstokens[begin:index_red]
+            return ret_tagstokens
+
         lentags = self.tagstokens.length - 1
-        previous = 0
         tag = ''
         source = None
         while lentags >= 0:
             tag = self.tagstokens.tags[lentags]
             if tag in gv.GRAMMAR.grammar['REDIRECTION']:
-                if lentags > 0 and self.tagstokens.find_prev_token(lentags - 1).isdigit() and self.tagstokens.find_prev_token(lentags - 1, False) != 'SUBAST':
-                    source = self.tagstokens.find_prev_token(lentags - 1)
+                if lentags > 0 and self.tagstokens.tokens[lentags - 1].isdigit() and self.tagstokens.tags[lentags - 1] != 'SUBAST':
+                    source = self.tagstokens.tokens[lentags - 1]
                 self.redirectionfd.append(
-                    RedirectionFD(self.tagstokens.copytt(previous),
+                    RedirectionFD(get_redirection_key_length(self.tagstokens, lentags),
                                   tag, source))
-                del self.tagstokens[previous]
-                del self.tagstokens[lentags]
                 if source:
                     del self.tagstokens[self.tagstokens.find_prev_ind_token(
                         lentags - 1)]
                     lentags = self.tagstokens.length - 1
                     source = None
-            elif tag != 'SPACES':
-                previous = lentags
             lentags -= 1
         self.tagstokens.strip()
         self.tagstokens.update_length()
