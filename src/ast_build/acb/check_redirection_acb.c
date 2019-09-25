@@ -32,6 +32,7 @@ static  t_tagstokens *get_redirection_tgtk(t_tagstokens *tgtk, int index_red)
 		index_red += 1;
 	}
 	ret_tagstokens = copy_tagstokens(tgtk, begin + 1, index_red);
+	strip_tagstokens(ret_tagstokens);
 	delitems_tagstokens(tgtk, begin, index_red, 42);
 	return (ret_tagstokens);
 }
