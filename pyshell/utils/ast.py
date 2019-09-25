@@ -228,7 +228,8 @@ class RedirectionFD():
         self.type = redirection_type
         self.heredoc_ast = None
         if source is None:
-            source = 0 if self.type in ["READ_FROM_FD", "READ_FROM"] else 1
+            source = 0 if self.type in ["READ_FROM_FD", "READ_FROM",
+                                        "HEREDOCMINUS", "HEREDOC"] else 1
 
         self.source = int(source)
         self.dest = self.tagstokens.tokens[-1]
