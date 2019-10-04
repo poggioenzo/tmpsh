@@ -52,7 +52,7 @@ class TagsTokensMonitor():
 
         if self.tt.valid:
             if self.tag == 'STMT':
-                self.begin_cmd = self.check_aliases()
+                self.is_stmt()
             elif assignation_braceparam(self):
                 self.braceparam_or_assignation()
             elif self.tag == 'DQUOTES':
@@ -113,6 +113,14 @@ class TagsTokensMonitor():
                 not_end = self.next_tag_token(True)
             self.heredocs_keys.pop(0)
             key = ''
+
+    def remove_escape_token(self):
+        if self.token and self.token[0] == gv.GRAMMAR.escape:
+            self.tt.tokens[self.i] = self.token[1:]
+
+    def is_stmt(self):
+        self.begin_cmd = self.check_aliases()
+        self.remove_escape_token()
 
     def check_aliases_token(self):
         ret = True
@@ -205,6 +213,8 @@ class TagsTokensMonitor():
             elif self.tag in gv.GRAMMAR.dquotes_opening_tags:
                 self.op_selector()
             else:
+                if self.tt.tags[self.i] == 'STMT':
+                    self.remove_escape_token()
                 self.tt.tags[self.i] = 'STMT' if self.tt.tags[self.i] != 'VAR' else 'VAR'
 
     def is_quote(self):
