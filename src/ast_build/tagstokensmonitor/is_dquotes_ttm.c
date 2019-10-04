@@ -44,6 +44,8 @@ void	is_dquotes_ttm(t_tags_tokens_monitor *self)
 			op_selector_ttm(self);
 		else
 		{
+			if (ft_strequ(vindex_pylst(self->tt->tags, self->i), "STMT"))
+				remove_escape_token_ttm(self);
 			if (!ft_strequ(vindex_pylst(self->tt->tags, self->i), "VAR"))
 				update_str = "STMT";
 			else

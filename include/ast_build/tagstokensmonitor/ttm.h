@@ -49,5 +49,6 @@
 # include "next_ttm.h"
 # include "op_selector_ttm.h"
 # include "check_alias_ttm.h"
+# include "is_stmt_ttm.h"
 
 #endif

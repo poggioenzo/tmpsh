@@ -52,7 +52,7 @@ void			op_selector_ttm(t_tags_tokens_monitor *self)
 	if (self->tt->valid)
 	{
 		if (ft_strequ(self->tag, "STMT"))
-			self->begin_cmd = check_aliases_ttm(self);
+			is_stmt_ttm(self);
 		else if (assignation_braceparam(self))
 			braceparam_or_assignation(self);
 		else if (ft_strequ(self->tag, "DQUOTES"))
