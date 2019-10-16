@@ -1,2 +1,5 @@
 1 - Some crash when moving really weirdly
 2 - For the prompt, must run big buffer line by line instead of stocking all
+3 - blocking signal while pasting.
+4 - `>lol` do not create lol file
+
