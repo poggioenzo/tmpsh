@@ -90,8 +90,10 @@ void			open_redirection_file(t_redirection_fd *redirection)
 	{
 		redirection->dest = join_pylst(redirection->tagstokens->tokens, "");
 		get_options(redirection->dest, redirection->type, &flags, &rights);
-		if (rights == -1 || \
-				check_rights(redirection->dest, rights, false, true))
+		if (rights == -1 && ft_strequ(redirection->type, "READ_FROM"))
+			ft_printf(NAME_SH" No such file or directory : %s\n", redirection->dest);
+		else if (rights == -1 || \
+				check_rights(redirection->dest, rights, true, true))
 		{
 			if ((fd = open(redirection->dest, flags, 0666)) != -1)
 			{
@@ -99,11 +101,11 @@ void			open_redirection_file(t_redirection_fd *redirection)
 				redirection->dest = int_copy(fd);
 				return ;
 			}
-			else
-				ft_printf(NAME_SH" Permission denied : %s\n", \
+			ft_printf(NAME_SH" Permission denied : %s\n", \
 						redirection->dest);
 		}
 		redirection->error = true;
+		redirection->dest = NULL;
 	}
 	else
 		convert_dest(redirection);

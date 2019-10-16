@@ -15,6 +15,7 @@
 #include "libft.h"
 #include "redirection_opener.h"
 #include "fd_management.h"
+#include "iter_tagstokens.h"
 
 static int		is_heredoc(char *type)
 {
@@ -36,7 +37,6 @@ static char		*join_cmd(t_pylst *list_branch)
 {
 	char			*final_cmd;
 	t_acb			*branch;
-	size_t			index;
 	char			*token;
 	char			*tag;
 
@@ -79,6 +79,51 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 	close(here_pipe[1]);
 }
 
+void		redirection_close_fds(t_pylst *redirection_list)
+{
+	t_redirection_fd *tmp_redir;
+	int				index;
+	int				nbr_redir;
+
+	index = 0;
+	nbr_redir = len_pylst(redirection_list);
+	while (index < nbr_redir)
+	{
+		tmp_redir = vindex_pylst(redirection_list, index++);
+		if (tmp_redir->error == true)
+			return ;
+		if (tmp_redir->dest)
+		{
+			close(clean_popper(tmp_redir->dest));
+			tmp_redir->dest = NULL;
+		}
+	}
+}
+
+t_bool		redirection_prepare_fds(t_pylst *redirection_list)
+{
+	t_redirection_fd	*tmp_redir;
+	int					index;
+	int					nbr_redir;
+
+	index = 0;
+	nbr_redir = len_pylst(redirection_list);
+	while (index < nbr_redir)
+	{
+		tmp_redir = vindex_pylst(redirection_list, index++);
+		if (is_heredoc(tmp_redir->type))
+			prepare_heredoc(tmp_redir);
+		else
+			open_redirection_file(tmp_redir);
+		if (tmp_redir->error == true)
+		{
+			redirection_close_fds(redirection_list);
+			return (false);
+		}
+	}
+	return (true);
+}
+
 /*
 ** setup_redirection:
 **
@@ -92,22 +137,19 @@ t_bool			setup_redirection(t_acb *branch)
 {
 	t_redirection_fd	*redirection;
 
+	if (redirection_prepare_fds(branch->redirectionfd) == false)
+		return (false);
 	while (iter_pylst(branch->redirectionfd, (void **)&redirection))
 	{
-		if (is_heredoc(redirection->type))
-			prepare_heredoc(redirection);
-		else
-			open_redirection_file(redirection);
-		if (redirection->error == false)
+		if (redirection->dest)
 		{
-			if (redirection->dest)
-				replace_fd(clean_popper(redirection->dest), \
-						redirection->source);
-			if (redirection->close)
-				close(redirection->source);
+			replace_fd(clean_popper(redirection->dest), \
+					redirection->source);
+			redirection->dest = NULL;
 		}
-		else
-			return (false);
+		if (redirection->close)
+			close(redirection->source);
 	}
+
 	return (true);
 }

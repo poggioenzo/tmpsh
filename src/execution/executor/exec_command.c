@@ -159,6 +159,8 @@ void			exec_command(t_acb *branch)
 		close_branch_stdfd(branch);
 		if (len_pylst(variables) >= 1)
 			variables_config(variables, false);
+		if (redirection_prepare_fds(branch->redirectionfd))
+			redirection_close_fds(branch->redirectionfd);
 		branch->status = 0;
 	}
 	else
