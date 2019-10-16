@@ -1,7 +1,2 @@
-0 - exit | ls should not exit
-2 - Some crash when moving really weirdly
-3 - check if file are opened with redirection on mac
-4 - `mv 2>&1 > content` Seem to not work properly (see test of subject)
-5 - `mv 2>&1` is giving an invalid free.
-6 - heredoc always get 1 as source
-7 - For the prompt, must run big buffer line by line instead of stocking all
+1 - Some crash when moving really weirdly
+2 - For the prompt, must run big buffer line by line instead of stocking all
