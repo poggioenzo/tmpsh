@@ -39,7 +39,7 @@ t_bool			revkeyinstack(t_pylst *stack)
 	{
 		cpstack = slice_pylst(stack, len_stack, len_pylst(stack));
 		key = join_pylst(cpstack, " ");
-		if (ops_begin_with(key, g_grammar->reverse_list))
+		if (ops_begin_with(key, g_grammar->reverse_list, false))
 		{
 			ret = TRUE;
 			free_pylst(&cpstack, ft_strdel_out(&key, 0));

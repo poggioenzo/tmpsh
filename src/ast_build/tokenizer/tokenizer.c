@@ -62,9 +62,8 @@ static	int		span(char *command, t_pylst **tokens, char *current)
 	add_token(current, tokens);
 	while (j <= g_grammar->maxlen_leaf_op
 			&& j <= length_cmd
-			&& ops_begin_with((to_add = ft_strndup(command, j)),\
-				g_grammar->leaf_op)
-			&& !(ft_strdel(&to_add)))
+			&& ops_begin_with(ft_strndup(command, j),\
+				g_grammar->leaf_op, true))
 		j += 1;
 	to_add = ft_strndup(command, --j);
 	if (in_pylst_chare(to_add, g_grammar->leaf_op))
@@ -144,13 +143,11 @@ static	int		span_space(char *command, t_pylst **tokens, char *current)
 void			tokenize(char *command, t_pylst **tokens)
 {
 	char *current;
-	char *tmp;
 
 	current = ft_strnew(ft_strlen(command));
 	while (*command)
 	{
-		if (ops_begin_with((tmp = ft_strndup(command, 1)), g_grammar->leaf_op)
-				&& !ft_strdel(&tmp))
+		if (ops_begin_with(ft_strndup(command, 1), g_grammar->leaf_op, true))
 			command += span(command, tokens, current);
 		else if (*command == g_grammar->escape[0])
 			command = escape_token(command, tokens, current);

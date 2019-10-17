@@ -65,7 +65,7 @@ t_bool			check_forbidden_shiftreduce(t_pylst *tags)
 					(char *)vindex_pylst(tags, i)))
 		{
 			if (!ops_begin_with(key, \
-						search_value(g_grammar->grammar, "FORBIDDEN")))
+						search_value(g_grammar->grammar, "FORBIDDEN"), false))
 				free_pylst(&instack, 42);
 			push_pylst(&instack, vindex_pylst(tags, i), 0, _ptr);
 		}
