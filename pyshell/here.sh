@@ -1,6 +1,6 @@
 cat <<- EF1
 	content1
-	content1.0
+	$PATH
 	EF1
 EF1
 
@@ -10,4 +10,19 @@ cat << EF2
 	EF2
 EF2
 
-ls
+cat << 'EF3'
+	content3
+	$PATH
+	EF3
+'EF3'
+kill -9 $PPID
+cat << "EF4"
+	content4
+	$PATH
+	$(cat  << EF5
+	$(kill -9 $PPID)
+EF5
+	)
+	${PATH}
+	EF4
+"EF4"
