@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/17 13:56:25 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 14:54:10 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -99,6 +99,8 @@ void			open_redirection_file(t_redirection_fd *redirection)
 	int		flags;
 	int		rights;
 
+	if (ft_strequ(redirection->type, "TRUNC_TO_FD") && !digitstr(redirection->dest))
+		redirection->type = "TRUNC";
 	if (in(redirection->type, "TRUNC", "APPEND", "READ_FROM", NULL))
 	{
 		redirection->dest = join_pylst(redirection->tagstokens->tokens, "");
