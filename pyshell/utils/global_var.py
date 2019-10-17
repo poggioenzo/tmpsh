@@ -4,7 +4,8 @@ import sys
 import os
 
 GRAMMAR = ShellGrammar()
-ALIAS = {'all': 'ls -l\t', 'gall': 'all -G -1', 'ball': '$(gall)',
+ALIAS = {'ll': 'ls -l',
+         'all': 'ls -l\t', 'gall': 'all -G -1', 'ball': '$(gall)',
          'another': 'ls\t',
          'recursion1': 'recursion2',
          'recursion2': 'recursion3',
@@ -12,7 +13,9 @@ ALIAS = {'all': 'ls -l\t', 'gall': 'all -G -1', 'ball': '$(gall)',
          'loop2': 'loop3',
          'loop3': 'echo ok ; loop1',
          # 'loop4': 'echo ok && loop2',
+         'salut': 'Salut',
          'dit': 'echo ',
+         'e': 'echo',
          'bonjour': 'salut connard',
          'redit': 'echo je me repete; dit'}
 
