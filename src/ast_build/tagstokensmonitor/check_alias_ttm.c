@@ -77,7 +77,7 @@ t_bool			check_aliases_ttm(t_tags_tokens_monitor *self)
 	t_bool	assignation;
 
 	assignation = get_assgt(self, (int)self->tt->length, self->i + 1, true);
-	if (cond_aliasing(self, assignation))
+	if (cond_aliasing(self, assignation) && self->begin_cmd)
 	{
 		if (!in_pylst_chare(self->token, g_actual_alias))
 		{
