@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:01:19 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -41,6 +41,8 @@ static void		shell_interupt(int status)
 	while (waitpid(-tpgid, NULL, WNOHANG) != -1)
 		;
 	manage_shell_repr(GET, &shell_repr, &cursor);
+	if (!shell_repr && !cursor)
+		return ;
 	*cursor = (t_cursor){.row = -1, .column = -1};
 	display_shell(shell_repr, cursor, FALSE);
 	ft_printf("\n");
