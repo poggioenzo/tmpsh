@@ -140,7 +140,7 @@ class TagsTokensMonitor():
     def check_aliases(self):
         assignation = self.i + 1 < self.tt.length and self.tt.find_next_token(
             self.i + 1, False) in ["ASSIGNATION_EQUAL", "CONCATENATION"]
-        if self.cond(assignation):
+        if self.cond(assignation) and self.begin_cmd:
             if self.token not in gv.ACTUAL_ALIAS:
                 self.begin_cmd = self.tt.replace_alias(self.token, self.i)
                 gv.ACTUAL_ALIAS.remove(self.token)
