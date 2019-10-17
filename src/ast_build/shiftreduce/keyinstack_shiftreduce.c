@@ -54,13 +54,14 @@ static	char	*get_ext_key(char *key, char *next_tag)
 {
 	char	*str;
 
-	str = "";
+	str = ft_strnew(0);
 	if (key)
 	{
+		ft_strdel(&str);
 		str = ft_strjoin(key, " ");
 		ft_strdel(&key);
 	}
-	return (ft_strjoin(str, next_tag));
+	return (ft_fstrjoin(&str, &next_tag, true, false));
 }
 
 /*
@@ -90,7 +91,7 @@ int				keyinstack(t_pylst *stack, char *next_tag)
 		{
 			if (search_value(g_grammar->reverse, ext_key))
 				break ;
-			return (i);
+			return (ft_strdel_out(&ext_key, ft_strdel_out(&key, i)));
 		}
 		ft_strdel_out(&ext_key, ft_strdel_out(&key, 0));
 		i++;
