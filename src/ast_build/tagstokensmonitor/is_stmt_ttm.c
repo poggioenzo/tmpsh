@@ -13,7 +13,7 @@
 
 void remove_escape_token_ttm(t_tags_tokens_monitor *self)
 {
-  if (self->token && self->token[0] == g_grammar->escape)
+  if (self->token && self->token[0] == *g_grammar->escape)
     ft_strcpy(self->token, self->token + 1);
 }
 
