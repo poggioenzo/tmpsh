@@ -89,11 +89,11 @@ int				prepare_builtin(t_acb *branch, char *executable, \
 			close_branch_stdfd(branch);
 			branch->running = true;
 			free_pylst(&variables, pid);
-			return (execution_cleaner(argv, executable, pid));
+			return (ft_strdel(&executable), pid);
 		}
 	}
 	branch->status = run_builtin(branch, argv, variables);
-	return (execution_cleaner(argv, executable, pid));
+	return (ft_strdel(&executable), pid);
 }
 
 /*
@@ -127,7 +127,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	close_branch_stdfd(branch);
 	branch->running = true;
 	free_pylst(&variables, pid);
-	return (execution_cleaner(argv, executable, pid));
+	return (ft_strdel(&executable), pid);
 }
 
 /*
@@ -158,4 +158,5 @@ void			exec_command(t_acb *branch)
 	}
 	else
 		branch->pid = child_execution(branch, cmd_args, variables);
+	free_str_array(&cmd_args, 0);
 }
