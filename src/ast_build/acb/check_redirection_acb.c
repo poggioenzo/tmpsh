@@ -6,18 +6,18 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 19:24:34 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 19:27:58 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:24:44 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "acb.h"
 
-static  t_tagstokens *get_redirection_tgtk(t_tagstokens *tgtk, int index_red)
+static t_tagstokens	*get_redirection_tgtk(t_tagstokens *tgtk, int index_red)
 {
-	int begin;
-	t_tagstokens *ret_tagstokens;
-	char *tag;
+	int				begin;
+	t_tagstokens	*ret_tagstokens;
+	char			*tag;
 
 	begin = index_red;
 	tag = vindex_pylst(tgtk->tags, index_red + 1);
@@ -37,8 +37,7 @@ static  t_tagstokens *get_redirection_tgtk(t_tagstokens *tgtk, int index_red)
 	return (ret_tagstokens);
 }
 
-
-static	char	*get_source_acb(t_tagstokens *tgtk, size_t lentags)
+static char			*get_source_acb(t_tagstokens *tgtk, size_t lentags)
 {
 	char	*source;
 
@@ -50,7 +49,8 @@ static	char	*get_source_acb(t_tagstokens *tgtk, size_t lentags)
 	return (source);
 }
 
-static	int		del_source_red(t_tagstokens *tgtk, int lentags, char **source)
+static int			del_source_red(t_tagstokens *tgtk, int lentags, \
+		char **source)
 {
 	int	begin;
 
@@ -63,7 +63,7 @@ static	int		del_source_red(t_tagstokens *tgtk, int lentags, char **source)
 	return (tgtk->length - 1);
 }
 
-void			check_redirection_acb(t_acb *self)
+void				check_redirection_acb(t_acb *self)
 {
 	int		lentags;
 	char	*tag;

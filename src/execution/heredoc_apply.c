@@ -6,13 +6,18 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 14:00:08 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "tmpsh.h"
 #include "libft.h"
+
+int		is_heredoc(char *type)
+{
+	return (in(type, "HEREDOC", "TRIPLEHEREDOC", "HEREDOCMINUS", NULL));
+}
 
 /*
 ** heredoc_apply:

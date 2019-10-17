@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:43:11 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -41,7 +41,8 @@ static void		replace_redirection(t_acb *branch, int change_index, \
 			{
 				ft_memdel(&redirection->dest);
 				redirection->dest = content;
-				update_pylst(redirection->tagstokens->tags, index, "STMT", 0, _ptr);
+				update_pylst(redirection->tagstokens->tags, index, "STMT", \
+						0, _ptr);
 				update_pylst(redirection->tagstokens->tokens, index, content, \
 						NO_COPY_BUT_FREE, _chare);
 			}
