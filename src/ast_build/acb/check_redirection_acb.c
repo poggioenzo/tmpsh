@@ -90,6 +90,5 @@ void				check_redirection_acb(t_acb *self)
 			lentags = del_source_red(self->tagstokens, lentags, &src);
 		}
 	}
-	strip_tagstokens(self->tagstokens);
 	reverse_pylst(&self->redirectionfd);
 }

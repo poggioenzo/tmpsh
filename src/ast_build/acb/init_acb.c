@@ -27,12 +27,10 @@ t_acb	*init_acb(t_tagstokens *tgtk, char *begin_andor, char *tag_end)
 	self->stdout = -1;
 	self->status = -1;
 	self->pid = -1;
-	strip_tagstokens(tgtk);
 	self->command = str_command_tagstokens(tgtk);
 	check_subast_acb(self);
 	set_subast_type_acb(self);
 	check_redirection_acb(self);
-	strip_tagstokens(tgtk);
 	self->print = str_command_tagstokens(tgtk);
 	return (self);
 }
