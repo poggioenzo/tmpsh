@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:12:36 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/04 16:42:27 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:27:13 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -55,7 +55,8 @@ static void		remove_escape_stmt(t_tagstokens *self)
 	{
 		if (ft_strequ(tag, "QUOTE"))
 			self->iter = skip_openning_tagstokens(self, self->iter, NULL);
-		else if (ft_strequ(tag, "STMT") && ft_strlen(token) > 1 && token[0] == '\\')
+		else if (ft_strequ(tag, "STMT") && ft_strlen(token) > 1 && \
+				token[0] == '\\')
 		{
 			ft_strcpy(token, token + 1);
 			if (ft_strequ(token, "\n"))

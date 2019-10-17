@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 14:03:40 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -16,11 +16,7 @@
 #include "redirection_opener.h"
 #include "fd_management.h"
 #include "iter_tagstokens.h"
-
-static int		is_heredoc(char *type)
-{
-	return (in(type, "HEREDOC", "TRIPLEHEREDOC", "HEREDOCMINUS", NULL));
-}
+#include "heredoc_apply.h"
 
 /*
 ** join_cmd:
@@ -79,11 +75,11 @@ static void		prepare_heredoc(t_redirection_fd *redirection)
 	close(here_pipe[1]);
 }
 
-void		redirection_close_fds(t_pylst *redirection_list)
+void			redirection_close_fds(t_pylst *redirection_list)
 {
-	t_redirection_fd *tmp_redir;
-	int				index;
-	int				nbr_redir;
+	t_redirection_fd	*tmp_redir;
+	int					index;
+	int					nbr_redir;
 
 	index = 0;
 	nbr_redir = len_pylst(redirection_list);
@@ -100,7 +96,7 @@ void		redirection_close_fds(t_pylst *redirection_list)
 	}
 }
 
-t_bool		redirection_prepare_fds(t_pylst *redirection_list)
+t_bool			redirection_prepare_fds(t_pylst *redirection_list)
 {
 	t_redirection_fd	*tmp_redir;
 	int					index;
@@ -150,6 +146,5 @@ t_bool			setup_redirection(t_acb *branch)
 		if (redirection->close)
 			close(redirection->source);
 	}
-
 	return (true);
 }
