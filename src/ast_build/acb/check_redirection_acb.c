@@ -46,7 +46,14 @@ static	char	*get_source_acb(t_tagstokens *tgtk, size_t lentags)
 	if (lentags > 0
 			&& digitstr(vindex_pylst(tgtk->tokens, lentags - 1))
 			&& !ft_strequ(vindex_pylst(tgtk->tags, lentags - 1), "SUBAST"))
-		source = ft_strdup(vindex_pylst(tgtk->tokens, lentags - 1));
+	{
+		if (lentags - 2 > 0 &&
+			in(find_prev_token(tgtk, lentags - 2, false), "TRUNC_TO_FD",
+				"READ_FROM_FD", NULL))
+			source = NULL;
+		else
+			source = ft_strdup(vindex_pylst(tgtk->tokens, lentags - 1));
+	}
 	return (source);
 }
 

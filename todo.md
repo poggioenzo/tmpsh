@@ -16,9 +16,6 @@ ls
 
 ```
 
-## redfd -> 2>&1>truc
-pass
-
 
 # Simon
 
