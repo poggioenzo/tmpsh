@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:18:52 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 22:18:57 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 14:19:21 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,7 +27,7 @@
 void	is_dquotes_ttm(t_tags_tokens_monitor *self)
 {
 	t_bool	indquote;
-	char	*update_str;
+	char	*new_str;
 
 	indquote = true;
 	push_pylst(&self->opened, "DQUOTES", 0, _ptr);
@@ -46,11 +46,9 @@ void	is_dquotes_ttm(t_tags_tokens_monitor *self)
 		{
 			if (ft_strequ(vindex_pylst(self->tt->tags, self->i), "STMT"))
 				remove_escape_token_ttm(self);
-			if (!ft_strequ(vindex_pylst(self->tt->tags, self->i), "VAR"))
-				update_str = "STMT";
-			else
-				update_str = "VAR";
-			update_pylst(self->tt->tags, self->i, update_str, 0, _ptr);
+			new_str = !ft_strequ(vindex_pylst(self->tt->tags, self->i), "VAR") ?
+				"STMT" : "VAR";
+			update_pylst(self->tt->tags, self->i, new_str, 0, _ptr);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/04 16:42:44 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/04 16:43:20 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:26:35 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -21,7 +21,6 @@ static void	remove_end_line(char *str)
 		ft_strcpy(str, newline);
 	else
 		ft_bzero(str, ft_strlen(str));
-
 }
 
 static void	remove_comments(char *str)
@@ -41,7 +40,7 @@ static void	remove_comments(char *str)
 	}
 }
 
-void	routine_tagstokens(t_tagstokens **self, char *shell_content)
+void		routine_tagstokens(t_tagstokens **self, char *shell_content)
 {
 	remove_comments(shell_content);
 	free_pylst(&g_actual_alias, 42);

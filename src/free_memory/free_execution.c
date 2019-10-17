@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:58:17 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -33,7 +33,8 @@ void		free_hash_exec_type(void *hash_exec)
 	ft_memdel((void **)hash_exec);
 }
 
-void		free_static_type(NOT_USE(void *static_ptr))
+void		free_static_type(void *static_ptr)
 {
+	UNUSED(static_ptr);
 	return ;
 }

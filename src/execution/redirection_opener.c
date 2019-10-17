@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 14:54:10 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -73,6 +73,20 @@ static void		get_options(char *filename, char *type, int *flags, int *rights)
 	}
 }
 
+static t_bool	open_file(t_redirection_fd *redirection, int flags)
+{
+	int		fd;
+
+	if ((fd = open(redirection->dest, flags, 0666)) != -1)
+	{
+		ft_strdel((char **)&redirection->dest);
+		redirection->dest = int_copy(fd);
+		return (true);
+	}
+	ft_printf(NAME_SH" Permission denied : %s\n", redirection->dest);
+	return (false);
+}
+
 /*
 ** open_redirection_file:
 **
@@ -82,27 +96,23 @@ static void		get_options(char *filename, char *type, int *flags, int *rights)
 
 void			open_redirection_file(t_redirection_fd *redirection)
 {
-	int		fd;
 	int		flags;
 	int		rights;
 
+	if (ft_strequ(redirection->type, "TRUNC_TO_FD") && !digitstr(redirection->dest))
+		redirection->type = "TRUNC";
 	if (in(redirection->type, "TRUNC", "APPEND", "READ_FROM", NULL))
 	{
 		redirection->dest = join_pylst(redirection->tagstokens->tokens, "");
 		get_options(redirection->dest, redirection->type, &flags, &rights);
 		if (rights == -1 && ft_strequ(redirection->type, "READ_FROM"))
-			ft_printf(NAME_SH" No such file or directory : %s\n", redirection->dest);
+			ft_printf(NAME_SH" No such file or directory : %s\n", \
+					redirection->dest);
 		else if (rights == -1 || \
 				check_rights(redirection->dest, rights, true, true))
 		{
-			if ((fd = open(redirection->dest, flags, 0666)) != -1)
-			{
-				ft_strdel((char **)&redirection->dest);
-				redirection->dest = int_copy(fd);
+			if (open_file(redirection, flags) == true)
 				return ;
-			}
-			ft_printf(NAME_SH" Permission denied : %s\n", \
-						redirection->dest);
 		}
 		redirection->error = true;
 		redirection->dest = NULL;

@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:38:57 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -53,4 +53,10 @@ char			**extract_cmd(t_acb *branch)
 			push_pylst(&command, token, ft_strlen(token) + 1, _chare);
 	}
 	return (convert_command(command));
+}
+
+int				execution_cleaner(char **argv, char *command, int status)
+{
+	ft_strdel(&command);
+	return (free_str_array(&argv, status));
 }

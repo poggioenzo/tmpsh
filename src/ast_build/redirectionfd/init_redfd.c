@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 19:51:18 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 21:52:44 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:25:41 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -39,8 +39,8 @@ t_redirection_fd	*init_redfd(t_tagstokens *tgtk, char *type,\
 	self->type = type;
 	self->heredoc_ast = NULL;
 	if (!source)
-		source = in(self->type,"READ_FROM_FD", "READ_FROM",
-											"HEREDOCMINUS", "HEREDOC", NULL) ? "0" : "1";
+		source = in(self->type, "READ_FROM_FD", "READ_FROM",
+								"HEREDOCMINUS", "HEREDOC", NULL) ? "0" : "1";
 	self->source = ft_atoi(source);
 	self->dest = vindex_pylst(self->tagstokens->tokens,\
 			self->tagstokens->length - 1);

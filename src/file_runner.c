@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 14:06:05 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -22,8 +22,7 @@
 #include "file_runner.h"
 #include <fcntl.h>
 
-
-enum e_tagstoks_state			script_execute(char *script)
+enum e_tagstoks_state		script_execute(char *script)
 {
 	enum e_tagstoks_state		state;
 	t_tagstokens				*tagstoks;
@@ -60,8 +59,8 @@ enum e_tagstoks_state			script_execute(char *script)
 
 enum e_tagstoks_state		run_file(char *filename)
 {
-	char			*content;
-	int				file_fd;
+	char					*content;
+	int						file_fd;
 	enum e_tagstoks_state	state;
 
 	if (!check_rights(filename, F | R, false, true))
@@ -81,7 +80,7 @@ enum e_tagstoks_state		run_file(char *filename)
 ** by one.
 */
 
-int			run_shell_files(char **files)
+int							run_shell_files(char **files)
 {
 	int		state;
 

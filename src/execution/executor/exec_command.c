@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/17 13:40:47 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -74,12 +74,6 @@ static void		close_branch_stdfd(t_acb *branch)
 		close(branch->stdout);
 }
 
-static int		execution_cleaner(char **argv, char *command, int status)
-{
-	ft_strdel(&command);
-	return (free_str_array(&argv, status));
-}
-
 int				prepare_builtin(t_acb *branch, char *executable, \
 		char **argv, t_pylst *variables)
 {
@@ -101,7 +95,6 @@ int				prepare_builtin(t_acb *branch, char *executable, \
 	branch->status = run_builtin(branch, argv, variables);
 	return (execution_cleaner(argv, executable, pid));
 }
-
 
 /*
 ** child_execution:
