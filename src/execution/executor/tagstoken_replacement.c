@@ -28,18 +28,24 @@ static void		replace_redirection(t_acb *branch, int change_index, \
 	char				*tag;
 	char				*token;
 	t_redirection_fd	*redirection;
+	unsigned int		index;
 
 	while (iter_pylst(branch->redirectionfd, (void **)&redirection))
 	{
-		tag = redirection->tagstokens->tags->value;
-		token = redirection->tagstokens->tokens->value;
-		if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
+		index = 0;
+		while (index < redirection->tagstokens->length)
 		{
-			ft_memdel(&redirection->dest);
-			redirection->dest = content;
-			update_pylst(redirection->tagstokens->tags, 0, "STMT", 0, _ptr);
-			update_pylst(redirection->tagstokens->tokens, 0, content, \
-					NO_COPY_BUT_FREE, _chare);
+			tag = vindex_pylst(redirection->tagstokens->tags, index);
+			token = vindex_pylst(redirection->tagstokens->tokens, index);
+			if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
+			{
+				ft_memdel(&redirection->dest);
+				redirection->dest = content;
+				update_pylst(redirection->tagstokens->tags, index, "STMT", 0, _ptr);
+				update_pylst(redirection->tagstokens->tokens, index, content, \
+						NO_COPY_BUT_FREE, _chare);
+			}
+			index++;
 		}
 	}
 }

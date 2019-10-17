@@ -15,5 +15,6 @@
 # define RESET_SIGNALS_H
 
 void	reset_signals(void);
+void	ignore_prompt_signals(void);
 
 #endif

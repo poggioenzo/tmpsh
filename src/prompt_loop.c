@@ -17,6 +17,8 @@
 #include "configuration.h"
 #include "display.h"
 #include "history.h"
+#include "signal_handler.h"
+#include "reset_signals.h"
 
 /*
 ** is_printable_str:
@@ -44,12 +46,22 @@ static int		is_printable_str(char *string)
 static int		char_loop(t_line **shell_repr, t_cursor **cursor, char *buffer)
 {
 	int				index;
+	int				is_newline;
 
 	index = 0;
 	if (is_printable_str(buffer))
 	{
+		ignore_prompt_signals();
 		while (buffer[index])
+		{
+			is_newline = buffer[index] == '\n';
+			if (is_newline)
+				signal_setup();
 			char_analysis(shell_repr, buffer + index++, cursor);
+			if (is_newline)
+				ignore_prompt_signals();
+		}
+		signal_setup();
 		return (true);
 	}
 	return (char_analysis(shell_repr, buffer, cursor));

@@ -15,5 +15,7 @@
 # define SETUP_REDIRECTION_H
 
 t_bool			setup_redirection(t_acb *branch);
+t_bool		redirection_prepare_fds(t_pylst *redirection_list);
+void		redirection_close_fds(t_pylst *redirection_list);
 
 #endif
