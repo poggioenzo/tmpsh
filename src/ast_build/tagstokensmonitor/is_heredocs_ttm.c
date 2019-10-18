@@ -59,6 +59,13 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
 	free_pylst(&list_tok, 42);
 }
 
+static void set_false(t_tags_tokens_monitor *self)
+{
+	self->tt->valid = false;
+	self->tt->token_error = ft_strdup(self->token);
+}
+
+
 /*
 ** is_heredocs_ttm:
 **
@@ -82,14 +89,15 @@ void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 	if (not_end && !in_grammar(self->tag, "ABS_TERMINATOR"))
 	{
 		if (search_value(g_grammar->opening_tags, self->tag))
-			append_to_heredocs_composed_keys(self, minus);
+		{	if (in(self->tag, "QUOTE", "DQUOTES"))
+				append_to_heredocs_composed_keys(self, minus);
+			else
+				set_false(self);
+		}
 		else
 			append_to_heredocs_keys(self, self->token, 1, minus);
 	}
 	else
-	{
-		self->tt->valid = false;
-		self->tt->token_error = ft_strdup(self->token);
-	}
+		set_false(self);
 	self->begin_cmd = true;
 }
