@@ -54,9 +54,3 @@ char			**extract_cmd(t_acb *branch)
 	}
 	return (convert_command(command));
 }
-
-int				execution_cleaner(char **argv, char *command, int status)
-{
-	ft_strdel(&command);
-	return (free_str_array(&argv, status));
-}

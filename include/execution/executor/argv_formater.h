@@ -15,6 +15,5 @@
 # define ARGV_FORMATER_H
 
 char		**extract_cmd(t_acb *branch);
-int			execution_cleaner(char **argv, char *command, int status);
 
 #endif

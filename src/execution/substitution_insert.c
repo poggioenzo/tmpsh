@@ -106,4 +106,5 @@ void		substitution_insert(char *content, t_tagstokens *tagstokens, \
 		del_portion_pylst(&tagstokens->tags, index, index + 1);
 	}
 	update_length_tagstokens(tagstokens);
+	ft_strdel(&content);
 }

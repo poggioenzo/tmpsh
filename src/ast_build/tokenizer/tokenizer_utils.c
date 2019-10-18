@@ -24,7 +24,7 @@
 ** the lengthed begin of one operator in leaf_op.
 */
 
-int	ops_begin_with(char *pattern, t_pylst *leaf_op)
+int	ops_begin_with(char *pattern, t_pylst *leaf_op, t_bool free_pattern)
 {
 	int		i;
 	char	*leaf;
@@ -39,5 +39,7 @@ int	ops_begin_with(char *pattern, t_pylst *leaf_op)
 			leaf_op->iter_item = NULL;
 			break ;
 		}
+	if (free_pattern)
+		ft_strdel(&pattern);
 	return (ret);
 }

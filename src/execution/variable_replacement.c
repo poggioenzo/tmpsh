@@ -48,7 +48,6 @@ static void		tagstoken_variable_swap(t_tagstokens *tagstok, int index)
 	token = vindex_pylst(tagstok->tokens, index);
 	variable = retrieve_variable(token + 1);
 	substitution_insert(variable, tagstok, index);
-	ft_strdel(&variable);
 }
 
 /*
