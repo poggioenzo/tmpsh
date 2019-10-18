@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/04 16:42:44 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/17 13:26:35 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/18 16:58:09 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -32,10 +32,12 @@ static void	remove_comments(char *str)
 	{
 		if (*str == '\\' && escaped == false)
 			escaped = true;
-		else if (escaped == true)
+		else
+		{
+			if (*str == '#' && escaped == false)
+				remove_end_line(str);
 			escaped = false;
-		else if (*str == '#')
-			remove_end_line(str);
+		}
 		str++;
 	}
 }
