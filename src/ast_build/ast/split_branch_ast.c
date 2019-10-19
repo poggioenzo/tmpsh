@@ -19,16 +19,22 @@ static	int	update_begin(int i, char **and_or_begin)
 	return (i + 1);
 }
 
+static	void init_var(size_t *i, size_t *begin, char **and_or_begin)
+{
+	*i = 0;
+	*begin = 0;
+	*and_or_begin = "";
+}
+
 void		split_branch_ast(t_ast *self, t_tagstokens *tgtk)
 {
 	size_t	i;
 	size_t	begin;
 	char	*and_or_begin;
 	char	*tag;
+	t_tagstokens *tmp;
 
-	i = 0;
-	begin = 0;
-	and_or_begin = "";
+	init_var(&i, &begin, &and_or_begin);
 	while (i <= tgtk->length)
 	{
 		tag = (i < tgtk->length) ? vindex_pylst(tgtk->tags, i) : "";
@@ -37,10 +43,11 @@ void		split_branch_ast(t_ast *self, t_tagstokens *tgtk)
 		else if (in_grammar(tag, "ABS_TERMINATOR")
 				|| (i == tgtk->length && begin != i))
 		{
+			tmp = copy_tagstokens(tgtk, begin, i);
 			push_pylst(&self->list_branch,
-				init_acb(copy_tagstokens(tgtk, begin, i), and_or_begin, tag),
-					-1, _acb);
+				init_acb(tmp, and_or_begin, tag), -1, _acb);
 			begin = update_begin(i, &and_or_begin);
+		//free_tagstokens(&tmp, 42);
 		}
 		if (!(++i) || ft_strequ(tag, "CMDAND") || ft_strequ(tag, "CMDOR"))
 			and_or_begin = tag;

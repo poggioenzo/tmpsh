@@ -44,5 +44,5 @@ int	skip_openning_tagstokens(t_tagstokens *self, size_t i, char *until)
 			del_portion_pylst(&stack, -1, len_pylst(stack));
 		i++;
 	}
-	return (i);
+	return (free_pylst(&stack ,i));
 }

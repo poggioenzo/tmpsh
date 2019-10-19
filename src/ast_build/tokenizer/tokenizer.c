@@ -157,4 +157,5 @@ void			tokenize(char *command, t_pylst **tokens)
 			current[ft_strlen(current)] = *command++;
 	}
 	add_token(current, tokens);
+	ft_strdel(&current);
 }
