@@ -47,7 +47,7 @@ void		split_branch_ast(t_ast *self, t_tagstokens *tgtk)
 			push_pylst(&self->list_branch,
 				init_acb(tmp, and_or_begin, tag), -1, _acb);
 			begin = update_begin(i, &and_or_begin);
-		//free_tagstokens(&tmp, 42);
+		//free_tagstokens(&tmp, 42); // plus rien ne marche avec
 		}
 		if (!(++i) || ft_strequ(tag, "CMDAND") || ft_strequ(tag, "CMDOR"))
 			and_or_begin = tag;
