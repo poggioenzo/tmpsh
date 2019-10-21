@@ -91,9 +91,7 @@ static t_pylst	*delete_variables(t_tagstokens *tagstok, t_pylst *assignations)
 	while (nbr_assignations--)
 	{
 		nbr_token = count_assignation_size(tagstok);
-		del_portion_pylst(&tagstok->tags, 0, nbr_token);
-		del_portion_pylst(&tagstok->tokens, 0, nbr_token);
-		update_length_tagstokens(tagstok);
+		delitems_tagstokens(tagstok, 0, nbr_token, 42);
 	}
 	return (assignations);
 }
