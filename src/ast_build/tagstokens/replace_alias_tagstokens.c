@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:20:46 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 21:51:28 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/21 15:28:42 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -47,7 +47,7 @@ t_bool			replace_alias_tagstokens(t_tagstokens *self,
 		ret = false;
 		alias_result = alias_key;
 	}
-	push_pylst(&g_actual_alias, alias_key, 0, _ptr);
+	push_pylst(&g_actual_alias, ft_strdup(alias_key), NO_COPY_BUT_FREE, _ptr);
 	input_init_tagstokens(&tt_alias, alias_result);
 	g_aliasindepth = tt_alias->length + i + 1;
 	insert_alias(&self->tokens, tt_alias->tokens, i, TRUE);
