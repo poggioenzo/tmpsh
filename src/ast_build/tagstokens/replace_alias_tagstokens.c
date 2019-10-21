@@ -51,7 +51,7 @@ t_bool			replace_alias_tagstokens(t_tagstokens *self,
 	input_init_tagstokens(&tt_alias, alias_result);
 	g_aliasindepth = tt_alias->length + i + 1;
 	insert_alias(&self->tokens, tt_alias->tokens, i, TRUE);
-	insert_alias(&self->tags, tt_alias->tags, i, FALSE);
+	insert_alias(&self->tags, tt_alias->tags, i, FALSE); // leaks here
 	self->valid = tt_alias->valid;
 	update_length_tagstokens(self);
 	free_tagstokens(&tt_alias, TRUE);

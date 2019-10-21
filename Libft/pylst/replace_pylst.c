@@ -53,5 +53,12 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 	}
 	else
 		new_pylst->next = save_head;
-	free_pylst(&del_slice, 0);
+	//print_pylst_chare(del_slice); // Empty list.
+	/*
+	execution_test git:(master) ✗ valgrind --leak-check=yes ../tmpsh
+	~/git/tmpsh/execution_test $> ls Empty list.
+	Empty list.
+	LEAKS...
+	*/
+	free_pylst(&del_slice, 0); // ne supprime pas le début des listes...
 }
