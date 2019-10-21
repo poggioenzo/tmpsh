@@ -106,7 +106,7 @@ void			run_ast(t_ast *ast)
 	job_list = NULL;
 	while (ast->list_branch)
 	{
-		branch = pop_pylst(&ast->list_branch, 0);
+		branch = pop_pylst(&ast->list_branch, 0); // quand est-ce que tu liberes ça
 		push_pylst(&job_list, branch, NO_COPY_BUT_FREE, _acb);
 		replace_variable(branch);
 		if (check_andor(job_list) == false)
