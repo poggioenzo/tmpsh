@@ -1,7 +1,0 @@
-var=ls
-tee << MDR
-Tee is not tea because $var
-    Files avaibles : $(ls)
-echo $($(echo "$var")) -> Amazing
-To much ${var}in$var 
-MDR

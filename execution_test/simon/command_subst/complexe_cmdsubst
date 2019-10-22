@@ -1,3 +1,0 @@
-$(echo ls | echo echo | cat && echo $(echo The && echo "folder "));
-my_file=".the_test_file.test" && "$(echo 'ls')" > $my_file
-echo "my file contain $(echo Not $(echo it) | cat < $my_file)"

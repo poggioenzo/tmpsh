@@ -1,8 +1,0 @@
-#check execution time depending of the number of CMDSUSBT
-1 subast => replacement : 0.00193  | run_ast : 0.00448 ==> 0.430
-2 subast => replacement : 0.00294  | run_ast : 0.00519 ==> 0.566
-3 subast => replacement : 0.00395  | run_ast : 0.00616 ==> 0.641
-4 subast => replacement : 0.00499  | run_ast : 0.00745 ==> 0.669
-5 subast => replacement : 0.00614  | run_ast : 0.00849 ==> 0.723
-6 subast => replacement : 0.00734  | run_ast : 0.00981 ==> 0.748
-7 subast => replacement : 0.00819  | run_ast : 0.01074 ==> 0.762
