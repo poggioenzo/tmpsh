@@ -6,12 +6,13 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 16:35:18 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "assert.h"
 
 /*
 ** replace_pylst:
@@ -36,15 +37,17 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 	t_pylst		*save_head;
 
 	save_head = *old_pylst;
+	assert(from >= 0 || to >= 0);
 	precedence_from = precedence_pylst(*old_pylst, from);
 	precedence_to = precedence_pylst(*old_pylst, to);
-	del_slice = NULL;
-	*old_pylst = precedence_from ? *old_pylst : new_pylst;
+	del_slice = *old_pylst;
 	if (precedence_from)
 	{
 		del_slice = precedence_from->next;
 		precedence_from->next = new_pylst;
 	}
+	else
+		*old_pylst = new_pylst;
 	new_pylst = index_pylst(new_pylst, -1);
 	if (precedence_to)
 	{
@@ -52,13 +55,6 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 		precedence_to->next = NULL;
 	}
 	else
-		new_pylst->next = save_head;
-	//print_pylst_chare(del_slice); // Empty list.
-	/*
-	execution_test git:(master) ✗ valgrind --leak-check=yes ../tmpsh
-	~/git/tmpsh/execution_test $> ls Empty list.
-	Empty list.
-	LEAKS...
-	*/
+		new_pylst->next = NULL;
 	free_pylst(&del_slice, 0); // ne supprime pas le début des listes...
 }
