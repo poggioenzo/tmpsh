@@ -68,7 +68,7 @@ static void	fill_tests_functions(void)
 	ADD_TEST(index_pylst_test);
 	ADD_TEST(join_pylst_test);
 	ADD_TEST(slice_pylst_test);
-	ADD_TEST(replace_negativ_pylst_test);
+	/* ADD_TEST(replace_negativ_pylst_test); */
 	ADD_TEST(replace_pylst_test);
 	ADD_TEST(del_portion_pylst_test);
 	ADD_TEST(del_negativ_portion_test);
