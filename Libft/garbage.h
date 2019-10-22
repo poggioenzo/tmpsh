@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/04/10 19:44:25 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/15 19:47:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:42:45 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -20,11 +20,8 @@
 ** Macro to use for allocation and free.
 */
 
-// # define MALLOC		garbage_malloc
-// # define FREE		garbage_free
-
-# define MALLOC		malloc
-# define FREE		free
+# define MALLOC		garbage_malloc
+# define FREE		garbage_free
 
 /*
 ** Structure of the chained list to store each allocated element.

@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/22 16:35:18 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:40:45 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -34,9 +34,7 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 	t_pylst		*precedence_from;
 	t_pylst		*precedence_to;
 	t_pylst		*del_slice;
-	t_pylst		*save_head;
 
-	save_head = *old_pylst;
 	assert(from >= 0 || to >= 0);
 	precedence_from = precedence_pylst(*old_pylst, from);
 	precedence_to = precedence_pylst(*old_pylst, to);
@@ -56,5 +54,5 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 	}
 	else
 		new_pylst->next = NULL;
-	free_pylst(&del_slice, 0); // ne supprime pas le début des listes...
+	free_pylst(&del_slice, 0);
 }
