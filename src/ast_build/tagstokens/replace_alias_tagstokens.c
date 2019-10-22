@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:20:46 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/21 15:28:42 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:30:22 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -51,7 +51,7 @@ t_bool			replace_alias_tagstokens(t_tagstokens *self,
 	input_init_tagstokens(&tt_alias, alias_result);
 	g_aliasindepth = tt_alias->length + i + 1;
 	insert_alias(&self->tokens, tt_alias->tokens, i, TRUE);
-	insert_alias(&self->tags, tt_alias->tags, i, FALSE); // leaks here
+	insert_alias(&self->tags, tt_alias->tags, i, FALSE);
 	self->valid = tt_alias->valid;
 	update_length_tagstokens(self);
 	free_tagstokens(&tt_alias, TRUE);

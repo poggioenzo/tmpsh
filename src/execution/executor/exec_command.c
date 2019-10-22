@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/17 13:40:47 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:36:01 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -89,11 +89,11 @@ int				prepare_builtin(t_acb *branch, char *executable, \
 			close_branch_stdfd(branch);
 			branch->running = true;
 			free_pylst(&variables, pid);
-			return (ft_strdel(&executable), pid);
+			return (ft_strdel_out(&executable, pid));
 		}
 	}
 	branch->status = run_builtin(branch, argv, variables);
-	return (ft_strdel(&executable), pid);
+	return (ft_strdel_out(&executable, pid));
 }
 
 /*
@@ -127,7 +127,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	close_branch_stdfd(branch);
 	branch->running = true;
 	free_pylst(&variables, pid);
-	return (ft_strdel(&executable), pid);
+	return (ft_strdel_out(&executable, pid));
 }
 
 /*

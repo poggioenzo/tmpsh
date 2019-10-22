@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:36:39 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -106,7 +106,7 @@ void			run_ast(t_ast *ast)
 	job_list = NULL;
 	while (ast->list_branch)
 	{
-		branch = pop_pylst(&ast->list_branch, 0); // quand est-ce que tu liberes ça
+		branch = pop_pylst(&ast->list_branch, 0);
 		push_pylst(&job_list, branch, NO_COPY_BUT_FREE, _acb);
 		replace_variable(branch);
 		if (check_andor(job_list) == false)

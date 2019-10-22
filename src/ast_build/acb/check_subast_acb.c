@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 19:30:50 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 19:32:25 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:25:37 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -42,10 +42,10 @@ static	void	replace_subast(t_tagstokens *tgtk, size_t begin,
 
 void			check_subast_acb(t_acb *self)
 {
-	size_t	i;
-	size_t	begin;
-	char	*tag;
-	t_tagstokens *tmp;
+	size_t			i;
+	size_t			begin;
+	char			*tag;
+	t_tagstokens	*tmp;
 
 	i = 0;
 	while (i < self->tagstokens->length)

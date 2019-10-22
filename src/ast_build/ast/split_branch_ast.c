@@ -6,33 +6,32 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 19:42:03 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 19:48:57 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:28:00 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-static	int	update_begin(int i, char **and_or_begin)
+static	int		update_begin(int i, char **and_or_begin)
 {
 	*and_or_begin = "";
 	return (i + 1);
 }
 
-static	void init_var(size_t *i, size_t *begin, char **and_or_begin)
+static	void	init_var(size_t *i, size_t *begin, char **and_or_begin)
 {
 	*i = 0;
 	*begin = 0;
 	*and_or_begin = "";
 }
 
-void		split_branch_ast(t_ast *self, t_tagstokens *tgtk)
+void			split_branch_ast(t_ast *self, t_tagstokens *tgtk)
 {
-	size_t	i;
-	size_t	begin;
-	char	*and_or_begin;
-	char	*tag;
-	t_tagstokens *tmp;
+	size_t			i;
+	size_t			begin;
+	char			*and_or_begin;
+	char			*tag;
 
 	init_var(&i, &begin, &and_or_begin);
 	while (i <= tgtk->length)
@@ -43,11 +42,10 @@ void		split_branch_ast(t_ast *self, t_tagstokens *tgtk)
 		else if (in_grammar(tag, "ABS_TERMINATOR")
 				|| (i == tgtk->length && begin != i))
 		{
-			tmp = copy_tagstokens(tgtk, begin, i);
 			push_pylst(&self->list_branch,
-				init_acb(tmp, and_or_begin, tag), -1, _acb);
+				init_acb(copy_tagstokens(tgtk, begin, i), and_or_begin, tag), \
+				NO_COPY_BUT_FREE, _acb);
 			begin = update_begin(i, &and_or_begin);
-		//free_tagstokens(&tmp, 42); // plus rien ne marche avec
 		}
 		if (!(++i) || ft_strequ(tag, "CMDAND") || ft_strequ(tag, "CMDOR"))
 			and_or_begin = tag;

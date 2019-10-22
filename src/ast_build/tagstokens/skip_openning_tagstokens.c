@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:23:38 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 20:24:55 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:29:02 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -44,5 +44,5 @@ int	skip_openning_tagstokens(t_tagstokens *self, size_t i, char *until)
 			del_portion_pylst(&stack, -1, len_pylst(stack));
 		i++;
 	}
-	return (free_pylst(&stack ,i));
+	return (free_pylst(&stack, i));
 }

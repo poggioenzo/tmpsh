@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:19:28 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 23:33:08 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:32:25 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -59,12 +59,11 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
 	free_pylst(&list_tok, 42);
 }
 
-static void set_false(t_tags_tokens_monitor *self)
+static void		set_false(t_tags_tokens_monitor *self)
 {
 	self->tt->valid = false;
 	self->tt->token_error = ft_strdup(self->token);
 }
-
 
 /*
 ** is_heredocs_ttm:
@@ -89,7 +88,8 @@ void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 	if (not_end && !in_grammar(self->tag, "ABS_TERMINATOR"))
 	{
 		if (search_value(g_grammar->opening_tags, self->tag))
-		{	if (in(self->tag, "QUOTE", "DQUOTES"))
+		{
+			if (in(self->tag, "QUOTE", "DQUOTES"))
 				append_to_heredocs_composed_keys(self, minus);
 			else
 				set_false(self);
