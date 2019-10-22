@@ -13,13 +13,6 @@
 
 #include "ttm.h"
 
-static char		*get_end_tag(char *tag)
-{
-	if (in(tag, "QUOTE", "DQUOTES", NULL))
-		return (tag);
-	return ("NEW_LINE");
-}
-
 static char		*transform_end_tag(char *tag)
 {
 	if (ft_strequ(tag, "QUOTE"))

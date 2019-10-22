@@ -6,12 +6,19 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:23:38 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/22 17:29:02 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:46:04 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "tagstokens.h"
+
+char	*get_end_tag(char *tag)
+{
+	if (in(tag, "QUOTE", "DQUOTES", NULL))
+		return (tag);
+	return ("NEW_LINE");
+}
 
 /*
 ** skip_openning_tagstokens:
@@ -24,7 +31,7 @@
 ** If until is define return the index when it first appears.
 */
 
-int	skip_openning_tagstokens(t_tagstokens *self, size_t i, char *until)
+int		skip_openning_tagstokens(t_tagstokens *self, size_t i, char *until)
 {
 	t_pylst	*stack;
 	char	*tag;

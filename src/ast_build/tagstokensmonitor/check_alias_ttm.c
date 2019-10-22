@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:13:35 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/21 15:23:59 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/22 17:38:58 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -57,6 +57,17 @@ static t_bool	cond_aliasing(t_tags_tokens_monitor *self, t_bool assignation)
 	return (ret);
 }
 
+static void		token_in_actual(t_tags_tokens_monitor *self)
+{
+	char	*tmp_alias;
+
+	tmp_alias = ft_strdup(self->token);
+	self->begin_cmd = replace_alias_tagstokens(
+		self->tt, self->token, self->i);
+	strremove_pylst(&g_actual_alias, tmp_alias);
+	ft_strdel(&tmp_alias);
+}
+
 /*
 ** check_aliases_ttm:
 **
@@ -75,19 +86,12 @@ static t_bool	cond_aliasing(t_tags_tokens_monitor *self, t_bool assignation)
 t_bool			check_aliases_ttm(t_tags_tokens_monitor *self)
 {
 	t_bool	assignation;
-	char	*tmp_alias;
 
 	assignation = get_assgt(self, (int)self->tt->length, self->i + 1, true);
 	if (cond_aliasing(self, assignation) && self->begin_cmd)
 	{
 		if (!in_pylst_chare(self->token, g_actual_alias))
-		{
-			tmp_alias = ft_strdup(self->token);
-			self->begin_cmd = replace_alias_tagstokens(
-				self->tt, self->token, self->i);
-			strremove_pylst(&g_actual_alias, tmp_alias);
-			ft_strdel(&tmp_alias);
-		}
+			token_in_actual(self);
 		else
 			self->begin_cmd = replace_alias_tagstokens(
 				self->tt, self->token, self->i);
