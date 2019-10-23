@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/22 17:37:07 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/23 13:29:14 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -32,7 +32,7 @@ static void		convert_dest(t_redirection_fd *redirection)
 	{
 		dest_fd = ft_atoi(redirection->dest);
 		ft_strdel((char **)&redirection->dest);
-		redirection->dest = &dest_fd;
+		redirection->dest = int_copy(dest_fd);
 	}
 	else
 		redirection->dest = NULL;
