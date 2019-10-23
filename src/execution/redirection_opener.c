@@ -17,6 +17,7 @@
 #include "tmpsh.h"
 #include "fd_management.h"
 #include "file_rights.h"
+#include "redirection_opener.h"
 
 /*
 ** convert_dest:
@@ -27,15 +28,30 @@
 static void		convert_dest(t_redirection_fd *redirection)
 {
 	int		dest_fd;
+	char	*new_type;
 
 	if (digitstr(redirection->dest))
 	{
 		dest_fd = ft_atoi(redirection->dest);
 		ft_strdel((char **)&redirection->dest);
 		redirection->dest = int_copy(dest_fd);
+		return ;
 	}
-	else
-		redirection->dest = NULL;
+	if (!ft_strequ(redirection->dest, "-"))
+	{
+		new_type = NULL;
+		if (ft_strequ(redirection->type, "TRUNC_TO_FD"))
+			new_type = "TRUNC";
+		else if (ft_strequ(redirection->type, "READ_FROM_FD"))
+			new_type = "READ_FROM";
+		if (new_type)
+		{
+			redirection->type = new_type;
+			open_redirection_file(redirection);
+			return ;
+		}
+	}
+	redirection->dest = NULL;
 }
 
 /*
@@ -99,9 +115,6 @@ void			open_redirection_file(t_redirection_fd *redirection)
 	int		flags;
 	int		rights;
 
-	if (ft_strequ(redirection->type, "TRUNC_TO_FD") && \
-			!digitstr(redirection->dest))
-		redirection->type = "TRUNC";
 	if (in(redirection->type, "TRUNC", "APPEND", "READ_FROM", NULL))
 	{
 		redirection->dest = join_pylst(redirection->tagstokens->tokens, "");
