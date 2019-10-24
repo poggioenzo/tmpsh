@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/24 13:26:18 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/24 13:45:33 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -146,7 +146,7 @@ t_bool			setup_redirection(t_acb *branch)
 				branch->redirectionfd->iter_item = NULL;
 				ft_printf(NAME_SH" %d: bad file descriptor\n", dest_fd);
 				return (false);
-			};
+			}
 			redirection->dest = NULL;
 		}
 		if (redirection->close)
