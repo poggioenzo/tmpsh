@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/24 11:42:24 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -31,17 +31,28 @@ t_pylst		*g_actual_alias = NULL;
 int			g_aliasindepth = 0;
 char		g_last_char[5];
 
+void		get_shell_directory(void)
+{
+	char	*cwd;
+
+	if ((cwd = ft_getenv("PWD")))
+		g_shell_dir = ft_strdup(cwd);
+	else
+	{
+		cwd = getcwd(NULL, 0);
+		g_shell_dir = ft_strdup(cwd);
+		free(cwd);
+	}
+}
+
 void		setup_globals(char **environ)
 {
 	char	*grammar_file;
-	char	*cwd;
 
 	setup_freefct();
 	setup_variables_elements(environ);
 	grammar_file = "grammar.txt";
-	cwd = getcwd(NULL, 0);
-	g_shell_dir = ft_strdup(cwd);
-	free(cwd);
+	get_shell_directory();
 	manage_termios(save_config);
 	grammar_file = ft_filejoin(&g_shell_dir, &grammar_file, false, false);
 	if (!check_rights(grammar_file, F | R, false, true))
