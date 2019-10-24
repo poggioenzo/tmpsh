@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/24 13:26:28 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,10 +25,13 @@
 ** Replace properly a fd using dup2.
 */
 
-void	replace_fd(int expected_fd, int old_fd)
+int		replace_fd(int expected_fd, int old_fd)
 {
-	dup2(expected_fd, old_fd);
+	int		res;
+
+	res = dup2(expected_fd, old_fd);
 	close(expected_fd);
+	return (res);
 }
 
 /*
