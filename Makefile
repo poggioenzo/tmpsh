@@ -40,7 +40,7 @@ INCLUDES += $(LIB_INCLUDES)
 all: get_lib $(NAME)
 
 $(NAME): $(OBJS) $(LIB)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^ -o $@ #-lncurses -ltinfo
+	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^ -o $@ -lncurses -ltinfo
 	ln -f -s $@ $(REAL_NAME)
 
 clean:
