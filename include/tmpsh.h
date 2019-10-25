@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/25 12:54:32 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -216,7 +216,8 @@ struct		s_redirection_fd
 	char			*print;
 	void			*dest;
 	t_ast			*heredoc_ast;
-	t_bool			close;
+	t_bool			close_src;
+	t_bool			close_dst;
 	t_bool			error;
 };
 

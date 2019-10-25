@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/23 13:29:14 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/25 13:17:36 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -27,26 +27,26 @@
 
 static void		convert_dest(t_redirection_fd *redirection)
 {
-	int		dest_fd;
-	char	*new_type;
+	void	*tmp;
 
 	if (digitstr(redirection->dest))
 	{
-		dest_fd = ft_atoi(redirection->dest);
+		tmp = int_copy(ft_atoi(redirection->dest));
 		ft_strdel((char **)&redirection->dest);
-		redirection->dest = int_copy(dest_fd);
+		redirection->dest = tmp;
+		redirection->close_dst = false;
 		return ;
 	}
 	if (!ft_strequ(redirection->dest, "-"))
 	{
-		new_type = NULL;
+		tmp = NULL;
 		if (ft_strequ(redirection->type, "TRUNC_TO_FD"))
-			new_type = "TRUNC";
+			tmp = "TRUNC";
 		else if (ft_strequ(redirection->type, "READ_FROM_FD"))
-			new_type = "READ_FROM";
-		if (new_type)
+			tmp = "READ_FROM";
+		if (tmp)
 		{
-			redirection->type = new_type;
+			redirection->type = tmp;
 			open_redirection_file(redirection);
 			return ;
 		}
