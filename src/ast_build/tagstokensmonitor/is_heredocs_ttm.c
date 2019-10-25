@@ -28,7 +28,7 @@ static void		append_to_heredocs_keys(t_tags_tokens_monitor *self, char *key,
 	t_pylst *list_param;
 
 	list_param = NULL;
-	push_pylst(&list_param, key, (ft_strlen(key) + 1) * sizeof(char), _chare);
+	push_pylst(&list_param, ft_strdup(key), (ft_strlen(key) + 1) * sizeof(char), _chare);
 	push_pylst(&list_param, &len, sizeof(int), _ptr);
 	push_pylst(&list_param, &minus, sizeof(int), _ptr);
 	push_pylst(&self->heredocs_keys, list_param, 0, _ptr);
@@ -39,6 +39,7 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
 {
 	t_pylst	*list_tok;
 	int		j;
+	char	*tmp;
 
 	j = skip_openning_tagstokens(self->tt, self->i,
 								get_end_tag(self->tag));
@@ -47,8 +48,9 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
 	update_pylst(self->tt->tags, self->i,
 				transform_end_tag(vindex_pylst(self->tt->tags, self->i))
 				, 0, _ptr);
-	append_to_heredocs_keys(self, join_pylst(list_tok, ""),
+	append_to_heredocs_keys(self, (tmp = join_pylst(list_tok, "")),
 			len_pylst(list_tok), minus);
+	ft_strdel(&tmp);
 	free_pylst(&list_tok, 42);
 }
 

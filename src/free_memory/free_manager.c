@@ -16,6 +16,7 @@
 #include "acb.h"
 #include "ast.h"
 #include "redirectionfd.h"
+#include "heredocs.h"
 
 /*
 ** setup_freefct:
@@ -37,4 +38,5 @@ void		setup_freefct(void)
 	g_free_fct[_ast] = free_ast_type;
 	g_free_fct[_redfd] = free_redfd_type;
 	g_free_fct[_static] = free_static_type;
+    g_free_fct[_heredocs] = free_heredocs_type;
 }

@@ -82,7 +82,7 @@ void				is_newline_ttm(t_tags_tokens_monitor *self)
 	{
 		minus = *((int *)vindex_pylst(list_param, 2));
 		heredoc = get_heredoc(list_param, &gold_key);
-		push_pylst(&g_heredocs, heredoc, 0, _ptr);
+		push_pylst(&g_heredocs, heredoc, 0, _heredocs);
 		not_end = full_heredoc(self, heredoc, gold_key, minus);
 		free_pylst(&list_param, 42);
 	}

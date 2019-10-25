@@ -53,6 +53,7 @@ enum			e_ctype
 	_hash_exec,
 	_job,
 	_static,
+	_heredocs,
 	size
 };
 

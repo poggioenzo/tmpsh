@@ -33,3 +33,8 @@ int			free_heredocs(t_heredocs **self, int status)
 	ft_memdel((void **)self);
 	return (status);
 }
+
+void	free_heredocs_type(void *heredoc)
+{
+	free_heredocs((t_heredocs **)heredoc, 42);
+}

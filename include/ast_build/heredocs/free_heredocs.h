@@ -15,5 +15,6 @@
 # define FREE_HEREDOCS_H
 
 int			free_heredocs(t_heredocs **self, int status);
+void        free_heredocs_type(void *heredoc);
 
 #endif

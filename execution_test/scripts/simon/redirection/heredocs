@@ -1,0 +1,17 @@
+cat << EOF
+    lol
+$(echo lol)
+    $PATH
+EOF
+
+cat << 'EOF'
+    lol
+$(echo lol)
+$PATH
+EOF
+
+cat << "EOF"
+lol
+    $(echo lol)
+$PATH
+EOF

@@ -27,13 +27,13 @@
 
 int	get_heredoc_redfd(t_redirection_fd *self)
 {
-	t_tagstokens	*tagstokens;
+	t_heredocs		*heredoc;
 
 	if (len_pylst(g_heredocs) > 0)
 	{
-		tagstokens = ((t_heredocs*)vindex_pylst(g_heredocs, 0))->tagstokens;
-		pop_pylst(&g_heredocs, 0);
-		self->heredoc_ast = init_ast(tagstokens);
+		heredoc = pop_pylst(&g_heredocs, 0);
+		self->heredoc_ast = init_ast(heredoc->tagstokens);
+		free_heredocs(&heredoc, 42);
 	}
 	return (0);
 }
