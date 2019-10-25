@@ -34,6 +34,7 @@ void	init_heredocs(t_heredocs **self, char *key, int len_key, t_bool quoted)
 	(*self)->quoted = quoted;
 	if ((*self)->quoted)
 	{
+		// (*self)->len_key--;
 		(*self)->quoted = !dquoted_gold_key(key); // rm cette ligne si on veut les heredocs comme bash
 	}
 	(*self)->closed = false;
