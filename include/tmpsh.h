@@ -229,7 +229,6 @@ struct		s_tags_tokens_monitor
 	char			*tag;
 	char			*token;
 	t_bool			begin_cmd;
-	t_pylst			*heredocs_keys;
 	t_pylst			*opened;
 };
 
@@ -239,7 +238,7 @@ struct		s_heredocs
 	char			*key;
 	int				quoted;
 	int				len_key;
-	t_bool			minus;
+	// t_bool			minus;
 	t_bool			closed;
 	t_tagstokens	*tagstokens;
 	t_pylst			*stack;

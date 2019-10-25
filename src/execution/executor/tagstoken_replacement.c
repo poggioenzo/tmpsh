@@ -39,7 +39,7 @@ static void		replace_redirection(t_acb *branch, int change_index, \
 			token = vindex_pylst(redirection->tagstokens->tokens, index);
 			if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
 			{
-				ft_memdel(&redirection->dest);
+				ft_memdel(&redirection->dest);// pb ici...
 				redirection->dest = content;
 				update_pylst(redirection->tagstokens->tags, index, "STMT", \
 						0, _ptr);

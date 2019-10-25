@@ -22,35 +22,30 @@ static char		*transform_end_tag(char *tag)
 	return (tag);
 }
 
-static void		append_to_heredocs_keys(t_tags_tokens_monitor *self, char *key,
-									int len, t_bool minus)
+static void		append_to_heredocs(t_tags_tokens_monitor *self, char *key,
+									int len, t_bool quoted)
 {
-	t_pylst *list_param;
+	t_heredocs *hd;
 
-	list_param = NULL;
-	push_pylst(&list_param, ft_strdup(key), (ft_strlen(key) + 1) * sizeof(char), _chare);
-	push_pylst(&list_param, &len, sizeof(int), _ptr);
-	push_pylst(&list_param, &minus, sizeof(int), _ptr);
-	push_pylst(&self->heredocs_keys, list_param, 0, _ptr);
+	hd = NULL;
+	init_heredocs(&hd, key, len, quoted);
+	push_pylst(&g_heredocs, hd, 0, _heredocs);
 }
 
-static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self,
-											t_bool minus)
+static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self)
 {
 	t_pylst	*list_tok;
 	int		j;
-	char	*tmp;
 
 	j = skip_openning_tagstokens(self->tt, self->i,
 								get_end_tag(self->tag));
-	list_tok = slice_pylst(self->tt->tokens, self->i, j + 1);
+	list_tok = slice_pylst(self->tt->tokens, self->i + 1, j - 1);
 	self->i = j;
 	update_pylst(self->tt->tags, self->i,
 				transform_end_tag(vindex_pylst(self->tt->tags, self->i))
 				, 0, _ptr);
-	append_to_heredocs_keys(self, (tmp = join_pylst(list_tok, "")),
-			len_pylst(list_tok), minus);
-	ft_strdel(&tmp);
+	append_to_heredocs(self, join_pylst(list_tok, ""),
+			len_pylst(list_tok), true);
 	free_pylst(&list_tok, 42);
 }
 
@@ -73,10 +68,8 @@ static void		set_false(t_tags_tokens_monitor *self)
 
 void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 {
-	t_bool	minus;
 	t_bool	not_end;
 
-	minus = ft_strequ(self->tag, "HEREDOCMINUS");
 	not_end = next_ttm(self, false);
 	if (ft_strequ(self->tag, "SPACES"))
 		not_end = next_ttm(self, false);
@@ -84,13 +77,13 @@ void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 	{
 		if (search_value(g_grammar->opening_tags, self->tag))
 		{
-			if (in(self->tag, "QUOTE", "DQUOTES"))
-				append_to_heredocs_composed_keys(self, minus);
+			if (in(self->tag, "QUOTE", "DQUOTES", NULL))
+				append_to_heredocs_composed_keys(self);
 			else
 				set_false(self);
 		}
 		else
-			append_to_heredocs_keys(self, self->token, 1, minus);
+			append_to_heredocs(self, ft_strdup(self->token), 1, false);
 	}
 	else
 		set_false(self);

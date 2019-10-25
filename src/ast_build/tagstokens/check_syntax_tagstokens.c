@@ -19,7 +19,8 @@ static int		end_escape(char *last_token)
 
 	ret = ft_strlen(last_token) == 2;
 	ret &= last_token[0] == g_grammar->escape[0];
-	ret &= (int)last_token[1] == 10;
+	if (ret)
+	 	ret &= (int)last_token[1] == 10;
 	return (ret);
 }
 
