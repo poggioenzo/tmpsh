@@ -28,6 +28,19 @@
 // 	return (heredoc);
 // }
 
+static t_bool		remove_next_ttm(t_tags_tokens_monitor *self)
+{
+	int prev;
+	t_bool ret;
+
+	prev = self->i;
+	ret = next_ttm(self);
+	if (ret)
+		delitems_tagstokens(self->tt, prev, prev + 1, 42);
+	self->i = prev;
+	return (ret);
+}
+
 static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 							t_heredocs *heredoc, char *gold_key)
 {
@@ -36,6 +49,7 @@ static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 
 	key = ft_strnew(0);
 	not_end = next_ttm(self);
+	int i = 0;
 	while (not_end)
 	{
 		if (ft_strequ(key, gold_key))
@@ -45,12 +59,13 @@ static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 		}
 		add_tags_tokens_heredocs(heredoc, self->tag, self->token);
 		key = get_key(key, self->tag, self->token, false);
+		ft_printf(WHITE"%d : "RED" |%s|"WHITE" == "GREEN"|%s|\n"WHITE, i++ ,key, gold_key);
 		if (ft_strequ(self->tag, "NEW_LINE"))
 		{
 			ft_strdel(&key);
 			key = ft_strnew(0);
 		}
-		not_end = next_ttm(self);
+		not_end = remove_next_ttm(self);
 	}
 	return (ft_strdel_out(&key, not_end));
 }
@@ -67,6 +82,7 @@ static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 
 void				is_newline_ttm(t_tags_tokens_monitor *self)
 {
+	DF;
 	char		*gold_key;
 	t_heredocs	*heredoc;
 	t_bool		not_end;
@@ -76,7 +92,7 @@ void				is_newline_ttm(t_tags_tokens_monitor *self)
 	while (iter_pylst(g_heredocs, (void **)&heredoc) && not_end)
 	{
 		gold_key = ft_strdup(heredoc->key);
-		modify_gold_key(gold_key);
+		ft_printf(RED"key\t|%s|\n"WHITE,gold_key);
 		not_end = full_heredoc(self, heredoc, gold_key);
 		ft_strdel(&gold_key);
 	}

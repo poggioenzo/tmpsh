@@ -39,13 +39,15 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self)
 
 	j = skip_openning_tagstokens(self->tt, self->i,
 								get_end_tag(self->tag));
-	list_tok = slice_pylst(self->tt->tokens, self->i + 1, j - 1);
+	list_tok = slice_pylst(self->tt->tokens, self->i + 1, j);
 	self->i = j;
 	update_pylst(self->tt->tags, self->i,
 				transform_end_tag(vindex_pylst(self->tt->tags, self->i))
 				, 0, _ptr);
-	append_to_heredocs(self, join_pylst(list_tok, ""),
-			len_pylst(list_tok), true);
+	char *tmp = join_pylst(list_tok, "");
+	print_pylst_chare(list_tok);
+	ft_printf(YELLOW"key = |%s|\n"WHITE, tmp);
+	append_to_heredocs(self, tmp, len_pylst(list_tok), true);
 	free_pylst(&list_tok, 42);
 }
 

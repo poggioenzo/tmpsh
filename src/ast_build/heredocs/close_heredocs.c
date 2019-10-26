@@ -28,14 +28,9 @@
 
 void	close_heredocs(t_heredocs *self)
 {
-	t_tagstokens *tmp;
-
-	tmp = self->tagstokens;
-	self->tagstokens = copy_tagstokens(self->tagstokens, 0, -self->len_key);
+	delitems_tagstokens(self->tagstokens, -self->len_key,
+			self->tagstokens->length, 0);
 	self->tagstokens->not_heredocs = false;
-	free_tagstokens(&tmp, 42);
-	// if (self->minus)
-	// 	striplines_heredocs(self);
 	check_syntax_tagstokens(self->tagstokens);
 	self->closed = true;
 }
