@@ -28,9 +28,9 @@ void	is_braceparam_ttm(t_tags_tokens_monitor *self)
 	t_bool	not_end;
 	char	*stmt_tag;
 
-	not_end = next_ttm(self, false);
+	not_end = next_ttm(self);
 	stmt_tag = self->tag;
-	not_end = not_end && next_ttm(self, false);
+	not_end = not_end && next_ttm(self);
 	if (!ft_strequ(stmt_tag, "STMT") || !ft_strequ(self->tag, "END_BRACE"))
 	{
 		if (not_end)

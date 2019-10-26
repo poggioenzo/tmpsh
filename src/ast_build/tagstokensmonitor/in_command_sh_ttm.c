@@ -41,9 +41,9 @@ void			in_command_sh_ttm(t_tags_tokens_monitor *self)
 	if (self->begin_cmd)
 	{
 		in_sub_process_ttm(self);
-		ret = next_ttm(self, false);
+		ret = next_ttm(self);
 		if (ft_strequ(self->tag, "SPACES"))
-			ret = next_ttm(self, false);
+			ret = next_ttm(self);
 		end = search_end(self->tag);
 		if (ret && !end)
 		{

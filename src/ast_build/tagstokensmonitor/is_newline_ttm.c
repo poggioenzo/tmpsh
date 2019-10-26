@@ -35,7 +35,7 @@ static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 	t_bool	not_end;
 
 	key = ft_strnew(0);
-	not_end = next_ttm(self, true);
+	not_end = next_ttm(self);
 	while (not_end)
 	{
 		if (ft_strequ(key, gold_key))
@@ -50,7 +50,7 @@ static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 			ft_strdel(&key);
 			key = ft_strnew(0);
 		}
-		not_end = next_ttm(self, true);
+		not_end = next_ttm(self);
 	}
 	return (ft_strdel_out(&key, not_end));
 }
