@@ -58,24 +58,29 @@ int		main(int argc, char **argv, char **environ)
 	int		status;
 
 	setup_globals(environ);
-	status = 0;
-	if (argc == 1)
-	{
-		if (!isatty(STDIN_FILENO))
-			status = run_stdin_file();
-		else if (isatty(STDOUT_FILENO))
-		{
-			source_rc();
-			prompt_loop();
-		}
-		else
-		{
-			ft_dprintf(2, NAME_SH" no controlling terminal.\n");
-			status = 1;
-		}
-	}
-	else
-		status = run_shell_files(argv + 1);
+	t_tagstokens *tmp = NULL;
+	status = argc;
+	if (*(++argv))
+		input_init_tagstokens(&tmp, *argv);
+	print_tagstokens(tmp);
+	// status = 0;
+	// if (argc == 1)
+	// {
+	// 	if (!isatty(STDIN_FILENO))
+	// 		status = run_stdin_file();
+	// 	else if (isatty(STDOUT_FILENO))
+	// 	{
+	// 		source_rc();
+	// 		prompt_loop();
+	// 	}
+	// 	else
+	// 	{
+	// 		ft_dprintf(2, NAME_SH" no controlling terminal.\n");
+	// 		status = 1;
+	// 	}
+	// }
+	// else
+	// 	status = run_shell_files(argv + 1);
 	remove_globals();
 	return (status);
 }
