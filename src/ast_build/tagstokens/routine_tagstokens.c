@@ -12,6 +12,7 @@
 /* ************************************************************************** */
 
 #include "tagstokens.h"
+#include "ttm.h"
 
 static void	remove_end_line(char *str)
 {
@@ -42,8 +43,12 @@ static void	remove_comments(char *str)
 	}
 }
 
-static	void reset_routine(void)
+void reset_routine(void)
 {
+	t_tags_tokens_monitor *self;
+
+	self = NULL;
+	is_newline_ttm(self, true);
 	free_pylst(&g_actual_alias, 42);
 	free_pylst(&g_passed_alias, 42);
 	free_pylst(&g_heredocs, 42);
@@ -55,5 +60,4 @@ void		routine_tagstokens(t_tagstokens **self, char *shell_content)
 	remove_comments(shell_content);
 	reset_routine();
 	input_init_tagstokens(self, shell_content);
-	reset_routine();
 }
