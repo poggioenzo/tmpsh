@@ -20,11 +20,11 @@
 ** Macro to use for allocation and free.
 */
 
-// # define MALLOC		malloc
-// # define FREE		free
+# define MALLOC		malloc
+# define FREE		free
 
-# define MALLOC		garbage_malloc
-# define FREE		garbage_free
+// # define MALLOC		garbage_malloc
+// # define FREE		garbage_free
 
 
 /*
