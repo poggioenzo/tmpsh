@@ -60,7 +60,7 @@ void			op_selector_ttm(t_tags_tokens_monitor *self)
 		else if (ft_strequ(self->tag, "QUOTE"))
 			is_quote_ttm(self);
 		else if (ft_strequ(self->tag, "NEW_LINE"))
-			is_newline_ttm(self);
+			is_newline_ttm(self, false);
 		else if (in_grammar(self->tag, "ABS_TERMINATOR"))
 			is_abs_terminator_ttm(self);
 		else if (in(self->tag, "CURSH", "SUBSH", NULL))
