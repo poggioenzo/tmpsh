@@ -22,8 +22,7 @@ static char		*transform_end_tag(char *tag)
 	return (tag);
 }
 
-static void		append_to_heredocs(t_tags_tokens_monitor *self, char *key,
-									int len, t_bool quoted)
+static void		append_to_heredocs(char *key, int len, t_bool quoted)
 {
 	t_heredocs *hd;
 
@@ -44,10 +43,7 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self)
 	update_pylst(self->tt->tags, self->i,
 				transform_end_tag(vindex_pylst(self->tt->tags, self->i))
 				, 0, _ptr);
-	char *tmp = join_pylst(list_tok, "");
-	print_pylst_chare(list_tok);
-	ft_printf(YELLOW"key = |%s|\n"WHITE, tmp);
-	append_to_heredocs(self, tmp, len_pylst(list_tok), true);
+	append_to_heredocs(join_pylst(list_tok, ""), len_pylst(list_tok), true);
 	free_pylst(&list_tok, 42);
 }
 
@@ -85,7 +81,7 @@ void			is_heredocs_ttm(t_tags_tokens_monitor *self)
 				set_false(self);
 		}
 		else
-			append_to_heredocs(self, ft_strdup(self->token), 1, false);
+			append_to_heredocs(ft_strdup(self->token), 1, false);
 	}
 	else
 		set_false(self);
