@@ -60,6 +60,6 @@ void		routine_tagstokens(t_tagstokens **self, char *shell_content)
 	remove_comments(shell_content);
 	reset_routine();
 	input_init_tagstokens(self, shell_content);
-	if ((*self)->incomplete)
+	if ((*self)->incomplete || !(*self)->valid)
 		reset_routine();
 }
