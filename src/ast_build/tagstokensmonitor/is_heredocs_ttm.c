@@ -13,6 +13,12 @@
 
 #include "ttm.h"
 
+static void		set_false(t_tags_tokens_monitor *self)
+{
+	self->tt->valid = false;
+	self->tt->token_error = ft_strdup(self->token);
+}
+
 static char		*transform_end_tag(char *tag)
 {
 	if (ft_strequ(tag, "QUOTE"))
@@ -38,6 +44,11 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self)
 
 	j = skip_openning_tagstokens(self->tt, self->i,
 								get_end_tag(self->tag));
+	if (!ft_strequ(self->tag, vindex_pylst(self->tt->tags, j)))
+	{
+		set_false(self);
+		return ;
+	}
 	list_tok = slice_pylst(self->tt->tokens, self->i + 1, j);
 	self->i = j;
 	update_pylst(self->tt->tags, self->i,
@@ -47,11 +58,6 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self)
 	free_pylst(&list_tok, 42);
 }
 
-static void		set_false(t_tags_tokens_monitor *self)
-{
-	self->tt->valid = false;
-	self->tt->token_error = ft_strdup(self->token);
-}
 
 /*
 ** is_heredocs_ttm:
