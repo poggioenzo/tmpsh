@@ -40,5 +40,4 @@ void	init_heredocs(t_heredocs **self, char *key, int len_key, t_bool quoted)
 	(*self)->closed = false;
 	(*self)->in_cmdsubst = false;
 	init_tagstokens(&(*self)->tagstokens, NULL, NULL);
-	ft_printf(str_heredocs(*self));
 }
