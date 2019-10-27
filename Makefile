@@ -2,7 +2,7 @@ NAME = 21sh
 REAL_NAME = tmpsh
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Wno-error=unused-result -O3 -g -fsanitize=address #-pedantic#-Wconversion #  -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Wno-error=unused-result -O3 -g #-fsanitize=address #-pedantic#-Wconversion #  -Wall -Wextra -Werror
 CPPFLAGS = $(addprefix -I , $(INCLUDES))
 
 include sources.d
@@ -40,7 +40,7 @@ INCLUDES += $(LIB_INCLUDES)
 all: get_lib $(NAME)
 
 $(NAME): $(OBJS) $(LIB)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^ -o $@ -lncurses -ltinfo
+	$(CC) $(CFLAGS) $(CPPFLAGS) -ltermcap $^ -o $@ #-lncurses -ltinfo
 	ln -f -s $@ $(REAL_NAME)
 
 clean:
