@@ -34,7 +34,7 @@ static void		append_to_heredocs(char *key, int len, t_bool quoted)
 
 	hd = NULL;
 	init_heredocs(&hd, key, len, quoted);
-	push_pylst(&g_heredocs, hd, 0, _heredocs);
+	push_pylst(&g_heredocs, hd, NO_COPY_BUT_FREE, _heredocs);
 }
 
 static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self)
