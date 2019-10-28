@@ -15,3 +15,18 @@ lol
     $(echo lol)
 $PATH
 EOF
+
+cat << EOF; <<EOF2 cat;
+	content
+EOF
+	content2
+EOF2
+
+cat <<1 <<2 <<3
+qwertyu
+1
+asdfghj
+2
+zxcvbnm
+3
+
