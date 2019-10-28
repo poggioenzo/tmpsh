@@ -73,22 +73,23 @@ static int			del_source_red(t_tagstokens *tgtk, int lentags, \
 void				check_redirection_acb(t_acb *self)
 {
 	int		lentags;
+	int		i;
 	char	*tag;
 	char	*src;
 
 	lentags = (int)self->tagstokens->length;
-	while (--lentags >= 0)
+	i = -1;
+	while (++i < lentags)
 	{
-		tag = vindex_pylst(self->tagstokens->tags, lentags);
+		tag = vindex_pylst(self->tagstokens->tags, i);
 		if (in_grammar(tag, "REDIRECTION"))
 		{
-			src = get_source_acb(self->tagstokens, lentags);
+			src = get_source_acb(self->tagstokens, i);
 			push_pylst(&self->redirectionfd,
 					init_redfd(
-					get_redirection_tgtk(self->tagstokens, lentags),
+					get_redirection_tgtk(self->tagstokens, i),
 						tag, src), -1, _redfd);
-			lentags = del_source_red(self->tagstokens, lentags, &src);
+			i = del_source_red(self->tagstokens, i, &src);
 		}
 	}
-	reverse_pylst(&self->redirectionfd);
 }
