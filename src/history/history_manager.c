@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 13:41:46 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -37,6 +37,7 @@ void	history_manager(char *key, t_line *shell_repr, t_cursor *cursor)
 	clean_lastest_history(is_repetition, shell_repr, cursor, history);
 	select_current_history(key, &history, is_repetition);
 	add_new_history(shell_repr, cursor, history);
+	update_line_lst(shell_repr);
 	cursor_line = get_cursor_line(shell_repr, cursor);
 	cursor->column = char_lst_len(cursor_line->chars);
 }
