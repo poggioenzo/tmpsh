@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:32:57 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 22:33:44 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 10:08:22 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,7 +25,7 @@
 ** - (t_bool*) clear : boolean to remove element.
 */
 
-t_bool	next_ttm(t_tags_tokens_monitor *self) //, t_bool clear)
+t_bool	next_ttm(t_tags_tokens_monitor *self)
 {
 	t_bool	ret;
 
@@ -35,7 +35,6 @@ t_bool	next_ttm(t_tags_tokens_monitor *self) //, t_bool clear)
 	{
 		self->tag = vindex_pylst(self->tt->tags, self->i);
 		self->token = vindex_pylst(self->tt->tokens, self->i);
-		
 	}
 	return (ret);
 }
