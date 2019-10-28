@@ -72,12 +72,13 @@ void				is_newline_ttm(t_tags_tokens_monitor *self, t_bool reset)
 
 	not_end = true;
 	gold_key = NULL;
+	heredoc = NULL;
 	if (reset)
 	{
 		index = 0;
 		return ;
 	}
-	while (self->tt->not_heredocs && index < len_pylst(g_heredocs) 
+	while (self->tt->not_heredocs && index < len_pylst(g_heredocs)
 			&& (heredoc = vindex_pylst(g_heredocs, index++)) && not_end)
 	{
 		gold_key = ft_strdup(heredoc->key);
