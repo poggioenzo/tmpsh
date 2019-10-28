@@ -37,49 +37,45 @@ static t_tagstokens	*get_redirection_tgtk(t_tagstokens *tgtk, int index_red)
 	return (ret_tagstokens);
 }
 
-static char			*get_source_acb(t_tagstokens *tgtk, size_t lentags)
+static char			*get_source_acb(t_tagstokens *tgtk, size_t i)
 {
 	char	*source;
 
 	source = NULL;
-	if (lentags > 0
-			&& digitstr(vindex_pylst(tgtk->tokens, lentags - 1))
-			&& !ft_strequ(vindex_pylst(tgtk->tags, lentags - 1), "SUBAST"))
+	if (i > 0
+			&& digitstr(vindex_pylst(tgtk->tokens, i - 1))
+			&& !ft_strequ(vindex_pylst(tgtk->tags, i - 1), "SUBAST"))
 	{
-		if (lentags - 2 > 0 &&
-			in(find_prev_token(tgtk, lentags - 2, false), "TRUNC_TO_FD",
+		if (i - 2 > 0 &&
+			in(find_prev_token(tgtk, i - 2, false), "TRUNC_TO_FD",
 				"READ_FROM_FD", NULL))
 			source = NULL;
 		else
-			source = ft_strdup(vindex_pylst(tgtk->tokens, lentags - 1));
+			source = ft_strdup(vindex_pylst(tgtk->tokens, i - 1));
 	}
 	return (source);
 }
 
-static int			del_source_red(t_tagstokens *tgtk, int lentags, \
-		char **source)
+static void			del_source_red(t_tagstokens *tgtk, int i, char **source)
 {
 	int	begin;
 
 	if (*source)
 	{
-		begin = find_prev_ind_token(tgtk, lentags - 1);
+		begin = find_prev_ind_token(tgtk, i - 1);
 		delitems_tagstokens(tgtk, begin, begin + 1, 42);
 	}
 	*source = NULL;
-	return (tgtk->length - 1);
 }
 
 void				check_redirection_acb(t_acb *self)
 {
-	int		lentags;
-	int		i;
+	size_t	i;
 	char	*tag;
 	char	*src;
 
-	lentags = (int)self->tagstokens->length;
-	i = -1;
-	while (++i < lentags)
+	i = 0;
+	while (i < self->tagstokens->length)
 	{
 		tag = vindex_pylst(self->tagstokens->tags, i);
 		if (in_grammar(tag, "REDIRECTION"))
@@ -89,7 +85,9 @@ void				check_redirection_acb(t_acb *self)
 					init_redfd(
 					get_redirection_tgtk(self->tagstokens, i),
 						tag, src), -1, _redfd);
-			i = del_source_red(self->tagstokens, i, &src);
+			del_source_red(self->tagstokens, i, &src);
+			i--;
 		}
+		i++;
 	}
 }
