@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/25 12:54:32 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 10:03:56 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -238,7 +238,6 @@ struct		s_heredocs
 	char			*key;
 	int				quoted;
 	int				len_key;
-	// t_bool			minus;
 	t_bool			closed;
 	t_tagstokens	*tagstokens;
 	t_pylst			*stack;

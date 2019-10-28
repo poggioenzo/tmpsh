@@ -6,32 +6,17 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:27:14 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 22:32:22 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 10:00:39 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ttm.h"
 
-// static t_heredocs	*get_heredoc(t_pylst *list_param, char **gold_key)
-// {
-// 	t_heredocs	*heredoc;
-// 	char		*tmp;
-//
-// 	tmp = (char *)vindex_pylst(list_param, 0);
-// 	init_heredocs(&heredoc,
-// 					tmp,
-// 					*((int *)vindex_pylst(list_param, 1)),
-// 					*((int *)vindex_pylst(list_param, 2)));
-// 	modify_gold_key(tmp);
-// 	*gold_key = tmp;
-// 	return (heredoc);
-// }
-
 static t_bool		remove_next_ttm(t_tags_tokens_monitor *self)
 {
-	int prev;
-	t_bool ret;
+	int		prev;
+	t_bool	ret;
 
 	prev = self->i;
 	ret = next_ttm(self);
@@ -80,7 +65,7 @@ static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 
 void				is_newline_ttm(t_tags_tokens_monitor *self, t_bool reset)
 {
-	static int		 	index = 0;
+	static int			index = 0;
 	char				*gold_key;
 	t_heredocs			*heredoc;
 	t_bool				not_end;
@@ -96,10 +81,8 @@ void				is_newline_ttm(t_tags_tokens_monitor *self, t_bool reset)
 			&& (heredoc = vindex_pylst(g_heredocs, index++)) && not_end)
 	{
 		gold_key = ft_strdup(heredoc->key);
-		// ft_printf(RED" %d -> key\t|%s|\n"WHITE, index, gold_key);
 		not_end = full_heredoc(self, heredoc, gold_key);
 		ft_strdel(&gold_key);
-
 	}
 	reset_ttm(self);
 }

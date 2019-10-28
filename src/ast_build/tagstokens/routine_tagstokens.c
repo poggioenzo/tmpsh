@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/04 16:42:44 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/18 16:58:09 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 09:56:46 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -43,7 +43,7 @@ static void	remove_comments(char *str)
 	}
 }
 
-void reset_routine(void)
+void		reset_routine(void)
 {
 	t_tags_tokens_monitor *self;
 

@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:06:38 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 22:07:13 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 09:53:07 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -40,9 +40,6 @@ char		*str_heredocs(t_heredocs *self)
 	str = quick_join(str, " | closed: ", true, false);
 	bool_str = self->closed ? "True" : "False";
 	str = quick_join(str, bool_str, true, false);
-	// str = quick_join(str, " | Minus: ", true, false);
-	// bool_str = self->minus ? "True" : "False";
-	// str = quick_join(str, bool_str, true, false);
 	str = quick_join(str, "\n", true, false);
 	str = quick_join(str, "DOC:\n", true, false);
 	str = quick_join(str, str_tagstokens(self->tagstokens), true, true);

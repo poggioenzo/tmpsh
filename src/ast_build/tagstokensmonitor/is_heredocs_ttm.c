@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:19:28 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/22 17:32:25 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 10:02:06 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -57,7 +57,6 @@ static void		append_to_heredocs_composed_keys(t_tags_tokens_monitor *self)
 	append_to_heredocs(join_pylst(list_tok, ""), len_pylst(list_tok), true);
 	free_pylst(&list_tok, 42);
 }
-
 
 /*
 ** is_heredocs_ttm:
