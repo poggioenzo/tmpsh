@@ -36,7 +36,7 @@ static	t_bool		full_heredoc(t_tags_tokens_monitor *self,
 	not_end = next_ttm(self);
 	while (not_end || ft_strequ(key, gold_key))
 	{
-		if (ft_strequ(key, gold_key))
+		if (ft_strequ(key, gold_key) && ft_strequ(self->tag, "NEW_LINE"))
 		{
 			close_heredocs(heredoc);
 			break ;
@@ -77,7 +77,7 @@ void				is_newline_ttm(t_tags_tokens_monitor *self, t_bool reset)
 		index = 0;
 		return ;
 	}
-	while (index < len_pylst(g_heredocs)
+	while (index < len_pylst(g_heredocs) && self->tt->not_heredocs
 			&& (heredoc = vindex_pylst(g_heredocs, index++)) && not_end)
 	{
 		gold_key = ft_strdup(heredoc->key);
