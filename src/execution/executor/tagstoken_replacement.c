@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/17 13:43:11 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 10:20:06 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -39,7 +39,7 @@ static void		replace_redirection(t_acb *branch, int change_index, \
 			token = vindex_pylst(redirection->tagstokens->tokens, index);
 			if (ft_strequ(tag, "SUBAST") && ft_atoi(token) == change_index)
 			{
-				ft_memdel(&redirection->dest);// pb ici...
+				ft_memdel(&redirection->dest);
 				redirection->dest = content;
 				update_pylst(redirection->tagstokens->tags, index, "STMT", \
 						0, _ptr);
