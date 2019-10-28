@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/28 13:41:46 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 14:04:39 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,6 +17,7 @@
 #include "keyboard.h"
 #include "char_utils.h"
 #include "cursor_dependent_selection.h"
+#include "t_line_utils.h"
 
 /*
 ** history_manager:
