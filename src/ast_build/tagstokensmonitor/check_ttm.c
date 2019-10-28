@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:15:36 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 22:15:48 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 09:57:37 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -25,6 +25,6 @@
 
 void	check_ttm(t_tags_tokens_monitor *self)
 {
-	while (next_ttm(self, false))
+	while (next_ttm(self))
 		op_selector_ttm(self);
 }

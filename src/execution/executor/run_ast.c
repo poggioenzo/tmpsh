@@ -16,6 +16,7 @@
 #include "run_ast_utils.h"
 #include "foreground.h"
 #include "job_control.h"
+#include "tagstokens.h"
 #include "variable_replacement.h"
 #include "cmdsubst_replacement.h"
 #include "subast_command.h"
@@ -131,4 +132,5 @@ void			executor(t_ast *ast)
 	wait_zombie();
 	run_ast(ast);
 	free_ast(&ast);
+	reset_routine();
 }

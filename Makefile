@@ -2,7 +2,7 @@ NAME = 21sh
 REAL_NAME = tmpsh
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Wno-error=unused-result -O3 -g -fsanitize=address #-pedantic#-Wconversion #  -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Wno-error=unused-result -O3 -g #-fsanitize=address #-pedantic#-Wconversion #  -Wall -Wextra -Werror
 CPPFLAGS = $(addprefix -I , $(INCLUDES))
 
 include sources.d

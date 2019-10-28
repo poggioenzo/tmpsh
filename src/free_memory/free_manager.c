@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 10:21:28 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -38,5 +38,5 @@ void		setup_freefct(void)
 	g_free_fct[_ast] = free_ast_type;
 	g_free_fct[_redfd] = free_redfd_type;
 	g_free_fct[_static] = free_static_type;
-    g_free_fct[_heredocs] = free_heredocs_type;
+	g_free_fct[_heredocs] = free_heredocs_type;
 }

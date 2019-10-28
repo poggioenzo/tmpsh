@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:05:43 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/09/03 22:05:46 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 09:51:48 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -26,7 +26,7 @@
 ** - (type) value : descibe output.
 */
 
-int			free_heredocs(t_heredocs **self, int status)
+int		free_heredocs(t_heredocs **self, int status)
 {
 	ft_strdel(&(*self)->key);
 	free_tagstokens(&(*self)->tagstokens, status);

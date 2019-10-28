@@ -31,7 +31,7 @@ void	is_dquotes_ttm(t_tags_tokens_monitor *self)
 
 	indquote = true;
 	push_pylst(&self->opened, "DQUOTES", 0, _ptr);
-	while (indquote && next_ttm(self, false))
+	while (indquote && next_ttm(self))
 	{
 		if (ft_strequ(self->tag, "DQUOTES") && \
 				ft_strequ(vindex_pylst(self->opened, -1), "DQUOTES"))

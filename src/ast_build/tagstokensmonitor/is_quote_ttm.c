@@ -58,7 +58,7 @@ void			is_quote_ttm(t_tags_tokens_monitor *self)
 	t_bool		inquote;
 
 	inquote = true;
-	while (inquote && next_ttm(self, false))
+	while (inquote && next_ttm(self))
 	{
 		if (ft_strequ(self->tag, "QUOTE"))
 		{

@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:12:36 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/17 13:27:13 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/28 09:55:53 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -19,7 +19,8 @@ static int		end_escape(char *last_token)
 
 	ret = ft_strlen(last_token) == 2;
 	ret &= last_token[0] == g_grammar->escape[0];
-	ret &= (int)last_token[1] == 10;
+	if (ret)
+		ret &= (int)last_token[1] == 10;
 	return (ret);
 }
 

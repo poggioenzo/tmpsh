@@ -60,7 +60,7 @@ void			append_tag_tagstokens(t_tagstokens *self, char *tag)
 
 void			append_token_tagstokens(t_tagstokens *self, char *token)
 {
-	push_pylst(&(self->tokens), ft_strdup(token), (ft_strlen(token) + 1) *\
+	push_pylst(&(self->tokens), token, (ft_strlen(token) + 1) *\
 			sizeof(char), _chare);
 }
 
