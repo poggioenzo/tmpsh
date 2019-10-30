@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 13:36:01 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -115,7 +115,10 @@ char				*find_newdir(char *argument, int p_opt)
 	char	*new_dir;
 
 	if (!argument && !(argument = ft_getenv("HOME")))
+	{
+		ft_dprintf(STDERR_FILENO, NAME_SH" : cd: HOME not set\n");
 		return (NULL);
+	}
 	if (*argument == '/')
 		new_dir = ft_strdup(argument);
 	else if (next_fileis(argument, "..") || next_fileis(argument, "."))
