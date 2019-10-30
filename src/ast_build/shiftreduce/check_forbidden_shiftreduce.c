@@ -23,7 +23,7 @@ static	t_bool	cond_check_forbidden_shiftreduce(char *key, size_t i,\
 	size_t	index_forbidden;
 	t_pylst	*forbidden_node;
 
-	if (in_reverse(key, "FORBIDDEN"))
+	if (in_grammar(key, "FORBIDDEN"))
 	{
 		index_forbidden = i - len_pylst(instack);
 		forbidden_node = index_pylst(tags, index_forbidden);
