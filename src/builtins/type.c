@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 15:43:28 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -73,7 +73,7 @@ int				built_type(char **argv, NOT_USE(char **environ))
 			ft_printf("%s is aliased to '%s'\n", *argv, used_elem);
 		else if ((search_value(g_builtins, *argv)))
 			ft_printf("%s is a shell builtin\n", *argv);
-		else if ((used_elem = get_execname(*argv)))
+		else if ((used_elem = get_execname(*argv, false)))
 			ft_printf("%s\n", used_elem);
 		else
 		{

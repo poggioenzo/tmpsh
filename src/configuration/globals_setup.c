@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/24 11:42:24 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 15:36:21 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -55,7 +55,7 @@ void		setup_globals(char **environ)
 	get_shell_directory();
 	manage_termios(save_config);
 	grammar_file = ft_filejoin(&g_shell_dir, &grammar_file, false, false);
-	if (!check_rights(grammar_file, F | R, false, true))
+	if (!check_rights(grammar_file, F | R, false, true, true))
 		exit(-1);
 	grammar_init(grammar_file);
 	setup_builtins();

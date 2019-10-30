@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/17 13:37:00 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 15:48:20 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,9 +17,10 @@
 #include "hash.h"
 #include "file_rights.h"
 
-char			*display_search_error(char *command)
+char			*display_search_error(char *command, t_bool verbose)
 {
-	ft_dprintf(STDERR_FILENO, NAME_SH" command not found: %s\n", command);
+	if (verbose)
+		ft_dprintf(STDERR_FILENO, NAME_SH" command not found: %s\n", command);
 	return (NULL);
 }
 
@@ -34,7 +35,7 @@ char			*display_search_error(char *command)
 **			- NULL otherwise.
 */
 
-char			*parse_path(char *command)
+char			*parse_path(char *command, t_bool verbose)
 {
 	char		**folders;
 	int			index;
@@ -42,7 +43,7 @@ char			*parse_path(char *command)
 	t_hash_exec	*cache;
 
 	if (!ft_getenv("PATH"))
-		return (display_search_error(command));
+		return (display_search_error(command, verbose));
 	folders = ft_strsplit(ft_getenv("PATH"), ":");
 	index = 0;
 	while (folders[index])
@@ -54,11 +55,11 @@ char			*parse_path(char *command)
 			insert_value(g_hash, command, cache, _hash_exec);
 			cache->count++;
 			free_str_array(&folders, 0);
-			return (check_rights(execname, X | R, true, true));
+			return (check_rights(execname, X | R, true, true, verbose));
 		}
 		ft_strdel(&execname);
 	}
-	display_search_error(command);
+	display_search_error(command, verbose);
 	free_str_array(&folders, 0);
 	return (NULL);
 }
@@ -72,7 +73,7 @@ char			*parse_path(char *command)
 ** error message otherwise.
 */
 
-char			*get_execname(char *command)
+char			*get_execname(char *command, t_bool verbose)
 {
 	t_hash_exec		*cache;
 
@@ -80,12 +81,17 @@ char			*get_execname(char *command)
 		return (NULL);
 	if ((cache = search_value(g_hash, command)))
 	{
-		cache->count++;
-		return (ft_strdup(cache->exec_file));
+		if (check_rights(cache->exec_file, F | X | R, false, true, false))
+		{
+			cache->count++;
+			return (ft_strdup(cache->exec_file));
+		}
+		else
+			delete_value(g_hash, command);
 	}
-	else if (search_value(g_builtins, command))
+	if (search_value(g_builtins, command))
 		return (ft_strdup(command));
 	else if (ft_strchr(command, '/'))
-		return (check_rights(ft_strdup(command), F | X | R, true, true));
-	return (parse_path(command));
+		return (check_rights(ft_strdup(command), F | X | R, true, true, verbose));
+	return (parse_path(command, verbose));
 }

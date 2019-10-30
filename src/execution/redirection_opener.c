@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/25 13:17:36 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 15:37:20 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -123,7 +123,7 @@ void			open_redirection_file(t_redirection_fd *redirection)
 			ft_printf(NAME_SH" No such file or directory : %s\n", \
 					redirection->dest);
 		else if (rights == -1 || \
-				check_rights(redirection->dest, rights, true, true))
+				check_rights(redirection->dest, rights, true, true, true))
 		{
 			if (open_file(redirection, flags) == true)
 				return ;

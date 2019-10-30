@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 15:43:15 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -65,7 +65,7 @@ static char			*find_execfile(char **args)
 	index = 0;
 	while (args[index] && ft_strchr(args[index], '='))
 		index++;
-	return (args[index] ? get_execname(args[index]) : NULL);
+	return (args[index] ? get_execname(args[index], true) : NULL);
 }
 
 /*

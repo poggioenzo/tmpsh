@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 15:30:44 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -46,7 +46,7 @@ int		is_directory(const char *path)
 */
 
 char	*check_rights(char *filename, int opts, t_bool free, \
-		t_bool avoid_folder)
+		t_bool avoid_folder, t_bool verbose)
 {
 	char	*error;
 
@@ -63,7 +63,8 @@ char	*check_rights(char *filename, int opts, t_bool free, \
 		error = NAME_SH" Permission denied : %s\n";
 	if (error)
 	{
-		ft_dprintf(2, error, filename);
+		if (verbose)
+			ft_dprintf(2, error, filename);
 		if (free == true)
 			ft_strdel(&filename);
 		else

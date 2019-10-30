@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/22 17:36:01 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 15:43:43 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -109,7 +109,7 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	pid_t		pid;
 	char		*executable;
 
-	executable = get_execname(argv[0]);
+	executable = get_execname(argv[0], true);
 	if (executable && !ft_strchr(executable, '/'))
 		return (prepare_builtin(branch, executable, argv, variables));
 	if ((pid = fork_prepare(branch->pgid, branch->background)) == 0)

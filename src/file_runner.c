@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/17 14:06:05 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 15:37:33 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -63,7 +63,7 @@ enum e_tagstoks_state		run_file(char *filename)
 	int						file_fd;
 	enum e_tagstoks_state	state;
 
-	if (!check_rights(filename, F | R, false, true))
+	if (!check_rights(filename, F | R, false, true, true))
 		return (1);
 	file_fd = open(filename, O_RDONLY);
 	if (!(content = fd_readfile(file_fd)))
