@@ -83,6 +83,6 @@ char		*format_prompt(void)
 
 	default_format = getenv("PROMPT42");
 	if (!default_format)
-		default_format = "%d $> ";
+		default_format = CYAN"%d "RED"$> "WHITE;
 	return (parse_prompt_format(default_format));
 }
