@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 13:44:10 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -82,6 +82,8 @@ static int	change_directory(char *directory, int is_p)
 		ft_setenv("PWD", g_shell_dir);
 		return (0);
 	}
+	else
+		ft_dprintf(2, NAME_SH" : %s not a directory\n", directory);
 	ft_strdel(&directory);
 	return (1);
 }

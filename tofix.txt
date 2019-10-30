@@ -1,8 +1,4 @@
-1/
-- cd pas de message d'erreur quand pas de HOME
-- cd dans un executable, pas d'erreur
 2/ ls 1>&3 | wc -l    ==> ls doit renvoyer une erreur
-3/ triple heredoc a fix
 4/ type gcc
 5/ hash : que faire quand fichier existe plus
 6/ Leaks pour le prompt
