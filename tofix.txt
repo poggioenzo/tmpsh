@@ -1,10 +1,4 @@
 2/ ls 1>&3 | wc -l    ==> ls doit renvoyer une erreur
-4/ type gcc
-5/ hash : que faire quand fichier existe plus
-6/ Leaks pour le prompt
-7/ kill -3 $$ => segfault 
-8/ {echo ok} > content ==> freeze
 9/ foo 2>&1 | wc
 10/ echo \\\\\\
 11/ \=ko echo $"\"
-12/ kill -3 $$
