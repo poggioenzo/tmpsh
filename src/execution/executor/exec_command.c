@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/30 15:43:43 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 16:22:23 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -36,6 +36,7 @@ static int		run_builtin(t_acb *branch, char **cmd_args, t_pylst *variables)
 	char	**saved_environ;
 	int		(*builtin)(char **, char **);
 	int		status;
+	int		std_fd[3];
 
 	saved_environ = NULL;
 	if (len_pylst(variables) > 0)
@@ -45,13 +46,13 @@ static int		run_builtin(t_acb *branch, char **cmd_args, t_pylst *variables)
 		free_pylst(&variables, 0);
 	}
 	builtin = search_value(g_builtins, cmd_args[0]);
-	save_std_fd(save);
+	save_std_fd(save, std_fd);
 	replace_std_fd(branch->stdin, branch->stdout);
 	if (setup_redirection(branch) == true)
 		status = builtin(cmd_args + 1, g_environ);
 	else
 		status = 1;
-	save_std_fd(restore);
+	save_std_fd(restore, std_fd);
 	if (saved_environ)
 	{
 		free_str_array(&g_environ, 0);

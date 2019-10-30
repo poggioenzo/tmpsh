@@ -1,0 +1,10 @@
+file1=a_file
+file2=${file1}2
+
+echo "THE file content " > $file1
+{ cat $file1 ; } > $file2
+
+{ echo the content && { mv  || echo plop ; } ; } > $file1
+{ cat  $file1; }
+
+rm $file1 $file2

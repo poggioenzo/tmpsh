@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/25 13:05:29 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 16:24:40 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -85,15 +85,14 @@ int		setup_pipe_fd(int pipes_fd[2])
 ** save_std_fd:
 **
 ** @mode : Call the function in save to restore mode.
+** @save_std_fd : list to save fd.
 **
 ** In the save mode, save current stdin, stdout or stderr
 ** to be replace freely. In restore mode, reset old stdin/out/err.
 */
 
-void	save_std_fd(enum e_save_fd mode)
+void	save_std_fd(enum e_save_fd mode, int *std_fds)
 {
-	static int	std_fds[3];
-
 	if (mode == save)
 	{
 		std_fds[0] = fcntl(STDIN_FILENO, F_DUPFD_CLOEXEC, 100);

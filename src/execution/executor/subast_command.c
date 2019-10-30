@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/10/30 16:22:44 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -35,7 +35,9 @@ static int		is_bg_or_pipe(t_acb *branch)
 
 static void		run_cursh(t_acb *branch, t_ast *subast)
 {
-	save_std_fd(save);
+	int		std_fd[3];
+
+	save_std_fd(save, std_fd);
 	replace_std_fd(branch->stdin, branch->stdout);
 	branch->pid = -1;
 	if (setup_redirection(branch))
@@ -45,7 +47,7 @@ static void		run_cursh(t_acb *branch, t_ast *subast)
 	}
 	else
 		branch->status = 1;
-	save_std_fd(restore);
+	save_std_fd(restore, std_fd);
 }
 
 /*
