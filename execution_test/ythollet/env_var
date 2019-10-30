@@ -1,4 +1,0 @@
-a=5 b=3 echo env val=$a
-echo now val=$a
-a=128
-echo after $a

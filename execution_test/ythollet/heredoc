@@ -1,5 +1,0 @@
-cat << EOF 
-<< word1
-word2 EOF
-EOF
-

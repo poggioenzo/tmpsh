@@ -1,5 +1,0 @@
-cat << HERE && tee << PLOP
-John
-HERE
-tee content
-PLOP

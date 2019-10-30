@@ -1,5 +1,0 @@
-mkdir test_dir; ln -s test_dir a_link
-cd -L -L -P -L a_link 2>&- >&-; pwd
-cd ..
-cd -L -P a_link >&- 2>&- ; pwd
-cd .. && rm a_link && rm -rf test_dir

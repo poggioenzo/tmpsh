@@ -1,6 +1,0 @@
-var=file
-
-cat << $var
-heredoc content
-file
-$var
