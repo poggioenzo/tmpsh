@@ -27,7 +27,8 @@ static t_tagstokens	*get_redirection_tgtk(t_tagstokens *tgtk, int index_red)
 	while (index_red < (int)tgtk->length)
 	{
 		tag = vindex_pylst(tgtk->tags, index_red);
-		if (ft_strequ(tag, "SPACES"))
+		if (ft_strequ(tag, "SPACES") || in_grammar(tag, "REDIRECTION")
+			|| in_grammar(tag, "ABS_TERMINATOR"))
 			break ;
 		index_red += 1;
 	}
