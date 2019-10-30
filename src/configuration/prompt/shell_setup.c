@@ -104,9 +104,12 @@ void			shell_exit(int status)
 	t_cursor	*cursor;
 
 	manage_shell_repr(GET, &shell_repr, &cursor);
-	*cursor = (t_cursor){.row = -1, .column = -1};
-	display_shell(shell_repr, cursor, FALSE);
-	ft_printf("%s\n", g_caps->reset_cursor);
+	if (cursor && shell_repr)
+	{
+		*cursor = (t_cursor){.row = -1, .column = -1};
+		display_shell(shell_repr, cursor, FALSE);
+		ft_printf("%s\n", g_caps->reset_cursor);
+	}
 	shell_cleaner();
 	remove_globals();
 	exit(status);
