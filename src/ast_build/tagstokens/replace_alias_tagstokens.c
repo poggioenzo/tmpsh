@@ -40,6 +40,7 @@ t_bool			replace_alias_tagstokens(t_tagstokens *self,
 	t_tagstokens	*tt_alias;
 	char			*alias_result;
 
+	tt_alias = NULL;
 	alias_result = search_value(g_alias, alias_key);
 	ret = ft_isspace(alias_result[ft_strlen(alias_result) - 1]);
 	if (in_pylst_chare(alias_key, g_actual_alias))
@@ -49,6 +50,8 @@ t_bool			replace_alias_tagstokens(t_tagstokens *self,
 	}
 	push_pylst(&g_actual_alias, ft_strdup(alias_key), NO_COPY_BUT_FREE, _ptr);
 	input_init_tagstokens(&tt_alias, alias_result);
+	if (!tt_alias)
+		return (delitems_tagstokens(self, i, i + 1, ret));
 	g_aliasindepth = tt_alias->length + i + 1;
 	insert_alias(&self->tokens, tt_alias->tokens, i, TRUE);
 	insert_alias(&self->tags, tt_alias->tags, i, FALSE);
