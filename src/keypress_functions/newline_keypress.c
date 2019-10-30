@@ -79,7 +79,7 @@ int			newline_check(t_line **shell_repr, t_cursor **cursor)
 
 	shell_content = render_shell_content(*shell_repr);
 	routine_tagstokens(&tagstoken, shell_content);
-	if (tagstoken->incomplete)
+	if (tagstoken->incomplete && tagstoken->valid)
 	{
 		add_new_line(*shell_repr, tagstoken, *cursor);
 		free_tagstokens(&tagstoken, 0);
