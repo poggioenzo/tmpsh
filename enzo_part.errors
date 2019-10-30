@@ -1,7 +1,0 @@
-
-1 -Probleme si 2>&1>truc a qui appartient le 1??
-2 - Heredocs seems stripped by default
-3 - A command like this is valid: (related to 2 ?)
-cat <<- EOF
-    $var
-  EOF
