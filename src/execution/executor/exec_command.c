@@ -37,20 +37,22 @@ static int		run_builtin(t_acb *branch, char **cmd_args, t_pylst *variables)
 	int		(*builtin)(char **, char **);
 	int		status;
 	int		std_fd[3];
+	char	**builtin_env;
 
 	saved_environ = ft_duparray(g_environ);
 	variables_config(variables, true);
 	free_pylst(&variables, 0);
+	builtin_env = g_environ;
+	g_environ = saved_environ;
 	builtin = search_value(g_builtins, cmd_args[0]);
 	save_std_fd(save, std_fd);
 	replace_std_fd(branch->stdin, branch->stdout);
 	if (setup_redirection(branch) == true)
-		status = builtin(cmd_args + 1, g_environ);
+		status = builtin(cmd_args + 1, builtin_env);
 	else
 		status = 1;
+	free_str_array(&builtin_env, 0);
 	save_std_fd(restore, std_fd);
-	free_str_array(&g_environ, 0);
-	g_environ = saved_environ;
 	return (status);
 }
 
