@@ -145,7 +145,7 @@ t_bool			setup_redirection(t_acb *branch)
 						redirection->close_dst) == -1)
 			{
 				branch->redirectionfd->iter_item = NULL;
-				ft_printf(NAME_SH" %d: bad file descriptor\n", dest_fd);
+				ft_dprintf(2, NAME_SH" %d: bad file descriptor\n", dest_fd);
 				return (false);
 			}
 			redirection->dest = NULL;

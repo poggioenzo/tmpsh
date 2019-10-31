@@ -20,6 +20,7 @@ To see any builtin's option, see the commentary above the function definition.
 - `alias` : Set or display aliases.
 - `unalias` : Unset aliases.
 - `hash` : Remember or report utility locations.
+- `pwd` : display working directory
 
 ### Shell Grammar
 

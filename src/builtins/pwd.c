@@ -32,7 +32,7 @@ static t_bool		parse_options(char **argv, int *p_flag, int *l_flag)
 	if (!in(options->value, "P", "L", NULL))
 	{
 		ft_dprintf(2, "pwd: bad option: -%s\n", options->value);
-		return (false);
+		return (free_pylst(&options, false));
 	}
 	if (ft_strequ(options->value, "P"))
 		*p_flag = true;
