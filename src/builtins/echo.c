@@ -72,7 +72,7 @@ void	replace_escape(char *str)
 **
 ** echo - Write argument to standard output.
 **
-** Synopsis : echo [string ...]
+** Synopsis : echo [-n] [string ...]
 **
 ** Options :
 ** -n : avoid printing a newline.
