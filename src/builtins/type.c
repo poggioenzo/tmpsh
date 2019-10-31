@@ -77,7 +77,7 @@ int				built_type(char **argv, NOT_USE(char **environ))
 			ft_printf("%s\n", used_elem);
 		else
 		{
-			ft_printf("type: %s: not found\n", *argv);
+			ft_dprintf(2, "type: %s: not found\n", *argv);
 			status = 1;
 		}
 		argv++;

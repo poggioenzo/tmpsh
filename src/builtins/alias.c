@@ -36,7 +36,7 @@ static t_bool		error_args(char **argv)
 	if (is_error)
 	{
 		error_opt = options->value;
-		ft_printf("alias: bad option: %s\n", error_opt);
+		ft_dprintf(2, "alias: bad option: %s\n", error_opt);
 	}
 	free_pylst(&options, 0);
 	return (is_error);
