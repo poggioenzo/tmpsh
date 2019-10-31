@@ -2,3 +2,5 @@
 9/ foo 2>&1 | wc
 10/ echo \\\\\\
 11/ \=ko echo $"\"
+12/ Lors de la concatenation des AST/ACB, remplacer les '\n'
+par des ';'
