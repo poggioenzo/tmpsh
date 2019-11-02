@@ -13,18 +13,18 @@
 
 #include "tagstokens.h"
 
-char *str_replace(char **str, char this, char by)
+char *str_replace(char *str, char this, char by)
 {
 	int i;
 
 	i = 0;
-	while (*str[i])
+	while (str[i])
 	{
-		if (*str[i] == this)
-			*str[i] = by;
+		if (str[i] == this)
+			str[i] = by;
 		i++;
 	}
-	return (*str);
+	return (str);
 }
 
 char	*str_command_tagstokens(t_tagstokens *self)
@@ -34,18 +34,15 @@ char	*str_command_tagstokens(t_tagstokens *self)
 	char	*str;
 	char	*local;
 
-
 	str = ft_strnew(0);
 	while (iter_tagstokens(self, &tok, &tag))
 	{
-		ft_printf(PURPLE"%d\n"WHITE, ft_strequ("NEW_LINE", tag));
 		local = " ";
 		if (ft_strequ("SPACES", tag))
 			str = ft_fstrjoin(&str, &local, TRUE, FALSE);
 		else if (ft_strequ("NEW_LINE", tag))
 		{
 			local = ";";
-
 			str = ft_fstrjoin(&str, &local, TRUE, FALSE);
 		}
 		else if (ft_strequ("SUBAST", tag))
@@ -56,7 +53,5 @@ char	*str_command_tagstokens(t_tagstokens *self)
 		else
 			str = ft_fstrjoin(&str, &tok, TRUE, FALSE);
 	}
-	str = str_replace(&str, '\n', ' ');
-	ft_printf(PURPLE"%s\n"WHITE, str);
-	return (str);
+	return (str_replace(str, '\n', ' '));
 }
