@@ -109,7 +109,7 @@ int			built_cd(char **argv, NOT_USE(char **environ))
 	options = argparser(argv);
 	if (ft_arraylen(argv) >= 2)
 	{
-		ft_printf("cd: too much arguments\n");
+		ft_dprintf(2, "cd: too much arguments\n");
 		return (free_pylst(&options, 1));
 	}
 	if (check_option(options) == false)

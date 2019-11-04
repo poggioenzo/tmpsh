@@ -38,7 +38,7 @@ int		built_exit(char **args, NOT_USE(char **env))
 	else if (argc == 1)
 		value = ft_atoi(args[0]);
 	else
-		value = 0;
+		value = g_last_status;
 	term = open("/dev/tty", O_WRONLY);
 	ft_dprintf(term, "%s", g_caps->reset_cursor);
 	close(term);

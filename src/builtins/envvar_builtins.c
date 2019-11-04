@@ -41,7 +41,7 @@ int				built_unsetenv(char **argv, NOT_USE(char **environ))
 			ft_unsetenv(argv[index]);
 		else
 		{
-			ft_printf("unsetenv: unknow variable: %s\n",\
+			ft_dprintf(2, "unsetenv: unknow variable: %s\n",\
 					argv[index]);
 			status = 1;
 		}

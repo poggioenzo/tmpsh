@@ -47,13 +47,13 @@ int					allowed_access(char *filename, int print_error)
 	if (access(filename, F_OK) == -1)
 	{
 		if (print_error == true)
-			ft_printf("cd: No such file or directory: %s\n", filename);
+			ft_dprintf(2, "cd: No such file or directory: %s\n", filename);
 		return (0);
 	}
 	if (access(filename, X_OK) == -1)
 	{
 		if (print_error == true)
-			ft_printf("cd: Permission denied : %s\n", filename);
+			ft_dprintf(2, "cd: Permission denied : %s\n", filename);
 		return (0);
 	}
 	return (1);

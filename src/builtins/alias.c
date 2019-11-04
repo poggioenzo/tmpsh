@@ -33,14 +33,13 @@ static t_bool		error_args(char **argv)
 
 	options = argparser(argv);
 	is_error = len_pylst(options);
-	free_pylst(&options, 0);
 	if (is_error)
 	{
 		error_opt = options->value;
-		ft_printf("alias: bad option: %s\n", error_opt);
-		return (true);
+		ft_dprintf(2, "alias: bad option: %s\n", error_opt);
 	}
-	return (false);
+	free_pylst(&options, 0);
+	return (is_error);
 }
 
 /*

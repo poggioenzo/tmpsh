@@ -27,5 +27,5 @@ void		check_eof(t_line *shell_repr)
 
 	first_unlock = get_unlocked_char(shell_repr->chars);
 	if (!first_unlock && !shell_repr->next)
-		shell_exit(0);
+		shell_exit(g_last_status);
 }

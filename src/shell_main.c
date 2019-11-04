@@ -67,6 +67,7 @@ int		main(int argc, char **argv, char **environ)
 		{
 			source_rc();
 			prompt_loop();
+			status = g_last_status;
 		}
 		else
 		{

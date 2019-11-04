@@ -88,7 +88,7 @@ int							run_shell_files(char **files)
 	while (*files)
 	{
 		if (run_file(*files++) != complete_script)
-			state = 1;
+			g_last_status = 1;
 	}
-	return (state);
+	return (g_last_status);
 }

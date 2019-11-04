@@ -47,7 +47,7 @@ int			built_unset(char **argv, NOT_USE(char **environ))
 		else if (ft_getvar(argv[index]))
 			ft_unsetvar(argv[index]);
 		else if ((status = 1))
-			ft_printf("unset: unknow variable: %s\n", argv[index]);
+			ft_dprintf(2, "unset: unknow variable: %s\n", argv[index]);
 		index++;
 	}
 	return (status);

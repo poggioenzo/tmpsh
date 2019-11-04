@@ -74,7 +74,7 @@ int				built_unalias(char **argv, NOT_USE(char **environ))
 		if (search_value(g_alias, argv[index]))
 			delete_value(g_alias, argv[index]);
 		else
-			ft_printf("unalias: no such hash table element: %s\n",\
+			ft_dprintf(2, "unalias: no such hash table element: %s\n",\
 					argv[index]);
 		index++;
 	}
