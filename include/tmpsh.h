@@ -199,6 +199,7 @@ struct		s_acb
 	char			*print;
 	int				stdin;
 	int				stdout;
+	int				close_pipe;
 	t_bool			background;
 	int				status;
 	pid_t			pid;

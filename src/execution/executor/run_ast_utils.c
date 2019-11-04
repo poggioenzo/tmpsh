@@ -31,6 +31,7 @@ void		setup_branch_pipe(t_acb *branch, t_acb *next_branch)
 	setup_pipe_fd(new_pipe);
 	next_branch->stdin = new_pipe[0];
 	branch->stdout = new_pipe[1];
+	branch->close_pipe = next_branch->stdin;
 }
 
 /*

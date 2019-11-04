@@ -25,6 +25,7 @@ t_acb	*init_acb(t_tagstokens *tgtk, char *begin_andor, char *tag_end)
 		self->tag_end = tag_end;
 	self->stdin = -1;
 	self->stdout = -1;
+	self->close_pipe = -1;
 	self->status = -1;
 	self->pid = -1;
 	self->command = str_command_tagstokens(tgtk);

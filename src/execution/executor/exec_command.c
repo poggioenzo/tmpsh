@@ -117,6 +117,8 @@ static int		child_execution(t_acb *branch, char **argv, t_pylst *variables)
 	{
 		reset_signals();
 		replace_std_fd(branch->stdin, branch->stdout);
+		if (branch->close_pipe != -1)
+			close(branch->close_pipe);
 		if (setup_redirection(branch) == false)
 			exit(1);
 		variables_config(variables, true);
