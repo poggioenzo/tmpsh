@@ -1,7 +1,0 @@
-2/ ls 1>&3 | wc -l    ==> ls doit renvoyer une erreur
-9/ foo 2>&1 | wc
-10/ echo \\\\\\
-11/ \=ko echo $"\"
-12/ Lors de la concatenation des AST/ACB, remplacer les '\n'
-par des ';'
-13/ Faire gaffe aux séquences spéciales dans le prompt, fausse sa longueur pour le print
