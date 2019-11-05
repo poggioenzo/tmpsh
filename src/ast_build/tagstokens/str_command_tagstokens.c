@@ -6,14 +6,14 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/08/27 20:25:09 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/08/27 20:25:55 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/05 14:56:50 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "tagstokens.h"
 
-char *str_replace(char *str, char this, char by)
+static	char	*str_replace(char *str, char this, char by)
 {
 	int i;
 
@@ -27,7 +27,7 @@ char *str_replace(char *str, char this, char by)
 	return (str);
 }
 
-char	*str_command_tagstokens(t_tagstokens *self)
+char			*str_command_tagstokens(t_tagstokens *self)
 {
 	char	*tok;
 	char	*tag;

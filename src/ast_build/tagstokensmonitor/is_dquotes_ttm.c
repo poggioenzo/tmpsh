@@ -6,19 +6,18 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/03 22:18:52 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/17 14:19:21 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/05 14:55:25 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ttm.h"
 
-static void escaped_chare(char *locale_stmt)
+static	void	escaped_chare(char *locale_stmt)
 {
 	if (ft_strlen(locale_stmt) > 1 && ft_incharset(locale_stmt[1], "$`\"\\\n"))
 		ft_strcpy(locale_stmt, locale_stmt + 1);
 }
-
 
 /*
 ** is_dquotes_ttm:
@@ -31,7 +30,7 @@ static void escaped_chare(char *locale_stmt)
 ** - (t_tags_tokens_monitor*) self : actual tagstokensmonitor.
 */
 
-void	is_dquotes_ttm(t_tags_tokens_monitor *self)
+void			is_dquotes_ttm(t_tags_tokens_monitor *self)
 {
 	t_bool	indquote;
 	char	*new_str;
