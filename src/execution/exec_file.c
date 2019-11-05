@@ -42,6 +42,7 @@ char			*parse_path(char *command, t_bool verbose)
 	char		*execname;
 	t_hash_exec	*cache;
 
+	verbose = verbose ? VERBOSE : 0;
 	if (!ft_getenv("PATH"))
 		return (display_search_error(command, verbose));
 	folders = ft_strsplit(ft_getenv("PATH"), ":");
@@ -55,7 +56,7 @@ char			*parse_path(char *command, t_bool verbose)
 			insert_value(g_hash, command, cache, _hash_exec);
 			cache->count++;
 			free_str_array(&folders, 0);
-			return (check_rights(execname, X | R, true, true, verbose));
+			return (check_rights(execname, X | R | verbose, true, true));
 		}
 		ft_strdel(&execname);
 	}
@@ -77,11 +78,12 @@ char			*get_execname(char *command, t_bool verbose)
 {
 	t_hash_exec		*cache;
 
+	verbose = verbose ? VERBOSE : 0;
 	if (ft_strlen(command) == 0)
 		return (NULL);
 	if ((cache = search_value(g_hash, command)))
 	{
-		if (check_rights(cache->exec_file, F | X | R, false, true, false))
+		if (check_rights(cache->exec_file, F | X | R, false, true))
 		{
 			cache->count++;
 			return (ft_strdup(cache->exec_file));
@@ -92,6 +94,6 @@ char			*get_execname(char *command, t_bool verbose)
 	if (search_value(g_builtins, command))
 		return (ft_strdup(command));
 	else if (ft_strchr(command, '/'))
-		return (check_rights(ft_strdup(command), F | X | R, true, true, verbose));
+		return (check_rights(ft_strdup(command), F | X | R | verbose, true, true));
 	return (parse_path(command, verbose));
 }

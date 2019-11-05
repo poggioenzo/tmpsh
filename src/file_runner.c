@@ -63,7 +63,7 @@ enum e_tagstoks_state		run_file(char *filename)
 	int						file_fd;
 	enum e_tagstoks_state	state;
 
-	if (!check_rights(filename, F | R, false, true, true))
+	if (!check_rights(filename, F | R | VERBOSE, false, true))
 		return (1);
 	file_fd = open(filename, O_RDONLY);
 	if (!(content = fd_readfile(file_fd)))

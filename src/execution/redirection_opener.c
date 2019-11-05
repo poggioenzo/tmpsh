@@ -123,7 +123,7 @@ void			open_redirection_file(t_redirection_fd *redirection)
 			ft_dprintf(2, NAME_SH" No such file or directory : %s\n", \
 					redirection->dest);
 		else if (rights == -1 || \
-				check_rights(redirection->dest, rights, true, true, true))
+				check_rights(redirection->dest, rights | VERBOSE, true, true))
 		{
 			if (open_file(redirection, flags) == true)
 				return ;

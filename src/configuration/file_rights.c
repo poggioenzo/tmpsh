@@ -36,7 +36,7 @@ int		is_directory(const char *path)
 ** check_rights:
 **
 ** @filename : file to check.
-** @opts: Use [F | R | X | W]
+** @opts: Use [F | R | X | W | VERBOSE]
 ** @free: indicate if filename have to be free
 ** @print_error: true if an error output is expected.
 **
@@ -46,7 +46,7 @@ int		is_directory(const char *path)
 */
 
 char	*check_rights(char *filename, int opts, t_bool free, \
-		t_bool avoid_folder, t_bool verbose)
+		t_bool avoid_folder)
 {
 	char	*error;
 
@@ -63,7 +63,7 @@ char	*check_rights(char *filename, int opts, t_bool free, \
 		error = NAME_SH" Permission denied : %s\n";
 	if (error)
 	{
-		if (verbose)
+		if (opts & VERBOSE)
 			ft_dprintf(2, error, filename);
 		if (free == true)
 			ft_strdel(&filename);

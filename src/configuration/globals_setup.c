@@ -55,7 +55,7 @@ void		setup_globals(char **environ)
 	get_shell_directory();
 	manage_termios(save_config);
 	grammar_file = ft_filejoin(&g_shell_dir, &grammar_file, false, false);
-	if (!check_rights(grammar_file, F | R, false, true, true))
+	if (!check_rights(grammar_file, F | R | VERBOSE, false, true))
 		exit(-1);
 	grammar_init(grammar_file);
 	setup_builtins();
