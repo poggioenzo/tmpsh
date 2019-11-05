@@ -13,6 +13,13 @@
 
 #include "ttm.h"
 
+static void escaped_chare(char *locale_stmt)
+{
+	if (ft_strlen(locale_stmt) > 1 && ft_incharset(locale_stmt[1], "$`\"\\\n"))
+		ft_strcpy(locale_stmt, locale_stmt + 1);
+}
+
+
 /*
 ** is_dquotes_ttm:
 **
@@ -44,6 +51,8 @@ void	is_dquotes_ttm(t_tags_tokens_monitor *self)
 			op_selector_ttm(self);
 		else
 		{
+			if (ft_strequ(vindex_pylst(self->tt->tags, self->i), "STMT"))
+				escaped_chare(vindex_pylst(self->tt->tokens, self->i));
 			new_str = !ft_strequ(vindex_pylst(self->tt->tags, self->i), "VAR") ?
 				"STMT" : "VAR";
 			update_pylst(self->tt->tags, self->i, new_str, 0, _ptr);

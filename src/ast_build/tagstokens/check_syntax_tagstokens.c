@@ -54,7 +54,7 @@ static void		remove_escape_stmt(t_tagstokens *self)
 
 	while (iter_tagstokens(self, &token, &tag))
 	{
-		if (ft_strequ(tag, "QUOTE"))
+		if (in(tag, "QUOTE", "DQUOTES", NULL))
 			self->iter = skip_openning_tagstokens(self, self->iter, NULL);
 		else if (ft_strequ(tag, "STMT") && ft_strlen(token) > 1 && \
 				token[0] == '\\')
