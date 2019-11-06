@@ -1,0 +1,4 @@
+1/ display segfault
+2/ remove incompatible operator
+3/ Take care of temporary environnement
+
