@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/30 15:48:20 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/06 10:44:17 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -54,7 +54,7 @@ char			*parse_path(char *command, t_bool verbose)
 		{
 			cache = hash_exec_init(execname);
 			insert_value(g_hash, command, cache, _hash_exec);
-			cache->count++ && free_str_array(&folders, 0);
+			free_str_array(&folders, 1) && cache->count++;
 			return (check_rights(execname, X | R | verbose, true, true));
 		}
 		ft_strdel(&execname);

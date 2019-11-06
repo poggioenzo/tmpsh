@@ -35,12 +35,13 @@ static void		insert_escape(t_tagstokens *tt, int i)
 	tokens = NULL;
 	push_pylst(&tags, "STMT", 0, _ptr);
 	push_pylst(&tags, "END_QUOTE", 0, _ptr);
-	push_pylst(&tokens, ft_strdup(escape),
+	push_pylst(&tokens, escape,
 			(ft_strlen(escape) + 1) * sizeof(char), _chare);
-	push_pylst(&tokens, ft_strdup(quote),
+	push_pylst(&tokens, quote,
 			(ft_strlen(quote) + 1) * sizeof(char), _chare);
 	insert_pylst(&tt->tokens, tokens, i, TRUE);
 	insert_pylst(&tt->tags, tags, i, FALSE);
+	free_pylst(&tokens, 42);
 }
 
 /*
