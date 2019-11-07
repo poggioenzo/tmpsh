@@ -24,11 +24,13 @@ static void	remove_end_line(char *str)
 		ft_bzero(str, ft_strlen(str));
 }
 
-static void	remove_comments(char *str)
+static void	remove_comments_newline(char *str)
 {
 	int		escaped;
+	char 	*save_str;
 
 	escaped = false;
+	save_str = str;
 	while (*str)
 	{
 		if (*str == '\\' && escaped == false)
@@ -37,11 +39,18 @@ static void	remove_comments(char *str)
 		{
 			if (*str == '#' && escaped == false)
 				remove_end_line(str);
+			else if (*str == '\n' && escaped == true && str[1])
+			{
+				ft_strcpy(str - 1, str + 1);
+				remove_comments_newline(save_str);
+				return ;
+			}
 			escaped = false;
 		}
 		str++;
 	}
 }
+
 
 void		reset_routine(void)
 {
@@ -57,7 +66,7 @@ void		reset_routine(void)
 
 void		routine_tagstokens(t_tagstokens **self, char *shell_content)
 {
-	remove_comments(shell_content);
+	remove_comments_newline(shell_content);
 	reset_routine();
 	input_init_tagstokens(self, shell_content);
 	if ((*self)->incomplete || !(*self)->valid)
