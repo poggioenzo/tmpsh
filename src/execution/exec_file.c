@@ -24,6 +24,17 @@ char			*display_search_error(char *command, t_bool verbose)
 	return (NULL);
 }
 
+static char		*get_path(void)
+{
+	char	*path_folders;
+
+	if ((path_folders = ft_getenv("PATH")))
+		return (path_folders);
+	if ((path_folders = ft_getvar("PATH")))
+		return (path_folders);
+	return (NULL);
+}
+
 /*
 ** parse_path:
 **
@@ -43,9 +54,9 @@ char			*parse_path(char *command, t_bool verbose)
 	t_hash_exec	*cache;
 
 	verbose = verbose ? VERBOSE : 0;
-	if (!ft_getenv("PATH"))
+	if (!get_path())
 		return (display_search_error(command, verbose));
-	folders = ft_strsplit(ft_getenv("PATH"), ":");
+	folders = ft_strsplit(get_path(), ":");
 	index = 0;
 	while (folders[index])
 	{
