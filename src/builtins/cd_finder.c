@@ -23,11 +23,11 @@
 ** message if it do not exist.
 */
 
-char				*get_oldpwd(void)
+char				*get_oldpwd(char **environ)
 {
 	char	*oldpwd;
 
-	if (!(oldpwd = ft_getenv("OLDPWD")))
+	if (!(oldpwd = ft_getenv_common("OLDPWD", environ)))
 		ft_dprintf(2, "cd : OLDPWD not set.\n");
 	return (oldpwd ? ft_strdup(oldpwd) : NULL);
 }
@@ -63,6 +63,7 @@ int					allowed_access(char *filename, int print_error)
 ** parse_cdpath:
 **
 ** @pathname: file to search with CDPATH.
+** @environ : buitlin environnement variables
 **
 ** Use the environnement variable CDPATH to search if any directory
 ** exists by the concatenation of a CDPATH folder and pathname.
@@ -71,7 +72,7 @@ int					allowed_access(char *filename, int print_error)
 ** the value <folder>/<pathname> followed by ./<folder>/<pathname>.
 */
 
-static char			*parse_cdpath(char *pathname)
+static char			*parse_cdpath(char *pathname, char **environ)
 {
 	char	*cdpath;
 	char	**split_folders;
@@ -79,7 +80,7 @@ static char			*parse_cdpath(char *pathname)
 	char	*new_dir;
 	char	*tmp;
 
-	if (!(cdpath = ft_getenv("CDPATH")))
+	if (!(cdpath = ft_getenv_common("CDPATH", environ)))
 		return (pathname);
 	split_folders = ft_strsplit(cdpath, ":");
 	index = 0;
@@ -110,11 +111,11 @@ static char			*parse_cdpath(char *pathname)
 **			- canonical filename where try chdir.
 */
 
-char				*find_newdir(char *argument, int p_opt)
+char				*find_newdir(char *argument, int p_opt, char **environ)
 {
 	char	*new_dir;
 
-	if (!argument && !(argument = ft_getenv("HOME")))
+	if (!argument && !(argument = ft_getenv_common("HOME", environ)))
 	{
 		ft_dprintf(STDERR_FILENO, NAME_SH" : cd: HOME not set\n");
 		return (NULL);
@@ -125,10 +126,10 @@ char				*find_newdir(char *argument, int p_opt)
 		new_dir = ft_strdup(argument);
 	else if (ft_strequ(argument, "-"))
 	{
-		if (!(new_dir = get_oldpwd()))
+		if (!(new_dir = get_oldpwd(environ)))
 			return (NULL);
 	}
-	else if (!(new_dir = parse_cdpath(argument)))
+	else if (!(new_dir = parse_cdpath(argument, environ)))
 		new_dir = argument;
 	if (*new_dir != '/' && !p_opt)
 		new_dir = ft_filejoin(&g_shell_dir, &new_dir, false, true);

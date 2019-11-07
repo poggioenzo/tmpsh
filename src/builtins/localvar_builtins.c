@@ -26,7 +26,7 @@
 ** -v : remove alse environnement variables.
 */
 
-int			built_unset(char **argv, NOT_USE(char **environ))
+int			built_unset(char **argv, char **environ)
 {
 	int		index;
 	int		rm_env;
@@ -42,7 +42,7 @@ int			built_unset(char **argv, NOT_USE(char **environ))
 	index = rm_env;
 	while (argv[index])
 	{
-		if (rm_env && ft_getenv(argv[index]))
+		if (rm_env && ft_getenv_common(argv[index], environ))
 			ft_unsetenv(argv[index]);
 		else if (ft_getvar(argv[index]))
 			ft_unsetvar(argv[index]);

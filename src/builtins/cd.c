@@ -99,7 +99,7 @@ static int	change_directory(char *directory, int is_p)
 ** of the directory when using chdir.
 */
 
-int			built_cd(char **argv, NOT_USE(char **environ))
+int			built_cd(char **argv, char **environ)
 {
 	t_pylst		*options;
 	char		*new_dir;
@@ -115,7 +115,7 @@ int			built_cd(char **argv, NOT_USE(char **environ))
 	if (check_option(options) == false)
 		return (1);
 	is_p = options && *(char *)vindex_pylst(options, -1) == 'P';
-	if (!(new_dir = find_newdir(argv[0], is_p)))
+	if (!(new_dir = find_newdir(argv[0], is_p, environ)))
 		return (1);
 	status = change_directory(new_dir, is_p);
 	free_pylst(&options, 0);

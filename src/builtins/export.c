@@ -103,11 +103,13 @@ static void		export_assignation(char *argument)
 ** as value.
 */
 
-static void		export_var(char *variable)
+static void		export_var(char *variable, char **environ)
 {
 	char	*value;
 
 	value = ft_getvar(variable);
+	if (!value)
+		value = ft_getenv_common(variable, environ);
 	if (!value)
 		value = "";
 	ft_setenv(variable, value);
@@ -141,7 +143,7 @@ int				built_export(char **argv, char **environ)
 		if (ft_strchr(argv[index], '='))
 			export_assignation(argv[index]);
 		else
-			export_var(argv[index]);
+			export_var(argv[index], environ);
 		index++;
 	}
 	return (0);

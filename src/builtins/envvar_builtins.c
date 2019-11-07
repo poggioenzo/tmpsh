@@ -23,7 +23,7 @@
 ** Synopsis : unsetenv [variable ... ]
 */
 
-int				built_unsetenv(char **argv, NOT_USE(char **environ))
+int				built_unsetenv(char **argv, char **environ)
 {
 	int		index;
 	int		status;
@@ -37,7 +37,7 @@ int				built_unsetenv(char **argv, NOT_USE(char **environ))
 	index = 0;
 	while (argv[index])
 	{
-		if (ft_getenv(argv[index]))
+		if (ft_getenv_common(argv[index], environ))
 			ft_unsetenv(argv[index]);
 		else
 		{

@@ -16,6 +16,6 @@
 
 char		*get_oldpwd(void);
 int			allowed_access(char *filename, int print_error);
-char		*find_newdir(char *argument, int p_opt);
+char		*find_newdir(char *argument, int p_opt, char **environ);
 
 #endif
