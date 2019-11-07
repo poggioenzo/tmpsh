@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/07 17:47:14 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -107,9 +107,9 @@ static void		export_var(char *variable, char **environ)
 {
 	char	*value;
 
-	value = ft_getvar(variable);
+	value = ft_getenv_common(variable, environ);
 	if (!value)
-		value = ft_getenv_common(variable, environ);
+		value = ft_getvar(variable);
 	if (!value)
 		value = "";
 	ft_setenv(variable, value);
