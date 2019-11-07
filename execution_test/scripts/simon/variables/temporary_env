@@ -1,0 +1,7 @@
+HOME=/ cd 
+pwd && OLDPWD=~ cd - >&-
+pwd
+
+VAR=blue
+VAR=test export VAR
+printenv VAR
