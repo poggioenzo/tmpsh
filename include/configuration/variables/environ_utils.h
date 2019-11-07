@@ -14,8 +14,8 @@
 #ifndef ENVIRON_UTILS_H
 # define ENVIRON_UTILS_H
 
-void	ft_setenv(char *variable, char *value);
-void	ft_unsetenv(char *variable);
-char	*ft_getenv(char *variable);
+char	*ft_getenv_common(char *variable, char **environ);
+char	*format_env_variable(char *variable, char *value);
+int		ft_getenv_index(char *variable, char **environ);
 
 #endif

@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   determine_bytes.c                                .::    .:/ .      .::   */
+/*   environ_setter.h                                 .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Created: 2019/11/07 10:31:55 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2019/11/07 10:46:47 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef VARIABLES_H
-# define VARIABLES_H
+#ifndef ENVIRON_SETTER_H
+# define ENVIRON_SETTER_H
 
-# include "environ_utils.h"
-# include "local_variables.h"
-# include "variable_management.h"
-# include "environ_variables.h"
+void	ft_setenv(char *variable, char *value);
+void	ft_unsetenv(char *variable);
+char	*ft_getenv(char *variable);
 
 #endif

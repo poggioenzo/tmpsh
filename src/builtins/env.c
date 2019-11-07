@@ -6,14 +6,14 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/30 15:43:15 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/07 10:48:19 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "tmpsh.h"
 #include "libft.h"
-#include "environ_utils.h"
+#include "variables.h"
 #include "exec_file.h"
 #include <sys/wait.h>
 

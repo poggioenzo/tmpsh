@@ -6,14 +6,14 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/07 11:01:08 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "tmpsh.h"
-#include "environ_utils.h"
+#include "variables.h"
 #include "variable_management.h"
 #include "prompt_loop.h"
 #include <fcntl.h>

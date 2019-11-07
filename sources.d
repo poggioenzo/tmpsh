@@ -80,6 +80,7 @@ VARIABLES_DIR = variables/
 VARIABLES_SRCS := environ_utils.c \
                   environ_setup.c \
                   local_variables.c \
+                  environ_variables.c \
 				  replace_home.c \
                   variables_management.c \
 
