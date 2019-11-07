@@ -17,6 +17,7 @@
 #include "libft.h"
 #include "foreground.h"
 #include "job_control.h"
+#include "signal_error.h"
 
 /*
 ** waitpid_layer:
@@ -48,6 +49,7 @@ static void				waitpid_layer(int pid, int mode, int status[2])
 	else if (WIFSIGNALED(return_status))
 	{
 		status[0] = WTERMSIG(return_status) + 128;
+		display_signal_error(WTERMSIG(return_status));
 		status[1] = finish;
 	}
 	else if (WIFEXITED(return_status))

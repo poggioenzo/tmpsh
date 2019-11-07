@@ -133,6 +133,7 @@ JOBCONTROL_SRCS := backgroundjobs.c \
 				   jobs_management.c \
 				   control.c \
 				   job.c \
+                   signal_error.c \
 
 JOBCONTROL_SRCS := $(addprefix $(JOBCONTROL_DIR), $(JOBCONTROL_SRCS))
 
