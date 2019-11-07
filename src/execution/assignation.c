@@ -88,6 +88,8 @@ static t_pylst	*delete_variables(t_tagstokens *tagstok, t_pylst *assignations)
 	int		nbr_token;
 
 	nbr_assignations = len_pylst(assignations);
+	if (ft_strequ(tagstok->tags->value, "SPACES"))
+		delitems_tagstokens(tagstok, 0, 1, 42);
 	while (nbr_assignations--)
 	{
 		nbr_token = count_assignation_size(tagstok);
