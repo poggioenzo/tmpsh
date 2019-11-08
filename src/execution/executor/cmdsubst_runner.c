@@ -52,7 +52,7 @@ static void		setup_stdput(t_ast *subast, t_pylst *pipe_fd)
 
 	stdin = -1;
 	stdout = -1;
-	if (ft_strequ(subast->type, "CMDSUBT2"))
+	if (ft_strequ(subast->type, "CMDSUBST2"))
 		stdin = clean_popper(pop_pylst(&pipe_fd, 0));
 	else if (in(subast->type, "CMDSUBST1", "CMDSUBST3", NULL))
 		stdout = clean_popper(pop_pylst(&pipe_fd, 1));

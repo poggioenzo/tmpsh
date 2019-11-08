@@ -125,12 +125,12 @@ enum e_waitstate		analyse_job_status(t_pylst *job_branches, int mode)
 	while (index >= 0)
 	{
 		branch = vindex_pylst(job_branches, index);
+		wait_subast(branch, mode);
 		if (branch->complete || branch->pid == -1)
 		{
 			index--;
 			continue ;
 		}
-		wait_subast(branch, mode);
 		waitpid_layer(branch->pid, mode, status);
 		if (status[0] == 0 && status[1] == running)
 			return (running);
