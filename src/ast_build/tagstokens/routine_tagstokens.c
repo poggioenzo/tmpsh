@@ -32,6 +32,8 @@ static void	remove_comments_newline(char *str)
 				return ;
 			else if (*str == '\n' && escaped == true && str[1])
 			{
+
+				
 				ft_strcpy(str - 1, str + 1);
 				remove_comments_newline(save_str);
 				return ;
