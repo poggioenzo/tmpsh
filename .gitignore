@@ -15,6 +15,7 @@ shell_debug
 test_shell
 shell_executable
 21sh
+42sh
 
 # Prerequisites
 dependencies/*.d
