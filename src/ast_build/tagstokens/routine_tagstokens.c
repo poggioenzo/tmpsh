@@ -14,15 +14,27 @@
 #include "tagstokens.h"
 #include "ttm.h"
 
-static void	remove_end_line(char *str)
-{
-	char	*newline;
+// static void	remove_end_line(char *str)
+// {
+// 	char	*newline;
+//
+// 	if ((newline = ft_strchr(str, '\n')))
+// 		ft_strcpy(str, newline);
+// 	else
+// 		ft_bzero(str, ft_strlen(str));
+// }
 
-	if ((newline = ft_strchr(str, '\n')))
-		ft_strcpy(str, newline);
-	else
-		ft_bzero(str, ft_strlen(str));
+static char 	*span_quote(char *str)
+{
+	int len;
+	char *span;
+
+	str++;
+	len = ft_strlen(str);
+	span = ft_strchr(str, '\'');
+	return (span);
 }
+
 
 static void	remove_comments_newline(char *str)
 {
@@ -37,8 +49,9 @@ static void	remove_comments_newline(char *str)
 			escaped = true;
 		else
 		{
-			if (*str == '#' && escaped == false)
-				remove_end_line(str);
+			if (*str == '\'' && escaped == false )
+				if (!(str = span_quote(str)))
+					return ;
 			else if (*str == '\n' && escaped == true && str[1])
 			{
 				ft_strcpy(str - 1, str + 1);

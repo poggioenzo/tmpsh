@@ -21,7 +21,7 @@
 ** Get the index in the environnement list of the given variable.
 */
 
-int		ft_getenv_index(char *variable, char **environ)
+int				ft_getenv_index(char *variable, char **environ)
 {
 	int		index;
 	int		len_var;
@@ -62,7 +62,7 @@ char			*ft_getenv_common(char *variable, char **environ)
 ** environnement format, like variable=value.
 */
 
-char		*format_env_variable(char *variable, char *value)
+char			*format_env_variable(char *variable, char *value)
 {
 	char	*format_env;
 	int		len_var;
@@ -76,5 +76,3 @@ char		*format_env_variable(char *variable, char *value)
 	ft_strcpy(format_env + len_var + 1, value);
 	return (format_env);
 }
-
-
