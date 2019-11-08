@@ -6,7 +6,7 @@
 /*   By: epoggio <marvin@le-101.fr>                 +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/09/04 16:42:44 by epoggio      #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/28 09:56:46 by epoggio     ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/08 13:11:07 by epoggio     ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -17,7 +17,7 @@
 static void	remove_comments_newline(char *str)
 {
 	int		escaped;
-	char 	*save_str;
+	char	*save_str;
 
 	escaped = false;
 	save_str = str;
@@ -29,11 +29,9 @@ static void	remove_comments_newline(char *str)
 		{
 			if (*str == '\'' && escaped == false
 				&& !(str = ft_strchr(str, '\'')))
-					return ;
+				return ;
 			else if (*str == '\n' && escaped == true && str[1])
 			{
-
-
 				ft_strcpy(str - 1, str + 1);
 				remove_comments_newline(save_str);
 				return ;
@@ -43,7 +41,6 @@ static void	remove_comments_newline(char *str)
 		str++;
 	}
 }
-
 
 void		reset_routine(void)
 {
