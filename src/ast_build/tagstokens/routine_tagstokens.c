@@ -27,13 +27,13 @@ static void	remove_comments_newline(char *str)
 			escaped = true;
 		else
 		{
-			if (*str == '\'' && escaped == false )
-				if (!(str = span_quote(str)))
+			if (*str == '\'' && escaped == false
+				&& !(str = ft_strchr(str, '\'')))
 					return ;
 			else if (*str == '\n' && escaped == true && str[1])
 			{
 
-				
+
 				ft_strcpy(str - 1, str + 1);
 				remove_comments_newline(save_str);
 				return ;
