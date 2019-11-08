@@ -14,16 +14,6 @@
 #include "tagstokens.h"
 #include "ttm.h"
 
-static void	remove_end_line(char *str)
-{
-	char	*newline;
-
-	if ((newline = ft_strchr(str, '\n')))
-		ft_strcpy(str, newline);
-	else
-		ft_bzero(str, ft_strlen(str));
-}
-
 static void	remove_comments_newline(char *str)
 {
 	int		escaped;
@@ -37,8 +27,9 @@ static void	remove_comments_newline(char *str)
 			escaped = true;
 		else
 		{
-			if (*str == '#' && escaped == false)
-				remove_end_line(str);
+			if (*str == '\'' && escaped == false
+				&& !(str = ft_strchr(str + 1, '\'')))
+				return ;
 			else if (*str == '\n' && escaped == true && str[1])
 			{
 				ft_strcpy(str - 1, str + 1);

@@ -1,0 +1,10 @@
+cat << EO\
+F > thecontent ; ls
+this is file content
+for EOF
+EOF
+
+
+echo middle
+cat thecontent && rm thecontent
+
