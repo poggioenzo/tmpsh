@@ -65,8 +65,7 @@ static char		*concat_job_command(t_pylst *job_branches)
 		command = ft_fstrjoin(&command, &branch->command, true, false);
 		if (!ft_strequ(branch->tag_end, ""))
 		{
-			tmp = " ";
-			command = ft_fstrjoin(&command, &tmp, true, false);
+			command = free_join(command, " ", false);
 			tmp = ((t_pylst *)search_value(g_grammar->grammar, \
 						branch->tag_end))->value;
 			tmp = ft_strequ(tmp, "\n") ? ";" : tmp;
