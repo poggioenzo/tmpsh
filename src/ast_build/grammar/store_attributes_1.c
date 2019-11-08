@@ -37,10 +37,12 @@ void		get_reverse_grammar(void)
 
 	while (ht_iter(g_grammar->grammar, &key, (void **)&lst_values))
 	{
+		if (!ft_strequ(key, "FORBIDDEN")) {
 		while (iter_pylst(lst_values, (void **)&value))
 		{
 			insert_value(g_grammar->reverse, value, key, _static);
 			push_pylst(&g_grammar->reverse_list, value, 0, _ptr);
+		}
 		}
 	}
 }
