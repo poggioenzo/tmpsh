@@ -42,6 +42,7 @@ static void		insert_escape(t_tagstokens *tt, int i)
 	insert_pylst(&tt->tokens, tokens, i, TRUE);
 	insert_pylst(&tt->tags, tags, i, FALSE);
 	free_pylst(&tokens, 42);
+	free_pylst(&tags, 42);
 }
 
 /*
