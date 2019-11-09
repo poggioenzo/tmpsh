@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   environ_setter.h                                 .::    .:/ .      .::   */
+/*   environ_variables.h                              .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2019/11/07 10:31:55 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/11/07 10:46:47 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Created: 2019/11/08 13:23:43 by simrossi     #+#   ##    ##    #+#       */
+/*   Updated: 2019/11/08 13:23:55 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
-#ifndef ENVIRON_SETTER_H
-# define ENVIRON_SETTER_H
+#ifndef ENVIRON_VARIABLES_H
+# define ENVIRON_VARIABLES_H
 
 void	ft_setenv(char *variable, char *value);
 void	ft_unsetenv(char *variable);

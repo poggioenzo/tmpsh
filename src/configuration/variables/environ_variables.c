@@ -20,7 +20,7 @@
 ** Behave like getenv but for the local environnement.
 */
 
-char		*ft_getenv(char *variable)
+char			*ft_getenv(char *variable)
 {
 	return (ft_getenv_common(variable, g_environ));
 }
