@@ -1,0 +1,7 @@
+echo <(echo your content)
+cat <(echo "this is content")
+
+
+echo >(echo lol)
+echo middle command
+echo content for process > >(cat)
