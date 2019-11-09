@@ -6,13 +6,12 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/10/22 17:40:45 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/09 14:45:00 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "assert.h"
 
 /*
 ** replace_pylst:
@@ -35,7 +34,6 @@ void	replace_pylst(t_pylst **old_pylst, t_pylst *new_pylst, int from, int to)
 	t_pylst		*precedence_to;
 	t_pylst		*del_slice;
 
-	assert(from >= 0 || to >= 0);
 	precedence_from = precedence_pylst(*old_pylst, from);
 	precedence_to = precedence_pylst(*old_pylst, to);
 	del_slice = *old_pylst;
