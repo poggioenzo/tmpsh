@@ -35,7 +35,6 @@ void		setup_builtins(void)
 	insert_value(g_builtins, "unset", built_unset, _static);
 	insert_value(g_builtins, "set", built_set, _static);
 	insert_value(g_builtins, "export", built_export, _static);
-	insert_value(g_builtins, "env", built_env, _static);
 	insert_value(g_builtins, "echo", built_echo, _static);
 	insert_value(g_builtins, "alias", built_alias, _static);
 	insert_value(g_builtins, "unalias", built_unalias, _static);
