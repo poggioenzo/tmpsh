@@ -17,7 +17,6 @@ SHELL_DEST=$1
 FILE_TO_COPY="
 Libft/Makefile
 Libft/libft.h
-Libft/pylst/replace_pylst.c
 Libft/ft_strall.c
 
 src/ast_build/tagstokens/routine_tagstokens.c
