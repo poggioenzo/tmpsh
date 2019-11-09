@@ -28,7 +28,7 @@ static void	remove_comments_newline(char *str)
 		else
 		{
 			if (*str == '\'' && escaped == false
-				&& !(str = ft_strchr(str, '\'')))
+				&& !(str = ft_strchr(str + 1, '\'')))
 				return ;
 			else if (*str == '\n' && escaped == true && str[1])
 			{
