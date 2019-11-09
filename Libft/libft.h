@@ -6,7 +6,7 @@
 /*   By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/10/03 08:38:27 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2019/04/16 16:18:52 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/09 15:47:06 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -161,6 +161,7 @@ size_t			ft_strcount(const char *str, char c);
 void			ft_striter(char *str, void (*fct)(char *));
 void			ft_striteri(char *str, void (*fct)(unsigned int, char *));
 char			*ft_strmap(const char *str, char (*fct)(char));
+int				ft_strall(const char *str, int (*fct)(char));
 char			*ft_strmapi(const char *str, char (*fct)(unsigned int, char));
 char			**ft_strsplit(const char *str, const char *charset);
 char			*ft_strnew(size_t size);

@@ -6,7 +6,7 @@
 /*   By: simrossi <marvin@le-101.fr>                +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2018/11/27 15:04:52 by simrossi     #+#   ##    ##    #+#       */
-/*   Updated: 2018/11/27 15:04:55 by simrossi    ###    #+. /#+    ###.fr     */
+/*   Updated: 2019/11/09 15:46:30 by simrossi    ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
@@ -16,6 +16,15 @@
 #include "argparser.h"
 
 t_ht_table		*g_alias = NULL;
+
+int					is_alias_char(char c)
+{
+	if (ft_isalnum(c))
+		return (1);
+	if (ft_incharset(c, "_.-"))
+		return (1);
+	return (0);
+}
 
 /*
 ** error_args:
@@ -80,6 +89,11 @@ static int			set_alias(char *argument)
 	if (ft_strlen(alias) == 0)
 	{
 		ft_dprintf(2, NAME_SH" alias: no alias name\n");
+		return (1);
+	}
+	if (!ft_strall(alias, is_alias_char))
+	{
+		ft_dprintf(2, NAME_SH" alias: '%s': invalid alias name\n", alias);
 		return (1);
 	}
 	value = ft_strdup(value);

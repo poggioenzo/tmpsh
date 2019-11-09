@@ -6,7 +6,7 @@
 #    By: simrossi <simrossi@student.le-101.fr>      +:+   +:    +:    +:+      #
 #                                                  #+#   #+    #+    #+#       #
 #    Created: 2018/10/03 08:24:35 by simrossi     #+#   ##    ##    #+#        #
-#    Updated: 2019/04/15 11:40:37 by simrossi    ###    #+. /#+    ###.fr      #
+#    Updated: 2019/11/09 15:37:10 by simrossi    ###    #+. /#+    ###.fr      #
 #                                                          /                   #
 #                                                         /                    #
 # **************************************************************************** #
@@ -154,6 +154,7 @@ SRCS = ft_atoi.c \
 	   ft_nbrlen.c \
 	   ft_strmap.c \
 	   ft_strmapi.c \
+	   ft_strall.c \
 	   ft_strncat.c \
 	   ft_strncmp.c \
 	   ft_strncpy.c \
