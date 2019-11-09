@@ -11,7 +11,7 @@ then
     echo "$0: '$1' not a directory" && exit 1
 fi
 
-SHELL_REF=$(pwd)
+SHELL_REF=$(dirname $0)
 SHELL_DEST=$1
 
 FILE_TO_COPY="
