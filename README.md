@@ -1,7 +1,10 @@
 
 
 # Tmpsh - Total Mastering Professional Shell || Temporary Shell
-tmpsh is a project of creating shell. 42 school project.
+
+*42 Lyon Project*
+
+tmpsh is a project of creating shell.
 
 ### Builtins
 
@@ -40,7 +43,7 @@ To see any builtin's option, see the commentary above the function definition.
 | '       |
 | ()      |
 | {}      |
-  
+
 #### Redirections
 
 __*Generic format*__ : `[n]<redir-operetor> <word>`
